@@ -1,0 +1,12 @@
+stages:
+  - test
+
+Test:
+  image: node:20.5.0
+  stage: test
+  tags:
+    - pihome
+  script:
+    - npm i
+    - npm run build
+    - npm run lint

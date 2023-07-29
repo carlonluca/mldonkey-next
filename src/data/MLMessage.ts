@@ -5,6 +5,9 @@ export enum MLMessageType {
     T_CORE_PROTOCOL = 0
 }
 
+/**
+ * Represent a generic messago to or from the mlnet core.
+ */
 export class MLMessage {
     public type: MLMessageType
 
