@@ -1,23 +1,23 @@
 /**
  * Supported messages.
  */
-export enum MLMessageType {
+export enum MLMessageTypeFrom {
     T_CORE_PROTOCOL = 0
 }
 
 /**
  * Represent a generic messago to or from the mlnet core.
  */
-export class MLMessage {
-    public type: MLMessageType
+export abstract class MLMessage {
+    public opcode: number
 
     /**
      * Ctor.
      * 
      * @param type 
      */
-    constructor(type: MLMessageType) {
-        this.type = type
+    constructor(opcode: number) {
+        this.opcode = opcode
     }
 
     /**
@@ -53,27 +53,38 @@ export class MLMessage {
 
         if (buffer.length >= SIZE_HEADER + size - SIZE_OPCODE) {
             console.log("Full message received")
-            if (opcode == MLMessageType.T_CORE_PROTOCOL)
+            if (opcode == MLMessageTypeFrom.T_CORE_PROTOCOL)
                 MLMessageCoreProtocol.fromBuffer(buffer.slice(4, size))
             return buffer.slice(SIZE_HEADER + size - SIZE_OPCODE)
         }
         else
             console.log("Insufficient data")
     }
+
+    public abstract toBuffer(): Buffer
 }
 
 /**
  * Represents the CoreProtocol message.
  */
-export class MLMessageCoreProtocol extends MLMessage {
-    public version: number
+export class MLMessageFrom extends MLMessage {
+    public version: MLMessageTypeFrom
 
     /**
      * Ctor.
      */
-    constructor(version: number) {
-        super(MLMessageType.T_CORE_PROTOCOL)
+    constructor(version: MLMessageTypeFrom) {
+        super(MLMessageTypeFrom.T_CORE_PROTOCOL)
         this.version = version
+    }
+
+    /**
+     * Not supposed to be sent to the server.
+     * 
+     * @returns 
+     */
+    public toBuffer(): Buffer {
+        return null
     }
 
     /**
@@ -83,5 +94,15 @@ export class MLMessageCoreProtocol extends MLMessage {
      */
     static fromBuffer(buffer: Buffer): MLMessageCoreProtocol {
         return new MLMessageCoreProtocol(buffer.readInt32LE(2))
+    }
+}
+
+export class MLMessageCoreProtocol extends MLMessageFrom {
+    /**
+     * Ctor.
+     */
+    constructor(version: MLMessageTypeFrom) {
+        super(MLMessageTypeFrom.T_CORE_PROTOCOL)
+        this.version = version
     }
 }
