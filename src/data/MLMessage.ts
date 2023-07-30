@@ -66,12 +66,12 @@ export class MLMessage {
  * Represents the CoreProtocol message.
  */
 export class MLMessageCoreProtocol extends MLMessage {
-    public version: Number
+    public version: number
 
     /**
      * Ctor.
      */
-    constructor(version: Number) {
+    constructor(version: number) {
         super(MLMessageType.T_CORE_PROTOCOL)
         this.version = version
     }
