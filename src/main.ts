@@ -18,7 +18,7 @@ client.connect(PORT, HOST, function () {
 
 client.on('data', function (data: Buffer) {
     buffer = Buffer.concat([buffer, data])
-    let msg = MLMessage.processBuffer(data)
+    const msg = MLMessage.processBuffer(data)
     if (!msg)
         return
     console.info("Message received:", msg.type)

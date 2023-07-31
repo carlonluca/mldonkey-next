@@ -191,7 +191,7 @@ export class MLMessageBadPassword extends MLMessageFrom {
     constructor() { super(MLMessageTypeFrom.T_BAD_PASSWORD) }
 }
 
-export class MLMessageGuiProtocol extends MLMessageTo {
+/*export class MLMessageGuiProtocol extends MLMessageTo {
     public version: number
     constructor(version: number) {
         super(MLMessageTypeTo.T_GUI_PROTOCOL)
@@ -201,7 +201,7 @@ export class MLMessageGuiProtocol extends MLMessageTo {
         let ret = Buffer.alloc(0)
         return this.createEnvelope(this.appendInt32(ret, this.version))
     }
-}
+}*/
 
 /**
  * Represents the Password message.
