@@ -23,7 +23,7 @@ client.on('data', function (data: Buffer) {
         return
     console.info("Message received:", msg.type)
     if (msg.type == MLMessageTypeFrom.T_CORE_PROTOCOL) {
-        //sendData(client, new MLMessageGuiProtocol(33))
+        sendData(client, new MLMessageGuiProtocol(33))
         sendData(client, new MLMessageToPassword(
             process.env.ML_DEV_USR,
             process.env.ML_DEV_PWD

@@ -81,7 +81,7 @@ export abstract class MLMessage {
      */
     protected createEnvelope(buffer: Buffer): Buffer {
         let envelope = Buffer.alloc(0)
-        envelope = this.appendInt32(envelope, buffer.length)
+        envelope = this.appendInt32(envelope, buffer.length + 2)
         envelope = this.appendInt16(envelope, this.opcode)
         return Buffer.concat([ envelope, buffer ])
     }
@@ -191,17 +191,18 @@ export class MLMessageBadPassword extends MLMessageFrom {
     constructor() { super(MLMessageTypeFrom.T_BAD_PASSWORD) }
 }
 
-/*export class MLMessageGuiProtocol extends MLMessageTo {
+export class MLMessageGuiProtocol extends MLMessageTo {
     public version: number
     constructor(version: number) {
         super(MLMessageTypeTo.T_GUI_PROTOCOL)
         this.version = version
     }
     public toBuffer(): Buffer {
-        let ret = Buffer.alloc(0)
-        return this.createEnvelope(this.appendInt32(ret, this.version))
+        let ret = this.appendInt32(Buffer.alloc(0), this.version)
+        ret = this.createEnvelope(ret)
+        return ret
     }
-}*/
+}
 
 /**
  * Represents the Password message.
