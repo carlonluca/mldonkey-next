@@ -1,3 +1,5 @@
+import { logger  } from '../core/MLLogger'
+
 /**
  * Supported messages.
  */
@@ -38,37 +40,37 @@ export abstract class MLMessage {
         const SIZE_OPCODE = 2
 
         if (buffer.length < SIZE_HEADER) {
-            console.log("Insufficient data")
+            logger.debug("Insufficient data")
             return
         }
 
         const header = buffer.slice(0, SIZE_HEADER);
         const size = header.readInt32LE() - SIZE_OPCODE
-        console.log("<- Size:", size)
+        logger.debug(`<- Size: ${size}`)
 
         const opcode = header.readInt16LE(SIZE_SIZE)
-        console.log("<- Opcode:", opcode)
+        logger.debug(`<- Opcode: ${opcode}`)
 
         if (opcode == -1 || size < 0) {
-            console.warn("Malformed packet:", opcode, size)
+            logger.warn(`Malformed packet: ${opcode} - ${size}`)
             buffer.slice(6)
             return
         }
 
         if (buffer.length >= SIZE_HEADER + size - SIZE_OPCODE) {
-            console.log("Full message received")
+            logger.verbose("Full message received")
             switch (opcode) {
             case MLMessageTypeFrom.T_CORE_PROTOCOL:
                 return MLMessageCoreProtocol.fromBuffer(buffer.slice(4, size))
             case MLMessageTypeFrom.T_BAD_PASSWORD:
                 return new MLMessageBadPassword()
             default:
-                console.warn("Unknown msg with opcode", opcode)
+                logger.warn(`Unknown msg with opcode: ${opcode}`)
                 return null
             }
         }
         else
-            console.log("Insufficient data")
+            logger.debug("Insufficient data")
 
         return null
     }

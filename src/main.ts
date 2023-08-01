@@ -1,4 +1,5 @@
 import * as net from 'net'
+import { logger  } from './core/MLLogger'
 import {
     MLMessage,
     MLMessageGuiProtocol,
@@ -13,7 +14,7 @@ let buffer = Buffer.alloc(0);
 
 const client = new net.Socket();
 client.connect(PORT, HOST, function () {
-    console.log('CONNECTED TO: ' + HOST + ':' + PORT)
+    logger.info(`Connected to: ${HOST}:${PORT}`)
 })
 
 client.on('data', function (data: Buffer) {
@@ -21,7 +22,7 @@ client.on('data', function (data: Buffer) {
     const msg = MLMessage.processBuffer(data)
     if (!msg)
         return
-    console.info("Message received:", msg.type)
+    logger.info(`Message received: ${msg.type}`)
     if (msg.type == MLMessageTypeFrom.T_CORE_PROTOCOL) {
         sendData(client, new MLMessageGuiProtocol(33))
         sendData(client, new MLMessageToPassword(
@@ -32,10 +33,9 @@ client.on('data', function (data: Buffer) {
 })
 
 client.on('close', function () {
-    console.log('Connection closed')
+    logger.info('Connection closed')
 })
 
 function sendData(client: net.Socket, msg: MLMessageTo) {
-    console.debug("-> ", msg.toBuffer().toString("hex"))
     client.write(msg.toBuffer())
 }

@@ -14,9 +14,13 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.4.5",
+    "@types/winston": "^2.4.4",
     "@typescript-eslint/eslint-plugin": "^6.2.0",
     "@typescript-eslint/parser": "^6.2.0",
     "eslint": "^8.46.0",
     "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "winston": "^3.10.0"
   }
 }
