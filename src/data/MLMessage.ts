@@ -1,4 +1,4 @@
-import { logger  } from '../core/MLLogger'
+import { logger } from '../core/MLLogger'
 
 /**
  * Supported messages.
