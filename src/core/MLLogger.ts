@@ -1,6 +1,6 @@
-import winston, { Logger } from 'winston';
+import winston from 'winston'
 
-let alignColorsAndTime = winston.format.combine(
+const alignColorsAndTime = winston.format.combine(
     winston.format.colorize({
         all:true
     }),
