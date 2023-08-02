@@ -39,3 +39,21 @@ client.on('close', function () {
 function sendData(client: net.Socket, msg: MLMessageTo) {
     client.write(msg.toBuffer())
 }
+
+// src/server.ts
+import WebSocket from 'ws';
+
+const wss = new WebSocket.Server({ port: 8080 });
+
+wss.on('connection', (ws: WebSocket) => {
+  ws.on('message', (message: string) => {
+    console.log(`Received: ${message}`);
+    ws.send(`You sent: ${message}`);
+  });
+
+  ws.on('close', () => {
+    console.log('Client disconnected');
+  });
+});
+
+console.log('WebSocket server listening on port 8080');
