@@ -46,6 +46,7 @@ import WebSocket from 'ws';
 const wss = new WebSocket.Server({ port: 8080 });
 
 wss.on('connection', (ws: WebSocket) => {
+    console.log("CONNECTED")
   ws.on('message', (message: string) => {
     console.log(`Received: ${message}`);
     ws.send(`You sent: ${message}`);
