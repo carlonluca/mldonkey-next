@@ -32,7 +32,6 @@ export class MLBridgeManager {
             return
         }
 
-        // TODO: dispose
         bridge.dispose()
         this.connections.delete(websocket)
         this.logClientsConnected()

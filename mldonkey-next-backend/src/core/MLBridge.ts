@@ -1,7 +1,6 @@
 import * as net from 'net'
-import { CONNECTING, WebSocket } from 'ws'
+import { WebSocket } from 'ws'
 import { logger } from './MLLogger'
-import { connect } from 'http2'
 
 const HOST = '192.168.0.2'
 const PORT = 4001
@@ -32,6 +31,10 @@ export class MLBridge {
         this.mlSocket.on('close', function () {
             logger.info('Connection closed')
             // TODO
+        })
+        this.webSocket.on("message", data => {
+            logger.verbose(`Sending data to mlnet core`)
+            this.mlSocket.write(data as Buffer)
         })
     }
 
