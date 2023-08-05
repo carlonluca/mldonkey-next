@@ -14,9 +14,4 @@ export class AppComponent {
     ngOnInit(): void {
         this.webSocketService.connect(`ws://${window.location.hostname}:8080`);
     }
-
-    sendMessage(): void {
-        const message = 'Hello, WebSocket server!';
-        this.webSocketService.send(message);
-    }
 }

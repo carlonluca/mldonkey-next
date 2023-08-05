@@ -1,6 +1,8 @@
 /* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
   "extends": "./tsconfig.json",
+  "types": [ "node" ],
+  "typeRoots": [ "./node_modules/@types" ],
   "compilerOptions": {
     "outDir": "./out-tsc/app",
     "types": []
