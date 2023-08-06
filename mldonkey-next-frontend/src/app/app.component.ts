@@ -1,5 +1,6 @@
 import { Component } from '@angular/core'
 import { WebSocketService } from './websocket-service.service'
+import { RouterOutlet } from '@angular/router'
 
 @Component({
     selector: 'app-root',
