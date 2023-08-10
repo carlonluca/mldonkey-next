@@ -4,7 +4,9 @@ import { logger } from './MLLogger'
  * Supported messages.
  */
 export enum MLMessageTypeFrom {
+    T_NONE = -1,
     T_CORE_PROTOCOL = 0,
+    T_NET_INFO = 20,
     T_BAD_PASSWORD = 47
 }
 
@@ -64,6 +66,8 @@ export abstract class MLMessage {
             switch (opcode) {
             case MLMessageTypeFrom.T_CORE_PROTOCOL:
                 return MLMessageCoreProtocol.fromBuffer(buffer.slice(4, size))
+            case MLMessageTypeFrom.T_NET_INFO:
+                return new MLMessageNetInfo()
             case MLMessageTypeFrom.T_BAD_PASSWORD:
                 return new MLMessageBadPassword()
             default:
@@ -195,6 +199,10 @@ export abstract class MLMessageTo extends MLMessage {
     public abstract toBuffer(): ArrayBuffer
 }
 
+export class MLMessageFromNone extends MLMessageFrom {
+    constructor() { super(MLMessageTypeFrom.T_NONE) }
+}
+
 /**
  * Core protocol message.
  */
@@ -231,6 +239,12 @@ export class MLMessageGuiProtocol extends MLMessageTo {
         let ret = this.appendInt32(new ArrayBuffer(0), this.version)
         ret = this.createEnvelope(ret)
         return ret
+    }
+}
+
+export class MLMessageNetInfo extends MLMessageFrom {
+    constructor() {
+        super(MLMessageTypeFrom.T_NET_INFO)
     }
 }
 

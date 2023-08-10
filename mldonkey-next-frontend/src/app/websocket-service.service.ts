@@ -17,6 +17,8 @@ export class WebSocketService {
     public webSocket!: WebSocketSubject<ArrayBuffer>
     public connectionState: MLObservableVariable<MLConnectionState> =
         new MLObservableVariable<MLConnectionState>(MLConnectionState.S_NOT_CONNECTED)
+    public lastMessage: MLObservableVariable<ML.MLMessageFrom> =
+        new MLObservableVariable<ML.MLMessageFrom>(new ML.MLMessageFromNone())
 
     /**
      * Ctor.
@@ -62,8 +64,11 @@ export class WebSocketService {
             return
         if (msg)
             console.info("<- Message received:", msg.type)
-        if (msg.type == 0)
+        if (msg.type == ML.MLMessageTypeFrom.T_CORE_PROTOCOL)
             this.sendMsg(new ML.MLMessageGuiProtocol(33))
+        else if (msg.type != ML.MLMessageTypeFrom.T_BAD_PASSWORD)
+            this.connectionState.value = MLConnectionState.S_AUTHENTICATED
+        this.lastMessage.value = msg
     }
 
     private onError(error: any): void {
