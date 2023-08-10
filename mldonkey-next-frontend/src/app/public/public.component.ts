@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { MLConnectionState, WebSocketService } from '../websocket-service.service'
 import { SpinnerService } from '../services/spinner.service'
-import { MLMessageTypeFrom } from '../core/MLMessage'
 import { Router } from '@angular/router'
 
 @Component({

@@ -11,4 +11,7 @@ export class MLObservableVariable<T> {
     set value(v: T) {
         this.observable.next(v)
     }
+    get value(): T {
+        return this.observable.value
+    }
 }
