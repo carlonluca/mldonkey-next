@@ -8,11 +8,5 @@ import { RouterOutlet } from '@angular/router'
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-    title = 'mldonket-next-frontend';
-
-    constructor(private webSocketService: WebSocketService) { }
-
-    ngOnInit(): void {
-        this.webSocketService.connect(`ws://${window.location.hostname}:8080`);
-    }
+    title = 'mldonket-next-frontend'
 }

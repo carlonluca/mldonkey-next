@@ -1,3 +1,6 @@
 <p>This is mldonkey-next</p>
-<button routerLink="/login">Connect</button>
+<p>Credentials</p>
+<input type="text" placeholder="Username" [(ngModel)]="inputUsr"/>
+<input type="password" placeholder="Password" [(ngModel)]="inputPwd"/>
+<button (click)="login()">Login</button>
 <p>{{ this.connected ? "Connected to the core" : "Not connected to the core" }}</p>

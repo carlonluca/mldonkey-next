@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core'
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket'
 import * as ML from './core/MLMessage'
 import { MLObservableVariable } from './core/MLObservableVariable'
+import { MLUtils } from './core/MLUtils'
 
 export enum MLConnectionState {
     S_NOT_CONNECTED,
@@ -17,7 +18,10 @@ export class WebSocketService {
     public connectionState: MLObservableVariable<MLConnectionState> =
         new MLObservableVariable<MLConnectionState>(MLConnectionState.S_NOT_CONNECTED)
 
-    constructor() { }
+    /**
+     * Ctor.
+     */
+    constructor() {}
 
     public connect(url: string): void {
         this.webSocket = webSocket<ArrayBuffer>({
@@ -38,24 +42,28 @@ export class WebSocketService {
         })
     }
 
-    public send(message: ArrayBuffer): void {
-        this.webSocket.next(message)
+    public login(usr: string, pwd: string) {
+        this.sendMsg(new ML.MLMessageToPassword(usr, pwd))
+    }
+
+    public sendData(msg: ArrayBuffer) {
+        console.log("-> ", MLUtils.buf2hex(msg))
+        this.webSocket.next(msg)
+    }
+
+    public sendMsg(msg: ML.MLMessageTo) {
+        this.sendData(msg.toBuffer())
     }
 
     private onMessageReceived(data: ArrayBuffer): void {
-        console.log('Received:', data)
+        console.log('<- ' , MLUtils.buf2hex(data))
         let msg = ML.MLMessage.processBuffer(data)
         if (!msg)
             return
-        switch (msg.type) {
-            case ML.MLMessageTypeFrom.T_CORE_PROTOCOL:
-                this.send(new ML.MLMessageGuiProtocol(33).toBuffer())
-                this.send(new ML.MLMessageToPassword(
-                    "",
-                    ""
-                ).toBuffer())
-                break
-        }
+        if (msg)
+            console.info("<- Message received:", msg.type)
+        if (msg.type == 0)
+            this.sendMsg(new ML.MLMessageGuiProtocol(33))
     }
 
     private onError(error: any): void {

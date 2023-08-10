@@ -7,8 +7,15 @@ import { MLConnectionState, WebSocketService } from '../websocket-service.servic
     styleUrls: ['./public.component.scss']
 })
 export class PublicComponent implements OnInit {
-    public connected: Boolean = false
+    connected: Boolean = false
+    inputUsr: string = ""
+    inputPwd: string = ""
 
+    /**
+     * Ctor.
+     * 
+     * @param webSocketService 
+     */
     constructor(private webSocketService: WebSocketService) {
         webSocketService.connectionState.observable.subscribe(state => {
             switch (state) {
@@ -25,7 +32,12 @@ export class PublicComponent implements OnInit {
         this.webSocketService.connect(`ws://${window.location.hostname}:8080`)
     }
 
-    ngOnInit() {
-        
+    ngOnInit() {}
+
+    /**
+     * Tries to login.
+     */
+    login() {
+        this.webSocketService.login(this.inputUsr, this.inputPwd)
     }
 }
