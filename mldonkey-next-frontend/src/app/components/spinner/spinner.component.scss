@@ -1,0 +1,41 @@
+.spinner-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Semi-transparent black background */
+    z-index: 9999;
+    /* Make sure it's on top of other elements */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Spinner container */
+.spinner-container {
+    text-align: center;
+}
+
+/* Spinner animation */
+.spinner {
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    /* Lighter border color */
+    border-top: 4px solid #3498db;
+    /* Blue, adjust as needed */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

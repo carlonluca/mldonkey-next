@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { MLConnectionState, WebSocketService } from '../websocket-service.service'
+import { SpinnerService } from '../services/spinner.service'
 
 @Component({
     selector: 'app-public',
@@ -16,7 +17,7 @@ export class PublicComponent implements OnInit {
      * 
      * @param webSocketService 
      */
-    constructor(private webSocketService: WebSocketService) {
+    constructor(private webSocketService: WebSocketService, private spinner: SpinnerService) {
         webSocketService.connectionState.observable.subscribe(state => {
             switch (state) {
                 case MLConnectionState.S_AUTHENTICATED:
@@ -38,6 +39,7 @@ export class PublicComponent implements OnInit {
      * Tries to login.
      */
     login() {
+        this.spinner.show()
         this.webSocketService.login(this.inputUsr, this.inputPwd)
     }
 }
