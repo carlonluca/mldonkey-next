@@ -48,7 +48,7 @@ export abstract class MLMessage {
         }
 
         //const header = buffer.slice(0, SIZE_HEADER);
-        let dataView = new DataView(buffer)
+        const dataView = new DataView(buffer)
         const size = dataView.getInt32(0, true) - SIZE_OPCODE
         logger.debug(`<- Size: ${size}`)
 

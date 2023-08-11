@@ -13,4 +13,5 @@ Test_server:
     - npm run lint
     - cd ../mldonkey-next-frontend
     - npm i
+    - npm run lint
     - npx ng build

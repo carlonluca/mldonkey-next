@@ -20,16 +20,11 @@ export class WebSocketService {
     public lastMessage: MLObservableVariable<ML.MLMessageFrom> =
         new MLObservableVariable<ML.MLMessageFrom>(new ML.MLMessageFromNone())
 
-    /**
-     * Ctor.
-     */
-    constructor() {}
-
     public connect(url: string): void {
         this.webSocket = webSocket<ArrayBuffer>({
             url: url,
             binaryType: "arraybuffer",
-            deserializer: (e: MessageEvent<any>) => e.data,
+            deserializer: (e: MessageEvent) => e.data,
             serializer: (b: ArrayBuffer) => b,
             openObserver: {
                 next: value => {
@@ -59,7 +54,7 @@ export class WebSocketService {
 
     private onMessageReceived(data: ArrayBuffer): void {
         console.log('<- ' , MLUtils.buf2hex(data))
-        let msg = ML.MLMessage.processBuffer(data)
+        const msg = ML.MLMessage.processBuffer(data)
         if (!msg)
             return
         if (msg)
@@ -71,7 +66,7 @@ export class WebSocketService {
         this.lastMessage.value = msg
     }
 
-    private onError(error: any): void {
+    private onError(error: unknown): void {
         console.error('WebSocket error:', error);
     }
 
