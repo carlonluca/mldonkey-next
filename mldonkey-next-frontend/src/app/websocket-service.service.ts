@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket'
-import * as ML from './core/MLMessage'
+import * as ML from './core/MLMsg'
 import { MLObservableVariable } from './core/MLObservableVariable'
 import { MLUtils } from './core/MLUtils'
 import { MLNetworkManager } from './core/MLNetworkManager'

@@ -1,4 +1,5 @@
 import { logger } from './MLLogger'
+import { MLMessageFromNetInfo } from './MLMsgNetInfo'
 
 /**
  * Supported messages.
@@ -66,7 +67,7 @@ export abstract class MLMessage {
             case MLMessageTypeFrom.T_CORE_PROTOCOL:
                 return MLMessageCoreProtocol.fromBuffer(buffer.slice(6, size))
             case MLMessageTypeFrom.T_NET_INFO:
-                return MLMessageNetInfo.fromBuffer(buffer.slice(6, size))
+                return MLMessageFromNetInfo.fromBuffer(buffer.slice(6, size))
             case MLMessageTypeFrom.T_BAD_PASSWORD:
                 return new MLMessageBadPassword()
             default:
@@ -258,19 +259,6 @@ export class MLMessageGuiProtocol extends MLMessageTo {
         let ret = this.appendInt32(new ArrayBuffer(0), this.version)
         ret = this.createEnvelope(ret)
         return ret
-    }
-}
-
-export class MLMessageNetInfo extends MLMessageFrom {
-    constructor(public netNum: number, public name: string) {
-        super(MLMessageTypeFrom.T_NET_INFO)
-        this.name = name
-    }
-
-    public static fromBuffer(buffer: ArrayBuffer): MLMessageFrom {
-        const [nn] = this.readInt32(buffer, 0)
-        const [name] = this.readString(buffer, 4)
-        return new MLMessageNetInfo(nn, name)
     }
 }
 

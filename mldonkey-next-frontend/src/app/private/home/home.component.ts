@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { MLMessageNetInfo } from 'src/app/core/MLMessage'
+import { MLMessageFromNetInfo } from 'src/app/core/MLMsgNetInfo'
 import { WebSocketService } from 'src/app/websocket-service.service'
 
 @Component({
@@ -10,8 +10,8 @@ import { WebSocketService } from 'src/app/websocket-service.service'
 export class HomeComponent {
     constructor(private websocketService: WebSocketService) {
         websocketService.lastMessage.observable.subscribe(msg => {
-            if (msg instanceof MLMessageNetInfo) {
-                const netInfo = (msg as MLMessageNetInfo).name
+            if (msg instanceof MLMessageFromNetInfo) {
+                const netInfo = (msg as MLMessageFromNetInfo).name
                 console.log("Net info:", netInfo)
             }
         })
