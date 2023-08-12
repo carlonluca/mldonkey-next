@@ -3,6 +3,7 @@ import { webSocket, WebSocketSubject } from 'rxjs/webSocket'
 import * as ML from './core/MLMessage'
 import { MLObservableVariable } from './core/MLObservableVariable'
 import { MLUtils } from './core/MLUtils'
+import { MLNetworkManager } from './core/MLNetworkManager'
 
 export enum MLConnectionState {
     S_NOT_CONNECTED,
@@ -19,6 +20,11 @@ export class WebSocketService {
         new MLObservableVariable<MLConnectionState>(MLConnectionState.S_NOT_CONNECTED)
     public lastMessage: MLObservableVariable<ML.MLMessageFrom> =
         new MLObservableVariable<ML.MLMessageFrom>(new ML.MLMessageFromNone())
+    public networkManager: MLNetworkManager
+
+    constructor() {
+        this.networkManager = new MLNetworkManager(this)
+    }
 
     public connect(url: string): void {
         this.webSocket = webSocket<ArrayBuffer>({

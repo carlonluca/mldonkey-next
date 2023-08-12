@@ -47,7 +47,6 @@ export abstract class MLMessage {
             return null
         }
 
-        //const header = buffer.slice(0, SIZE_HEADER);
         const dataView = new DataView(buffer)
         const size = dataView.getInt32(0, true) - SIZE_OPCODE
         logger.debug(`<- Size: ${size}`)
@@ -65,9 +64,9 @@ export abstract class MLMessage {
             logger.trace("Full message received")
             switch (opcode) {
             case MLMessageTypeFrom.T_CORE_PROTOCOL:
-                return MLMessageCoreProtocol.fromBuffer(buffer.slice(4, size))
+                return MLMessageCoreProtocol.fromBuffer(buffer.slice(6, size))
             case MLMessageTypeFrom.T_NET_INFO:
-                return new MLMessageNetInfo()
+                return MLMessageNetInfo.fromBuffer(buffer.slice(6, size))
             case MLMessageTypeFrom.T_BAD_PASSWORD:
                 return new MLMessageBadPassword()
             default:
@@ -163,6 +162,26 @@ export abstract class MLMessage {
         tmpBuff.setInt32(0, i, true)
         return MLMessage.concatArrayBuffers(buffer, tmpBuff.buffer)
     }
+
+    protected static readString(buffer: ArrayBuffer, offset: number): [string, number] {
+        let [size, consumed] = this.readInt16(buffer, offset)
+        if (size == 0xffff) {
+            [size, consumed] = this.readInt32(buffer, offset + consumed)
+            consumed += 2
+        }
+
+        const decoder = new TextDecoder("iso-8859-1")
+        const ret = decoder.decode(new DataView(buffer, offset + consumed, size))
+        return [ret, consumed + size]
+    }
+
+    protected static readInt16(buffer: ArrayBuffer, offset: number): [number, number] {
+        return [new DataView(buffer).getInt16(offset, true), 2]
+    }
+
+    protected static readInt32(buffer: ArrayBuffer, offset: number): [number, number] {
+        return [new DataView(buffer).getInt32(offset, true), 4]
+    }
 }
 
 /**
@@ -243,8 +262,15 @@ export class MLMessageGuiProtocol extends MLMessageTo {
 }
 
 export class MLMessageNetInfo extends MLMessageFrom {
-    constructor() {
+    constructor(public netNum: number, public name: string) {
         super(MLMessageTypeFrom.T_NET_INFO)
+        this.name = name
+    }
+
+    public static fromBuffer(buffer: ArrayBuffer): MLMessageFrom {
+        const [nn] = this.readInt32(buffer, 0)
+        const [name] = this.readString(buffer, 4)
+        return new MLMessageNetInfo(nn, name)
     }
 }
 
