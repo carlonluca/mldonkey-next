@@ -22,6 +22,8 @@ export class WebSocketService {
         new MLObservableVariable<ML.MLMessageFrom>(new ML.MLMessageFromNone())
     public networkManager: MLNetworkManager
 
+    private buffer: ArrayBuffer = new ArrayBuffer(0)
+
     constructor() {
         this.networkManager = new MLNetworkManager(this)
     }
@@ -59,8 +61,10 @@ export class WebSocketService {
     }
 
     private onMessageReceived(data: ArrayBuffer): void {
-        console.log('<- ' , MLUtils.buf2hex(data))
-        const msg = ML.MLMessage.processBuffer(data)
+        this.buffer = MLUtils.concatArrayBuffers(this.buffer, data)
+        console.log('<-' , MLUtils.buf2hex(this.buffer))
+        const [msg, consumed] = ML.MLMessage.processBuffer(this.buffer)
+        this.buffer = this.buffer.slice(consumed)
         if (!msg)
             return
         if (msg)

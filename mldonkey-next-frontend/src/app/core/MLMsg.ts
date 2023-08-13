@@ -1,5 +1,6 @@
 import { logger } from './MLLogger'
 import { MLMessageFromNetInfo } from './MLMsgNetInfo'
+import { MLUtils } from './MLUtils'
 
 /**
  * Supported messages.
@@ -38,19 +39,19 @@ export abstract class MLMessage {
      * @param data 
      * @returns 
      */
-    static processBuffer(buffer: ArrayBuffer): MLMessageFrom | null {
+    static processBuffer(buffer: ArrayBuffer): [MLMessageFrom | null, number] {
         const SIZE_HEADER = 6
         const SIZE_SIZE = 4
         const SIZE_OPCODE = 2
 
         if (buffer.byteLength < SIZE_HEADER) {
             logger.debug("Insufficient data")
-            return null
+            return [null, 0]
         }
 
         const dataView = new DataView(buffer)
         const size = dataView.getInt32(0, true) - SIZE_OPCODE
-        logger.debug(`<- Size: ${size}`)
+        logger.debug(`<- Size: ${size} - ${MLUtils.buf2hex(buffer.slice(0, 4))}`)
 
         const opcode = dataView.getInt16(SIZE_SIZE, true)
         logger.debug(`<- Opcode: ${opcode}`)
@@ -58,58 +59,33 @@ export abstract class MLMessage {
         if (opcode == -1 || size < 0) {
             logger.warn(`Malformed packet: ${opcode} - ${size}`)
             buffer.slice(6)
-            return null
+            return [null, 0]
         }
 
-        if (buffer.byteLength >= SIZE_HEADER + size - SIZE_OPCODE) {
-            logger.trace("Full message received")
-            buffer = buffer.slice(6)
+        if (buffer.byteLength >= SIZE_HEADER + size) {
+            logger.debug("Full message received:", MLUtils.buf2hex(buffer.slice(0, SIZE_HEADER + size)))
+            buffer = buffer.slice(SIZE_HEADER)
 
             const data = buffer.slice(0, size)
             buffer = buffer.slice(size)
+            logger.debug("Remaining buffer:", MLUtils.buf2hex(buffer))
             switch (opcode) {
             case MLMessageTypeFrom.T_CORE_PROTOCOL:
-                return MLMessageCoreProtocol.fromBuffer(data)
+                return [MLMessageCoreProtocol.fromBuffer(data), size + SIZE_HEADER]
             case MLMessageTypeFrom.T_NET_INFO:
-                return MLMessageFromNetInfo.fromBuffer(data)
+                return [MLMessageFromNetInfo.fromBuffer(data), size + SIZE_HEADER]
             case MLMessageTypeFrom.T_BAD_PASSWORD:
-                return new MLMessageBadPassword()
+                return [new MLMessageBadPassword(), size + SIZE_HEADER]
             default:
                 logger.warn(`Unknown msg with opcode: ${opcode}`)
-                return null
+                return [null, 0]
             }
         }
         else
             logger.debug("Insufficient data")
 
-        return null
+        return [null, 0]
     }
-
-    private static subviewFromRange(source: DataView, offset: number, length: number): DataView {
-        const buffer = source.buffer
-        const subBuffer = buffer.slice(offset, length)
-        return new DataView(subBuffer)
-    }
-
-    private static concatArrayBuffers(...buffers: ArrayBuffer[]) {
-        const totalLength = buffers.reduce((acc, buffer) => acc + buffer.byteLength, 0)
-        const combinedBuffer = new ArrayBuffer(totalLength)
-        const combinedUint8Array = new Uint8Array(combinedBuffer)
-      
-        let offset = 0
-        for (const buffer of buffers) {
-          const uint8Array = new Uint8Array(buffer)
-          combinedUint8Array.set(uint8Array, offset)
-          offset += buffer.byteLength
-        }
-      
-        return combinedBuffer
-    }
-
-    private static stringToUtf8ArrayBuffer(input: string): ArrayBuffer {
-        const encoder = new TextEncoder();
-        return encoder.encode(input).buffer;
-      }
 
     /**
      * Embeds the buffer into a mldonkey envelope.
@@ -121,7 +97,7 @@ export abstract class MLMessage {
         let envelope = new ArrayBuffer(0)
         envelope = this.appendInt32(envelope, buffer.byteLength + 2)
         envelope = this.appendInt16(envelope, this.opcode)
-        return MLMessage.concatArrayBuffers(envelope, buffer)
+        return MLUtils.concatArrayBuffers(envelope, buffer)
     }
 
     /**
@@ -139,7 +115,7 @@ export abstract class MLMessage {
         }
         else
             ret = this.appendInt16(ret, sSize)
-        return MLMessage.concatArrayBuffers(buffer, ret, MLMessage.stringToUtf8ArrayBuffer(s))
+        return MLUtils.concatArrayBuffers(buffer, ret, MLUtils.stringToUtf8ArrayBuffer(s))
     }
 
     /**
@@ -152,7 +128,7 @@ export abstract class MLMessage {
     protected appendInt16(buffer: ArrayBuffer, i: number): ArrayBuffer {
         const tmpBuff = new DataView(new ArrayBuffer(2))
         tmpBuff.setInt16(0, i, true)
-        return MLMessage.concatArrayBuffers(buffer, tmpBuff.buffer)
+        return MLUtils.concatArrayBuffers(buffer, tmpBuff.buffer)
     }
 
     /**
@@ -165,7 +141,7 @@ export abstract class MLMessage {
     protected appendInt32(buffer: ArrayBuffer, i: number): ArrayBuffer {
         const tmpBuff = new DataView(new ArrayBuffer(4))
         tmpBuff.setInt32(0, i, true)
-        return MLMessage.concatArrayBuffers(buffer, tmpBuff.buffer)
+        return MLUtils.concatArrayBuffers(buffer, tmpBuff.buffer)
     }
 
     protected static readString(buffer: ArrayBuffer, offset: number): [string, number] {
