@@ -63,11 +63,15 @@ export abstract class MLMessage {
 
         if (buffer.byteLength >= SIZE_HEADER + size - SIZE_OPCODE) {
             logger.trace("Full message received")
+            buffer = buffer.slice(6)
+
+            const data = buffer.slice(0, size)
+            buffer = buffer.slice(size)
             switch (opcode) {
             case MLMessageTypeFrom.T_CORE_PROTOCOL:
-                return MLMessageCoreProtocol.fromBuffer(buffer.slice(6, size))
+                return MLMessageCoreProtocol.fromBuffer(data)
             case MLMessageTypeFrom.T_NET_INFO:
-                return MLMessageFromNetInfo.fromBuffer(buffer.slice(6, size))
+                return MLMessageFromNetInfo.fromBuffer(data)
             case MLMessageTypeFrom.T_BAD_PASSWORD:
                 return new MLMessageBadPassword()
             default:
