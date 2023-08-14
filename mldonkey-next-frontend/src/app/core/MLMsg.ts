@@ -156,12 +156,20 @@ export abstract class MLMessage {
         return [ret, consumed + size]
     }
 
+    protected static readInt8(buffer: ArrayBuffer, offset: number): [number, number] {
+        return [new DataView(buffer).getInt8(offset), 1]
+    }
+
     protected static readInt16(buffer: ArrayBuffer, offset: number): [number, number] {
         return [new DataView(buffer).getInt16(offset, true), 2]
     }
 
     protected static readInt32(buffer: ArrayBuffer, offset: number): [number, number] {
         return [new DataView(buffer).getInt32(offset, true), 4]
+    }
+
+    protected static readInt64(buffer: ArrayBuffer, offset: number): [bigint, number] {
+        return [new DataView(buffer).getBigInt64(offset, true), 8]
     }
 }
 

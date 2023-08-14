@@ -4,6 +4,7 @@ import * as ML from './core/MLMsg'
 import { MLObservableVariable } from './core/MLObservableVariable'
 import { MLUtils } from './core/MLUtils'
 import { MLNetworkManager } from './core/MLNetworkManager'
+import { logger } from './core/MLLogger'
 
 export enum MLConnectionState {
     S_NOT_CONNECTED,
@@ -52,7 +53,7 @@ export class WebSocketService {
     }
 
     public sendData(msg: ArrayBuffer) {
-        console.log("-> ", MLUtils.buf2hex(msg))
+        logger.trace("-> ", MLUtils.buf2hex(msg))
         this.webSocket.next(msg)
     }
 
@@ -62,13 +63,13 @@ export class WebSocketService {
 
     private onMessageReceived(data: ArrayBuffer): void {
         this.buffer = MLUtils.concatArrayBuffers(this.buffer, data)
-        console.log('<-' , MLUtils.buf2hex(this.buffer))
+        logger.trace('<-' , MLUtils.buf2hex(this.buffer))
         const [msg, consumed] = ML.MLMessage.processBuffer(this.buffer)
         this.buffer = this.buffer.slice(consumed)
         if (!msg)
             return
         if (msg)
-            console.info("<- Message received:", msg.type)
+            logger.info("<- Message received:", msg.type)
         if (msg.type == ML.MLMessageTypeFrom.T_CORE_PROTOCOL)
             this.sendMsg(new ML.MLMessageGuiProtocol(33))
         else if (msg.type != ML.MLMessageTypeFrom.T_BAD_PASSWORD)
@@ -77,10 +78,10 @@ export class WebSocketService {
     }
 
     private onError(error: unknown): void {
-        console.error('WebSocket error:', error);
+        logger.error('WebSocket error:', error)
     }
 
     private onClose(): void {
-        console.log('WebSocket connection closed.');
+        logger.info('WebSocket connection closed.')
     }
 }
