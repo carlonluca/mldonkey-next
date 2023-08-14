@@ -39,14 +39,14 @@ export abstract class MLMessage {
      * @param data 
      * @returns 
      */
-    static processBuffer(buffer: ArrayBuffer): [MLMessageFrom | null, number] {
+    static processBuffer(buffer: ArrayBuffer): [MLMessageFrom | null, number, boolean] {
         const SIZE_HEADER = 6
         const SIZE_SIZE = 4
         const SIZE_OPCODE = 2
 
         if (buffer.byteLength < SIZE_HEADER) {
             logger.debug("Insufficient data")
-            return [null, 0]
+            return [null, 0, false]
         }
 
         const dataView = new DataView(buffer)
@@ -59,7 +59,7 @@ export abstract class MLMessage {
         if (opcode == -1 || size < 0) {
             logger.warn(`Malformed packet: ${opcode} - ${size}`)
             buffer.slice(6)
-            return [null, 0]
+            return [null, 0, true]
         }
 
         if (buffer.byteLength >= SIZE_HEADER + size) {
@@ -68,23 +68,22 @@ export abstract class MLMessage {
 
             const data = buffer.slice(0, size)
             buffer = buffer.slice(size)
-            logger.debug("Remaining buffer:", MLUtils.buf2hex(buffer))
             switch (opcode) {
             case MLMessageTypeFrom.T_CORE_PROTOCOL:
-                return [MLMessageCoreProtocol.fromBuffer(data), size + SIZE_HEADER]
+                return [MLMessageCoreProtocol.fromBuffer(data), size + SIZE_HEADER, true]
             case MLMessageTypeFrom.T_NET_INFO:
-                return [MLMessageFromNetInfo.fromBuffer(data), size + SIZE_HEADER]
+                return [MLMessageFromNetInfo.fromBuffer(data), size + SIZE_HEADER, true]
             case MLMessageTypeFrom.T_BAD_PASSWORD:
-                return [new MLMessageBadPassword(), size + SIZE_HEADER]
+                return [new MLMessageBadPassword(), size + SIZE_HEADER, true]
             default:
                 logger.warn(`Unknown msg with opcode: ${opcode}`)
-                return [null, 0]
+                return [null, 0, true]
             }
         }
         else
             logger.debug("Insufficient data")
 
-        return [null, 0]
+        return [null, 0, false]
     }
 
     /**

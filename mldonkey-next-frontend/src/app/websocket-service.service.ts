@@ -64,17 +64,23 @@ export class WebSocketService {
     private onMessageReceived(data: ArrayBuffer): void {
         this.buffer = MLUtils.concatArrayBuffers(this.buffer, data)
         logger.trace('<-' , MLUtils.buf2hex(this.buffer))
-        const [msg, consumed] = ML.MLMessage.processBuffer(this.buffer)
-        this.buffer = this.buffer.slice(consumed)
-        if (!msg)
-            return
-        if (msg)
-            logger.info("<- Message received:", msg.type)
-        if (msg.type == ML.MLMessageTypeFrom.T_CORE_PROTOCOL)
-            this.sendMsg(new ML.MLMessageGuiProtocol(33))
-        else if (msg.type != ML.MLMessageTypeFrom.T_BAD_PASSWORD)
-            this.connectionState.value = MLConnectionState.S_AUTHENTICATED
-        this.lastMessage.value = msg
+
+        // eslint-disable-next-line no-constant-condition
+        while (true) {
+            const [msg, consumed, tryAgain] = ML.MLMessage.processBuffer(this.buffer)
+            this.buffer = this.buffer.slice(consumed)
+            if (!msg)
+                return
+            if (msg)
+                logger.info("<- Message received:", msg.type)
+            if (msg.type == ML.MLMessageTypeFrom.T_CORE_PROTOCOL)
+                this.sendMsg(new ML.MLMessageGuiProtocol(33))
+            else if (msg.type != ML.MLMessageTypeFrom.T_BAD_PASSWORD)
+                this.connectionState.value = MLConnectionState.S_AUTHENTICATED
+            this.lastMessage.value = msg
+            if (!tryAgain)
+                break
+        }
     }
 
     private onError(error: unknown): void {
