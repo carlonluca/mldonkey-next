@@ -23,7 +23,9 @@
  */
 
 import { Component } from '@angular/core'
+import { interval } from 'rxjs'
 import { logger } from 'src/app/core/MLLogger'
+import { MLMsgToGetDownload } from 'src/app/core/MLMsg'
 import { MLMsgConsole } from 'src/app/core/MLMsgConsole'
 import { MLMessageFromNetInfo } from 'src/app/core/MLMsgNetInfo'
 import { WebSocketService } from 'src/app/websocket-service.service'
@@ -43,5 +45,6 @@ export class HomeComponent {
                 logger.debug("Console:", msg.command)
             }
         })
+        interval(1000).subscribe(() => websocketService.sendMsg(new MLMsgToGetDownload()))
     }
 }

@@ -165,7 +165,7 @@ export class WebSocketService {
                 return [new MLMessageBadPassword(), size + SIZE_HEADER, true]
             default:
                 logger.warn(`Unknown msg with opcode: ${opcode}`)
-                return [null, 0, true]
+                return [null, size + SIZE_HEADER, true]
             }
         }
         else

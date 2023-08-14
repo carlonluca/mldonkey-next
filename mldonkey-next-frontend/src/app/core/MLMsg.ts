@@ -37,6 +37,7 @@ export enum MLMessageTypeFrom {
 
 export enum MLMessageTypeTo {
     T_GUI_PROTOCOL = 0,
+    T_GET_DOWNLOAD_FILES = 45,
     T_PASSWORD = 52
 }
 
@@ -239,5 +240,17 @@ export class MLMessageToPassword extends MLMessageTo {
         ret = this.appendString(ret, this.passwd)
         ret = this.appendString(ret, this.user)
         return this.createEnvelope(ret)
+    }
+}
+
+export class MLMsgToGetDownload extends MLMessageTo {
+    constructor() {
+        super(MLMessageTypeTo.T_GET_DOWNLOAD_FILES)
+    }
+
+    public toBuffer(): ArrayBuffer {
+        let ret = new ArrayBuffer(0)
+        ret = this.createEnvelope(ret)
+        return ret
     }
 }
