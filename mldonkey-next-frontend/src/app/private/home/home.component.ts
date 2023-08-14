@@ -24,6 +24,7 @@
 
 import { Component } from '@angular/core'
 import { logger } from 'src/app/core/MLLogger'
+import { MLMsgConsole } from 'src/app/core/MLMsgConsole'
 import { MLMessageFromNetInfo } from 'src/app/core/MLMsgNetInfo'
 import { WebSocketService } from 'src/app/websocket-service.service'
 
@@ -36,8 +37,10 @@ export class HomeComponent {
     constructor(private websocketService: WebSocketService) {
         websocketService.lastMessage.observable.subscribe(msg => {
             if (msg instanceof MLMessageFromNetInfo) {
-                const netInfo = msg as MLMessageFromNetInfo
-                logger.debug("Net info:", netInfo.name, netInfo.configFile, netInfo.connected, netInfo.flags)
+                logger.debug("Net info:", msg.name, msg.configFile, msg.connected, msg.flags)
+            }
+            else if (msg instanceof MLMsgConsole) {
+                logger.debug("Console:", msg.command)
             }
         })
     }

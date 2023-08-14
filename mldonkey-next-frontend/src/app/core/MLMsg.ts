@@ -22,8 +22,6 @@
  * Date: 14.08.2023
  */
 
-import { logger } from './MLLogger'
-import { MLMessageFromNetInfo } from './MLMsgNetInfo'
 import { MLUtils } from './MLUtils'
 
 /**
@@ -32,6 +30,7 @@ import { MLUtils } from './MLUtils'
 export enum MLMessageTypeFrom {
     T_NONE = -1,
     T_CORE_PROTOCOL = 0,
+    T_CONSOLE = 19,
     T_NET_INFO = 20,
     T_BAD_PASSWORD = 47
 }
@@ -54,60 +53,6 @@ export abstract class MLMessage {
      */
     constructor(opcode: number) {
         this.opcode = opcode
-    }
-
-    /**
-     * Parses the buffer. Returns a message if parsed successfully and the number
-     * of consumed bytes.
-     * 
-     * @param data 
-     * @returns 
-     */
-    static processBuffer(buffer: ArrayBuffer): [MLMessageFrom | null, number, boolean] {
-        const SIZE_HEADER = 6
-        const SIZE_SIZE = 4
-        const SIZE_OPCODE = 2
-
-        if (buffer.byteLength < SIZE_HEADER) {
-            logger.debug("Insufficient data")
-            return [null, 0, false]
-        }
-
-        const dataView = new DataView(buffer)
-        const size = dataView.getInt32(0, true) - SIZE_OPCODE
-        logger.debug(`<- Size: ${size} - ${MLUtils.buf2hex(buffer.slice(0, 4))}`)
-
-        const opcode = dataView.getInt16(SIZE_SIZE, true)
-        logger.debug(`<- Opcode: ${opcode}`)
-
-        if (opcode == -1 || size < 0) {
-            logger.warn(`Malformed packet: ${opcode} - ${size}`)
-            buffer.slice(6)
-            return [null, 0, true]
-        }
-
-        if (buffer.byteLength >= SIZE_HEADER + size) {
-            logger.debug("Full message received:", MLUtils.buf2hex(buffer.slice(0, SIZE_HEADER + size)))
-            buffer = buffer.slice(SIZE_HEADER)
-
-            const data = buffer.slice(0, size)
-            buffer = buffer.slice(size)
-            switch (opcode) {
-            case MLMessageTypeFrom.T_CORE_PROTOCOL:
-                return [MLMessageCoreProtocol.fromBuffer(data), size + SIZE_HEADER, true]
-            case MLMessageTypeFrom.T_NET_INFO:
-                return [MLMessageFromNetInfo.fromBuffer(data), size + SIZE_HEADER, true]
-            case MLMessageTypeFrom.T_BAD_PASSWORD:
-                return [new MLMessageBadPassword(), size + SIZE_HEADER, true]
-            default:
-                logger.warn(`Unknown msg with opcode: ${opcode}`)
-                return [null, 0, true]
-            }
-        }
-        else
-            logger.debug("Insufficient data")
-
-        return [null, 0, false]
     }
 
     /**
@@ -200,26 +145,20 @@ export abstract class MLMessage {
  * Represents the CoreProtocol message.
  */
 export abstract class MLMessageFrom extends MLMessage {
-    public type: MLMessageTypeFrom
-
     /**
      * Ctor.
      */
-    constructor(type: MLMessageTypeFrom) {
+    constructor(public type: MLMessageTypeFrom) {
         super(type)
-        this.type = type
     }
 }
 
 export abstract class MLMessageTo extends MLMessage {
-    public type: MLMessageTypeTo
-
     /**
      * Ctor.
      */
-    constructor(type: MLMessageTypeTo) {
+    constructor(public type: MLMessageTypeTo) {
         super(type)
-        this.type = type
     }
 
     /**
