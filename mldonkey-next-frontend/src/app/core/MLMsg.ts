@@ -19,7 +19,7 @@
 /**
  * Author:  Luca Carlon
  * Company: -
- * Date: 14.08.2023
+ * Date: 2023.08.14
  */
 
 import { MLUtils } from './MLUtils'
@@ -232,56 +232,6 @@ export abstract class MLMessage {
         const tmpBuff = new DataView(new ArrayBuffer(4))
         tmpBuff.setInt32(0, i, true)
         return MLUtils.concatArrayBuffers(buffer, tmpBuff.buffer)
-    }
-
-    protected static readRawData(buffer: ArrayBuffer, offset: number, length: number): [ArrayBuffer, number] {
-        return [buffer.slice(offset, offset + length), length]
-    }
-
-    protected static readMd4(buffer: ArrayBuffer, offset: number): [ArrayBuffer, number] {
-        return this.readRawData(buffer, offset, 16)
-    }
-
-    protected static readString(buffer: ArrayBuffer, offset: number): [string, number] {
-        let [size, consumed] = this.readInt16(buffer, offset)
-        if (size == 0xffff) {
-            [size, consumed] = this.readInt32(buffer, offset + consumed)
-            consumed += 2
-        }
-
-        const decoder = new TextDecoder("iso-8859-1")
-        const ret = decoder.decode(new DataView(buffer, offset + consumed, size))
-        return [ret, consumed + size]
-    }
-
-    protected static readStringList(buffer: ArrayBuffer, offset: number): [string[], number] {
-        let consumed = 0
-        const [size] = this.readInt16(buffer, offset)
-        consumed += 2
-        const ret: string[] = []
-        for (let i = 0; i < size; i++) {
-            const [s, consumedString] = this.readString(buffer, offset + consumed)
-            consumed += consumedString
-            ret.push(s)
-        }
-
-        return [ret, consumed]
-    }
-
-    protected static readInt8(buffer: ArrayBuffer, offset: number): [number, number] {
-        return [new DataView(buffer).getInt8(offset), 1]
-    }
-
-    protected static readInt16(buffer: ArrayBuffer, offset: number): [number, number] {
-        return [new DataView(buffer).getInt16(offset, true), 2]
-    }
-
-    protected static readInt32(buffer: ArrayBuffer, offset: number): [number, number] {
-        return [new DataView(buffer).getInt32(offset, true), 4]
-    }
-
-    protected static readInt64(buffer: ArrayBuffer, offset: number): [bigint, number] {
-        return [new DataView(buffer).getBigInt64(offset, true), 8]
     }
 }
 

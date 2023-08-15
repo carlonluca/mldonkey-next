@@ -1,0 +1,159 @@
+/*
+ * This file is part of mldonket-next.
+ *
+ * Copyright (c) 2023 Luca Carlon
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 3.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * Author:  Luca Carlon
+ * Company: -
+ * Date: 2023.08.15
+ */
+
+export class MLBufferUtils {
+    public static readRawData(buffer: ArrayBuffer, offset: number, length: number): [ArrayBuffer, number] {
+        return [buffer.slice(offset, offset + length), length]
+    }
+
+    public static readMd4(buffer: ArrayBuffer, offset: number): [ArrayBuffer, number] {
+        return this.readRawData(buffer, offset, 16)
+    }
+
+    public static readString(buffer: ArrayBuffer, offset: number): [string, number] {
+        let [size, consumed] = this.readInt16(buffer, offset)
+        if (size == 0xffff) {
+            [size, consumed] = this.readInt32(buffer, offset + consumed)
+            consumed += 2
+        }
+
+        const decoder = new TextDecoder("iso-8859-1")
+        const ret = decoder.decode(new DataView(buffer, offset + consumed, size))
+        return [ret, consumed + size]
+    }
+
+    public static readStringList(buffer: ArrayBuffer, offset: number): [string[], number] {
+        let consumed = 0
+        const [size] = this.readInt16(buffer, offset)
+        consumed += 2
+        const ret: string[] = []
+        for (let i = 0; i < size; i++) {
+            const [s, consumedString] = this.readString(buffer, offset + consumed)
+            consumed += consumedString
+            ret.push(s)
+        }
+
+        return [ret, consumed]
+    }
+
+    public static readInt8(buffer: ArrayBuffer, offset: number): [number, number] {
+        return [new DataView(buffer).getInt8(offset), 1]
+    }
+
+    public static readInt16(buffer: ArrayBuffer, offset: number): [number, number] {
+        return [new DataView(buffer).getInt16(offset, true), 2]
+    }
+
+    public static readInt32(buffer: ArrayBuffer, offset: number): [number, number] {
+        return [new DataView(buffer).getInt32(offset, true), 4]
+    }
+
+    public static readInt64(buffer: ArrayBuffer, offset: number): [bigint, number] {
+        return [new DataView(buffer).getBigInt64(offset, true), 8]
+    }
+}
+
+export class MLMsgReader {
+    constructor(public data: ArrayBuffer, public offset: number = 0) {}
+
+    readRawData(offset: number, length: number): [ArrayBuffer, number] {
+        return MLBufferUtils.readRawData(this.data, offset, length)
+    }
+
+    readMd4(offset: number): [ArrayBuffer, number] {
+        return MLBufferUtils.readMd4(this.data, offset)
+    }
+
+    readStringList(offset: number): [string[], number] {
+        return MLBufferUtils.readStringList(this.data, offset)
+    }
+
+    readString(offset: number): [string, number] {
+        return MLBufferUtils.readString(this.data, offset)
+    }
+
+    readInt8(offset: number): [number, number] {
+        return MLBufferUtils.readInt8(this.data, offset)
+    }
+
+    readInt16(offset: number): [number, number] {
+        return MLBufferUtils.readInt16(this.data, offset)
+    }
+
+    readInt32(offset: number): [number, number] {
+        return MLBufferUtils.readInt32(this.data, offset)
+    }
+
+    readInt64(offset: number): [bigint, number] {
+        return MLBufferUtils.readInt64(this.data, offset)
+    }
+
+    takeRawData(length: number): ArrayBuffer {
+        const [ret, consumed] = this.readRawData(this.offset, length)
+        this.offset += consumed
+        return ret
+    }
+
+    takeMd4(): ArrayBuffer {
+        const [ret, consumed] = this.readMd4(this.offset)
+        this.offset += consumed
+        return ret
+    }
+
+    takeStringList(): string[] {
+        const [ret, consumed] = this.readStringList(this.offset)
+        this.offset += consumed
+        return ret
+    }
+
+    takeString(): string {
+        const [ret, consumed] = this.readString(this.offset)
+        this.offset += consumed
+        return ret
+    }
+
+    takeInt8(): number {
+        const [ret, consumed] = this.readInt8(this.offset)
+        this.offset += consumed
+        return ret
+    }
+
+    takeInt16(): number {
+        const [ret, consumed] = this.readInt16(this.offset)
+        this.offset += consumed
+        return ret
+    }
+
+    takeInt32(): number {
+        const [ret, consumed] = this.readInt32(this.offset)
+        this.offset += consumed
+        return ret
+    }
+
+    takeInt64(): bigint {
+        const [ret, consumed] = this.readInt64(this.offset)
+        this.offset += consumed
+        return ret
+    }
+}

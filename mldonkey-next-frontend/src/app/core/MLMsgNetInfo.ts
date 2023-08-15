@@ -23,6 +23,7 @@
  */
 
 import { MLMessageFrom, MLMessageTypeFrom } from "./MLMsg"
+import { MLMsgReader } from "./MLMsgReader"
 import { MLUPdateable } from "./MLUpdateable"
 
 export enum MLNetworkFlags {
@@ -62,29 +63,21 @@ export class MLMessageFromNetInfo extends MLMessageFrom implements MLUPdateable<
     }
 
     public static fromBuffer(buffer: ArrayBuffer): MLMessageFrom {
-        let offset = 0
-        const [nn] = this.readInt32(buffer, 0)
-        offset += 4
-        const [name, consumedName] = this.readString(buffer, offset)
-        offset += consumedName
-        const [enabled] = this.readInt8(buffer, offset)
-        offset += 1
-        const [configFile, consumedConfigFile] = this.readString(buffer, offset)
-        offset += consumedConfigFile
-        const [uploaded] = this.readInt64(buffer, offset)
-        offset += 8
-        const [downloaded] = this.readInt64(buffer, offset)
-        offset += 8
-        const [connected] = this.readInt8(buffer, offset)
-        offset += 1
-        const [flagCount] = this.readInt16(buffer, offset)
-        offset += 2
+        const reader = new MLMsgReader(buffer)
+        const nn = reader.takeInt32()
+        const name = reader.takeString()
+        const enabled = reader.takeInt8()
+        const configFile = reader.takeString()
+        const uploaded = reader.takeInt64()
+        const downloaded = reader.takeInt64()
+        const connected = reader.takeInt8()
+        const flagCount = reader.takeInt16()
         let flags = 0
         for (let i = 0; i < flagCount; i++) {
-            const [j] = this.readInt16(buffer, offset)
+            const j = reader.takeInt16()
             flags |= (1 << j) as MLNetworkFlags
-            offset += 2
         }
+        
         return new MLMessageFromNetInfo(nn, name, enabled != 0, configFile, uploaded, downloaded, connected != 0, flags as MLNetworkFlags)
     }
 }

@@ -23,6 +23,7 @@
  */
 
 import { MLMessageFrom, MLMessageTypeFrom } from "./MLMsg"
+import { MLMsgReader } from "./MLMsgReader"
 
 export class MLMsgConsole extends MLMessageFrom {
     constructor(public command: string) {
@@ -30,7 +31,6 @@ export class MLMsgConsole extends MLMessageFrom {
     }
 
     public static fromBuffer(buffer: ArrayBuffer): MLMsgConsole {
-        const [s] = this.readString(buffer, 0)
-        return new MLMsgConsole(s)
+        return new MLMsgConsole(new MLMsgReader(buffer).takeString())
     }
 }

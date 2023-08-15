@@ -1,5 +1,6 @@
 import { logger } from "./MLLogger"
 import { MLMessageFrom, MLMessageTypeFrom } from "./MLMsg"
+import { MLMsgReader } from "./MLMsgReader"
 import { MLUPdateable } from "./MLUpdateable"
 
 export class MLMsgDownloadElement implements MLUPdateable<MLMsgDownloadElement> {
@@ -17,23 +18,16 @@ export class MLMsgFromDownload extends MLMessageFrom {
     }
 
     public static fromBuffer(buffer: ArrayBuffer): MLMsgFromDownload {
-        let offset = 0
-        const [elementCount] = this.readInt16(buffer, 0)
-        offset += 2
+        const reader = new MLMsgReader(buffer)
+        const elementCount = reader.takeInt16()
         const elements: Map<number, MLMsgDownloadElement> = new Map()
         //for (let i = 0; i < elementCount; i++) {
-            const [downloadId] = this.readInt32(buffer, offset)
-            offset += 4
-            const [netId] = this.readInt32(buffer, offset)
-            offset += 4
-            const [names, consumedStrings] = this.readStringList(buffer, offset)
-            offset += consumedStrings
-            const [md4, consumedMd4] = this.readMd4(buffer, offset)
-            offset += consumedMd4
-            const [size] = this.readInt64(buffer, offset)
-            offset += 8
-            const [downloaded] = this.readInt64(buffer, offset)
-            offset += 8
+            const downloadId = reader.takeInt32()
+            const netId = reader.takeInt32()
+            const names = reader.takeStringList()
+            const md4 = reader.takeMd4()
+            const size = reader.takeInt64()
+            const downloaded = reader.takeInt64()            
 
             logger.debug("File:", downloadId, names, size)
         //}
