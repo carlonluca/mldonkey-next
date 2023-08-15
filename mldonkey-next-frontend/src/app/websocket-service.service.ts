@@ -32,6 +32,7 @@ import { logger } from './core/MLLogger'
 import { MLMessageBadPassword, MLMessageCoreProtocol, MLMessageFrom, MLMessageTypeFrom } from './core/MLMsg'
 import { MLMsgConsole } from './core/MLMsgConsole'
 import { MLMessageFromNetInfo } from './core/MLMsgNetInfo'
+import { MLMsgFromDownload } from './core/MLMsgDownload'
 
 export enum MLConnectionState {
     S_NOT_CONNECTED,
@@ -159,8 +160,10 @@ export class WebSocketService {
                 return [MLMessageCoreProtocol.fromBuffer(data), size + SIZE_HEADER, true]
             case MLMessageTypeFrom.T_CONSOLE:
                 return [MLMsgConsole.fromBuffer(data), size + SIZE_HEADER, true]
-            case MLMessageTypeFrom.T_NET_INFO:
+            case MLMessageTypeFrom.T_NETWORK_INFO:
                 return [MLMessageFromNetInfo.fromBuffer(data), size + SIZE_HEADER, true]
+            case MLMessageTypeFrom.T_DOWNLOAD_FILES:
+                return [MLMsgFromDownload.fromBuffer(data), size + SIZE_HEADER, true]
             case MLMessageTypeFrom.T_BAD_PASSWORD:
                 return [new MLMessageBadPassword(), size + SIZE_HEADER, true]
             default:

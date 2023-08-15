@@ -23,6 +23,7 @@
  */
 
 import { MLMessageFrom, MLMessageTypeFrom } from "./MLMsg"
+import { MLUPdateable } from "./MLUpdateable"
 
 export enum MLNetworkFlags {
     NetworkHasServers = 0x0001,
@@ -35,7 +36,7 @@ export enum MLNetworkFlags {
     NetworkHasUpload = 0x0080
 }
 
-export class MLMessageFromNetInfo extends MLMessageFrom {
+export class MLMessageFromNetInfo extends MLMessageFrom implements MLUPdateable<MLMessageFromNetInfo> {
     constructor(
         public netNum: number,
         public name: string,
@@ -46,7 +47,18 @@ export class MLMessageFromNetInfo extends MLMessageFrom {
         public connected: boolean,
         public flags: MLNetworkFlags
     ) {
-        super(MLMessageTypeFrom.T_NET_INFO)
+        super(MLMessageTypeFrom.T_NETWORK_INFO)
+    }
+
+    public update(netInfo: MLMessageFromNetInfo) {
+        this.netNum = netInfo.netNum
+        this.name = netInfo.name
+        this.enabled = netInfo.enabled
+        this.configFile = netInfo.configFile
+        this.uploaded = netInfo.uploaded
+        this.downloaded = netInfo.downloaded
+        this.connected = netInfo.connected
+        this.flags = netInfo.flags
     }
 
     public static fromBuffer(buffer: ArrayBuffer): MLMessageFrom {

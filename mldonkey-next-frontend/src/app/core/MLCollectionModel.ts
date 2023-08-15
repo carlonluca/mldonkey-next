@@ -22,22 +22,18 @@
  * Date: 2023.08.14
  */
 
-import { WebSocketService } from "../websocket-service.service"
-import { MLCollectionModel } from "./MLCollectionModel"
-import { MLMessageTypeFrom } from "./MLMsg"
-import { MLMessageFromNetInfo } from "./MLMsgNetInfo"
+import { MLUPdateable } from "./MLUpdateable"
 
-export class MLNetworkManager extends MLCollectionModel<number, MLMessageFromNetInfo> {
-    constructor(private websocketService: WebSocketService) {
-        super()
-        websocketService.lastMessage.observable.subscribe(msg => {
-            if (msg.type == MLMessageTypeFrom.T_NETWORK_INFO) {
-                this.handleValue(msg as MLMessageFromNetInfo)
-            }
-        })
-    }
+export abstract class MLCollectionModel<K, V extends MLUPdateable<V>> {
+    public elements: Map<K, V> = new Map()
 
-    protected override keyFromValue(value: MLMessageFromNetInfo): number {
-        return value.netNum
+    protected abstract keyFromValue(value: V): K
+
+    protected handleValue(value: V) {
+        const oldValue = this.elements.get(this.keyFromValue(value))
+        if (!oldValue)
+            this.elements.set(this.keyFromValue(value), value)
+        else
+            oldValue.update(value)
     }
 }
