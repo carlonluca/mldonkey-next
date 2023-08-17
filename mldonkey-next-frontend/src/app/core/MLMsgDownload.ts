@@ -1,10 +1,68 @@
+/*
+ * This file is part of mldonket-next.
+ *
+ * Copyright (c) 2023 Luca Carlon
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 3.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * Author:  Luca Carlon
+ * Company: -
+ * Date: 2023.08.17
+ */
+
 import { logger } from "./MLLogger"
 import { MLMessageFrom, MLMessageTypeFrom } from "./MLMsg"
 import { MLMsgReader } from "./MLMsgReader"
 import { MLUPdateable } from "./MLUpdateable"
 
+export enum MLMsgFromDownloadState {
+    S_DOWNLOADING = 0,
+    S_PAUSED,
+    S_COMPLETE,
+    S_SHARED,
+    S_CANCELLED,
+    S_NEW,
+    S_ABORTED,
+    S_QUEUED
+}
+
 export class MLMsgDownloadElement implements MLUPdateable<MLMsgDownloadElement> {
-    constructor(public downloadId: number) { }
+    constructor(
+        public downloadId: number,
+        public netId: number,
+        public names: string[],
+        public md4: ArrayBuffer,
+        public size: bigint,
+        public downloaded: bigint,
+        public nlocations: number,
+        public nclients: number,
+        public state: MLMsgFromDownloadState,
+        public abortedMsg: string|null,
+        public chunks: ArrayBuffer,
+        public availability: Map<number, ArrayBuffer>,
+        public speed: number,
+        public chunksAge: number[],
+        public age: number,
+        public format: number,
+        public formatInfo: string,
+        public name: string,
+        public lastSeen: number,
+        public priority: number,
+        public comment: string,
+        public uids: string[]
+        ) { }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
     update(update: MLMsgDownloadElement): void {
@@ -13,7 +71,7 @@ export class MLMsgDownloadElement implements MLUPdateable<MLMsgDownloadElement> 
 }
 
 export class MLMsgFromDownload extends MLMessageFrom {
-    constructor(public elemnts: Map<number, MLMsgDownloadElement>) {
+    constructor(public elements: Map<number, MLMsgDownloadElement>) {
         super(MLMessageTypeFrom.T_DOWNLOAD_FILES)
     }
 
@@ -53,7 +111,6 @@ export class MLMsgFromDownload extends MLMessageFrom {
                 age = 0x7fffffff + age
             const format = reader.takeInt8()
             let formatInfo = ""
-            logger.debug("File1:", downloadId, names, size, speed, chunksAge, formatInfo, format)
             switch (format) {
                 case 1: {
                     const a = reader.takeString()
@@ -224,8 +281,6 @@ export class MLMsgFromDownload extends MLMessageFrom {
                 break
             }
 
-            logger.debug("File2:", downloadId, names, size, speed, formatInfo)
-
             const name = reader.takeString()
             const lastSeen = reader.takeInt32()
             let priority = reader.takeInt32()
@@ -234,19 +289,32 @@ export class MLMsgFromDownload extends MLMessageFrom {
             const comment = reader.takeString()
             // TODO: check protocol
             const uids = reader.takeStringList()
+            elements.set(downloadId, new MLMsgDownloadElement(
+                downloadId,
+                netId,
+                names,
+                md4,
+                size,
+                downloaded,
+                nlocations,
+                nclients,
+                state,
+                abortedmsg,
+                chunks,
+                availability,
+                speed,
+                chunksAge,
+                age,
+                format,
+                formatInfo,
+                name,
+                lastSeen,
+                priority,
+                comment,
+                uids
+            ))
         }
 
-        return new MLMsgFromDownload(new Map())
+        return new MLMsgFromDownload(elements)
     }
-}
-
-export enum MLMsgFromDownloadState {
-    S_DOWNLOADING = 0,
-    S_PAUSED,
-    S_COMPLETE,
-    S_SHARED,
-    S_CANCELLED,
-    S_NEW,
-    S_ABORTED,
-    S_QUEUED
 }
