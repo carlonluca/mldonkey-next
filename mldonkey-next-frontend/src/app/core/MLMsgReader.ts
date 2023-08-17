@@ -16,6 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { logger } from "./MLLogger"
+
 /**
  * Author:  Luca Carlon
  * Company: -
@@ -27,20 +29,27 @@ export class MLBufferUtils {
         return [buffer.slice(offset, offset + length), length]
     }
 
+    public static readByteArray(buffer: ArrayBuffer, offset: number): [ArrayBuffer, number] {
+        let consumed = 0
+        let [length] = this.readInt16(buffer, offset)
+        consumed += 2
+        if (length === 0xffff) {
+            [length] = this.readInt32(buffer, offset)
+            consumed += 4
+        }
+        const [ret] = this.readRawData(buffer, offset + consumed, length)
+        return [ret, length + consumed]
+    }
+
     public static readMd4(buffer: ArrayBuffer, offset: number): [ArrayBuffer, number] {
         return this.readRawData(buffer, offset, 16)
     }
 
     public static readString(buffer: ArrayBuffer, offset: number): [string, number] {
-        let [size, consumed] = this.readInt16(buffer, offset)
-        if (size == 0xffff) {
-            [size, consumed] = this.readInt32(buffer, offset + consumed)
-            consumed += 2
-        }
-
+        const [data, consumed] = this.readByteArray(buffer, offset)
         const decoder = new TextDecoder("iso-8859-1")
-        const ret = decoder.decode(new DataView(buffer, offset + consumed, size))
-        return [ret, consumed + size]
+        const ret = decoder.decode(data)
+        return [ret, consumed]
     }
 
     public static readStringList(buffer: ArrayBuffer, offset: number): [string[], number] {
@@ -72,6 +81,24 @@ export class MLBufferUtils {
     public static readInt64(buffer: ArrayBuffer, offset: number): [bigint, number] {
         return [new DataView(buffer).getBigInt64(offset, true), 8]
     }
+
+    public static readDecimal(buffer: ArrayBuffer, offset: number): [number, number] {
+        /*const [data, consumed] = this.readByteArray(buffer, offset)
+        if (data.byteLength <= 4)
+            return [new DataView(data).getFloat32(0, true), consumed]
+        else if (data.byteLength <= 8)
+            return [new DataView(data).getFloat64(0, true), consumed]
+        else {
+            logger.warn("Could not read decimal of size", data.byteLength)
+            return [0, consumed]
+        }*/
+        const [data, consumed] = this.readString(buffer, offset)
+        return [parseFloat(data), consumed]
+    }
+
+    public static readDate(buffer: ArrayBuffer, offset: number): [number, number] {
+        return [Math.round(Date.now() / 1000) - this.readInt32(buffer, offset)[0], 4]
+    }
 }
 
 export class MLMsgReader {
@@ -79,6 +106,10 @@ export class MLMsgReader {
 
     readRawData(offset: number, length: number): [ArrayBuffer, number] {
         return MLBufferUtils.readRawData(this.data, offset, length)
+    }
+
+    readByteArray(offset: number): [ArrayBuffer, number] {
+        return MLBufferUtils.readByteArray(this.data, offset)
     }
 
     readMd4(offset: number): [ArrayBuffer, number] {
@@ -109,8 +140,22 @@ export class MLMsgReader {
         return MLBufferUtils.readInt64(this.data, offset)
     }
 
+    readDecimal(offset: number): [number, number] {
+        return MLBufferUtils.readDecimal(this.data, offset)
+    }
+
+    readDate(offset: number): [number, number] {
+        return MLBufferUtils.readDate(this.data, offset)
+    }
+
     takeRawData(length: number): ArrayBuffer {
         const [ret, consumed] = this.readRawData(this.offset, length)
+        this.offset += consumed
+        return ret
+    }
+
+    takeByteArray(): ArrayBuffer {
+        const [ret, consumed] = this.readByteArray(this.offset)
         this.offset += consumed
         return ret
     }
@@ -153,6 +198,18 @@ export class MLMsgReader {
 
     takeInt64(): bigint {
         const [ret, consumed] = this.readInt64(this.offset)
+        this.offset += consumed
+        return ret
+    }
+
+    takeDecimal(): number {
+        const [ret, consumed] = this.readDecimal(this.offset)
+        this.offset += consumed
+        return ret
+    }
+
+    takeDate(): number {
+        const [ret, consumed] = this.readDate(this.offset)
         this.offset += consumed
         return ret
     }
