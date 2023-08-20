@@ -22,10 +22,21 @@
  * Date: 2023.08.17
  */
 
+import { WebSocketService } from "../websocket-service.service"
 import { MLCollectionModel } from "./MLCollectionModel"
-import { MLMsgDownloadElement } from "./MLMsgDownload"
+import { MLMessageTypeFrom } from "./MLMsg"
+import { MLMsgDownloadElement, MLMsgFromDownload } from "./MLMsgDownload"
 
 export class MLDownloadManager extends MLCollectionModel<number, MLMsgDownloadElement> {
+    constructor(websocketService: WebSocketService) {
+        super()
+        websocketService.lastMessage.observable.subscribe(msg => {
+            if (msg.type == MLMessageTypeFrom.T_DOWNLOAD_FILES) {
+                (msg as MLMsgFromDownload).elements.forEach((v) => this.handleValue(v))
+            }
+        })
+    }
+
     protected override keyFromValue(value: MLMsgDownloadElement): number {
         return value.downloadId
     }

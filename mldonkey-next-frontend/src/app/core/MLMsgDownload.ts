@@ -22,7 +22,6 @@
  * Date: 2023.08.17
  */
 
-import { logger } from "./MLLogger"
 import { MLMessageFrom, MLMessageTypeFrom } from "./MLMsg"
 import { MLMsgReader } from "./MLMsgReader"
 import { MLUPdateable } from "./MLUpdateable"

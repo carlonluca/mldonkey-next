@@ -22,18 +22,20 @@
  * Date: 2023.08.14
  */
 
+import { MLObservableVariable } from "./MLObservableVariable"
 import { MLUPdateable } from "./MLUpdateable"
 
 export abstract class MLCollectionModel<K, V extends MLUPdateable<V>> {
-    public elements: Map<K, V> = new Map()
+    public elements: MLObservableVariable<Map<K, V>> = new MLObservableVariable(new Map())
 
     protected abstract keyFromValue(value: V): K
 
     protected handleValue(value: V) {
-        const oldValue = this.elements.get(this.keyFromValue(value))
+        const oldValue = this.elements.value.get(this.keyFromValue(value))
         if (!oldValue)
-            this.elements.set(this.keyFromValue(value), value)
+            this.elements.value.set(this.keyFromValue(value), value)
         else
             oldValue.update(value)
+        this.elements.observable.next(this.elements.value)
     }
 }
