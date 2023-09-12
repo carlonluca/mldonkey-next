@@ -22,23 +22,25 @@
  * Company: -
  */
 
-import { logger } from './core/MLLogger'
 import WebSocket from 'ws'
+import { logger } from './core/MLLogger'
 import { MLBridgeManager } from './core/MLBridgeManager'
+import { IncomingMessage } from 'http';
 
 const wss = new WebSocket.Server({ port: 8080 });
 const bridgeManager = new MLBridgeManager();
 
-wss.on('connection', (ws: WebSocket /* , _req: IncomingMessage */) => {
-    console.log("Client connected")
+wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
+    logger.info(`Client connected: ${req.socket.remoteAddress}`)
     bridgeManager.clientConnected(ws)
 
-    ws.on('close', () => {
-        console.log('Client disconnected')
+    ws.on('close', (ws: WebSocket, req: IncomingMessage) => {
+        logger.info(`Client disconnected: ${req.socket.remoteAddress}`)
         bridgeManager.clientDisconnected(ws)
     })
-    ws.on("error", (_ws: WebSocket, err: Error) => {
+    ws.on("error", (ws: WebSocket, err: Error) => {
         logger.warn(`Client failed: ${err.message}`)
+        bridgeManager.clientDisconnected(ws)
     })
 })
 

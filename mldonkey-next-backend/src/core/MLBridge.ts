@@ -41,24 +41,36 @@ export class MLBridge {
      * @param webSocket 
      * @param mlSocket 
      */
-    constructor(
-        public webSocket: WebSocket
-    ) {
+    constructor(public webSocket: WebSocket) {
+        this.reconnect()
+    }
+
+    reconnect() {
         this.mlSocket = new net.Socket()
         this.mlSocket.connect(PORT, HOST, function () {
             logger.info(`Connected to: ${HOST}:${PORT}`)
         })
         this.mlSocket.on('data', function (data: Buffer) {
             logger.verbose(`Sending data to client`)
-            webSocket.send(data)
+            this.webSocket.send(data)
         })
         this.mlSocket.on('close', function () {
             logger.info('Connection closed')
-            // TODO
+        })
+        this.mlSocket.on('error', (error) => {
+            logger.warn("Connection error")
+            // TODO: implement this.
+        })
+        this.mlSocket.on('timeout', () => {
+            logger.warn("Connection timed out")
+            // TODO: implement this.
         })
         this.webSocket.on("message", data => {
             logger.verbose(`Sending data to mlnet core`)
-            this.mlSocket.write(data as Buffer)
+            this.mlSocket.write(data as Buffer, (error) => {
+                logger.warn("Failed to send data")
+                // TODO: implement this
+            })
         })
     }
 
