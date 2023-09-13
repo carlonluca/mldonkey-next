@@ -58,18 +58,18 @@ export class MLBridge {
             logger.info('Connection closed')
         })
         this.mlSocket.on('error', (error) => {
-            logger.warn("Connection error")
-            // TODO: implement this.
+            logger.warn(`Connection error: ${error.message}`)
+            this.webSocket.close()
         })
         this.mlSocket.on('timeout', () => {
             logger.warn("Connection timed out")
-            // TODO: implement this.
+            this.webSocket.close()
         })
         this.webSocket.on("message", data => {
             logger.verbose(`Sending data to mlnet core`)
             this.mlSocket.write(data as Buffer, (error) => {
-                logger.warn("Failed to send data")
-                // TODO: implement this
+                logger.warn(`Failed to send data to mldonkey: ${error.message}`)
+                this.webSocket.close()
             })
         })
     }
