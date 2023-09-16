@@ -27,7 +27,7 @@ import { logger } from './core/MLLogger'
 import { MLBridgeManager } from './core/MLBridgeManager'
 import { IncomingMessage } from 'http';
 
-const wss = new WebSocket.Server({ port: 8080 });
+const wss = new WebSocket.Server({ port: 4002 });
 const bridgeManager = new MLBridgeManager();
 
 wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
@@ -44,4 +44,4 @@ wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
     })
 })
 
-console.log('WebSocket server listening on port 8080');
+console.log('WebSocket server listening on port 4002');
