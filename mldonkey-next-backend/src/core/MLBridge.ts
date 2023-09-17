@@ -47,14 +47,14 @@ export class MLBridge {
 
     reconnect() {
         this.mlSocket = new net.Socket()
-        this.mlSocket.connect(PORT, HOST, function () {
+        this.mlSocket.connect(PORT, HOST, () => {
             logger.info(`Connected to: ${HOST}:${PORT}`)
         })
-        this.mlSocket.on('data', function (data: Buffer) {
+        this.mlSocket.on('data', (data: Buffer) => {
             logger.verbose(`Sending data to client`)
             this.webSocket.send(data)
         })
-        this.mlSocket.on('close', function () {
+        this.mlSocket.on('close', () => {
             logger.info('Connection closed')
         })
         this.mlSocket.on('error', (error) => {
@@ -67,10 +67,7 @@ export class MLBridge {
         })
         this.webSocket.on("message", data => {
             logger.verbose(`Sending data to mlnet core`)
-            this.mlSocket.write(data as Buffer, (error) => {
-                logger.warn(`Failed to send data to mldonkey: ${error.message}`)
-                this.webSocket.close()
-            })
+            this.mlSocket.write(data as Buffer)
         })
     }
 
