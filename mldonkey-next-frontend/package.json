@@ -24,6 +24,7 @@
     "blob-to-buffer": "^1.2.9",
     "buffer": "^6.0.3",
     "loglevel": "^1.8.1",
+    "node": "20.5",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"

@@ -26,6 +26,7 @@ import { Component } from '@angular/core'
 import { MLConnectionState, WebSocketService } from '../websocket-service.service'
 import { SpinnerService } from '../services/spinner.service'
 import { Router } from '@angular/router'
+import { environment } from '../../environments/environment'
 
 @Component({
     selector: 'app-public',
@@ -62,7 +63,7 @@ export class PublicComponent {
             }
         })
 
-        this.webSocketService.connect(`ws://${window.location.hostname}:8080`)
+        this.webSocketService.connect(`ws://${environment.mldonkeyWsAddr}:${environment.mldonkeyWsPort}`)
     }
 
     /**
