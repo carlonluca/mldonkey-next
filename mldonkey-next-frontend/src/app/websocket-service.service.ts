@@ -163,6 +163,10 @@ export class WebSocketService {
             case MLMessageTypeFrom.T_NETWORK_INFO:
                 return [MLMessageFromNetInfo.fromBuffer(data), size + SIZE_HEADER, true]
             case MLMessageTypeFrom.T_DOWNLOAD_FILES:
+            case MLMessageTypeFrom.T_DOWNLOAD_FILES_V1:
+            case MLMessageTypeFrom.T_DOWNLOAD_FILES_V2:
+            case MLMessageTypeFrom.T_DOWNLOAD_FILES_V3:
+            case MLMessageTypeFrom.T_DOWNLOAD_FILES_V4:
                 return [MLMsgFromDownload.fromBuffer(data), size + SIZE_HEADER, true]
             case MLMessageTypeFrom.T_BAD_PASSWORD:
                 return [new MLMessageBadPassword(), size + SIZE_HEADER, true]
