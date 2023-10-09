@@ -45,7 +45,7 @@ export class MLBufferUtils {
 
     public static readString(buffer: ArrayBuffer, offset: number): [string, number] {
         const [data, consumed] = this.readByteArray(buffer, offset)
-        const decoder = new TextDecoder("iso-8859-1")
+        const decoder = new TextDecoder("utf-8")
         const ret = decoder.decode(data)
         return [ret, consumed]
     }
