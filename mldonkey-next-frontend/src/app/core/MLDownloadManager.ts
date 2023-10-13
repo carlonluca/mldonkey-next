@@ -31,8 +31,11 @@ export class MLDownloadManager extends MLCollectionModel<number, MLMsgDownloadEl
     constructor(websocketService: WebSocketService) {
         super()
         websocketService.lastMessage.observable.subscribe(msg => {
-            if (msg.type == MLMessageTypeFrom.T_DOWNLOAD_FILES) {
+            switch (msg.type) {
+            case MLMessageTypeFrom.T_DOWNLOAD_FILES:
+            case MLMessageTypeFrom.T_DOWNLOAD_FILES_V4:
                 (msg as MLMsgFromDownload).elements.forEach((v) => this.handleValue(v))
+                break
             }
         })
     }

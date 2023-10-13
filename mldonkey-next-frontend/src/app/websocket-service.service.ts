@@ -162,10 +162,12 @@ export class WebSocketService {
                 return [MLMsgConsole.fromBuffer(data), size + SIZE_HEADER, true]
             case MLMessageTypeFrom.T_NETWORK_INFO:
                 return [MLMessageFromNetInfo.fromBuffer(data), size + SIZE_HEADER, true]
-            case MLMessageTypeFrom.T_DOWNLOAD_FILES:
             case MLMessageTypeFrom.T_DOWNLOAD_FILES_V1:
             case MLMessageTypeFrom.T_DOWNLOAD_FILES_V2:
             case MLMessageTypeFrom.T_DOWNLOAD_FILES_V3:
+                logger.warn("Obsolete download files message received")
+                return [null, size + SIZE_HEADER, false]
+            case MLMessageTypeFrom.T_DOWNLOAD_FILES:
             case MLMessageTypeFrom.T_DOWNLOAD_FILES_V4:
                 return [MLMsgFromDownload.fromBuffer(data), size + SIZE_HEADER, true]
             case MLMessageTypeFrom.T_BAD_PASSWORD:
