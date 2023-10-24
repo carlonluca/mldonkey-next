@@ -25,7 +25,8 @@
 import { WebSocketService } from "../websocket-service.service"
 import { MLCollectionModel } from "./MLCollectionModel"
 import { MLMessageTypeFrom } from "./MLMsg"
-import { MLMsgDownloadElement, MLMsgFromDownload } from "./MLMsgDownload"
+import { MLMsgDownloadElement, MLMsgFileDownloaded, MLMsgFromDownloadFile } from "./MLMsgDownload"
+import { logger } from "./MLLogger"
 
 export class MLDownloadManager extends MLCollectionModel<number, MLMsgDownloadElement> {
     constructor(websocketService: WebSocketService) {
@@ -33,8 +34,11 @@ export class MLDownloadManager extends MLCollectionModel<number, MLMsgDownloadEl
         websocketService.lastMessage.observable.subscribe(msg => {
             switch (msg.type) {
             case MLMessageTypeFrom.T_DOWNLOAD_FILES:
-            case MLMessageTypeFrom.T_DOWNLOAD_FILES_V4:
-                (msg as MLMsgFromDownload).elements.forEach((v) => this.handleValue(v))
+                (msg as MLMsgFromDownloadFile).elements.forEach((v) => this.handleValue(v))
+                break
+            case MLMessageTypeFrom.T_FILE_DOWNLOADED:
+                logger.error("DOWNLOADED:", msg)
+                this.removeWithKey((msg as MLMsgFileDownloaded).downloadId)
                 break
             }
         })

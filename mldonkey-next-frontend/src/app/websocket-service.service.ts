@@ -32,7 +32,7 @@ import { logger } from './core/MLLogger'
 import { MLMessageBadPassword, MLMessageCoreProtocol, MLMessageFrom, MLMessageTypeFrom } from './core/MLMsg'
 import { MLMsgConsole } from './core/MLMsgConsole'
 import { MLMessageFromNetInfo } from './core/MLMsgNetInfo'
-import { MLMsgFromDownload } from './core/MLMsgDownload'
+import { MLMsgFileDownloaded, MLMsgFromDownloadFile } from './core/MLMsgDownload'
 
 export enum MLConnectionState {
     S_NOT_CONNECTED,
@@ -91,16 +91,19 @@ export class WebSocketService {
 
     private onMessageReceived(data: ArrayBuffer): void {
         this.buffer = MLUtils.concatArrayBuffers(this.buffer, data)
-        logger.trace('<-' , MLUtils.buf2hex(this.buffer))
+        logger.debug('<-' , MLUtils.buf2hex(this.buffer))
+        logger.debug("Buffer size:", this.buffer.byteLength)
 
         // eslint-disable-next-line no-constant-condition
         while (true) {
             const [msg, consumed, tryAgain] = WebSocketService.processBuffer(this.buffer)
             this.buffer = this.buffer.slice(consumed)
+            logger.debug("Buffer size:", this.buffer.byteLength)
+            if (!msg && !tryAgain)
+                break
             if (!msg)
-                return
-            if (msg)
-                logger.info("<- Message received:", msg.type)
+                continue
+            logger.info("<- Message received:", msg.type)
             if (msg.type == ML.MLMessageTypeFrom.T_CORE_PROTOCOL)
                 this.sendMsg(new ML.MLMessageGuiProtocol(33))
             else if (msg.type != ML.MLMessageTypeFrom.T_BAD_PASSWORD)
@@ -169,7 +172,10 @@ export class WebSocketService {
                 return [null, size + SIZE_HEADER, false]
             case MLMessageTypeFrom.T_DOWNLOAD_FILES:
             case MLMessageTypeFrom.T_DOWNLOAD_FILES_V4:
-                return [MLMsgFromDownload.fromBuffer(data), size + SIZE_HEADER, true]
+                return [MLMsgFromDownloadFile.fromBuffer(data), size + SIZE_HEADER, true]
+            case MLMessageTypeFrom.T_FILE_DOWNLOADED:
+            case MLMessageTypeFrom.T_FILE_DOWNLOADED_V1:
+                return [MLMsgFileDownloaded.fromBuffer(data, opcode), size + SIZE_HEADER, true]
             case MLMessageTypeFrom.T_BAD_PASSWORD:
                 return [new MLMessageBadPassword(), size + SIZE_HEADER, true]
             default:

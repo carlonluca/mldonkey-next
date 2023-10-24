@@ -69,12 +69,12 @@ export class MLMsgDownloadElement implements MLUPdateable<MLMsgDownloadElement> 
     }
 }
 
-export class MLMsgFromDownload extends MLMessageFrom {
+export class MLMsgFromDownloadFile extends MLMessageFrom {
     constructor(public elements: Map<number, MLMsgDownloadElement>) {
         super(MLMessageTypeFrom.T_DOWNLOAD_FILES)
     }
 
-    public static fromBuffer(buffer: ArrayBuffer): MLMsgFromDownload {
+    public static fromBuffer(buffer: ArrayBuffer): MLMsgFromDownloadFile {
         const reader = new MLMsgReader(buffer)
         const elementCount = reader.takeInt16()
         const elements: Map<number, MLMsgDownloadElement> = new Map()
@@ -314,6 +314,28 @@ export class MLMsgFromDownload extends MLMessageFrom {
             ))
         }
 
-        return new MLMsgFromDownload(elements)
+        return new MLMsgFromDownloadFile(elements)
+    }
+}
+
+export class MLMsgFileDownloaded extends MLMessageFrom {
+    constructor(
+        public downloadId: number,
+        public downloaded: bigint,
+        public speed: number,
+        public lastseen: number | null
+    ) {
+        super(MLMessageTypeFrom.T_FILE_DOWNLOADED)
+    }
+
+    public static fromBuffer(buffer: ArrayBuffer, opcode: number): MLMsgFileDownloaded {
+        const reader = new MLMsgReader(buffer)
+        const downloadId = reader.takeInt32()
+        const downloaded = reader.takeInt64()
+        const speed = reader.takeDecimal()
+        let lastseen = null
+        if (opcode >= 46)
+            lastseen = reader.takeInt32()
+        return new MLMsgFileDownloaded(downloadId, downloaded, speed, lastseen)
     }
 }

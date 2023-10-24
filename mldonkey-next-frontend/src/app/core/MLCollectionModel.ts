@@ -38,4 +38,8 @@ export abstract class MLCollectionModel<K, V extends MLUPdateable<V>> {
             oldValue.update(value)
         this.elements.observable.next(this.elements.value)
     }
+
+    protected removeWithKey(value: K) {
+        this.elements.value.delete(value)
+    }
 }
