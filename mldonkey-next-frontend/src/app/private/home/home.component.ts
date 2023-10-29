@@ -30,7 +30,6 @@ import { WebSocketService } from 'src/app/websocket-service.service'
 import { MatTableDataSource } from '@angular/material/table'
 import { interval } from 'rxjs'
 import { MLMsgToGetDownload } from 'src/app/core/MLMsg'
-import { logger } from 'src/app/core/MLLogger'
 
 @Component({
     selector: 'app-home',
