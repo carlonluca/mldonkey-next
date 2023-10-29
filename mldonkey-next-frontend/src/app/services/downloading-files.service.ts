@@ -18,7 +18,7 @@ export class DownloadingFilesService implements OnDestroy {
     constructor(public websocketService: WebSocketService) {
         this.downloadingFiles = new MLDownloadManager(websocketService)
         this.unsubscribe.add(this.downloadingFiles.elements.observable.subscribe((downloading) => {
-            this.downloadingList.value = Array.from(downloading.values())
+            this.downloadingList.value = Array.from(downloading.values()).filter((e) => e.state == 0)
         }));
     }
     ngOnDestroy(): void {

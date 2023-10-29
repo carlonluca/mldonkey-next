@@ -60,7 +60,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         );
         this.subscriptions.add(this.downloadingService.downloadingList.observable.subscribe((list) => {
             this.dataSource.data = list
-            logger.warn("LIST:", list)
         }))
     }
 

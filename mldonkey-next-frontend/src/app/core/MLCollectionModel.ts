@@ -28,6 +28,10 @@ import { MLUPdateable } from "./MLUpdateable"
 export abstract class MLCollectionModel<K, V extends MLUPdateable<V>> {
     public elements: MLObservableVariable<Map<K, V>> = new MLObservableVariable(new Map())
 
+    public getWithKey(key: K): V | undefined {
+        return this.elements.value.get(key)
+    }
+
     protected abstract keyFromValue(value: V): K
 
     protected handleValue(value: V) {

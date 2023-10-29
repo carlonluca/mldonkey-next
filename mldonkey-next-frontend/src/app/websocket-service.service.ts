@@ -33,6 +33,7 @@ import { MLMessageBadPassword, MLMessageCoreProtocol, MLMessageFrom, MLMessageTy
 import { MLMsgConsole } from './core/MLMsgConsole'
 import { MLMessageFromNetInfo } from './core/MLMsgNetInfo'
 import { MLMsgFileDownloaded, MLMsgFromDownloadFile } from './core/MLMsgDownload'
+import { MLMsgFromFileInfo } from './core/MLMsgFileInfo'
 
 export enum MLConnectionState {
     S_NOT_CONNECTED,
@@ -176,6 +177,13 @@ export class WebSocketService {
             case MLMessageTypeFrom.T_FILE_DOWNLOADED:
             case MLMessageTypeFrom.T_FILE_DOWNLOADED_V1:
                 return [MLMsgFileDownloaded.fromBuffer(data, opcode), size + SIZE_HEADER, true]
+            case MLMessageTypeFrom.T_FILE_INFO_V1:
+            case MLMessageTypeFrom.T_FILE_INFO_V2:
+                logger.warn("Obsolete file info message received")
+                return [null, size + SIZE_HEADER, false]
+            case MLMessageTypeFrom.T_FILE_INFO_V3:
+            case MLMessageTypeFrom.T_FILE_INFO:
+                return [MLMsgFromFileInfo.fromBuffer(data), size + SIZE_HEADER, true]
             case MLMessageTypeFrom.T_BAD_PASSWORD:
                 return [new MLMessageBadPassword(), size + SIZE_HEADER, true]
             default:
