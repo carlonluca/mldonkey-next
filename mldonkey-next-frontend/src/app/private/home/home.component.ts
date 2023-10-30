@@ -22,7 +22,7 @@
  * Date: 14.08.2023
  */
 
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { MLMsgDownloadElement } from 'src/app/core/MLMsgDownload'
 import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
 import { DownloadingFilesService } from 'src/app/services/downloading-files.service'
@@ -30,6 +30,7 @@ import { WebSocketService } from 'src/app/websocket-service.service'
 import { MatTableDataSource } from '@angular/material/table'
 import { interval } from 'rxjs'
 import { MLMsgToGetDownload } from 'src/app/core/MLMsg'
+import { MatSort } from '@angular/material/sort'
 
 @Component({
     selector: 'app-home',
@@ -39,6 +40,8 @@ import { MLMsgToGetDownload } from 'src/app/core/MLMsg'
 export class HomeComponent implements OnInit, OnDestroy {
     dataSource = new MatTableDataSource<MLMsgDownloadElement>([])
     displayedColumns: string[] = ['name', 'size']
+    
+    @ViewChild(MatSort) sort: MatSort
 
     private subscriptions = new MLSubscriptionSet()
 
@@ -59,6 +62,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         );
         this.subscriptions.add(this.downloadingService.downloadingList.observable.subscribe((list) => {
             this.dataSource.data = list
+            this.dataSource.sort = this.sort
         }))
     }
 

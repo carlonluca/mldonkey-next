@@ -32,6 +32,7 @@ import { HomeComponent } from './private/home/home.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { MatToolbarModule } from '@angular/material/toolbar'
 import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
     declarations: [
@@ -45,7 +46,8 @@ import { MatTableModule } from '@angular/material/table';
         AppRoutingModule,
         BrowserAnimationsModule,
         MatToolbarModule,
-        MatTableModule
+        MatTableModule,
+        MatSortModule
     ],
     providers: [],
     bootstrap: [AppComponent]
