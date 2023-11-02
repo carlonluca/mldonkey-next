@@ -30,7 +30,7 @@ import { WebSocketService } from 'src/app/websocket-service.service'
 import { MatTableDataSource } from '@angular/material/table'
 import { interval } from 'rxjs'
 import { MLMsgToGetDownload } from 'src/app/core/MLMsg'
-import { MatSort } from '@angular/material/sort'
+import { MatSort, MatSortable } from '@angular/material/sort'
 
 @Component({
     selector: 'app-home',
@@ -64,6 +64,10 @@ export class HomeComponent implements OnInit, OnDestroy {
             this.dataSource.data = list
             this.dataSource.sort = this.sort
         }))
+    }
+
+    ngAfterViewInit() {
+        this.sort.sort({ id: "name" } as MatSortable)
     }
 
     ngOnDestroy() {
