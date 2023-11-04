@@ -40,6 +40,7 @@ import { MatSort, MatSortable } from '@angular/material/sort'
 export class HomeComponent implements OnInit, OnDestroy {
     dataSource = new MatTableDataSource<MLMsgDownloadElement>([])
     displayedColumns: string[] = ['name', 'size']
+    opened: boolean = true
     
     @ViewChild(MatSort) sort: MatSort
 

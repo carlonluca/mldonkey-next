@@ -27,6 +27,7 @@ import { RouterModule, Routes } from '@angular/router'
 import { LoginComponent } from './login/login.component'
 import { HomeComponent } from './private/home/home.component'
 import { AuthGuard } from './auth.guard'
+import { DownloadComponent } from './private/home/download/download.component'
 
 const routes: Routes = [
     {
@@ -40,7 +41,12 @@ const routes: Routes = [
     {
         path: "home",
         component: HomeComponent,
-        canActivate: [ AuthGuard ]
+        canActivate: [ AuthGuard ],
+        children: [{
+            path: "**",
+            canActivate: [ AuthGuard ],
+            component: DownloadComponent
+        }]
     }
 ]
 

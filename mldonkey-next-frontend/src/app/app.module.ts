@@ -33,13 +33,16 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { MatToolbarModule } from '@angular/material/toolbar'
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { DownloadComponent } from './private/home/download/download.component'
 
 @NgModule({
     declarations: [
         AppComponent,
         LoginComponent,
         SpinnerComponent,
-        HomeComponent
+        HomeComponent,
+        DownloadComponent
     ],
     imports: [
         BrowserModule,
@@ -47,7 +50,8 @@ import { MatSortModule } from '@angular/material/sort';
         BrowserAnimationsModule,
         MatToolbarModule,
         MatTableModule,
-        MatSortModule
+        MatSortModule,
+        MatSidenavModule
     ],
     providers: [],
     bootstrap: [AppComponent]

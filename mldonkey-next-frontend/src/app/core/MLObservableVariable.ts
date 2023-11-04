@@ -33,7 +33,8 @@ export class MLObservableVariable<T> {
         this.observable = new BehaviorSubject<T>(this.defaultValue)
     }
     set value(v: T) {
-        this.observable.next(v)
+        if (v !== this.value)
+            this.observable.next(v)
     }
     get value(): T {
         return this.observable.value
