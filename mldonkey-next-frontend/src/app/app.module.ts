@@ -34,7 +34,11 @@ import { MatToolbarModule } from '@angular/material/toolbar'
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { DownloadComponent } from './private/home/download/download.component'
+import { DownloadComponent } from './private/home/download/download.component';
+import { SearchComponent } from './private/home/search/search.component';
+import { ServersComponent } from './private/home/servers/servers.component';
+import { StatsComponent } from './private/home/stats/stats.component';
+import { OptionsComponent } from './private/home/options/options.component'
 
 @NgModule({
     declarations: [
@@ -42,7 +46,11 @@ import { DownloadComponent } from './private/home/download/download.component'
         LoginComponent,
         SpinnerComponent,
         HomeComponent,
-        DownloadComponent
+        DownloadComponent,
+        SearchComponent,
+        ServersComponent,
+        StatsComponent,
+        OptionsComponent
     ],
     imports: [
         BrowserModule,

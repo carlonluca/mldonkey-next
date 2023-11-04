@@ -28,6 +28,10 @@ import { LoginComponent } from './login/login.component'
 import { HomeComponent } from './private/home/home.component'
 import { AuthGuard } from './auth.guard'
 import { DownloadComponent } from './private/home/download/download.component'
+import { SearchComponent } from './private/home/search/search.component'
+import { ServersComponent } from './private/home/servers/servers.component'
+import { StatsComponent } from './private/home/stats/stats.component'
+import { OptionsComponent } from './private/home/options/options.component'
 
 const routes: Routes = [
     {
@@ -43,9 +47,29 @@ const routes: Routes = [
         component: HomeComponent,
         canActivate: [ AuthGuard ],
         children: [{
-            path: "**",
+            path: "",
             canActivate: [ AuthGuard ],
             component: DownloadComponent
+        }, {
+            path: "download",
+            canActivate: [ AuthGuard ],
+            component: DownloadComponent
+        }, {
+            path: "search",
+            canActivate: [ AuthGuard ],
+            component: SearchComponent
+        }, {
+            path: "servers",
+            canActivate: [ AuthGuard ],
+            component: ServersComponent
+        }, {
+            path: "stats",
+            canActivate: [ AuthGuard ],
+            component: StatsComponent
+        }, {
+            path: "options",
+            canActivate: [ AuthGuard ],
+            component: OptionsComponent
         }]
     }
 ]
