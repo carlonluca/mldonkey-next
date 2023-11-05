@@ -22,7 +22,7 @@
  * Date: 14.08.2023
  */
 
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { MLMsgDownloadElement } from 'src/app/core/MLMsgDownload'
 import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
 import { DownloadingFilesService } from 'src/app/services/downloading-files.service'
@@ -37,7 +37,7 @@ import { MatSort, MatSortable } from '@angular/material/sort'
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
     dataSource = new MatTableDataSource<MLMsgDownloadElement>([])
     displayedColumns: string[] = ['name', 'size']
     opened: boolean = true
