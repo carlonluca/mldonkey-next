@@ -25,19 +25,19 @@
 import { WebSocketService } from "../websocket-service.service"
 import { MLCollectionModel } from "./MLCollectionModel"
 import { MLMessageTypeFrom } from "./MLMsg"
-import { MLMessageFromNetInfo } from "./MLMsgNetInfo"
+import { MLMsgFromNetInfo } from "./MLMsgNetInfo"
 
-export class MLNetworkManager extends MLCollectionModel<number, MLMessageFromNetInfo> {
+export class MLNetworkManager extends MLCollectionModel<number, MLMsgFromNetInfo> {
     constructor(private websocketService: WebSocketService) {
         super()
         websocketService.lastMessage.observable.subscribe(msg => {
             if (msg.type == MLMessageTypeFrom.T_NETWORK_INFO) {
-                this.handleValue(msg as MLMessageFromNetInfo)
+                this.handleValue(msg as MLMsgFromNetInfo)
             }
         })
     }
 
-    protected override keyFromValue(value: MLMessageFromNetInfo): number {
+    protected override keyFromValue(value: MLMsgFromNetInfo): number {
         return value.netNum
     }
 }

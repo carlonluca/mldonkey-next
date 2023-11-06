@@ -29,10 +29,10 @@ import { MLObservableVariable } from './core/MLObservableVariable'
 import { MLUtils } from './core/MLUtils'
 import { MLNetworkManager } from './core/MLNetworkManager'
 import { logger } from './core/MLLogger'
-import { MLMessageBadPassword, MLMessageCoreProtocol, MLMessageFrom, MLMessageTypeFrom } from './core/MLMsg'
-import { MLMsgConsole } from './core/MLMsgConsole'
-import { MLMessageFromNetInfo } from './core/MLMsgNetInfo'
-import { MLMsgFileDownloaded, MLMsgFromDownloadFile } from './core/MLMsgDownload'
+import { MLMessageBadPassword, MLMessageCoreProtocol, MLMsgFrom, MLMessageTypeFrom } from './core/MLMsg'
+import { MLMsgFromConsole } from './core/MLMsgConsole'
+import { MLMsgFromNetInfo } from './core/MLMsgNetInfo'
+import { MLMsgFromFileDownloaded, MLMsgFromDownloadFile } from './core/MLMsgDownload'
 import { MLMsgFromFileInfo } from './core/MLMsgFileInfo'
 
 export enum MLConnectionState {
@@ -48,8 +48,8 @@ export class WebSocketService {
     public webSocket!: WebSocketSubject<ArrayBuffer>
     public connectionState: MLObservableVariable<MLConnectionState> =
         new MLObservableVariable<MLConnectionState>(MLConnectionState.S_NOT_CONNECTED)
-    public lastMessage: MLObservableVariable<ML.MLMessageFrom> =
-        new MLObservableVariable<ML.MLMessageFrom>(new ML.MLMessageFromNone())
+    public lastMessage: MLObservableVariable<ML.MLMsgFrom> =
+        new MLObservableVariable<ML.MLMsgFrom>(new ML.MLMsgFromNone())
     public networkManager: MLNetworkManager
 
     private buffer: ArrayBuffer = new ArrayBuffer(0)
@@ -86,7 +86,7 @@ export class WebSocketService {
         this.webSocket.next(msg)
     }
 
-    public sendMsg(msg: ML.MLMessageTo) {
+    public sendMsg(msg: ML.MLMsgTo) {
         this.sendData(msg.toBuffer())
     }
 
@@ -130,7 +130,7 @@ export class WebSocketService {
      * @param data 
      * @returns 
      */
-    private static processBuffer(buffer: ArrayBuffer): [MLMessageFrom | null, number, boolean] {
+    private static processBuffer(buffer: ArrayBuffer): [MLMsgFrom | null, number, boolean] {
         const SIZE_HEADER = 6
         const SIZE_SIZE = 4
         const SIZE_OPCODE = 2
@@ -163,9 +163,9 @@ export class WebSocketService {
             case MLMessageTypeFrom.T_CORE_PROTOCOL:
                 return [MLMessageCoreProtocol.fromBuffer(data), size + SIZE_HEADER, true]
             case MLMessageTypeFrom.T_CONSOLE:
-                return [MLMsgConsole.fromBuffer(data), size + SIZE_HEADER, true]
+                return [MLMsgFromConsole.fromBuffer(data), size + SIZE_HEADER, true]
             case MLMessageTypeFrom.T_NETWORK_INFO:
-                return [MLMessageFromNetInfo.fromBuffer(data), size + SIZE_HEADER, true]
+                return [MLMsgFromNetInfo.fromBuffer(data), size + SIZE_HEADER, true]
             case MLMessageTypeFrom.T_DOWNLOAD_FILES_V1:
             case MLMessageTypeFrom.T_DOWNLOAD_FILES_V2:
             case MLMessageTypeFrom.T_DOWNLOAD_FILES_V3:
@@ -176,7 +176,7 @@ export class WebSocketService {
                 return [MLMsgFromDownloadFile.fromBuffer(data), size + SIZE_HEADER, true]
             case MLMessageTypeFrom.T_FILE_DOWNLOADED:
             case MLMessageTypeFrom.T_FILE_DOWNLOADED_V1:
-                return [MLMsgFileDownloaded.fromBuffer(data, opcode), size + SIZE_HEADER, true]
+                return [MLMsgFromFileDownloaded.fromBuffer(data, opcode), size + SIZE_HEADER, true]
             case MLMessageTypeFrom.T_FILE_INFO_V1:
             case MLMessageTypeFrom.T_FILE_INFO_V2:
                 logger.warn("Obsolete file info message received")

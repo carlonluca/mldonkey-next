@@ -165,7 +165,7 @@ export enum MLMessageTypeTo {
 /**
  * Represent a generic messago to or from the mlnet core.
  */
-export abstract class MLMessage {
+export abstract class MLMsg {
     public opcode: number
 
     /**
@@ -238,7 +238,7 @@ export abstract class MLMessage {
 /**
  * Represents the CoreProtocol message.
  */
-export abstract class MLMessageFrom extends MLMessage {
+export abstract class MLMsgFrom extends MLMsg {
     /**
      * Ctor.
      */
@@ -247,7 +247,7 @@ export abstract class MLMessageFrom extends MLMessage {
     }
 }
 
-export abstract class MLMessageTo extends MLMessage {
+export abstract class MLMsgTo extends MLMsg {
     /**
      * Ctor.
      */
@@ -263,14 +263,14 @@ export abstract class MLMessageTo extends MLMessage {
     public abstract toBuffer(): ArrayBuffer
 }
 
-export class MLMessageFromNone extends MLMessageFrom {
+export class MLMsgFromNone extends MLMsgFrom {
     constructor() { super(MLMessageTypeFrom.T_NONE) }
 }
 
 /**
  * Core protocol message.
  */
-export class MLMessageCoreProtocol extends MLMessageFrom {
+export class MLMessageCoreProtocol extends MLMsgFrom {
     public version: number
 
     /**
@@ -281,7 +281,7 @@ export class MLMessageCoreProtocol extends MLMessageFrom {
         this.version = version
     }
 
-    public static fromBuffer(buffer: ArrayBuffer): MLMessageFrom {
+    public static fromBuffer(buffer: ArrayBuffer): MLMsgFrom {
         return new MLMessageCoreProtocol(new DataView(buffer).getInt32(2, true))
     }
 }
@@ -289,11 +289,11 @@ export class MLMessageCoreProtocol extends MLMessageFrom {
 /**
  * Bad password message.
  */
-export class MLMessageBadPassword extends MLMessageFrom {
+export class MLMessageBadPassword extends MLMsgFrom {
     constructor() { super(MLMessageTypeFrom.T_BAD_PASSWORD) }
 }
 
-export class MLMessageGuiProtocol extends MLMessageTo {
+export class MLMessageGuiProtocol extends MLMsgTo {
     public version: number
     constructor(version: number) {
         super(MLMessageTypeTo.T_GUI_PROTOCOL)
@@ -309,7 +309,7 @@ export class MLMessageGuiProtocol extends MLMessageTo {
 /**
  * Represents the Password message.
  */
-export class MLMessageToPassword extends MLMessageTo {
+export class MLMessageToPassword extends MLMsgTo {
     public user: string
     public passwd: string
 
@@ -336,7 +336,7 @@ export class MLMessageToPassword extends MLMessageTo {
     }
 }
 
-export class MLMsgToGetDownload extends MLMessageTo {
+export class MLMsgToGetDownload extends MLMsgTo {
     constructor() {
         super(MLMessageTypeTo.T_GET_DOWNLOAD_FILES)
     }

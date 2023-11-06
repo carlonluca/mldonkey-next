@@ -16,31 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { MLMsgFrom, MLMessageTypeFrom } from "./MLMsg";
-import { MLMsgDownloadElement } from "./MLMsgDownload";
+import { MLMsgFrom } from "./MLMsg";
 
 /**
  * Author:  Luca Carlon
  * Company: -
- * Date: 2023.10.28
+ * Date: 2023.11.05
  */
-export class MLMsgFromFileInfo extends MLMsgFrom {
-    /**
-     * Ctor.
-     * 
-     * @param downloadElement 
-     */
-    constructor(public downloadElement: MLMsgDownloadElement) {
-        super(MLMessageTypeFrom.T_FILE_INFO)
-    }
+export class MLMsgFromQuery extends MLMsgFrom {
 
-    /**
-     * Parses the buffer.
-     * 
-     * @param buffer 
-     * @returns 
-     */
-    public static fromBuffer(buffer: ArrayBuffer): MLMsgFromFileInfo {
-        return new MLMsgFromFileInfo(MLMsgDownloadElement.fromBuffer(buffer))
-    }
 }

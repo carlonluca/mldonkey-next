@@ -22,15 +22,15 @@
  * Date: 14.08.2023
  */
 
-import { MLMessageFrom, MLMessageTypeFrom } from "./MLMsg"
+import { MLMsgFrom, MLMessageTypeFrom } from "./MLMsg"
 import { MLMsgReader } from "./MLMsgReader"
 
-export class MLMsgConsole extends MLMessageFrom {
+export class MLMsgFromConsole extends MLMsgFrom {
     constructor(public command: string) {
         super(MLMessageTypeFrom.T_CONSOLE)
     }
 
-    public static fromBuffer(buffer: ArrayBuffer): MLMsgConsole {
-        return new MLMsgConsole(new MLMsgReader(buffer).takeString())
+    public static fromBuffer(buffer: ArrayBuffer): MLMsgFromConsole {
+        return new MLMsgFromConsole(new MLMsgReader(buffer).takeString())
     }
 }

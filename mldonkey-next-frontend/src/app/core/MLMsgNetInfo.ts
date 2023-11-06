@@ -22,7 +22,7 @@
  * Date: 14.08.2023
  */
 
-import { MLMessageFrom, MLMessageTypeFrom } from "./MLMsg"
+import { MLMsgFrom, MLMessageTypeFrom } from "./MLMsg"
 import { MLMsgReader } from "./MLMsgReader"
 import { MLUPdateable } from "./MLUpdateable"
 
@@ -37,7 +37,7 @@ export enum MLNetworkFlags {
     NetworkHasUpload = 0x0080
 }
 
-export class MLMessageFromNetInfo extends MLMessageFrom implements MLUPdateable<MLMessageFromNetInfo> {
+export class MLMsgFromNetInfo extends MLMsgFrom implements MLUPdateable<MLMsgFromNetInfo> {
     constructor(
         public netNum: number,
         public name: string,
@@ -51,7 +51,7 @@ export class MLMessageFromNetInfo extends MLMessageFrom implements MLUPdateable<
         super(MLMessageTypeFrom.T_NETWORK_INFO)
     }
 
-    public update(netInfo: MLMessageFromNetInfo) {
+    public update(netInfo: MLMsgFromNetInfo) {
         this.netNum = netInfo.netNum
         this.name = netInfo.name
         this.enabled = netInfo.enabled
@@ -62,7 +62,7 @@ export class MLMessageFromNetInfo extends MLMessageFrom implements MLUPdateable<
         this.flags = netInfo.flags
     }
 
-    public static fromBuffer(buffer: ArrayBuffer): MLMessageFrom {
+    public static fromBuffer(buffer: ArrayBuffer): MLMsgFrom {
         const reader = new MLMsgReader(buffer)
         const nn = reader.takeInt32()
         const name = reader.takeString()
@@ -78,6 +78,6 @@ export class MLMessageFromNetInfo extends MLMessageFrom implements MLUPdateable<
             flags |= (1 << j) as MLNetworkFlags
         }
         
-        return new MLMessageFromNetInfo(nn, name, enabled != 0, configFile, uploaded, downloaded, connected != 0, flags as MLNetworkFlags)
+        return new MLMsgFromNetInfo(nn, name, enabled != 0, configFile, uploaded, downloaded, connected != 0, flags as MLNetworkFlags)
     }
 }

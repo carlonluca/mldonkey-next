@@ -25,7 +25,7 @@
 import { WebSocketService } from "../websocket-service.service"
 import { MLCollectionModel } from "./MLCollectionModel"
 import { MLMessageTypeFrom } from "./MLMsg"
-import { MLMsgDownloadElement, MLMsgFileDownloaded, MLMsgFromDownloadFile } from "./MLMsgDownload"
+import { MLMsgDownloadElement, MLMsgFromFileDownloaded, MLMsgFromDownloadFile } from "./MLMsgDownload"
 import { logger } from "./MLLogger"
 import { MLMsgFromFileInfo } from "./MLMsgFileInfo"
 
@@ -38,7 +38,7 @@ export class MLDownloadManager extends MLCollectionModel<number, MLMsgDownloadEl
                 (msg as MLMsgFromDownloadFile).elements.forEach((v) => this.handleValue(v))
                 break
             case MLMessageTypeFrom.T_FILE_DOWNLOADED:
-                this.removeWithKey((msg as MLMsgFileDownloaded).downloadId)
+                this.removeWithKey((msg as MLMsgFromFileDownloaded).downloadId)
                 break
             case MLMessageTypeFrom.T_FILE_INFO:
                 this.handleValue((msg as MLMsgFromFileInfo).downloadElement)

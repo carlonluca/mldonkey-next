@@ -21,7 +21,7 @@
  * Company: -
  * Date: 2023.08.17
  */
-import { MLMessageFrom, MLMessageTypeFrom } from "./MLMsg"
+import { MLMsgFrom, MLMessageTypeFrom } from "./MLMsg"
 import { MLMsgReader } from "./MLMsgReader"
 import { MLUPdateable } from "./MLUpdateable"
 
@@ -328,7 +328,7 @@ export class MLMsgDownloadElement implements MLUPdateable<MLMsgDownloadElement> 
     }
 }
 
-export class MLMsgFromDownloadFile extends MLMessageFrom {
+export class MLMsgFromDownloadFile extends MLMsgFrom {
     constructor(public elements: Map<number, MLMsgDownloadElement>) {
         super(MLMessageTypeFrom.T_DOWNLOAD_FILES)
     }
@@ -347,7 +347,7 @@ export class MLMsgFromDownloadFile extends MLMessageFrom {
     }
 }
 
-export class MLMsgFileDownloaded extends MLMessageFrom {
+export class MLMsgFromFileDownloaded extends MLMsgFrom {
     constructor(
         public downloadId: number,
         public downloaded: bigint,
@@ -357,7 +357,7 @@ export class MLMsgFileDownloaded extends MLMessageFrom {
         super(MLMessageTypeFrom.T_FILE_DOWNLOADED)
     }
 
-    public static fromBuffer(buffer: ArrayBuffer, opcode: number): MLMsgFileDownloaded {
+    public static fromBuffer(buffer: ArrayBuffer, opcode: number): MLMsgFromFileDownloaded {
         const reader = new MLMsgReader(buffer)
         const downloadId = reader.takeInt32()
         const downloaded = reader.takeInt64()
@@ -365,6 +365,6 @@ export class MLMsgFileDownloaded extends MLMessageFrom {
         let lastseen = null
         if (opcode >= 46)
             lastseen = reader.takeInt32()
-        return new MLMsgFileDownloaded(downloadId, downloaded, speed, lastseen)
+        return new MLMsgFromFileDownloaded(downloadId, downloaded, speed, lastseen)
     }
 }
