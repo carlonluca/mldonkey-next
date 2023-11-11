@@ -34,10 +34,10 @@ wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
     logger.info(`Client connected: ${req.socket.remoteAddress} ${ws}`)
     bridgeManager.clientConnected(ws)
 
-    ws.on('close', (ws_: WebSocket, req: IncomingMessage) => {
+    ws.on('close', (_ws: WebSocket, _req: IncomingMessage) => {
         bridgeManager.clientDisconnected(ws)
     })
-    ws.on("error", (ws_: WebSocket, err: Error) => {
+    ws.on("error", (_ws: WebSocket, err: Error) => {
         logger.warn(`Client failed: ${err.message}`)
         bridgeManager.clientDisconnected(ws)
     })
