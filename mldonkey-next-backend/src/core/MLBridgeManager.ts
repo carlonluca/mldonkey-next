@@ -52,7 +52,7 @@ export class MLBridgeManager {
     public clientDisconnected(websocket: WebSocket) {
         const bridge = this.connections.get(websocket)
         if (!bridge) {
-            logger.warn("Client not registered")
+            logger.warn(`Client not registered ${websocket}`)
             return
         }
 

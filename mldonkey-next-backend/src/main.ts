@@ -31,14 +31,13 @@ const wss = new WebSocket.Server({ port: 4002 });
 const bridgeManager = new MLBridgeManager();
 
 wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
-    logger.info(`Client connected: ${req.socket.remoteAddress}`)
+    logger.info(`Client connected: ${req.socket.remoteAddress} ${ws}`)
     bridgeManager.clientConnected(ws)
 
-    ws.on('close', (ws: WebSocket, req: IncomingMessage) => {
-        logger.info(`Client disconnected: ${req.socket.remoteAddress}`)
+    ws.on('close', (ws_: WebSocket, req: IncomingMessage) => {
         bridgeManager.clientDisconnected(ws)
     })
-    ws.on("error", (ws: WebSocket, err: Error) => {
+    ws.on("error", (ws_: WebSocket, err: Error) => {
         logger.warn(`Client failed: ${err.message}`)
         bridgeManager.clientDisconnected(ws)
     })
