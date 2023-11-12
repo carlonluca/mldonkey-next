@@ -209,6 +209,19 @@ export abstract class MLMsg {
     }
 
     /**
+     * Appends a 8 bit integer.
+     * 
+     * @param buffer 
+     * @param i 
+     * @returns 
+     */
+    protected appendInt8(buffer: ArrayBuffer, i: number): ArrayBuffer {
+        const tmpBuff = new DataView(new ArrayBuffer(1))
+        tmpBuff.setInt8(0, i)
+        return MLUtils.concatArrayBuffers(buffer, tmpBuff.buffer)
+    }
+
+    /**
      * Appends a 16 bit integer.
      * 
      * @param buffer 

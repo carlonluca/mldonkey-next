@@ -16,13 +16,45 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { MLMsgFrom } from "./MLMsg";
-
 /**
  * Author:  Luca Carlon
  * Company: -
  * Date: 2023.11.05
  */
-export class MLMsgFromQuery extends MLMsgFrom {
+import { MLMessageTypeTo, MLMsgTo } from "./MLMsg";
 
+export class MLMsgToQuery extends MLMsgTo {
+    constructor(public searchNumber: number) { super(MLMessageTypeTo.T_SEARCH_QUERY) }
+
+    public override toBuffer(): ArrayBuffer {
+        let ret = new ArrayBuffer(0)
+        ret = this.appendInt32(ret, this.searchNumber)
+        ret = this.appendInt8(ret, 4)                   // Operation
+        //ret = this.appendInt16(ret, 2)
+        ret = this.appendString(ret, "the")
+        ret = this.appendString(ret, "offspring")
+        ret = this.appendInt32(ret, 100)
+        ret = this.appendInt8(ret, 0)    // Search type
+        ret = this.appendInt32(ret, 0)   // Network
+        return this.createEnvelope(ret)
+    }
+}
+
+export class MLMsgToGetSearch extends MLMsgTo {
+    constructor(public id: number) { super(MLMessageTypeTo.T_GET_SEARCH) }
+
+    public override toBuffer(): ArrayBuffer {
+        let ret = new ArrayBuffer(0)
+        ret = this.appendInt32(ret, this.id)
+        return this.createEnvelope(ret)
+    }
+}
+
+export class MLMsgToGetSearches extends MLMsgTo {
+    constructor() { super(MLMessageTypeTo.T_GET_SEARCHES) }
+
+    public override toBuffer(): ArrayBuffer {
+        let ret = new ArrayBuffer(0)
+        return this.createEnvelope(ret)
+    }
 }

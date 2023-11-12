@@ -21,7 +21,7 @@
  * Company: -
  * Date: 2023.11.05
  */
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, OnInit, OnDestroy } from '@angular/core';
 import { MatSort, MatSortable } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { interval } from 'rxjs';
@@ -36,7 +36,7 @@ import { WebSocketService } from 'src/app/websocket-service.service';
     templateUrl: './download.component.html',
     styleUrls: ['./download.component.scss']
 })
-export class DownloadComponent {
+export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
     dataSource = new MatTableDataSource<MLMsgDownloadElement>([])
     displayedColumns: string[] = ['name', 'size']
 
@@ -47,9 +47,10 @@ export class DownloadComponent {
     constructor(private websocketService: WebSocketService, private downloadingService: DownloadingFilesService) {}
 
     ngOnInit() {
-        this.subscriptions.add(interval(1000).subscribe(() =>
-            this.websocketService.sendMsg(new MLMsgToGetDownload()))
-        );
+        this.websocketService.sendMsg(new MLMsgToGetDownload())
+        //this.subscriptions.add(interval(1000).subscribe(() =>
+        //    this.websocketService.sendMsg(new MLMsgToGetDownload()))
+        //);
         this.subscriptions.add(this.downloadingService.downloadingList.observable.subscribe((list) => {
             this.dataSource.data = list
             this.dataSource.sort = this.sort

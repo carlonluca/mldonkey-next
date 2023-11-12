@@ -82,7 +82,7 @@ export class WebSocketService {
     }
 
     public sendData(msg: ArrayBuffer) {
-        logger.trace("-> ", MLUtils.buf2hex(msg))
+        logger.debug("-> ", MLUtils.buf2hex(msg))
         this.webSocket.next(msg)
     }
 
