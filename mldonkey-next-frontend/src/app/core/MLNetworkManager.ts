@@ -24,8 +24,8 @@
 
 import { WebSocketService } from "../websocket-service.service"
 import { MLCollectionModel } from "./MLCollectionModel"
-import { MLMessageTypeFrom } from "./MLMsg"
-import { MLMsgFromNetInfo } from "./MLMsgNetInfo"
+import { MLMessageTypeFrom } from "../msg/MLMsg"
+import { MLMsgFromNetInfo } from "../msg/MLMsgNetInfo"
 
 export class MLNetworkManager extends MLCollectionModel<number, MLMsgFromNetInfo> {
     constructor(private websocketService: WebSocketService) {

@@ -24,16 +24,16 @@
 
 import { Injectable } from '@angular/core'
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket'
-import * as ML from './core/MLMsg'
+import * as ML from './msg/MLMsg'
 import { MLObservableVariable } from './core/MLObservableVariable'
 import { MLUtils } from './core/MLUtils'
 import { MLNetworkManager } from './core/MLNetworkManager'
 import { logger } from './core/MLLogger'
-import { MLMessageBadPassword, MLMessageCoreProtocol, MLMsgFrom, MLMessageTypeFrom } from './core/MLMsg'
-import { MLMsgFromConsole } from './core/MLMsgConsole'
-import { MLMsgFromNetInfo } from './core/MLMsgNetInfo'
-import { MLMsgFromFileDownloaded, MLMsgFromDownloadFile } from './core/MLMsgDownload'
-import { MLMsgFromFileInfo } from './core/MLMsgFileInfo'
+import { MLMessageBadPassword, MLMessageCoreProtocol, MLMsgFrom, MLMessageTypeFrom } from './msg/MLMsg'
+import { MLMsgFromConsole } from './msg/MLMsgConsole'
+import { MLMsgFromNetInfo } from './msg/MLMsgNetInfo'
+import { MLMsgFromFileDownloaded, MLMsgFromDownloadFile } from './msg/MLMsgDownload'
+import { MLMsgFromFileInfo } from './msg/MLMsgFileInfo'
 
 export enum MLConnectionState {
     S_NOT_CONNECTED,

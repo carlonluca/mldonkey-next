@@ -25,9 +25,9 @@ import { Component, ViewChild, AfterViewInit, OnInit, OnDestroy } from '@angular
 import { MatSort, MatSortable } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { interval } from 'rxjs';
-import { MLMsgToGetDownload } from 'src/app/core/MLMsg';
-import { MLMsgDownloadElement } from 'src/app/core/MLMsgDownload';
 import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet';
+import { MLMsgDownloadElement } from 'src/app/data/MLDownloadFileInfo';
+import { MLMsgToGetDownload } from 'src/app/msg/MLMsg';
 import { DownloadingFilesService } from 'src/app/services/downloading-files.service';
 import { WebSocketService } from 'src/app/websocket-service.service';
 
@@ -47,10 +47,10 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
     constructor(private websocketService: WebSocketService, private downloadingService: DownloadingFilesService) {}
 
     ngOnInit() {
-        this.websocketService.sendMsg(new MLMsgToGetDownload())
-        //this.subscriptions.add(interval(1000).subscribe(() =>
-        //    this.websocketService.sendMsg(new MLMsgToGetDownload()))
-        //);
+        //this.websocketService.sendMsg(new MLMsgToGetDownload())
+        this.subscriptions.add(interval(1000).subscribe(() =>
+            this.websocketService.sendMsg(new MLMsgToGetDownload()))
+        );
         this.subscriptions.add(this.downloadingService.downloadingList.observable.subscribe((list) => {
             this.dataSource.data = list
             this.dataSource.sort = this.sort

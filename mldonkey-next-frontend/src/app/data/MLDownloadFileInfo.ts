@@ -19,11 +19,10 @@
 /**
  * Author:  Luca Carlon
  * Company: -
- * Date: 2023.08.17
+ * Date:    2023.11.13
  */
-import { MLMsgFrom, MLMessageTypeFrom } from "./MLMsg"
-import { MLMsgReader } from "./MLMsgReader"
-import { MLUPdateable } from "./MLUpdateable"
+import { MLMsgReader } from "../msg/MLMsgReader"
+import { MLUPdateable } from "../core/MLUpdateable"
 
 export enum MLMsgFromDownloadState {
     S_DOWNLOADING = 0,
@@ -325,46 +324,5 @@ export class MLMsgDownloadElement implements MLUPdateable<MLMsgDownloadElement> 
 
     public static fromBuffer(buffer: ArrayBuffer): MLMsgDownloadElement {
         return this.fromReader(new MLMsgReader(buffer))
-    }
-}
-
-export class MLMsgFromDownloadFile extends MLMsgFrom {
-    constructor(public elements: Map<number, MLMsgDownloadElement>) {
-        super(MLMessageTypeFrom.T_DOWNLOAD_FILES)
-    }
-
-    public static fromBuffer(buffer: ArrayBuffer): MLMsgFromDownloadFile {
-        const reader = new MLMsgReader(buffer)
-        const elementCount = reader.takeInt16()
-        const elements: Map<number, MLMsgDownloadElement> = new Map()
-        for (let i = 0; i < elementCount; i++) {
-            const f = MLMsgDownloadElement.fromReader(reader)
-            if (f)
-                elements.set(f.downloadId, f)
-        }
-
-        return new MLMsgFromDownloadFile(elements)
-    }
-}
-
-export class MLMsgFromFileDownloaded extends MLMsgFrom {
-    constructor(
-        public downloadId: number,
-        public downloaded: bigint,
-        public speed: number,
-        public lastseen: number | null
-    ) {
-        super(MLMessageTypeFrom.T_FILE_DOWNLOADED)
-    }
-
-    public static fromBuffer(buffer: ArrayBuffer, opcode: number): MLMsgFromFileDownloaded {
-        const reader = new MLMsgReader(buffer)
-        const downloadId = reader.takeInt32()
-        const downloaded = reader.takeInt64()
-        const speed = reader.takeDecimal()
-        let lastseen = null
-        if (opcode >= 46)
-            lastseen = reader.takeInt32()
-        return new MLMsgFromFileDownloaded(downloadId, downloaded, speed, lastseen)
     }
 }

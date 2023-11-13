@@ -3,10 +3,9 @@ import { interval } from 'rxjs'
 import { WebSocketService } from 'src/app/websocket-service.service'
 import {
     MLMsgToGetSearch,
-    MLMsgToGetSearches,
     MLMsgToQuery
-} from 'src/app/core/MLMsgQuery'
-
+} from 'src/app/msg/MLMsgQuery'
+    
 @Component({
     selector: 'app-search',
     templateUrl: './search.component.html',

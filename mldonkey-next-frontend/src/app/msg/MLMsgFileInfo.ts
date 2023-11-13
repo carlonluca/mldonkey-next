@@ -16,8 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { MLMsgFrom, MLMessageTypeFrom } from "./MLMsg";
-import { MLMsgDownloadElement } from "./MLMsgDownload";
+import { MLMsgDownloadElement } from "../data/MLDownloadFileInfo"
+import { MLMsgFrom, MLMessageTypeFrom } from "./MLMsg"
 
 /**
  * Author:  Luca Carlon

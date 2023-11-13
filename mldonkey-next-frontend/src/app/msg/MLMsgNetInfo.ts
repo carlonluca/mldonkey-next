@@ -24,7 +24,7 @@
 
 import { MLMsgFrom, MLMessageTypeFrom } from "./MLMsg"
 import { MLMsgReader } from "./MLMsgReader"
-import { MLUPdateable } from "./MLUpdateable"
+import { MLUPdateable } from "../core/MLUpdateable"
 
 export enum MLNetworkFlags {
     NetworkHasServers = 0x0001,

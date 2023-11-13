@@ -24,10 +24,11 @@
 
 import { WebSocketService } from "../websocket-service.service"
 import { MLCollectionModel } from "./MLCollectionModel"
-import { MLMessageTypeFrom } from "./MLMsg"
-import { MLMsgDownloadElement, MLMsgFromFileDownloaded, MLMsgFromDownloadFile } from "./MLMsgDownload"
+import { MLMessageTypeFrom } from "../msg/MLMsg"
+import { MLMsgFromFileDownloaded, MLMsgFromDownloadFile } from "../msg/MLMsgDownload"
 import { logger } from "./MLLogger"
-import { MLMsgFromFileInfo } from "./MLMsgFileInfo"
+import { MLMsgFromFileInfo } from "../msg/MLMsgFileInfo"
+import { MLMsgDownloadElement } from "../data/MLDownloadFileInfo"
 
 export class MLDownloadManager extends MLCollectionModel<number, MLMsgDownloadElement> {
     constructor(websocketService: WebSocketService) {

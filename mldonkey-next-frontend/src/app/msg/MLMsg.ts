@@ -22,7 +22,7 @@
  * Date: 2023.08.14
  */
 
-import { MLUtils } from './MLUtils'
+import { MLUtils } from '../core/MLUtils'
 
 /**
  * Supported messages.
