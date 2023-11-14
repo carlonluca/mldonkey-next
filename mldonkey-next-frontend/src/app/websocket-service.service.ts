@@ -34,6 +34,7 @@ import { MLMsgFromConsole } from './msg/MLMsgConsole'
 import { MLMsgFromNetInfo } from './msg/MLMsgNetInfo'
 import { MLMsgFromFileDownloaded, MLMsgFromDownloadFile } from './msg/MLMsgDownload'
 import { MLMsgFromFileInfo } from './msg/MLMsgFileInfo'
+import { MLMsgFromSearch } from './msg/MLMsgQuery'
 
 export enum MLConnectionState {
     S_NOT_CONNECTED,
@@ -186,6 +187,8 @@ export class WebSocketService {
                 return [MLMsgFromFileInfo.fromBuffer(data), size + SIZE_HEADER, true]
             case MLMessageTypeFrom.T_BAD_PASSWORD:
                 return [new MLMessageBadPassword(), size + SIZE_HEADER, true]
+            case MLMessageTypeFrom.T_SEARCH:
+                return [MLMsgFromSearch.fromBuffer(data), size + SIZE_HEADER, true]
             default:
                 logger.warn(`Unknown msg with opcode: ${opcode}`)
                 return [null, size + SIZE_HEADER, true]

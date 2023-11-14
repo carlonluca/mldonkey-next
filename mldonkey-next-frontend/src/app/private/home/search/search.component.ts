@@ -5,6 +5,7 @@ import {
     MLMsgToGetSearch,
     MLMsgToQuery
 } from 'src/app/msg/MLMsgQuery'
+import { SearchesService } from 'src/app/services/searches.service'
     
 @Component({
     selector: 'app-search',
@@ -14,7 +15,7 @@ import {
 export class SearchComponent implements OnInit {
     i: number = 3
 
-    constructor(private websocketService: WebSocketService) {}
+    constructor(private websocketService: WebSocketService, private searchService: SearchesService) {}
 
     ngOnInit(): void {
         interval(1000).subscribe(() => {

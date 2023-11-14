@@ -21,12 +21,10 @@
  * Company: -
  * Date: 2023.08.17
  */
-
 import { WebSocketService } from "../websocket-service.service"
 import { MLCollectionModel } from "./MLCollectionModel"
 import { MLMessageTypeFrom } from "../msg/MLMsg"
 import { MLMsgFromFileDownloaded, MLMsgFromDownloadFile } from "../msg/MLMsgDownload"
-import { logger } from "./MLLogger"
 import { MLMsgFromFileInfo } from "../msg/MLMsgFileInfo"
 import { MLMsgDownloadElement } from "../data/MLDownloadFileInfo"
 
@@ -45,10 +43,6 @@ export class MLDownloadManager extends MLCollectionModel<number, MLMsgDownloadEl
                 this.handleValue((msg as MLMsgFromFileInfo).downloadElement)
                 break
             }
-
-            this.elements.value.forEach((f) => {
-                logger.warn(`STATE: ${f.state}`)
-            })
         })
     }
 

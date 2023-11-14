@@ -47,7 +47,6 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
     constructor(private websocketService: WebSocketService, private downloadingService: DownloadingFilesService) {}
 
     ngOnInit() {
-        //this.websocketService.sendMsg(new MLMsgToGetDownload())
         this.subscriptions.add(interval(1000).subscribe(() =>
             this.websocketService.sendMsg(new MLMsgToGetDownload()))
         );

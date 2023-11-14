@@ -21,7 +21,9 @@
  * Company: -
  * Date: 2023.11.05
  */
-import { MLMessageTypeTo, MLMsgTo } from "./MLMsg";
+import { MLSearchInfo, MLSearchType } from "../data/MLSearchInfo";
+import { MLMessageTypeFrom, MLMessageTypeTo, MLMsgFrom, MLMsgTo } from "./MLMsg";
+import { MLMsgReader } from "./MLMsgReader";
 
 export class MLMsgToQuery extends MLMsgTo {
     constructor(public searchNumber: number) { super(MLMessageTypeTo.T_SEARCH_QUERY) }
@@ -56,5 +58,21 @@ export class MLMsgToGetSearches extends MLMsgTo {
     public override toBuffer(): ArrayBuffer {
         let ret = new ArrayBuffer(0)
         return this.createEnvelope(ret)
+    }
+}
+
+export class MLMsgFromSearch extends MLMsgFrom {
+    constructor(public content: MLSearchInfo) { super(MLMessageTypeFrom.T_SEARCH) }
+
+    public static fromBuffer(buffer: ArrayBuffer): MLMsgFrom {
+        const reader = new MLMsgReader(buffer)
+        const content = new MLSearchInfo(
+            reader.takeInt32(),
+            reader.takeString(),
+            reader.takeInt32(),
+            reader.takeInt8() as MLSearchType,
+            reader.takeInt32()
+        )
+        return new MLMsgFromSearch(content)
     }
 }
