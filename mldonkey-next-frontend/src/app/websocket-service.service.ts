@@ -146,7 +146,7 @@ export class WebSocketService {
         logger.debug(`<- Size: ${size} - ${MLUtils.buf2hex(buffer.slice(0, 4))}`)
 
         const opcode = dataView.getInt16(SIZE_SIZE, true)
-        logger.debug(`<- Opcode: ${opcode}`)
+        logger.info(`<- Opcode: ${MLMessageTypeFrom[opcode]} (${opcode})`)
 
         if (opcode == -1 || size < 0) {
             logger.warn(`Malformed packet: ${opcode} - ${size}`)
@@ -190,7 +190,7 @@ export class WebSocketService {
             case MLMessageTypeFrom.T_SEARCH:
                 return [MLMsgFromSearch.fromBuffer(data), size + SIZE_HEADER, true]
             default:
-                logger.warn(`Unknown msg with opcode: ${opcode}`)
+                logger.warn(`Unknown msg with opcode: ${MLMessageTypeFrom[opcode]} (${opcode})`)
                 return [null, size + SIZE_HEADER, true]
             }
         }
