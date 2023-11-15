@@ -23,6 +23,7 @@
  */
 import { MLResultInfo } from "../data/MLResultInfo"
 import { MLSearchInfo, MLSearchType } from "../data/MLSearchInfo"
+import { MLSearchResult } from "../data/MLSearchResult"
 import { MLMessageTypeFrom, MLMessageTypeTo, MLMsgFrom, MLMsgTo } from "./MLMsg"
 import { MLMsgReader } from "./MLMsgReader"
 
@@ -87,5 +88,16 @@ export class MLMsgFromResultInfo extends MLMsgFrom {
             return null
 
         return new MLMsgFromResultInfo(resultInfo)
+    }
+}
+
+export class MLMsgFromSearchResult extends MLMsgFrom {
+    constructor(public content: MLSearchResult) { super(MLMessageTypeFrom.T_SEARCH_RESULT) }
+
+    public static fromBuffer(buffer: ArrayBuffer): MLMsgFromSearchResult {
+        const reader = new MLMsgReader(buffer, 0)
+        const searchId = reader.takeInt32()
+        const resultId = reader.takeInt32()
+        return new MLMsgFromSearchResult(new MLSearchResult(resultId, searchId))
     }
 }

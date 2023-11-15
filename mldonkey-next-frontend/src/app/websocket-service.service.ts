@@ -33,7 +33,7 @@ import { MLMsgFromConsole } from './msg/MLMsgConsole'
 import { MLMsgFromNetInfo } from './msg/MLMsgNetInfo'
 import { MLMsgFromFileDownloaded, MLMsgFromDownloadFile } from './msg/MLMsgDownload'
 import { MLMsgFromFileInfo } from './msg/MLMsgFileInfo'
-import { MLMsgFromResultInfo, MLMsgFromSearch } from './msg/MLMsgQuery'
+import { MLMsgFromResultInfo, MLMsgFromSearch, MLMsgFromSearchResult } from './msg/MLMsgQuery'
 
 export enum MLConnectionState {
     S_NOT_CONNECTED,
@@ -168,6 +168,8 @@ export class WebSocketService {
                 const msg = MLMsgFromResultInfo.fromBuffer(data, protocol)
                 return [msg, size + SIZE_HEADER, !!msg]
             }
+            case MLMessageTypeFrom.T_SEARCH_RESULT:
+                return [MLMsgFromSearchResult.fromBuffer(data), size + SIZE_HEADER, true]
             case MLMessageTypeFrom.T_CONSOLE:
                 return [MLMsgFromConsole.fromBuffer(data), size + SIZE_HEADER, true]
             case MLMessageTypeFrom.T_NETWORK_INFO:
