@@ -57,7 +57,7 @@ export class MLMsgToGetSearches extends MLMsgTo {
     constructor() { super(MLMessageTypeTo.T_GET_SEARCHES) }
 
     public override toBuffer(): ArrayBuffer {
-        let ret = new ArrayBuffer(0)
+        const ret = new ArrayBuffer(0)
         return this.createEnvelope(ret)
     }
 }

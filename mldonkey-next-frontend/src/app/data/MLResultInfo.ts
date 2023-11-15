@@ -82,7 +82,9 @@ export class MLResultInfo implements MLUPdateable<MLResultInfo> {
             alreadyDone = (reader.takeInt8() > 0)
             time = proto > 26 ? reader.takeInt32() : 0
         }
-        catch (e) {}
+        catch (e) {
+            // No need to handle.
+        }
 
         return new MLResultInfo(
             id,

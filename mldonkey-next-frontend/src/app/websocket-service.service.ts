@@ -53,7 +53,7 @@ export class WebSocketService {
     public networkManager: MLNetworkManager
 
     private buffer: ArrayBuffer = new ArrayBuffer(0)
-    private protocol: number = 0
+    private protocol = 0
 
     constructor() {
         this.networkManager = new MLNetworkManager(this)
@@ -105,7 +105,7 @@ export class WebSocketService {
                 continue
             logger.info("<- Message received:", msg.type)
             if (msg.type == ML.MLMessageTypeFrom.T_CORE_PROTOCOL) {
-                let msg = new ML.MLMessageGuiProtocol(33)
+                const msg = new ML.MLMessageGuiProtocol(33)
                 this.sendMsg(msg)
                 this.protocol = msg.version
             }

@@ -13,7 +13,7 @@ import { SearchesService } from 'src/app/services/searches.service'
     styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements OnInit {
-    i: number = 3
+    i = 3
 
     constructor(private websocketService: WebSocketService, private searchService: SearchesService) {}
 
