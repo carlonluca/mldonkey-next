@@ -294,7 +294,7 @@ export class MLMessageCoreProtocol extends MLMsgFrom {
         this.version = version
     }
 
-    public static fromBuffer(buffer: ArrayBuffer): MLMsgFrom {
+    public static fromBuffer(buffer: ArrayBuffer): MLMessageCoreProtocol {
         return new MLMessageCoreProtocol(new DataView(buffer).getInt32(2, true))
     }
 }

@@ -21,7 +21,6 @@
  * Company: -
  * Date: 14.08.2023
  */
-
 import { Injectable } from '@angular/core'
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket'
 import * as ML from './msg/MLMsg'
@@ -34,7 +33,7 @@ import { MLMsgFromConsole } from './msg/MLMsgConsole'
 import { MLMsgFromNetInfo } from './msg/MLMsgNetInfo'
 import { MLMsgFromFileDownloaded, MLMsgFromDownloadFile } from './msg/MLMsgDownload'
 import { MLMsgFromFileInfo } from './msg/MLMsgFileInfo'
-import { MLMsgFromSearch } from './msg/MLMsgQuery'
+import { MLMsgFromResultInfo, MLMsgFromSearch } from './msg/MLMsgQuery'
 
 export enum MLConnectionState {
     S_NOT_CONNECTED,
@@ -54,6 +53,7 @@ export class WebSocketService {
     public networkManager: MLNetworkManager
 
     private buffer: ArrayBuffer = new ArrayBuffer(0)
+    private protocol: number = 0
 
     constructor() {
         this.networkManager = new MLNetworkManager(this)
@@ -94,20 +94,21 @@ export class WebSocketService {
     private onMessageReceived(data: ArrayBuffer): void {
         this.buffer = MLUtils.concatArrayBuffers(this.buffer, data)
         logger.debug('<-' , MLUtils.buf2hex(this.buffer))
-        logger.debug("Buffer size:", this.buffer.byteLength)
 
         // eslint-disable-next-line no-constant-condition
         while (true) {
-            const [msg, consumed, tryAgain] = WebSocketService.processBuffer(this.buffer)
+            const [msg, consumed, tryAgain] = WebSocketService.processBuffer(this.buffer, this.protocol)
             this.buffer = this.buffer.slice(consumed)
-            logger.debug("Buffer size:", this.buffer.byteLength)
             if (!msg && !tryAgain)
                 break
             if (!msg)
                 continue
             logger.info("<- Message received:", msg.type)
-            if (msg.type == ML.MLMessageTypeFrom.T_CORE_PROTOCOL)
-                this.sendMsg(new ML.MLMessageGuiProtocol(33))
+            if (msg.type == ML.MLMessageTypeFrom.T_CORE_PROTOCOL) {
+                let msg = new ML.MLMessageGuiProtocol(33)
+                this.sendMsg(msg)
+                this.protocol = msg.version
+            }
             else if (msg.type != ML.MLMessageTypeFrom.T_BAD_PASSWORD)
                 this.connectionState.value = MLConnectionState.S_AUTHENTICATED
             this.lastMessage.value = msg
@@ -131,7 +132,7 @@ export class WebSocketService {
      * @param data 
      * @returns 
      */
-    private static processBuffer(buffer: ArrayBuffer): [MLMsgFrom | null, number, boolean] {
+    private static processBuffer(buffer: ArrayBuffer, protocol: number): [MLMsgFrom | null, number, boolean] {
         const SIZE_HEADER = 6
         const SIZE_SIZE = 4
         const SIZE_OPCODE = 2
@@ -163,6 +164,10 @@ export class WebSocketService {
             switch (opcode) {
             case MLMessageTypeFrom.T_CORE_PROTOCOL:
                 return [MLMessageCoreProtocol.fromBuffer(data), size + SIZE_HEADER, true]
+            case MLMessageTypeFrom.T_RESULT_INFO: {
+                const msg = MLMsgFromResultInfo.fromBuffer(data, protocol)
+                return [msg, size + SIZE_HEADER, !!msg]
+            }
             case MLMessageTypeFrom.T_CONSOLE:
                 return [MLMsgFromConsole.fromBuffer(data), size + SIZE_HEADER, true]
             case MLMessageTypeFrom.T_NETWORK_INFO:

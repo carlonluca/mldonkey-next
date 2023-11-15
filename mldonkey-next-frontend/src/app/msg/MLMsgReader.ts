@@ -21,6 +21,17 @@
  * Company: -
  * Date: 2023.08.15
  */
+import {
+    MLTag,
+    MLTagIn16,
+    MLTagIn8,
+    MLTagInt32,
+    MLTagInt32Pair,
+    MLTagIp,
+    MLTagString,
+    MLTagType,
+    MLTagUint32
+} from "./MLtag"
 
 export class MLBufferUtils {
     public static readRawData(buffer: ArrayBuffer, offset: number, length: number): [ArrayBuffer, number] {
@@ -97,6 +108,49 @@ export class MLBufferUtils {
     public static readDate(buffer: ArrayBuffer, offset: number): [number, number] {
         return [Math.round(Date.now() / 1000) - this.readInt32(buffer, offset)[0], 4]
     }
+
+    public static readTag(data: ArrayBuffer, offset: number): [MLTag | undefined, number] {
+        let consumed = 0
+        const [name, consumedString] = this.readString(data, offset)
+        consumed += consumedString
+        const [type, consumedType] = this.readInt8(data, offset + consumed)
+        consumed += consumedType
+        switch (type) {
+        case MLTagType.T_UINT32: {
+            const [value, consumedValue] = this.readInt32(data, offset + consumed)
+            return [new MLTagUint32(name, value), consumed + consumedValue]
+        }
+        case MLTagType.T_SINT32: {
+            const [value, consumedValue] = this.readInt32(data, offset + consumed)
+            return [new MLTagInt32(name, value), consumed + consumedValue]
+        }
+        case MLTagType.T_STRING: {
+            const [value, consumedValue] = this.readString(data, offset + consumed)
+            return [new MLTagString(name, value), consumed + consumedValue]
+        }
+        case MLTagType.T_IP: {
+            const [value, consumedValue] = this.readInt32(data, offset + consumed)
+            return [new MLTagIp(name, value), consumed + consumedValue]
+        }
+        case MLTagType.T_SINT16: {
+            const [value, consumedValue] = this.readInt16(data, offset + consumed)
+            return [new MLTagIn16(name, value), consumed + consumedValue]
+        }
+        case MLTagType.T_SINT8: {
+            const [value, consumedValue] = this.readInt8(data, offset + consumed)
+            return [new MLTagIn8(name, value), consumed + consumedValue]
+        }
+        case MLTagType.T_SINT32_PAIR: {
+            const [value1, consumedValue1] = this.readInt32(data, offset + consumed)
+            consumed += consumedValue1
+            const [value2, consumedValue2] = this.readInt32(data, offset + consumed)
+            consumed += consumedValue2
+            return [new MLTagInt32Pair(name, value1, value2), consumed]
+        }
+        default:
+            return [undefined, 0]
+        }
+    }
 }
 
 export class MLMsgReader {
@@ -144,6 +198,10 @@ export class MLMsgReader {
 
     readDate(offset: number): [number, number] {
         return MLBufferUtils.readDate(this.data, offset)
+    }
+
+    readTag(offset: number): [MLTag | undefined, number] {
+        return MLBufferUtils.readTag(this.data, offset)
     }
 
     takeRawData(length: number): ArrayBuffer {
@@ -208,6 +266,12 @@ export class MLMsgReader {
 
     takeDate(): number {
         const [ret, consumed] = this.readDate(this.offset)
+        this.offset += consumed
+        return ret
+    }
+
+    takeTag(): MLTag | undefined {
+        const [ret, consumed] = this.readTag(this.offset)
         this.offset += consumed
         return ret
     }

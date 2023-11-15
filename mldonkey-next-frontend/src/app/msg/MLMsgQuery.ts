@@ -21,9 +21,10 @@
  * Company: -
  * Date: 2023.11.05
  */
-import { MLSearchInfo, MLSearchType } from "../data/MLSearchInfo";
-import { MLMessageTypeFrom, MLMessageTypeTo, MLMsgFrom, MLMsgTo } from "./MLMsg";
-import { MLMsgReader } from "./MLMsgReader";
+import { MLResultInfo } from "../data/MLResultInfo"
+import { MLSearchInfo, MLSearchType } from "../data/MLSearchInfo"
+import { MLMessageTypeFrom, MLMessageTypeTo, MLMsgFrom, MLMsgTo } from "./MLMsg"
+import { MLMsgReader } from "./MLMsgReader"
 
 export class MLMsgToQuery extends MLMsgTo {
     constructor(public searchNumber: number) { super(MLMessageTypeTo.T_SEARCH_QUERY) }
@@ -36,7 +37,7 @@ export class MLMsgToQuery extends MLMsgTo {
         ret = this.appendString(ret, "the")
         ret = this.appendString(ret, "offspring")
         ret = this.appendInt32(ret, 100)
-        ret = this.appendInt8(ret, 0)    // Search type
+        ret = this.appendInt8(ret, 1)    // Search type
         ret = this.appendInt32(ret, 0)   // Network
         return this.createEnvelope(ret)
     }
@@ -74,5 +75,17 @@ export class MLMsgFromSearch extends MLMsgFrom {
             reader.takeInt32()
         )
         return new MLMsgFromSearch(content)
+    }
+}
+
+export class MLMsgFromResultInfo extends MLMsgFrom {
+    constructor(public content: MLResultInfo) { super(MLMessageTypeFrom.T_RESULT_INFO) }
+
+    public static fromBuffer(buffer: ArrayBuffer, proto: number): MLMsgFromResultInfo | null {
+        const resultInfo = MLResultInfo.fromBuffer(buffer, proto)
+        if (!resultInfo)
+            return null
+
+        return new MLMsgFromResultInfo(resultInfo)
     }
 }
