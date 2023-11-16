@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { WebSocketService } from 'src/app/websocket-service.service'
 import {
+    MLMsgToGetSearch,
     MLMsgToGetSearches,
     MLMsgToQuery
 } from 'src/app/msg/MLMsgQuery'
@@ -55,8 +56,10 @@ export class SearchComponent implements OnInit {
             maxKey = 0
 
         this.currentSearchId = maxKey + 1
+        logger.warn("New search ID:", this.currentSearchId)
         this.currentSearchResults.setSearchId(this.currentSearchId)
 
-        this.websocketService.sendMsg(new MLMsgToQuery(this.currentSearchId, this.searchText)) 
+        this.websocketService.sendMsg(new MLMsgToQuery(this.currentSearchId, this.searchText))
+        this.websocketService.sendMsg(new MLMsgToGetSearch(this.currentSearchId))
     }
 }
