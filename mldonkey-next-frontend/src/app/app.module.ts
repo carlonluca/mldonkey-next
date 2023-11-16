@@ -39,6 +39,7 @@ import { SearchComponent } from './private/home/search/search.component';
 import { ServersComponent } from './private/home/servers/servers.component';
 import { StatsComponent } from './private/home/stats/stats.component';
 import { OptionsComponent } from './private/home/options/options.component'
+import { FormsModule } from '@angular/forms'
 
 @NgModule({
     declarations: [
@@ -59,7 +60,8 @@ import { OptionsComponent } from './private/home/options/options.component'
         MatToolbarModule,
         MatTableModule,
         MatSortModule,
-        MatSidenavModule
+        MatSidenavModule,
+        FormsModule
     ],
     providers: [],
     bootstrap: [AppComponent]

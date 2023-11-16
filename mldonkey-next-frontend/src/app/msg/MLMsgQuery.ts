@@ -28,7 +28,7 @@ import { MLMessageTypeFrom, MLMessageTypeTo, MLMsgFrom, MLMsgTo } from "./MLMsg"
 import { MLMsgReader } from "./MLMsgReader"
 
 export class MLMsgToQuery extends MLMsgTo {
-    constructor(public searchNumber: number) { super(MLMessageTypeTo.T_SEARCH_QUERY) }
+    constructor(public searchNumber: number, public s: string) { super(MLMessageTypeTo.T_SEARCH_QUERY) }
 
     public override toBuffer(): ArrayBuffer {
         let ret = new ArrayBuffer(0)
@@ -36,7 +36,7 @@ export class MLMsgToQuery extends MLMsgTo {
         ret = this.appendInt8(ret, 4)                   // Operation
         //ret = this.appendInt16(ret, 2)
         ret = this.appendString(ret, "the")
-        ret = this.appendString(ret, "offspring")
+        ret = this.appendString(ret, this.s)
         ret = this.appendInt32(ret, 100)
         ret = this.appendInt8(ret, 1)    // Search type
         ret = this.appendInt32(ret, 0)   // Network
@@ -66,7 +66,7 @@ export class MLMsgToGetSearches extends MLMsgTo {
 export class MLMsgFromSearch extends MLMsgFrom {
     constructor(public content: MLSearchInfo) { super(MLMessageTypeFrom.T_SEARCH) }
 
-    public static fromBuffer(buffer: ArrayBuffer): MLMsgFrom {
+    public static fromBuffer(buffer: ArrayBuffer): MLMsgFromSearch {
         const reader = new MLMsgReader(buffer)
         const content = new MLSearchInfo(
             reader.takeInt32(),
