@@ -3,7 +3,9 @@ import { WebSocketService } from 'src/app/websocket-service.service'
 import {
     MLMsgToGetSearch,
     MLMsgToGetSearches,
-    MLMsgToQuery
+    MLMsgToQuery,
+    MLQueryAnd,
+    MLQueryNode
 } from 'src/app/msg/MLMsgQuery'
 import { SearchesService } from 'src/app/services/searches.service'
 import { logger } from 'src/app/core/MLLogger'
@@ -60,7 +62,7 @@ export class SearchComponent implements OnInit {
         this.currentSearchId = maxKey + 1
         this.currentSearchResults.setSearchId(this.currentSearchId)
 
-        this.websocketService.sendMsg(new MLMsgToQuery(this.currentSearchId, this.searchText))
+        this.websocketService.sendMsg(new MLMsgToQuery(this.currentSearchId, MLQueryNode.fromString(this.searchText)))
         this.websocketService.sendMsg(new MLMsgToGetSearch(this.currentSearchId))
     }
 

@@ -262,6 +262,17 @@ export abstract class MLMsg {
         tmpBuff.setInt32(0, i, true)
         return MLUtils.concatArrayBuffers(buffer, tmpBuff.buffer)
     }
+
+    /**
+     * Shortcut to concat.
+     * 
+     * @param buffer 
+     * @param appended 
+     * @returns 
+     */
+    protected appendBuffer(buffer: ArrayBuffer, appended: ArrayBuffer): ArrayBuffer {
+        return MLUtils.concatArrayBuffers(buffer, appended)
+    }
 }
 
 /**

@@ -27,19 +27,84 @@ import { MLSearchResult } from "../data/MLSearchResult"
 import { MLMessageTypeFrom, MLMessageTypeTo, MLMsgFrom, MLMsgTo } from "./MLMsg"
 import { MLMsgReader } from "./MLMsgReader"
 
+export enum MLQueryNodeType {
+    T_AND = 0,
+    T_OR,
+    T_ANDNOT,
+    T_MODULE,
+    T_KEYWORDS,
+    T_MINSIZE,
+    T_MAXSIZE,
+    T_FORMAT,
+    T_MEDIA,
+    T_MP3_ARTIST,
+    T_MP3_TITLE,
+    T_MP3_ALBUM,
+    T_MP3_BITRATE,
+    T_HIDDEN
+}
+
+export class MLQueryNode extends MLMsgTo {
+    constructor(public nodeType: MLQueryNodeType) { super(MLMessageTypeTo.T_NONE) }
+    toBuffer(): ArrayBuffer { return new ArrayBuffer(0) }
+
+    /**
+     * Creates a query from a multiword string.
+     * 
+     * @param s 
+     * @returns 
+     */
+    public static fromString(s: string): MLQueryNode {
+        const keywordQueries: MLQueryNode[] = []
+        s.trim().split(' ').forEach((t) => {
+            if (t)
+                keywordQueries.push(new MLQueryKeywords(t))
+        })
+        return new MLQueryAnd(keywordQueries)
+    }
+}
+
+export class MLQueryKeywords extends MLQueryNode {
+    constructor(public keyword: string) {
+        super(MLQueryNodeType.T_KEYWORDS)
+    }
+
+    public override toBuffer(): ArrayBuffer {
+        let ret = new ArrayBuffer(0)
+        ret = this.appendInt8(ret, MLQueryNodeType.T_KEYWORDS)
+        ret = this.appendString(ret, "keyword")
+        ret = this.appendString(ret, this.keyword)
+        return ret
+    }
+}
+
+export class MLQueryAnd extends MLQueryNode {
+    constructor(public queryies: MLQueryNode[]) {
+        super(MLQueryNodeType.T_AND)
+    }
+
+    public override toBuffer(): ArrayBuffer {
+        let ret = new ArrayBuffer(0)
+        ret = this.appendInt8(ret, this.nodeType)
+        ret = this.appendInt16(ret, this.queryies.length)
+        this.queryies.forEach((q) => {
+            ret = this.appendBuffer(ret, q.toBuffer())
+        })
+
+        return ret
+    }
+}
+
 export class MLMsgToQuery extends MLMsgTo {
-    constructor(public searchNumber: number, public s: string) { super(MLMessageTypeTo.T_SEARCH_QUERY) }
+    constructor(public searchNumber: number, public query: MLQueryNode) { super(MLMessageTypeTo.T_SEARCH_QUERY) }
 
     public override toBuffer(): ArrayBuffer {
         let ret = new ArrayBuffer(0)
         ret = this.appendInt32(ret, this.searchNumber)
-        ret = this.appendInt8(ret, 4)                   // Operation
-        //ret = this.appendInt16(ret, 2)
-        ret = this.appendString(ret, "the")
-        ret = this.appendString(ret, this.s)
+        ret = this.appendBuffer(ret, this.query.toBuffer())
         ret = this.appendInt32(ret, 100)
-        ret = this.appendInt8(ret, 1)    // Search type
-        ret = this.appendInt32(ret, 0)   // Network
+        ret = this.appendInt8(ret, 1)                   // Search type
+        ret = this.appendInt32(ret, 0)                  // Network
         return this.createEnvelope(ret)
     }
 }
