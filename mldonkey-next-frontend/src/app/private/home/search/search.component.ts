@@ -12,6 +12,7 @@ import { MLSearchSessionManager } from 'src/app/core/MLSearchSessionManager'
 import { MatTableDataSource } from '@angular/material/table'
 import { MLResultInfo } from 'src/app/data/MLResultInfo'
 import { MLDownloadMethod, MLMsgToDownload } from 'src/app/msg/MLMsgDownload'
+import { MLTagIn8, MLTagInt32, MLTagType } from 'src/app/msg/MLtag'
 
 @Component({
     selector: 'app-search',
@@ -20,7 +21,7 @@ import { MLDownloadMethod, MLMsgToDownload } from 'src/app/msg/MLMsgDownload'
 })
 export class SearchComponent implements OnInit {
     dataSource = new MatTableDataSource<MLResultInfo>([])
-    displayedColumns: string[] = ['name', 'size']
+    displayedColumns: string[] = ['availability', 'name', 'size']
     searchText = ''
     currentSearchId = -1
     currentSearch: MLSearchInfo | null = null
@@ -61,6 +62,13 @@ export class SearchComponent implements OnInit {
 
         this.websocketService.sendMsg(new MLMsgToQuery(this.currentSearchId, this.searchText))
         this.websocketService.sendMsg(new MLMsgToGetSearch(this.currentSearchId))
+    }
+
+    extractAvailability(result: MLResultInfo): number {
+        const availabilityTag = result.fileMetadata.get("availability")
+        if (!availabilityTag || availabilityTag.type !== MLTagType.T_SINT8)
+            return 0
+        return (availabilityTag as MLTagIn8).value
     }
 
     rowClicked(resultInfo: MLResultInfo) {

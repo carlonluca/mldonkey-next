@@ -5,6 +5,10 @@
     <button type="button" (click)="search()">Search</button>
     <br/>
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+        <ng-container matColumnDef="availability">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Availability</th>
+            <td mat-cell *matCellDef="let result"> {{ extractAvailability(result) }} </td>
+        </ng-container>
         <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
             <td mat-cell *matCellDef="let result"> {{ result.fileNames[0] }} </td>
