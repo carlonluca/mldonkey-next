@@ -4,7 +4,6 @@ import {
     MLMsgToGetSearch,
     MLMsgToGetSearches,
     MLMsgToQuery,
-    MLQueryAnd,
     MLQueryNode
 } from 'src/app/msg/MLMsgQuery'
 import { SearchesService } from 'src/app/services/searches.service'
@@ -14,7 +13,7 @@ import { MLSearchSessionManager } from 'src/app/core/MLSearchSessionManager'
 import { MatTableDataSource } from '@angular/material/table'
 import { MLResultInfo } from 'src/app/data/MLResultInfo'
 import { MLDownloadMethod, MLMsgToDownload } from 'src/app/msg/MLMsgDownload'
-import { MLTagIn8, MLTagInt32, MLTagType } from 'src/app/msg/MLtag'
+import { MLTagIn8, MLTagType } from 'src/app/msg/MLtag'
 
 @Component({
     selector: 'app-search',
