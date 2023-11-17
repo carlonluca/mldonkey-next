@@ -57,7 +57,6 @@ export class SearchComponent implements OnInit {
             maxKey = 0
 
         this.currentSearchId = maxKey + 1
-        logger.warn("New search ID:", this.currentSearchId)
         this.currentSearchResults.setSearchId(this.currentSearchId)
 
         this.websocketService.sendMsg(new MLMsgToQuery(this.currentSearchId, this.searchText))
@@ -65,7 +64,7 @@ export class SearchComponent implements OnInit {
     }
 
     rowClicked(resultInfo: MLResultInfo) {
-        logger.warn("Download:", resultInfo.fileNames)
+        logger.info("Download:", resultInfo.fileNames)
         const msg = new MLMsgToDownload(resultInfo.fileNames, resultInfo.id, MLDownloadMethod.M_FORCE)
         this.websocketService.sendMsg(msg)
     }
