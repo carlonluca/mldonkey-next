@@ -28,7 +28,7 @@ import { WebSocketService } from "../websocket-service.service"
 import { MLObservableVariable } from "./MLObservableVariable"
 
 export class MLSearchResultManager {
-    public searchResults: MLObservableVariable<Array<MLSearchResult>> = new MLObservableVariable(new Array())
+    public searchResults: MLObservableVariable<MLSearchResult[]> = new MLObservableVariable<MLSearchResult[]>([])
 
     constructor(websocketService: WebSocketService) {
         websocketService.lastMessage.observable.subscribe(msg => {

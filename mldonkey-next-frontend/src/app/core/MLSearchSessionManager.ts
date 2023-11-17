@@ -28,7 +28,7 @@ import { MLSearchInfoManager } from "./MLSearchInfoManager"
 import { MLSearchResultManager } from "./MLSearchResultManager"
 
 export class MLSearchSessionManager {
-    public elements: MLObservableVariable<Array<MLResultInfo>> = new MLObservableVariable(new Array())
+    public elements: MLObservableVariable<MLResultInfo[]> = new MLObservableVariable<MLResultInfo[]>([])
 
     constructor(
         private searchId: number,

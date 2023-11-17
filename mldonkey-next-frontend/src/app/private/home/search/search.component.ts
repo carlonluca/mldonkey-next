@@ -21,7 +21,7 @@ import { MLDownloadMethod, MLMsgToDownload } from 'src/app/msg/MLMsgDownload'
 export class SearchComponent implements OnInit {
     dataSource = new MatTableDataSource<MLResultInfo>([])
     displayedColumns: string[] = ['name', 'size']
-    searchText: string = ''
+    searchText = ''
     currentSearchId = -1
     currentSearch: MLSearchInfo | null = null
     currentSearchResults: MLSearchSessionManager
@@ -48,7 +48,7 @@ export class SearchComponent implements OnInit {
     search() {
         logger.info(`Searching for ${this.searchText}`)
         let maxKey: number | undefined;
-        for (let key of this.searchService.searchManager.elements.value.keys()) {
+        for (const key of this.searchService.searchManager.elements.value.keys()) {
             if (maxKey === undefined || key > maxKey) {
                 maxKey = key
             }
