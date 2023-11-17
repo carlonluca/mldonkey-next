@@ -11,6 +11,7 @@ import { MLSearchInfo } from 'src/app/data/MLSearchInfo'
 import { MLSearchSessionManager } from 'src/app/core/MLSearchSessionManager'
 import { MatTableDataSource } from '@angular/material/table'
 import { MLResultInfo } from 'src/app/data/MLResultInfo'
+import { MLDownloadMethod, MLMsgToDownload } from 'src/app/msg/MLMsgDownload'
 
 @Component({
     selector: 'app-search',
@@ -61,5 +62,11 @@ export class SearchComponent implements OnInit {
 
         this.websocketService.sendMsg(new MLMsgToQuery(this.currentSearchId, this.searchText))
         this.websocketService.sendMsg(new MLMsgToGetSearch(this.currentSearchId))
+    }
+
+    rowClicked(resultInfo: MLResultInfo) {
+        logger.warn("Download:", resultInfo.fileNames)
+        const msg = new MLMsgToDownload(resultInfo.fileNames, resultInfo.id, MLDownloadMethod.M_FORCE)
+        this.websocketService.sendMsg(msg)
     }
 }

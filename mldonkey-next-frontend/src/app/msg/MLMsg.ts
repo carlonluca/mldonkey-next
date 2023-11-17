@@ -209,6 +209,22 @@ export abstract class MLMsg {
     }
 
     /**
+     * Appends a list of strings.
+     * 
+     * @param buffer 
+     * @param strings 
+     * @returns 
+     */
+    protected appendStringList(buffer: ArrayBuffer, strings: string[]): ArrayBuffer {
+        let tmpBuff = new ArrayBuffer(0)
+        tmpBuff = this.appendInt16(tmpBuff, strings.length)
+        strings.forEach((s) => {
+            tmpBuff = this.appendString(tmpBuff, s)
+        })
+        return tmpBuff
+    }
+
+    /**
      * Appends a 8 bit integer.
      * 
      * @param buffer 

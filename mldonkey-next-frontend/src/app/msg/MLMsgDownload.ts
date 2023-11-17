@@ -22,7 +22,7 @@
  * Date:    2023.08.17
  */
 import { MLMsgDownloadElement } from "../data/MLDownloadFileInfo"
-import { MLMsgFrom, MLMessageTypeFrom } from "./MLMsg"
+import { MLMsgFrom, MLMessageTypeFrom, MLMsgTo, MLMessageTypeTo } from "./MLMsg"
 import { MLMsgReader } from "./MLMsgReader"
 
 export class MLMsgFromDownloadFile extends MLMsgFrom {
@@ -63,5 +63,28 @@ export class MLMsgFromFileDownloaded extends MLMsgFrom {
         if (opcode >= 46)
             lastseen = reader.takeInt32()
         return new MLMsgFromFileDownloaded(downloadId, downloaded, speed, lastseen)
+    }
+}
+
+export enum MLDownloadMethod {
+    M_TRY = 0,
+    M_FORCE = 1
+}
+
+export class MLMsgToDownload extends MLMsgTo {
+    constructor(
+        public fileNames: string[],
+        public resultId: number,
+        public method: MLDownloadMethod
+    ) {
+        super(MLMessageTypeTo.T_DOWNLOAD_QUERY)
+    }
+
+    public override toBuffer(): ArrayBuffer {
+        let ret = new ArrayBuffer(0)
+        ret = this.appendStringList(ret, this.fileNames)
+        ret = this.appendInt32(ret, this.resultId)
+        ret = this.appendInt8(ret, this.method)
+        return this.createEnvelope(ret)
     }
 }
