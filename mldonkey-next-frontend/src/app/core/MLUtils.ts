@@ -16,6 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import prettyBytes from "pretty-bytes";
+
 /**
  * Author:  Luca Carlon
  * Company: -
@@ -60,5 +62,17 @@ export class MLUtils {
     public static stringToUtf8ArrayBuffer(input: string): ArrayBuffer {
         const encoder = new TextEncoder();
         return encoder.encode(input).buffer;
+    }
+
+    /**
+     * Prints a human readable size.
+     * 
+     * @param size 
+     * @returns 
+     */
+    public static beautifySize(size: bigint): string {
+        if (size > Number.MAX_SAFE_INTEGER)
+            return "" + size
+        return prettyBytes(Number(size))
     }
 }

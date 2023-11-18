@@ -15,6 +15,8 @@ import { MLResultInfo } from 'src/app/data/MLResultInfo'
 import { MLDownloadMethod, MLMsgToDownload } from 'src/app/msg/MLMsgDownload'
 import { MLTagIn8, MLTagType, MLTagUint32 } from 'src/app/msg/MLtag'
 import { MatSort, MatSortable } from '@angular/material/sort'
+import prettyBytes from 'pretty-bytes'
+import { MLUtils } from 'src/app/core/MLUtils'
 
 @Component({
     selector: 'app-search',
@@ -48,9 +50,9 @@ export class SearchComponent implements AfterViewInit, OnInit {
         this.dataSource.sortingDataAccessor = (item, property) => {
             switch (property) {
             case "availability":
-                return this.extractAvailability(item)
+                return this.stringifyAvailability(item)
             case "completesources":
-                return this.extractCompleteSources(item)
+                return this.stringifyCompleteSources(item)
             case "name":
                 return item.fileNames[0]
             case "size":
@@ -88,18 +90,22 @@ export class SearchComponent implements AfterViewInit, OnInit {
         this.websocketService.sendMsg(new MLMsgToGetSearch(this.currentSearchId))
     }
 
-    extractAvailability(result: MLResultInfo): number {
+    stringifyAvailability(result: MLResultInfo): number {
         const availabilityTag = result.fileMetadata.get("availability")
         if (!availabilityTag || availabilityTag.type !== MLTagType.T_SINT8)
             return 0
         return (availabilityTag as MLTagIn8).value
     }
 
-    extractCompleteSources(result: MLResultInfo): number {
+    stringifyCompleteSources(result: MLResultInfo): number {
         const csourcesTag = result.fileMetadata.get("completesources")
         if (!csourcesTag || csourcesTag.type !== MLTagType.T_UINT32)
             return 0
         return (csourcesTag as MLTagUint32).value
+    }
+
+    stringifySize(result: MLResultInfo): string {
+        return MLUtils.beautifySize(result.fileSize)
     }
 
     rowClicked(resultInfo: MLResultInfo) {

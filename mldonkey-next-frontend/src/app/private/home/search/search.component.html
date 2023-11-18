@@ -6,11 +6,11 @@
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
         <ng-container matColumnDef="availability">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Availability</th>
-            <td mat-cell *matCellDef="let result"> {{ extractAvailability(result) }} </td>
+            <td mat-cell *matCellDef="let result"> {{ stringifyAvailability(result) }} </td>
         </ng-container>
         <ng-container matColumnDef="completesources">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Complete sources</th>
-            <td mat-cell *matCellDef="let result"> {{ extractCompleteSources(result) }} </td>
+            <td mat-cell *matCellDef="let result"> {{ stringifyCompleteSources(result) }} </td>
         </ng-container>
         <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
@@ -18,7 +18,7 @@
         </ng-container>
         <ng-container matColumnDef="size">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Size</th>
-            <td mat-cell *matCellDef="let result"> {{ result.fileSize }} </td>
+            <td mat-cell *matCellDef="let result"> {{ stringifySize(result) }} </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="rowClicked(row)"></tr>
