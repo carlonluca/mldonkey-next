@@ -1,11 +1,5 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core'
 import { WebSocketService } from 'src/app/websocket-service.service'
-import {
-    MLMsgToGetSearch,
-    MLMsgToGetSearches,
-    MLMsgToQuery,
-    MLQueryNode
-} from 'src/app/msg/MLMsgQuery'
 import { SearchesService } from 'src/app/services/searches.service'
 import { logger } from 'src/app/core/MLLogger'
 import { MLSearchInfo } from 'src/app/data/MLSearchInfo'
@@ -15,8 +9,13 @@ import { MLResultInfo } from 'src/app/data/MLResultInfo'
 import { MLDownloadMethod, MLMsgToDownload } from 'src/app/msg/MLMsgDownload'
 import { MLTagIn8, MLTagType, MLTagUint32 } from 'src/app/msg/MLtag'
 import { MatSort, MatSortable } from '@angular/material/sort'
-import prettyBytes from 'pretty-bytes'
 import { MLUtils } from 'src/app/core/MLUtils'
+import {
+    MLMsgToGetSearch,
+    MLMsgToGetSearches,
+    MLMsgToQuery,
+    MLQueryNode
+} from 'src/app/msg/MLMsgQuery'
 
 @Component({
     selector: 'app-search',
