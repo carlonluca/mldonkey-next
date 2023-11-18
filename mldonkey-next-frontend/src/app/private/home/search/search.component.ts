@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core'
 import { WebSocketService } from 'src/app/websocket-service.service'
 import {
     MLMsgToGetSearch,
@@ -14,13 +14,14 @@ import { MatTableDataSource } from '@angular/material/table'
 import { MLResultInfo } from 'src/app/data/MLResultInfo'
 import { MLDownloadMethod, MLMsgToDownload } from 'src/app/msg/MLMsgDownload'
 import { MLTagIn8, MLTagType } from 'src/app/msg/MLtag'
+import { MatSort, MatSortable } from '@angular/material/sort'
 
 @Component({
     selector: 'app-search',
     templateUrl: './search.component.html',
     styleUrls: ['./search.component.scss']
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements AfterViewInit, OnInit {
     dataSource = new MatTableDataSource<MLResultInfo>([])
     displayedColumns: string[] = ['availability', 'name', 'size']
     searchText = ''
@@ -28,23 +29,43 @@ export class SearchComponent implements OnInit {
     currentSearch: MLSearchInfo | null = null
     currentSearchResults: MLSearchSessionManager
 
+    @ViewChild(MatSort) sort: MatSort
+
     constructor(
         private websocketService: WebSocketService,
         private searchService: SearchesService
-        ) {
-            this.currentSearchResults = new MLSearchSessionManager(
-                -1,
-                searchService.searchManager,
-                searchService.resultManager,
-                searchService.searchResultManager
-            )
-            this.currentSearchResults.elements.observable.subscribe((list) => {
-                this.dataSource.data = list
-            })
+    ) {
+        this.currentSearchResults = new MLSearchSessionManager(
+            -1,
+            searchService.searchManager,
+            searchService.resultManager,
+            searchService.searchResultManager
+        )
+    }
+
+    ngAfterViewInit(): void {
+        this.dataSource.sort = this.sort
+        this.dataSource.sortingDataAccessor = (item, property) => {
+            switch (property) {
+            case "availability":
+                return this.extractAvailability(item)
+            case "name":
+                return item.fileNames[0]
+            case "size":
+                return Number(item.fileSize / 1024n)
+            default:
+                return ""
+            }
         }
+        this.sort.sort({ id: "fileSize" } as MatSortable)
+    }
 
     ngOnInit(): void {
         this.websocketService.sendMsg(new MLMsgToGetSearches())
+        this.currentSearchResults.elements.observable.subscribe((list) => {
+            this.dataSource.data = list
+            this.dataSource.sort = this.sort
+        })
     }
 
     search() {

@@ -24,6 +24,6 @@
 
 import log from 'loglevel'
 
-log.setLevel(log.levels.DEBUG)
+log.setLevel(log.levels.INFO)
 
 export const logger = log
