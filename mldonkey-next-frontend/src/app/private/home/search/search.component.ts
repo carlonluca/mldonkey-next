@@ -13,7 +13,7 @@ import { MLSearchSessionManager } from 'src/app/core/MLSearchSessionManager'
 import { MatTableDataSource } from '@angular/material/table'
 import { MLResultInfo } from 'src/app/data/MLResultInfo'
 import { MLDownloadMethod, MLMsgToDownload } from 'src/app/msg/MLMsgDownload'
-import { MLTagIn8, MLTagType } from 'src/app/msg/MLtag'
+import { MLTagIn8, MLTagType, MLTagUint32 } from 'src/app/msg/MLtag'
 import { MatSort, MatSortable } from '@angular/material/sort'
 
 @Component({
@@ -23,7 +23,7 @@ import { MatSort, MatSortable } from '@angular/material/sort'
 })
 export class SearchComponent implements AfterViewInit, OnInit {
     dataSource = new MatTableDataSource<MLResultInfo>([])
-    displayedColumns: string[] = ['availability', 'name', 'size']
+    displayedColumns: string[] = ['availability', "completesources", 'name', 'size']
     searchText = ''
     currentSearchId = -1
     currentSearch: MLSearchInfo | null = null
@@ -49,6 +49,8 @@ export class SearchComponent implements AfterViewInit, OnInit {
             switch (property) {
             case "availability":
                 return this.extractAvailability(item)
+            case "completesources":
+                return this.extractCompleteSources(item)
             case "name":
                 return item.fileNames[0]
             case "size":
@@ -91,6 +93,13 @@ export class SearchComponent implements AfterViewInit, OnInit {
         if (!availabilityTag || availabilityTag.type !== MLTagType.T_SINT8)
             return 0
         return (availabilityTag as MLTagIn8).value
+    }
+
+    extractCompleteSources(result: MLResultInfo): number {
+        const csourcesTag = result.fileMetadata.get("completesources")
+        if (!csourcesTag || csourcesTag.type !== MLTagType.T_UINT32)
+            return 0
+        return (csourcesTag as MLTagUint32).value
     }
 
     rowClicked(resultInfo: MLResultInfo) {
