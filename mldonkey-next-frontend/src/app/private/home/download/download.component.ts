@@ -39,7 +39,7 @@ import { WebSocketService } from 'src/app/websocket-service.service';
 })
 export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
     dataSource = new MatTableDataSource<MLMsgDownloadElement>([])
-    displayedColumns: string[] = ['name', 'size']
+    displayedColumns: string[] = ['name', 'downloaded', 'size']
 
     @ViewChild(MatSort) sort: MatSort
 
@@ -66,6 +66,8 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
                 return Number(item.size/1024n)
             case "name":
                 return item.name
+            case "downloaded":
+                return Number(item.downloaded/1024n)
             default:
                 return 0
             }
@@ -76,7 +78,7 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
         this.subscriptions.unsubscribe(null)
     }
 
-    stringifySize(download: MLMsgDownloadElement): string {
-        return MLUtils.beautifySize(download.size)
+    stringifySize(size: bigint): string {
+        return MLUtils.beautifySize(size)
     }
 }
