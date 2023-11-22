@@ -32,7 +32,6 @@ import { MLResultInfo } from 'src/app/data/MLResultInfo'
 import { MLDownloadMethod, MLMsgToDownload } from 'src/app/msg/MLMsgDownload'
 import { MLTagIn8, MLTagType, MLTagUint32 } from 'src/app/msg/MLtag'
 import { MatSort, MatSortable } from '@angular/material/sort'
-import { MLUtils } from 'src/app/core/MLUtils'
 import {
     MLMsgToGetSearch,
     MLMsgToGetSearches,

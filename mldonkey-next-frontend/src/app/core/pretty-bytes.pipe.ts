@@ -29,7 +29,7 @@ import { MLUtils } from "./MLUtils";
     name: 'prettyBytes'
 })
 export class PrettyBytesPipe implements PipeTransform {
-    transform(value: bigint | number, ...args: any[]): string {
+    transform(value: bigint | number): string {
         return MLUtils.beautifySize(value)
     }
 }
