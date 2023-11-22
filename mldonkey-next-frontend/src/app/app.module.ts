@@ -40,6 +40,7 @@ import { ServersComponent } from './private/home/servers/servers.component';
 import { StatsComponent } from './private/home/stats/stats.component';
 import { OptionsComponent } from './private/home/options/options.component'
 import { FormsModule } from '@angular/forms'
+import { PrettyBytesPipe } from "./core/pretty-bytes.pipe";
 
 @NgModule({
     declarations: [
@@ -53,6 +54,8 @@ import { FormsModule } from '@angular/forms'
         StatsComponent,
         OptionsComponent
     ],
+    providers: [],
+    bootstrap: [AppComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,
@@ -61,9 +64,8 @@ import { FormsModule } from '@angular/forms'
         MatTableModule,
         MatSortModule,
         MatSidenavModule,
-        FormsModule
-    ],
-    providers: [],
-    bootstrap: [AppComponent]
+        FormsModule,
+        PrettyBytesPipe
+    ]
 })
 export class AppModule { }

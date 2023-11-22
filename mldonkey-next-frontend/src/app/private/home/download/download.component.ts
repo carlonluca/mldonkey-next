@@ -26,7 +26,6 @@ import { MatSort, MatSortable } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { interval } from 'rxjs';
 import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet';
-import { MLUtils } from 'src/app/core/MLUtils';
 import { MLMsgDownloadElement } from 'src/app/data/MLDownloadFileInfo';
 import { MLMsgToGetDownload } from 'src/app/msg/MLMsg';
 import { DownloadingFilesService } from 'src/app/services/downloading-files.service';
@@ -76,9 +75,5 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.subscriptions.unsubscribe(null)
-    }
-
-    stringifySize(size: bigint): string {
-        return MLUtils.beautifySize(size)
     }
 }
