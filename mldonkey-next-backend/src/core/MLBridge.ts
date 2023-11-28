@@ -73,5 +73,6 @@ export class MLBridge {
 
     public dispose() {
         this.webSocket.close()
+        this.mlSocket.destroy()
     }
 }

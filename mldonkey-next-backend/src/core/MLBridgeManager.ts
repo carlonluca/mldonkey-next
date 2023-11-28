@@ -57,7 +57,8 @@ export class MLBridgeManager {
         }
 
         bridge.dispose()
-        this.connections.delete(websocket)
+        if (!this.connections.delete(websocket))
+            logger.warn("Client could not be removed from the connections map")
         this.logClientsConnected()
     }
 
