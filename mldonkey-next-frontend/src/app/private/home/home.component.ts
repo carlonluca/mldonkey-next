@@ -21,7 +21,6 @@
  * Company: -
  * Date: 14.08.2023
  */
-
 import { Component } from '@angular/core'
 
 @Component({
