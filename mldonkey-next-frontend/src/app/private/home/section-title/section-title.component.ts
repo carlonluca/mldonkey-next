@@ -30,5 +30,5 @@ import { Component, Input } from '@angular/core'
 })
 export class SectionTitleComponent {
     @Input() routerLinkValue: string[] = []
-    @Input() buttonText: string = 'Click me'
+    @Input() buttonText = 'Click me'
 }
