@@ -41,6 +41,7 @@ import { StatsComponent } from './private/home/stats/stats.component';
 import { OptionsComponent } from './private/home/options/options.component'
 import { FormsModule } from '@angular/forms'
 import { PrettyBytesPipe } from "./core/pretty-bytes.pipe";
+import { SectionTitleComponent } from './private/home/section-title/section-title.component';
 
 @NgModule({
     declarations: [
@@ -52,7 +53,8 @@ import { PrettyBytesPipe } from "./core/pretty-bytes.pipe";
         SearchComponent,
         ServersComponent,
         StatsComponent,
-        OptionsComponent
+        OptionsComponent,
+        SectionTitleComponent
     ],
     providers: [],
     bootstrap: [AppComponent],

@@ -7,11 +7,11 @@
 
 <mat-sidenav-container>
     <mat-sidenav [(opened)]="opened" mode="side">
-        <button class="sectionButton" [routerLink]="['/home/download']">Download</button><br/>
-        <button class="sectionButton" [routerLink]="['/home/search']">Search</button><br/>
-        <button class="sectionButton" [routerLink]="['/home/servers']">Servers</button><br/>
-        <button class="sectionButton" [routerLink]="['/home/stats']">Statistics</button><br/>
-        <button class="sectionButton" [routerLink]="['/home/options']">Options</button>
+        <app-section-title [routerLinkValue]="['/home/download']" buttonText="Download"></app-section-title>
+        <app-section-title [routerLinkValue]="['/home/search']" buttonText="Search"></app-section-title>
+        <app-section-title [routerLinkValue]="['/home/servers']" buttonText="Servers"></app-section-title>
+        <app-section-title [routerLinkValue]="['/home/stats']" buttonText="Statistics"></app-section-title>
+        <app-section-title [routerLinkValue]="['/home/options']" buttonText="Options"></app-section-title>
     </mat-sidenav>
     <mat-sidenav-content>
         <router-outlet></router-outlet>
