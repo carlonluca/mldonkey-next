@@ -22,6 +22,13 @@
  * Date: 14.08.2023
  */
 import { Component } from '@angular/core'
+import {
+    faDownload,
+    faMagnifyingGlass,
+    faServer,
+    faChartSimple,
+    faGears
+} from '@fortawesome/free-solid-svg-icons'
 
 @Component({
     selector: 'app-home',
@@ -30,4 +37,9 @@ import { Component } from '@angular/core'
 })
 export class HomeComponent {
     opened = true
+    faDownload = faDownload
+    faMagnifyingGlass = faMagnifyingGlass
+    faServer = faServer
+    faChartSimple = faChartSimple
+    faGears = faGears
 }

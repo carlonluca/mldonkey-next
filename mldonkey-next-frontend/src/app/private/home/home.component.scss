@@ -7,3 +7,11 @@ mat-sidenav {
 mat-sidenav-container mat-sidenav {
     background-color: $dark2;
 }
+
+.menuButton {
+    margin-right: $defaultMargin;
+    background: transparent;
+    border: 0px solid;
+    padding: $defaultMargin $defaultMargin;
+    color: $textColor;
+}

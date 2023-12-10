@@ -34,6 +34,7 @@ import { MatToolbarModule } from '@angular/material/toolbar'
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatIconModule } from '@angular/material/icon'
 import { DownloadComponent } from './private/home/download/download.component';
 import { SearchComponent } from './private/home/search/search.component';
 import { ServersComponent } from './private/home/servers/servers.component';
@@ -42,6 +43,7 @@ import { OptionsComponent } from './private/home/options/options.component'
 import { FormsModule } from '@angular/forms'
 import { PrettyBytesPipe } from "./core/pretty-bytes.pipe";
 import { SectionTitleComponent } from './private/home/section-title/section-title.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
     declarations: [
@@ -67,7 +69,9 @@ import { SectionTitleComponent } from './private/home/section-title/section-titl
         MatSortModule,
         MatSidenavModule,
         FormsModule,
-        PrettyBytesPipe
+        PrettyBytesPipe,
+        FontAwesomeModule,
+        MatIconModule
     ]
 })
 export class AppModule { }

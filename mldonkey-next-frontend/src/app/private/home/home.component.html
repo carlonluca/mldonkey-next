@@ -1,17 +1,36 @@
 <mat-toolbar>
     <mat-toolbar-row>
-        <button mat-button (click)="opened=!opened">Menu</button>
-        <span class="span">mldonkey-next</span>
+        <button class="menuButton" mat-button (click)="opened=!opened">
+            <mat-icon>menu</mat-icon>
+        </button>
+        mldonkey-next
     </mat-toolbar-row>
 </mat-toolbar>
 
 <mat-sidenav-container>
     <mat-sidenav [(opened)]="opened" mode="side">
-        <app-section-title [routerLinkValue]="['/home/download']" buttonText="Download"></app-section-title>
-        <app-section-title [routerLinkValue]="['/home/search']" buttonText="Search"></app-section-title>
-        <app-section-title [routerLinkValue]="['/home/servers']" buttonText="Servers"></app-section-title>
-        <app-section-title [routerLinkValue]="['/home/stats']" buttonText="Statistics"></app-section-title>
-        <app-section-title [routerLinkValue]="['/home/options']" buttonText="Options"></app-section-title>
+        <app-section-title [routerLinkValue]="['/home/download']"
+            buttonText="Download"
+            [iconDef]="faDownload">
+        </app-section-title>
+        <app-section-title [routerLinkValue]="['/home/search']"
+            buttonText="Search"
+            [iconDef]="faMagnifyingGlass">
+        </app-section-title>
+        <app-section-title [routerLinkValue]="['/home/servers']"
+            buttonText="Servers"
+            [iconDef]="faServer">
+        </app-section-title>
+        <app-section-title
+            [routerLinkValue]="['/home/stats']"
+            buttonText="Statistics"
+            [iconDef]="faChartSimple">
+        </app-section-title>
+        <app-section-title
+            [routerLinkValue]="['/home/options']"
+            buttonText="Options"
+            [iconDef]="faGears">
+        </app-section-title>
     </mat-sidenav>
     <mat-sidenav-content>
         <router-outlet></router-outlet>

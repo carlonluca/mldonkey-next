@@ -22,6 +22,7 @@
  * Date:    2023.12.03
  */
 import { Component, Input } from '@angular/core'
+import { IconDefinition, faQuestion } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
     selector: 'app-section-title',
@@ -31,4 +32,5 @@ import { Component, Input } from '@angular/core'
 export class SectionTitleComponent {
     @Input() routerLinkValue: string[] = []
     @Input() buttonText = 'Click me'
+    @Input() iconDef: IconDefinition = faQuestion
 }

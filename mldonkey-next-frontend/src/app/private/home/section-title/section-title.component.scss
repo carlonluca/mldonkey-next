@@ -1,17 +1,18 @@
 @import "../../../css/shared.scss";
 
+$sectionButtonHeight: 50px;
+
 .sectionButton {
     background: $dark2;
     border: 0px solid;
     padding: 15px 30px;
     color: white;
     margin: 0px;
-    width: 200px;
     height: 50px;
     font-size: $sectionFontSize;
 }
 
-.sectionButton:hover {
+.container:hover {
     filter: brightness(70%);
     -webkit-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;
@@ -22,10 +23,24 @@
 
 .container {
     display: flex;
-    align-items: stretch;
+    justify-content: flex-start;
+    align-items: center;
+    background: $dark2;
 }
 
-.element1, .element2 {
-    flex: 1;
+.margin {
+    width: 10px;
+}
+
+.element1 {
     margin-right: 10px;
+    margin-left: 10px;
+    display: flex;
+    justify-content: center;
+    width: $sectionFontSize;
+    height: $sectionFontSize;
+}
+
+fa-icon {
+    font-size: $sectionFontSize;
 }
