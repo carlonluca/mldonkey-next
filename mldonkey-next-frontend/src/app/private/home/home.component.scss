@@ -8,6 +8,10 @@ mat-sidenav-container mat-sidenav {
     background-color: $dark2;
 }
 
+mat-sidenav-container {
+    height: 100vh;
+}
+
 .menuButton {
     margin-right: $defaultMargin;
     background: transparent;
