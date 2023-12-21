@@ -60,7 +60,7 @@ export class PublicComponent {
                     if (this.inputUsr && this.inputPwd)
                         this.storage.setLoginData(new Credentials(this.inputUsr, this.inputPwd))
                     break
-                case MLConnectionState.S_CONNECTED:
+                case MLConnectionState.S_CONNECTED: {
                     this.connected = true
                     const data = this.storage.getLoginData()
                     if (data) {
@@ -75,6 +75,7 @@ export class PublicComponent {
                         }, 1000)
                     }
                     break
+                }
                 default:
                     this.connected = false
                     break
