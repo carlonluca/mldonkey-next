@@ -27,6 +27,9 @@ import { MLConnectionState, WebSocketService } from '../websocket-service.servic
 import { SpinnerService } from '../services/spinner.service'
 import { Router } from '@angular/router'
 import { environment } from '../../environments/environment'
+import { Credentials, StorageService } from '../services/storage.service'
+import { MLMessageTypeFrom } from '../msg/MLMsg'
+import { logger } from '../core/MLLogger'
 
 @Component({
     selector: 'app-public',
@@ -46,21 +49,40 @@ export class PublicComponent {
     constructor(
         private webSocketService: WebSocketService,
         private spinner: SpinnerService,
-        private router: Router) {
+        private router: Router,
+        private storage: StorageService) {
         webSocketService.connectionState.observable.subscribe(state => {
             switch (state) {
                 case MLConnectionState.S_AUTHENTICATED:
                     this.connected = true
                     this.spinner.hide()
                     this.router.navigateByUrl("/home")
+                    if (this.inputUsr && this.inputPwd)
+                        this.storage.setLoginData(new Credentials(this.inputUsr, this.inputPwd))
                     break
                 case MLConnectionState.S_CONNECTED:
                     this.connected = true
+                    const data = this.storage.getLoginData()
+                    if (data) {
+                        this.spinner.show()
+
+                        // Apparently mldonkey returns "bad credentials" if login is run too soon.
+                        setTimeout(() => {
+                            if (data) {
+                                logger.info("Credentials found in storage. Logging in automatically...")
+                                this.doLogin(data.username, data.passwd)
+                            }
+                        }, 1000)
+                    }
                     break
                 default:
                     this.connected = false
                     break
             }
+        })
+        webSocketService.lastMessage.observable.subscribe(msg => {
+            if (msg.type === MLMessageTypeFrom.T_BAD_PASSWORD)
+                this.storage.setLoginData(null)
         })
 
         this.webSocketService.connect(`ws://${environment.mldonkeyWsAddr}:${environment.mldonkeyWsPort}`)
@@ -70,8 +92,18 @@ export class PublicComponent {
      * Tries to login.
      */
     login() {
+        this.doLogin(this.inputUsr, this.inputPwd)
+    }
+
+    /**
+     * Logs in with the provided credentials.
+     * 
+     * @param username 
+     * @param passwd 
+     */
+    doLogin(username: string, passwd: string) {
         // TODO: introduce some kind of timeout here
         this.spinner.show()
-        this.webSocketService.login(this.inputUsr, this.inputPwd)
+        this.webSocketService.login(username, passwd)
     }
 }
