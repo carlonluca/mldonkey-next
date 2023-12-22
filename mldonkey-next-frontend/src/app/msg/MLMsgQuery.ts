@@ -54,9 +54,15 @@ export class MLQueryNode extends MLMsgTo {
      * @param s 
      * @returns 
      */
-    public static fromString(s: string): MLQueryNode {
+    public static fromString(s: string): MLQueryNode | null {
+        const tokens = s.trim().split(' ')
+        if (tokens.length <= 0)
+            return null
+        if (tokens.length === 1)
+            return new MLQueryKeywords(tokens[0])
+        
         const keywordQueries: MLQueryNode[] = []
-        s.trim().split(' ').forEach((t) => {
+        tokens.forEach((t) => {
             if (t)
                 keywordQueries.push(new MLQueryKeywords(t))
         })
