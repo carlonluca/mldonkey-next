@@ -31,6 +31,11 @@
             buttonText="Options"
             [iconDef]="faGears">
         </app-section-title>
+        <app-section-title
+            (click)="logout()"
+            buttonText="Logout"
+            [iconDef]="faDoorOpen">
+    </app-section-title>
     </mat-sidenav>
     <mat-sidenav-content>
         <router-outlet></router-outlet>

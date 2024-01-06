@@ -22,13 +22,16 @@
  * Date: 14.08.2023
  */
 import { Component } from '@angular/core'
+import { Router } from '@angular/router'
 import {
     faDownload,
     faMagnifyingGlass,
     faServer,
     faChartSimple,
-    faGears
+    faGears,
+    faDoorOpen
 } from '@fortawesome/free-solid-svg-icons'
+import { StorageService } from 'src/app/services/storage.service'
 
 @Component({
     selector: 'app-home',
@@ -42,4 +45,12 @@ export class HomeComponent {
     faServer = faServer
     faChartSimple = faChartSimple
     faGears = faGears
+    faDoorOpen = faDoorOpen
+
+    constructor(private router: Router, private storage: StorageService) {}
+
+    logout() {
+        this.storage.setLoginData(null)
+        this.router.navigate(["/login"])
+    }
 }
