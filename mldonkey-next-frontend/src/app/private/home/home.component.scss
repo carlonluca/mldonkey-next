@@ -1,5 +1,7 @@
 @import "../../css/shared.scss";
 
+$otherComponentHeight: 60px;
+
 mat-sidenav {
     margin: 0px;
 }
@@ -9,7 +11,15 @@ mat-sidenav-container mat-sidenav {
 }
 
 mat-sidenav-container {
-    height: 100vh;
+    position: fixed;
+    bottom: 0;
+    top: $otherComponentHeight;
+    left: 0;
+    right: 0;
+}
+
+mat-toolbar {
+    height: $otherComponentHeight;
 }
 
 .menuButton {
