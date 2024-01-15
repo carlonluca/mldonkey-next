@@ -1,8 +1,11 @@
 <form>
-    <label for="searchInput">Enter text:</label>
-    <input type="text" id="searchInput" name="searchInput" placeholder="Type here..." [(ngModel)]="searchText">
-    <button type="button" (click)="search()">Search</button>
-    <br/>
+    <div id="queryContainer">
+        <mat-form-field id="searchForm" subscriptSizing="dynamic">
+            <input matInput type="text" id="searchInput" name="searchInput" placeholder="Enter a query here..." [(ngModel)]="searchText">
+        </mat-form-field>
+        <button mat-raised-button id="searchButton" (click)="search()">Search</button>
+    </div>
+    
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
         <ng-container matColumnDef="availability">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Availability</th>

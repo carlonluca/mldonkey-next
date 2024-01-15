@@ -26,24 +26,27 @@ import { NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
-import { LoginComponent } from './login/login.component';
-import { SpinnerComponent } from './components/spinner/spinner.component';
-import { HomeComponent } from './private/home/home.component';
+import { LoginComponent } from './login/login.component'
+import { SpinnerComponent } from './components/spinner/spinner.component'
+import { HomeComponent } from './private/home/home.component'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { MatToolbarModule } from '@angular/material/toolbar'
-import { MatTableModule } from '@angular/material/table';
-import { MatSortModule } from '@angular/material/sort';
-import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatTableModule } from '@angular/material/table'
+import { MatSortModule } from '@angular/material/sort'
+import { MatSidenavModule } from '@angular/material/sidenav'
 import { MatIconModule } from '@angular/material/icon'
-import { DownloadComponent } from './private/home/download/download.component';
-import { SearchComponent } from './private/home/search/search.component';
-import { ServersComponent } from './private/home/servers/servers.component';
-import { StatsComponent } from './private/home/stats/stats.component';
+import { MatButtonModule } from '@angular/material/button'
+import { MatInputModule } from '@angular/material/input'
+import { MatFormFieldModule } from '@angular/material/form-field'
+import { DownloadComponent } from './private/home/download/download.component'
+import { SearchComponent } from './private/home/search/search.component'
+import { ServersComponent } from './private/home/servers/servers.component'
+import { StatsComponent } from './private/home/stats/stats.component'
 import { OptionsComponent } from './private/home/options/options.component'
 import { FormsModule } from '@angular/forms'
-import { PrettyBytesPipe } from "./core/pretty-bytes.pipe";
-import { SectionTitleComponent } from './private/home/section-title/section-title.component';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { PrettyBytesPipe } from "./core/pretty-bytes.pipe"
+import { SectionTitleComponent } from './private/home/section-title/section-title.component'
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 
 @NgModule({
     declarations: [
@@ -71,7 +74,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
         FormsModule,
         PrettyBytesPipe,
         FontAwesomeModule,
-        MatIconModule
+        MatIconModule,
+        MatButtonModule,
+        MatInputModule,
+        MatFormFieldModule
     ]
 })
 export class AppModule { }

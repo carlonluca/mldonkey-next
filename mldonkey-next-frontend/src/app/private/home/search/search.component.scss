@@ -1,0 +1,16 @@
+#queryContainer {
+    display: flex;
+    margin: 10px;
+    align-items: stretch;
+}
+
+#searchForm {
+    flex: 1;
+    margin-right: 5px;
+    padding: 0px;
+    height: 50px;
+}
+
+#searchButton {
+    height: 50px;
+}
