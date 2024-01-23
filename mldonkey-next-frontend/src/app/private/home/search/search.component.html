@@ -3,7 +3,7 @@
         <mat-form-field id="searchForm" subscriptSizing="dynamic">
             <input matInput type="text" id="searchInput" name="searchInput" placeholder="Enter a query here..." [(ngModel)]="searchText">
         </mat-form-field>
-        <button mat-raised-button id="searchButton" (click)="search()">Search</button>
+        <button mat-raised-button id="searchButton" (click)="search()" [disabled]="searchText.length <= 0">Search</button>
     </div>
     
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
