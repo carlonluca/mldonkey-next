@@ -28,6 +28,12 @@ import { PublicRoutingModule } from './public-routing.module'
 import { PublicComponent } from './public.component'
 import { RouterModule } from '@angular/router'
 import { FormsModule } from '@angular/forms'
+import { MatIconModule } from '@angular/material/icon'
+import { MatDividerModule } from '@angular/material/divider'
+import { MatButtonModule } from '@angular/material/button'
+import { MatInputModule } from '@angular/material/input'
+import { MatFormFieldModule } from '@angular/material/form-field'
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 
 @NgModule({
     declarations: [
@@ -37,7 +43,13 @@ import { FormsModule } from '@angular/forms'
         CommonModule,
         PublicRoutingModule,
         RouterModule,
-        FormsModule
+        FormsModule,
+        MatButtonModule,
+        MatDividerModule,
+        MatIconModule,
+        MatInputModule,
+        MatFormFieldModule,
+        FontAwesomeModule
     ]
 })
 export class PublicModule {}

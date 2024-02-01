@@ -30,6 +30,7 @@ import { environment } from '../../environments/environment'
 import { Credentials, StorageService } from '../services/storage.service'
 import { MLMessageTypeFrom } from '../msg/MLMsg'
 import { logger } from '../core/MLLogger'
+import { faUser, faKey } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
     selector: 'app-public',
@@ -37,6 +38,8 @@ import { logger } from '../core/MLLogger'
     styleUrls: ['./public.component.scss']
 })
 export class PublicComponent {
+    faUser = faUser
+    faKey = faKey
     connected = false
     inputUsr = ""
     inputPwd = ""
