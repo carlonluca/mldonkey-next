@@ -1,17 +1,27 @@
-#full-screen-container {
-    width: 100%;
-    height: 100%;
+@mixin centered-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 20px;
+}
+
+#full-screen-container {
+    @include centered-container();
+    width: 100%;
+    height: 100%;
 }
 
 .full-screen-row {
-    width: 30%;
+    width: 100%;
 }
 
 .center-text {
     text-align: center;
+}
+
+.login-container {
+    @include centered-container();
+    width: 600px;
+    padding: 30px;
+    gap: 20px;
 }

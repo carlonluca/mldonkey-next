@@ -1,20 +1,22 @@
 <div id="full-screen-container" class="mat-app-background">
-    <mat-form-field class="full-screen-row">
-        <mat-label>Username</mat-label>
-        <button matPrefix mat-icon-button color="white" matTooltip="Your username" matTooltipPosition="below">
-            <fa-icon [icon]="faUser"></fa-icon>
-        </button>
-        <input matInput type="text" [(ngModel)]="inputUsr" />
-    </mat-form-field>
-
-    <mat-form-field class="full-screen-row">
-        <mat-label>Password</mat-label>
-        <button matPrefix mat-icon-button color="white" matTooltip="Your password" matTooltipPosition="below">
-            <fa-icon [icon]="faKey"></fa-icon>
-        </button>
-        <input matInput type="password" [(ngModel)]="inputPwd">
-    </mat-form-field>
-
-    <button class="full-screen-row" mat-raised-button (click)="login()">Login</button>
-    <p class="full-screen-row center-text">{{ this.connected ? "Connected to the core" : "Not connected to the core" }}</p>
+    <div class="login-container mat-elevation-z8">
+        <mat-form-field class="full-screen-row">
+            <mat-label>Username</mat-label>
+            <button matPrefix mat-icon-button color="white" matTooltip="Your username" matTooltipPosition="below">
+                <fa-icon [icon]="faUser"></fa-icon>
+            </button>
+            <input matInput type="text" [(ngModel)]="inputUsr" />
+        </mat-form-field>
+    
+        <mat-form-field class="full-screen-row">
+            <mat-label>Password</mat-label>
+            <button matPrefix mat-icon-button color="white" matTooltip="Your password" matTooltipPosition="below">
+                <fa-icon [icon]="faKey"></fa-icon>
+            </button>
+            <input matInput type="password" [(ngModel)]="inputPwd">
+        </mat-form-field>
+    
+        <button class="full-screen-row" mat-raised-button (click)="login()">Login</button>
+        <p class="full-screen-row center-text">{{ this.connected ? "Connected to the core" : "Not connected to the core" }}</p>
+    </div>
 </div>
