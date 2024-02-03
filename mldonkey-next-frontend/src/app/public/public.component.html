@@ -1,22 +1,32 @@
+<!--
+  This file is part of mldonket-next.
+
+  Copyright (c) 2023 Luca Carlon
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, version 3.
+
+  This program is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
+
 <div id="full-screen-container" class="mat-app-background">
     <div class="login-container mat-elevation-z8">
-        <mat-form-field class="full-screen-row">
-            <mat-label>Username</mat-label>
-            <button matPrefix mat-icon-button color="white" matTooltip="Your username" matTooltipPosition="below">
-                <fa-icon [icon]="faUser"></fa-icon>
-            </button>
-            <input matInput type="text" [(ngModel)]="inputUsr" />
-        </mat-form-field>
-    
-        <mat-form-field class="full-screen-row">
-            <mat-label>Password</mat-label>
-            <button matPrefix mat-icon-button color="white" matTooltip="Your password" matTooltipPosition="below">
-                <fa-icon [icon]="faKey"></fa-icon>
-            </button>
-            <input matInput type="password" [(ngModel)]="inputPwd">
-        </mat-form-field>
-    
+        <app-input-with-icon class="full-screen-row" [faIcon]="faUser" [(userInput)]="inputUsr" label="Username"
+            tooltip="Your username" type="text" />
+        <app-input-with-icon class="full-screen-row" [faIcon]="faKey" [(userInput)]="inputPwd" label="Password"
+            tooltip="Your password" type="password" />
         <button class="full-screen-row" mat-raised-button (click)="login()">Login</button>
-        <p class="full-screen-row center-text">{{ this.connected ? "Connected to the core" : "Not connected to the core" }}</p>
+        <div class="flex-container">
+            <fa-icon class="flex-child" [icon]="this.connected ? faConnected : faDisconnected"></fa-icon>
+            <p>{{ this.connected ? "Connected to the core" : "Not connected to the core" }}</p>
+        </div>
     </div>
+    <p class="copyright">© 2023-2024 Luca Carlon</p>
 </div>

@@ -1,3 +1,5 @@
+@import '../css/shared.scss';
+
 @mixin centered-container {
     display: flex;
     flex-direction: column;
@@ -24,4 +26,19 @@
     width: 600px;
     padding: 30px;
     gap: 20px;
+}
+
+.flex-container {
+    display: flex;
+}
+
+.flex-child {
+    margin-right: $defaultMargin;
+}
+
+.copyright {
+    position: absolute;
+    bottom: $defaultMargin;
+    left: $defaultMargin;
+    margin: 0;
 }

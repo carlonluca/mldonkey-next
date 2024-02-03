@@ -30,7 +30,8 @@ import { environment } from '../../environments/environment'
 import { Credentials, StorageService } from '../services/storage.service'
 import { MLMessageTypeFrom } from '../msg/MLMsg'
 import { logger } from '../core/MLLogger'
-import { faUser, faKey } from '@fortawesome/free-solid-svg-icons'
+import { faUser, faKey, faLink, faLinkSlash } from '@fortawesome/free-solid-svg-icons'
+import { InputWithIconComponent } from '../components/input-with-icon/input-with-icon.component'
 
 @Component({
     selector: 'app-public',
@@ -40,6 +41,8 @@ import { faUser, faKey } from '@fortawesome/free-solid-svg-icons'
 export class PublicComponent {
     faUser = faUser
     faKey = faKey
+    faConnected = faLink
+    faDisconnected = faLinkSlash
     connected = false
     inputUsr = ""
     inputPwd = ""

@@ -1,7 +1,7 @@
 <!--
   This file is part of mldonket-next.
 
-  Copyright (c) 2023 Luca Carlon
+  Copyright (c) 2024 Luca Carlon
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -16,8 +16,11 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<div *ngIf="showSpinner" class="spinner-overlay" (click)="preventEventPropagation($event)">
-    <div class="spinner-container">
-        <div class="spinner"></div>
-    </div>
-</div>
+<mat-form-field [style.width.%]="100">
+    <mat-label width="100%">{{ label }}</mat-label>
+    <button width="100%" matPrefix mat-icon-button color="white" (matTooltip)="tooltip" matTooltipPosition="below" tabindex="-1">
+        <fa-icon [icon]="faIcon"></fa-icon>
+    </button>
+    <input width="100%" matInput #inputValue class="fill-parent" [type]="this.type" [value]="this.userInput"
+        (change)="this.userInputChange.emit(inputValue.value)" />
+</mat-form-field>

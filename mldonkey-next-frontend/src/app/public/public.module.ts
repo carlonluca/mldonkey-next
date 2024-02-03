@@ -34,6 +34,7 @@ import { MatButtonModule } from '@angular/material/button'
 import { MatInputModule } from '@angular/material/input'
 import { MatFormFieldModule } from '@angular/material/form-field'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
+import { ComponentsModule } from '../components/components.module'
 
 @NgModule({
     declarations: [
@@ -49,7 +50,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
         MatIconModule,
         MatInputModule,
         MatFormFieldModule,
-        FontAwesomeModule
+        FontAwesomeModule,
+        ComponentsModule
     ]
 })
 export class PublicModule {}
