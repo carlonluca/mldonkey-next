@@ -78,6 +78,11 @@ export class WebSocketService {
         })
     }
 
+    public disconnect(): void {
+        this.webSocket.unsubscribe()
+        this.connectionState.value = MLConnectionState.S_NOT_CONNECTED
+    }
+
     public login(usr: string, pwd: string) {
         this.sendMsg(new ML.MLMessageToPassword(usr, pwd))
     }

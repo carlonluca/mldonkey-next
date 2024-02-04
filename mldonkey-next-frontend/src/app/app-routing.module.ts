@@ -24,7 +24,6 @@
 
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
-import { LoginComponent } from './login/login.component'
 import { HomeComponent } from './private/home/home.component'
 import { AuthGuard } from './auth.guard'
 import { DownloadComponent } from './private/home/download/download.component'
@@ -32,6 +31,7 @@ import { SearchComponent } from './private/home/search/search.component'
 import { ServersComponent } from './private/home/servers/servers.component'
 import { StatsComponent } from './private/home/stats/stats.component'
 import { OptionsComponent } from './private/home/options/options.component'
+import { PublicComponent } from './public/public.component'
 
 const routes: Routes = [
     {
@@ -40,7 +40,7 @@ const routes: Routes = [
     },
     {
         path: "login",
-        component: LoginComponent
+        component: PublicComponent
     },
     {
         path: "home",

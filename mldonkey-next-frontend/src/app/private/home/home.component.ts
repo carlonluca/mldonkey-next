@@ -32,6 +32,7 @@ import {
     faDoorOpen
 } from '@fortawesome/free-solid-svg-icons'
 import { StorageService } from 'src/app/services/storage.service'
+import { WebSocketService } from 'src/app/websocket-service.service'
 
 @Component({
     selector: 'app-home',
@@ -47,10 +48,14 @@ export class HomeComponent {
     faGears = faGears
     faDoorOpen = faDoorOpen
 
-    constructor(private router: Router, private storage: StorageService) {}
+    constructor(
+        private webSocketService: WebSocketService,
+        private router: Router,
+        private storage: StorageService) {}
 
     logout() {
         this.storage.setLoginData(null)
-        this.router.navigate(["/login"])
+        this.webSocketService.disconnect()
+        this.router.navigate(["/"])
     }
 }
