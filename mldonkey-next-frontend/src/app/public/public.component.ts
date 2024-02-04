@@ -31,7 +31,6 @@ import { Credentials, StorageService } from '../services/storage.service'
 import { MLMessageTypeFrom } from '../msg/MLMsg'
 import { logger } from '../core/MLLogger'
 import { faUser, faKey, faLink, faLinkSlash } from '@fortawesome/free-solid-svg-icons'
-import { InputWithIconComponent } from '../components/input-with-icon/input-with-icon.component'
 
 @Component({
     selector: 'app-public',
