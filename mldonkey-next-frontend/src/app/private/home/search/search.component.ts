@@ -38,6 +38,7 @@ import {
     MLMsgToQuery,
     MLQueryNode
 } from 'src/app/msg/MLMsgQuery'
+import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
 
 @Component({
     selector: 'app-search',
@@ -51,6 +52,7 @@ export class SearchComponent implements AfterViewInit, OnInit {
     currentSearchId = -1
     currentSearch: MLSearchInfo | null = null
     currentSearchResults: MLSearchSessionManager
+    subscriptions: MLSubscriptionSet = new MLSubscriptionSet()
 
     @ViewChild(MatSort) sort: MatSort
 
@@ -87,10 +89,15 @@ export class SearchComponent implements AfterViewInit, OnInit {
 
     ngOnInit(): void {
         this.websocketService.sendMsg(new MLMsgToGetSearches())
-        this.currentSearchResults.elements.observable.subscribe((list) => {
+        this.subscriptions.add(this.currentSearchResults.elements.observable.subscribe((list) => {
+            console.log("Search result backed changed")
             this.dataSource.data = list
             this.dataSource.sort = this.sort
-        })
+        }))
+    }
+
+    ngOnDestroy() {
+        this.subscriptions.unsubscribe(null)
     }
 
     search() {
