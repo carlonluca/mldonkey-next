@@ -26,4 +26,9 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="rowClicked(row)"></tr>
     </table>
+
+    <button mat-raised-button id="refresh-button" (click)="refreshView()">
+        <fa-icon id="more-icon" [icon]="faCaretDown">mic</fa-icon>
+        More results
+    </button>
 </form>

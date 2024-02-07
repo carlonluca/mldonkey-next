@@ -39,6 +39,7 @@ import {
     MLQueryNode
 } from 'src/app/msg/MLMsgQuery'
 import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
+import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
     selector: 'app-search',
@@ -49,10 +50,12 @@ export class SearchComponent implements AfterViewInit, OnInit {
     dataSource = new MatTableDataSource<MLResultInfo>([])
     displayedColumns: string[] = ['availability', "completesources", 'name', 'size']
     searchText = ''
+    faCaretDown = faCaretDown
     currentSearchId = -1
     currentSearch: MLSearchInfo | null = null
     currentSearchResults: MLSearchSessionManager
     subscriptions: MLSubscriptionSet = new MLSubscriptionSet()
+    backendData: MLResultInfo[] = []
 
     @ViewChild(MatSort) sort: MatSort
 
@@ -90,9 +93,7 @@ export class SearchComponent implements AfterViewInit, OnInit {
     ngOnInit(): void {
         this.websocketService.sendMsg(new MLMsgToGetSearches())
         this.subscriptions.add(this.currentSearchResults.elements.observable.subscribe((list) => {
-            console.log("Search result backed changed")
-            this.dataSource.data = list
-            this.dataSource.sort = this.sort
+            this.backendData = list
         }))
     }
 
@@ -119,6 +120,14 @@ export class SearchComponent implements AfterViewInit, OnInit {
             return
         this.websocketService.sendMsg(new MLMsgToQuery(this.currentSearchId, query))
         this.websocketService.sendMsg(new MLMsgToGetSearch(this.currentSearchId))
+
+        this.dataSource.data = []
+        setTimeout(() => this.refreshView(), 2000)
+    }
+
+    refreshView() {
+        this.dataSource.data = this.backendData
+        this.dataSource.sort = this.sort
     }
 
     stringifyAvailability(result: MLResultInfo): number {

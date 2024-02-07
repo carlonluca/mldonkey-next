@@ -1,3 +1,5 @@
+@import "../../../css/shared.scss";
+
 #queryContainer {
     display: flex;
     margin: 10px;
@@ -9,8 +11,27 @@
     margin-right: 5px;
     padding: 0px;
     height: 50px;
+    background-color: transparent;
 }
 
 #searchButton {
     height: 50px;
+}
+
+#refresh-button {
+    position: fixed;
+    bottom: $defaultMargin;
+    right: $defaultMargin;
+    opacity: 60%;
+    background-color: black;
+    height: 50px;
+}
+
+#more-icon {
+    margin-right: $defaultMargin;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  transition: background-color 0s 600000s, color 0s 600000s !important;
 }
