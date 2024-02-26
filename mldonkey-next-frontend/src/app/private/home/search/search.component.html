@@ -1,34 +1,40 @@
-<form>
-    <div id="queryContainer">
+<form id="main-container" [ngClass]="{'full-height': this.dataSource.data.length <= 0}">
+    <div id="query-container">
         <mat-form-field id="searchForm" subscriptSizing="dynamic">
-            <input matInput type="text" id="searchInput" name="searchInput" placeholder="Enter a query here..." [(ngModel)]="searchText">
+            <input matInput type="text" id="searchInput" name="searchInput" placeholder="Enter a query here..."
+                [(ngModel)]="searchText">
         </mat-form-field>
-        <button mat-raised-button id="searchButton" (click)="search()" [disabled]="searchText.length <= 0">Search</button>
+        <button mat-raised-button id="searchButton" (click)="search()"
+            [disabled]="searchText.length <= 0">Search</button>
     </div>
-    
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
-        <ng-container matColumnDef="availability">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Availability</th>
-            <td mat-cell *matCellDef="let result"> {{ stringifyAvailability(result) }} </td>
-        </ng-container>
-        <ng-container matColumnDef="completesources">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Complete sources</th>
-            <td mat-cell *matCellDef="let result"> {{ stringifyCompleteSources(result) }} </td>
-        </ng-container>
-        <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-            <td mat-cell *matCellDef="let result"> {{ result.fileNames[0] }} </td>
-        </ng-container>
-        <ng-container matColumnDef="size">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Size</th>
-            <td mat-cell *matCellDef="let result"> {{ result.fileSize | prettyBytes }} </td>
-        </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="rowClicked(row)"></tr>
-    </table>
 
-    <button mat-raised-button id="refresh-button" (click)="refreshView()">
-        <fa-icon id="more-icon" [icon]="faCaretDown">mic</fa-icon>
-        More results
-    </button>
+    <div id="spinner-container" *ngIf="this.dataSource.data.length <= 0">
+        <p id="no-results-label">No results available.</p>
+    </div>
 </form>
+
+<button mat-raised-button id="refresh-button" (click)="refreshView()">
+    <fa-icon id="more-icon" [icon]="faCaretDown">mic</fa-icon>
+    More results
+</button>
+
+<table mat-table *ngIf="this.dataSource.data.length > 0" [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+    <ng-container matColumnDef="availability">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Availability</th>
+        <td mat-cell *matCellDef="let result"> {{ stringifyAvailability(result) }} </td>
+    </ng-container>
+    <ng-container matColumnDef="completesources">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Complete sources</th>
+        <td mat-cell *matCellDef="let result"> {{ stringifyCompleteSources(result) }} </td>
+    </ng-container>
+    <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+        <td mat-cell *matCellDef="let result"> {{ result.fileNames[0] }} </td>
+    </ng-container>
+    <ng-container matColumnDef="size">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Size</th>
+        <td mat-cell *matCellDef="let result"> {{ result.fileSize | prettyBytes }} </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="rowClicked(row)"></tr>
+</table>

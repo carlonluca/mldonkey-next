@@ -46,6 +46,7 @@ import { FormsModule } from '@angular/forms'
 import { PrettyBytesPipe } from "./core/pretty-bytes.pipe"
 import { SectionTitleComponent } from './private/home/section-title/section-title.component'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
     declarations: [
@@ -75,7 +76,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
         MatIconModule,
         MatButtonModule,
         MatInputModule,
-        MatFormFieldModule
+        MatFormFieldModule,
+        MatProgressSpinnerModule
     ]
 })
 export class AppModule { }

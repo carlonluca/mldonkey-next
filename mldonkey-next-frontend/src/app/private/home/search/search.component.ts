@@ -40,6 +40,7 @@ import {
 } from 'src/app/msg/MLMsgQuery'
 import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
+import { SpinnerService } from 'src/app/services/spinner.service'
 
 @Component({
     selector: 'app-search',
@@ -61,7 +62,8 @@ export class SearchComponent implements AfterViewInit, OnInit {
 
     constructor(
         private websocketService: WebSocketService,
-        private searchService: SearchesService
+        private searchService: SearchesService,
+        private spinner: SpinnerService
     ) {
         this.currentSearchResults = new MLSearchSessionManager(
             -1,
@@ -122,12 +124,16 @@ export class SearchComponent implements AfterViewInit, OnInit {
         this.websocketService.sendMsg(new MLMsgToGetSearch(this.currentSearchId))
 
         this.dataSource.data = []
+
+        this.spinner.show()
+
         setTimeout(() => this.refreshView(), 2000)
     }
 
     refreshView() {
         this.dataSource.data = this.backendData
         this.dataSource.sort = this.sort
+        this.spinner.hide()
     }
 
     stringifyAvailability(result: MLResultInfo): number {
