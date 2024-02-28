@@ -40,7 +40,7 @@
 
 input:-webkit-autofill,
 input:-webkit-autofill:focus {
-  transition: background-color 0s 600000s, color 0s 600000s !important;
+    transition: background-color 0s 600000s, color 0s 600000s !important;
 }
 
 #spinner-container {
@@ -50,12 +50,25 @@ input:-webkit-autofill:focus {
     justify-content: center;
 }
 
-#spinner {
-}
-
-#no-results-label {
-}
-
 .full-height {
     height: 100%;
+}
+
+// Click animation
+@keyframes row-animation {
+    0% {
+        background-color: #ffffff00;
+    }
+
+    50% {
+        background-color: #a9a9a9be;
+    }
+
+    100% {
+        background-color: #ffffff00;
+    }
+}
+
+.row-clicked {
+    animation: row-animation 200ms ease;
 }

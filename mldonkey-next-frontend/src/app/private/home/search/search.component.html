@@ -18,7 +18,7 @@
     More results
 </button>
 
-<table mat-table *ngIf="this.dataSource.data.length > 0" [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+<table mat-table [hidden]="this.dataSource.data.length <= 0" [dataSource]="dataSource" class="mat-elevation-z8" matSort>
     <ng-container matColumnDef="availability">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Availability</th>
         <td mat-cell *matCellDef="let result"> {{ stringifyAvailability(result) }} </td>
@@ -36,5 +36,5 @@
         <td mat-cell *matCellDef="let result"> {{ result.fileSize | prettyBytes }} </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="rowClicked(row)"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="rowClicked(row, $event)"></tr>
 </table>

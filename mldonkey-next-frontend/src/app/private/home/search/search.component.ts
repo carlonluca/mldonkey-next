@@ -74,22 +74,22 @@ export class SearchComponent implements AfterViewInit, OnInit {
     }
 
     ngAfterViewInit(): void {
+        this.sort.sort({ id: "size" } as MatSortable)
         this.dataSource.sort = this.sort
         this.dataSource.sortingDataAccessor = (item, property) => {
             switch (property) {
-            case "availability":
-                return this.stringifyAvailability(item)
-            case "completesources":
-                return this.stringifyCompleteSources(item)
-            case "name":
-                return item.fileNames[0]
-            case "size":
-                return Number(item.fileSize / 1024n)
-            default:
-                return ""
+                case "availability":
+                    return this.stringifyAvailability(item)
+                case "completesources":
+                    return this.stringifyCompleteSources(item)
+                case "name":
+                    return item.fileNames[0]
+                case "size":
+                    return Number(item.fileSize / 1024n)
+                default:
+                    return ""
             }
         }
-        this.sort.sort({ id: "fileSize" } as MatSortable)
     }
 
     ngOnInit(): void {
@@ -150,8 +150,17 @@ export class SearchComponent implements AfterViewInit, OnInit {
         return (csourcesTag as MLTagUint32).value
     }
 
-    rowClicked(resultInfo: MLResultInfo) {
+    rowClicked(resultInfo: MLResultInfo, event: Event) {
         logger.info("Download:", resultInfo.fileNames)
+
+        // Add a CSS class to trigger the animation
+        const targetElement = event.target as HTMLElement
+        const targetRow = targetElement.parentNode as HTMLElement
+        targetRow.classList.add('row-clicked')
+        setTimeout(() => {
+            targetElement.classList.remove('row-clicked')
+        }, 1000)
+
         const msg = new MLMsgToDownload(resultInfo.fileNames, resultInfo.id, MLDownloadMethod.M_FORCE)
         this.websocketService.sendMsg(msg)
     }
