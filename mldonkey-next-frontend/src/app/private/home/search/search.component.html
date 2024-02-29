@@ -1,22 +1,42 @@
+<!--
+  This file is part of mldonket-next.
+
+  Copyright (c) 2024 Luca Carlon
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, version 3.
+
+  This program is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
+
 <form id="main-container" [ngClass]="{'full-height': this.dataSource.data.length <= 0}">
     <div id="query-container">
         <mat-form-field id="searchForm" subscriptSizing="dynamic">
             <input matInput type="text" id="searchInput" name="searchInput" placeholder="Enter a query here..."
                 [(ngModel)]="searchText">
         </mat-form-field>
-        <button mat-raised-button id="searchButton" (click)="search()"
-            [disabled]="searchText.length <= 0">Search</button>
+        <button mat-raised-button id="search-button" (click)="search()"
+            [disabled]="searchText.length <= 0">
+            <fa-icon id="find-icon" [icon]="faMagnifyingGlass">mic</fa-icon>
+            Search
+        </button>
+        <button mat-raised-button id="refresh-button" (click)="refreshView()">
+            <fa-icon id="more-icon" [icon]="faCaretDown">mic</fa-icon>
+            More results
+        </button>
     </div>
 
     <div id="spinner-container" *ngIf="this.dataSource.data.length <= 0">
         <p id="no-results-label">No results available.</p>
     </div>
 </form>
-
-<button mat-raised-button id="refresh-button" (click)="refreshView()">
-    <fa-icon id="more-icon" [icon]="faCaretDown">mic</fa-icon>
-    More results
-</button>
 
 <table mat-table [hidden]="this.dataSource.data.length <= 0" [dataSource]="dataSource" class="mat-elevation-z8" matSort>
     <ng-container matColumnDef="availability">

@@ -32,15 +32,18 @@ import { MLResultInfo } from 'src/app/data/MLResultInfo'
 import { MLDownloadMethod, MLMsgToDownload } from 'src/app/msg/MLMsgDownload'
 import { MLTagIn8, MLTagType, MLTagUint32 } from 'src/app/msg/MLtag'
 import { MatSort, MatSortable } from '@angular/material/sort'
+import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
+import { SpinnerService } from 'src/app/services/spinner.service'
 import {
     MLMsgToGetSearch,
     MLMsgToGetSearches,
     MLMsgToQuery,
     MLQueryNode
 } from 'src/app/msg/MLMsgQuery'
-import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
-import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
-import { SpinnerService } from 'src/app/services/spinner.service'
+import {
+    faCaretDown,
+    faMagnifyingGlass
+} from '@fortawesome/free-solid-svg-icons'
 
 @Component({
     selector: 'app-search',
@@ -52,6 +55,7 @@ export class SearchComponent implements AfterViewInit, OnInit {
     displayedColumns: string[] = ['availability', "completesources", 'name', 'size']
     searchText = ''
     faCaretDown = faCaretDown
+    faMagnifyingGlass = faMagnifyingGlass
     currentSearchId = -1
     currentSearch: MLSearchInfo | null = null
     currentSearchResults: MLSearchSessionManager
@@ -124,6 +128,7 @@ export class SearchComponent implements AfterViewInit, OnInit {
         this.websocketService.sendMsg(new MLMsgToGetSearch(this.currentSearchId))
 
         this.dataSource.data = []
+        this.backendData = []
 
         this.spinner.show()
 

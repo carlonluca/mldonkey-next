@@ -21,16 +21,11 @@
     background-color: transparent;
 }
 
-#searchButton {
+#search-button {
     height: 50px;
 }
 
 #refresh-button {
-    position: fixed;
-    bottom: $defaultMargin;
-    right: $defaultMargin;
-    opacity: 60%;
-    background-color: black;
     height: 50px;
 }
 

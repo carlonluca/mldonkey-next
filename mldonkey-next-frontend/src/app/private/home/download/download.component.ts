@@ -60,7 +60,6 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
         this.sort.sort({ id: "name" } as MatSortable)
         this.dataSource.sort = this.sort
         this.dataSource.sortingDataAccessor = (item, prop) => {
-            console.log("SORT")
             switch (prop) {
             case "size":
                 return Number(item.size/1024n)
