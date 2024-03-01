@@ -33,6 +33,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { StorageService } from 'src/app/services/storage.service'
 import { WebSocketService } from 'src/app/websocket-service.service'
+import packageJson from '../../../../package.json'
 
 @Component({
     selector: 'app-home',
@@ -47,6 +48,7 @@ export class HomeComponent {
     faChartSimple = faChartSimple
     faGears = faGears
     faDoorOpen = faDoorOpen
+    version = packageJson.version
 
     constructor(
         private webSocketService: WebSocketService,

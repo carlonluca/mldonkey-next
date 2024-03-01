@@ -1,9 +1,13 @@
 <mat-toolbar>
     <mat-toolbar-row>
-        <button class="menuButton" mat-button (click)="opened=!opened">
-            <mat-icon>menu</mat-icon>
-        </button>
-        mldonkey-next
+        <div id="topbar-container">
+            <button class="menu-button" mat-mini-fab color="primary" (click)="opened=!opened">
+                <mat-icon>menu</mat-icon>
+            </button>
+            <p>mldonkey-next</p>
+            <div id="topbar-spacing"></div>
+            <p id="version-string">v{{ this.version }}</p>
+        </div>
     </mat-toolbar-row>
 </mat-toolbar>
 

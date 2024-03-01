@@ -22,10 +22,33 @@ mat-toolbar {
     height: $otherComponentHeight;
 }
 
-.menuButton {
+.menu-button {
     margin-right: $defaultMargin;
-    background: transparent;
     border: 0px solid;
     padding: $defaultMargin $defaultMargin;
     color: $textColor;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0px;
 }
+
+#topbar-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+}
+
+#topbar-spacing {
+    flex-grow: 1;
+}
+
+#version-string {
+    font-size: small;
+}
+
+::ng-deep.mat-fab .mat-button-wrapper {
+    display: flex !important;
+    justify-content: center !important;
+  }
