@@ -8,6 +8,7 @@ Test_server:
     - pihome
   script:
     - npm config set fetch-timeout 60000
+    - npm config set registry http://registry.npmjs.org/
     - cd mldonkey-next-backend
     - npm i
     - npm run build
