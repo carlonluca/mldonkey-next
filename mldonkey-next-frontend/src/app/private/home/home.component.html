@@ -6,7 +6,10 @@
             </button>
             <p>mldonkey-next</p>
             <div id="topbar-spacing"></div>
-            <p id="version-string">v{{ this.version }}</p>
+            <div id="version-column">
+                <p class="version-string">mldonkey-next v{{ this.version }}</p>
+                <p class="version-string">angular v{{ this.versionAngular.full }}</p>
+            </div>
         </div>
     </mat-toolbar-row>
 </mat-toolbar>

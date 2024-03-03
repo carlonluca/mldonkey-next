@@ -76,4 +76,9 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
     ngOnDestroy() {
         this.subscriptions.unsubscribe(null)
     }
+
+    computeProgress(item: MLMsgDownloadElement): number {
+        console.log("Log:", Number(item.downloaded*100n/item.size))
+        return Number(item.downloaded*100n/item.size)
+    }
 }

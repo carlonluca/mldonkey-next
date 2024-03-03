@@ -21,7 +21,7 @@
  * Company: -
  * Date: 14.08.2023
  */
-import { Component } from '@angular/core'
+import { Component, VERSION } from '@angular/core'
 import { Router } from '@angular/router'
 import {
     faDownload,
@@ -49,6 +49,7 @@ export class HomeComponent {
     faGears = faGears
     faDoorOpen = faDoorOpen
     version = packageJson.version
+    versionAngular = VERSION
 
     constructor(
         private webSocketService: WebSocketService,

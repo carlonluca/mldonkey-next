@@ -44,11 +44,14 @@ mat-toolbar {
     flex-grow: 1;
 }
 
-#version-string {
-    font-size: small;
+#version-column {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
 }
 
-::ng-deep.mat-fab .mat-button-wrapper {
-    display: flex !important;
-    justify-content: center !important;
-  }
+.version-string {
+    font-size: small;
+    margin: 0px;
+    line-height: 20px;
+}
