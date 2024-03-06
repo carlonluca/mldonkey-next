@@ -7,7 +7,7 @@
     margin-bottom: 5px;
 }
 
-.alternate::after {
+.alternate::before {
     content: "";
     position: absolute;
     top: 0;
@@ -22,6 +22,10 @@
 }
 
 th {
+    position: relative;
+}
+
+.pos-relative {
     position: relative;
 }
 
