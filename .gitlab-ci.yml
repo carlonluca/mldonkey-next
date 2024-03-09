@@ -8,12 +8,11 @@ Test_server:
     - pihome
   script:
     - npm config set fetch-timeout 60000
-    - npm config set registry http://registry.npmjs.org/
     - cd mldonkey-next-backend
-    - npm i
+    - npm i --maxsockets 1
     - npm run build
     - npm run lint
     - cd ../mldonkey-next-frontend
-    - npm i
+    - npm i --maxsockets 1
     - npm run lint
     - npx ng build
