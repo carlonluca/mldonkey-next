@@ -1,6 +1,6 @@
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic'
 import { AppModule } from './app/app.module'
-import { logger } from './app/core/MLLogger'
+import { uiLogger } from './app/core/MLLogger'
 
 platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => logger.error(err))
+  .catch(err => uiLogger.error(err))

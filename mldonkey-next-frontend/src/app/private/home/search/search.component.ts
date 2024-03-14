@@ -24,7 +24,7 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core'
 import { WebSocketService } from 'src/app/websocket-service.service'
 import { SearchesService } from 'src/app/services/searches.service'
-import { logger } from 'src/app/core/MLLogger'
+import { uiLogger } from 'src/app/core/MLLogger'
 import { MLSearchInfo } from 'src/app/data/MLSearchInfo'
 import { MLSearchSessionManager } from 'src/app/core/MLSearchSessionManager'
 import { MatTableDataSource } from '@angular/material/table'
@@ -108,7 +108,7 @@ export class SearchComponent implements AfterViewInit, OnInit {
     }
 
     search() {
-        logger.info(`Searching for ${this.searchText}`)
+        uiLogger.info(`Searching for ${this.searchText}`)
         let maxKey: number | undefined;
         for (const key of this.searchService.searchManager.elements.value.keys()) {
             if (maxKey === undefined || key > maxKey) {
@@ -156,7 +156,7 @@ export class SearchComponent implements AfterViewInit, OnInit {
     }
 
     rowClicked(resultInfo: MLResultInfo, event: Event) {
-        logger.info("Download:", resultInfo.fileNames)
+        uiLogger.info("Download:", resultInfo.fileNames)
 
         // Add a CSS class to trigger the animation
         const targetElement = event.target as HTMLElement

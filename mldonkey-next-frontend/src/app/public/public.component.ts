@@ -29,7 +29,7 @@ import { Router } from '@angular/router'
 import { environment } from '../../environments/environment'
 import { Credentials, StorageService } from '../services/storage.service'
 import { MLMessageTypeFrom } from '../msg/MLMsg'
-import { logger } from '../core/MLLogger'
+import { uiLogger } from '../core/MLLogger'
 import { faUser, faKey, faLink, faLinkSlash } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
@@ -74,7 +74,7 @@ export class PublicComponent {
                         // Apparently mldonkey returns "bad credentials" if login is run too soon.
                         setTimeout(() => {
                             if (data) {
-                                logger.info("Credentials found in storage. Logging in automatically...")
+                                uiLogger.info("Credentials found in storage. Logging in automatically...")
                                 this.doLogin(data.username, data.passwd)
                             }
                         }, 1000)
