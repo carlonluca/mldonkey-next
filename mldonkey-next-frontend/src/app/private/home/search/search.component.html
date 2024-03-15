@@ -19,7 +19,7 @@
 <form id="main-container" [ngClass]="{'full-height': this.dataSource.data.length <= 0}">
     <div id="query-container">
         <mat-form-field id="searchForm" subscriptSizing="dynamic">
-            <input matInput type="text" id="searchInput" name="searchInput" placeholder="Enter a query here..."
+            <input matInput spellcheck="false" type="text" id="searchInput" name="searchInput" placeholder="Enter a query here..."
                 [(ngModel)]="searchText">
         </mat-form-field>
         <button mat-raised-button id="search-button" (click)="search()"
