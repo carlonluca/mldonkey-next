@@ -25,10 +25,13 @@
 import log from 'loglevel'
 
 const _wsLogger = log.getLogger("websocket")
+const _searchLogger = log.getLogger("search")
 const _uiLogger = log.getLogger("ui")
 
 _wsLogger.setLevel(log.levels.WARN)
 _uiLogger.setLevel(log.levels.DEBUG)
+_searchLogger.setLevel(log.levels.DEBUG)
 
 export const wsLogger = _wsLogger
 export const uiLogger = _uiLogger
+export const searchLogger = _searchLogger

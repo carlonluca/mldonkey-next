@@ -21,6 +21,7 @@
  * Company: -
  * Date: 2023.11.05
  */
+import { searchLogger } from "../core/MLLogger"
 import { MLResultInfo } from "../data/MLResultInfo"
 import { MLSearchInfo, MLSearchType } from "../data/MLSearchInfo"
 import { MLSearchResult } from "../data/MLSearchResult"
@@ -169,6 +170,8 @@ export class MLMsgFromSearchResult extends MLMsgFrom {
         const reader = new MLMsgReader(buffer, 0)
         const searchId = reader.takeInt32()
         const resultId = reader.takeInt32()
+        searchLogger.trace("Search result mapping received, searchId -> resultId",
+            searchId, "->", resultId)
         return new MLMsgFromSearchResult(new MLSearchResult(resultId, searchId))
     }
 }

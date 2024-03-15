@@ -21,6 +21,7 @@
  * Company: -
  * Date: 2023.11.13
  */
+import { searchLogger } from "../core/MLLogger"
 import { MLUPdateable } from "../core/MLUpdateable"
 import { MLUtils } from "../core/MLUtils"
 import { MLMsgReader } from "../msg/MLMsgReader"
@@ -85,6 +86,8 @@ export class MLResultInfo implements MLUPdateable<MLResultInfo> {
         catch (e) {
             // No need to handle.
         }
+
+        searchLogger.trace("Result info received:", id, names)
 
         return new MLResultInfo(
             id,

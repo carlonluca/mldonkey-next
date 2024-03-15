@@ -118,12 +118,14 @@ export class SearchComponent implements AfterViewInit, OnInit {
         if (maxKey === undefined)
             maxKey = 0
 
+        console.log("Current search ID:", this.currentSearchId)
         this.currentSearchId = maxKey + 1
         this.currentSearchResults.setSearchId(this.currentSearchId)
 
         const query = MLQueryNode.fromString(this.searchText)
         if (!query)
             return
+        console.log("Query:", query, this.currentSearchId)
         this.websocketService.sendMsg(new MLMsgToQuery(this.currentSearchId, query))
         this.websocketService.sendMsg(new MLMsgToGetSearch(this.currentSearchId))
 
