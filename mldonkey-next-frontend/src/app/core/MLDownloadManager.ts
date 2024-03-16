@@ -37,14 +37,15 @@ export class MLDownloadManager extends MLCollectionModel<number, MLMsgDownloadEl
                 (msg as MLMsgFromDownloadFile).elements.forEach((v) => this.handleValue(v))
                 this.expireDownloads()
                 break
-            case MLMessageTypeFrom.T_FILE_DOWNLOADED:
-                let _msg = msg as MLMsgFromFileDownloaded
-                let item = this.getWithKey(_msg.downloadId)
+            case MLMessageTypeFrom.T_FILE_DOWNLOADED: {
+                const _msg = msg as MLMsgFromFileDownloaded
+                const item = this.getWithKey(_msg.downloadId)
                 if (!item)
                     return
                 item.downloaded = _msg.downloaded
                 this.expireDownloads()
                 break
+            }
             case MLMessageTypeFrom.T_FILE_INFO:
                 this.handleValue((msg as MLMsgFromFileInfo).downloadElement)
                 break
