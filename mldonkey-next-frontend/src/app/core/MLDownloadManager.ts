@@ -58,7 +58,7 @@ export class MLDownloadManager extends MLCollectionModel<number, MLMsgDownloadEl
     }
 
     private expireDownloads() {
-        for (let i of this.elements.value.values()) {
+        for (const i of this.elements.value.values()) {
             if (i.downloaded >= i.size)
                 this.removeWithKey(i.downloadId)
         }

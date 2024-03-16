@@ -21,7 +21,7 @@
  * Company: -
  * Date:    2023.11.19
  */
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core'
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { WebSocketService } from 'src/app/websocket-service.service'
 import { SearchesService } from 'src/app/services/searches.service'
 import { uiLogger } from 'src/app/core/MLLogger'
@@ -50,7 +50,7 @@ import {
     templateUrl: './search.component.html',
     styleUrls: ['./search.component.scss']
 })
-export class SearchComponent implements AfterViewInit, OnInit {
+export class SearchComponent implements AfterViewInit, OnInit, OnDestroy {
     dataSource = new MatTableDataSource<MLResultInfo>([])
     displayedColumns: string[] = ['availability', "completesources", 'name', 'size']
     searchText = ''
