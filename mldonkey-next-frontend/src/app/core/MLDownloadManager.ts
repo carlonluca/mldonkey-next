@@ -35,9 +35,15 @@ export class MLDownloadManager extends MLCollectionModel<number, MLMsgDownloadEl
             switch (msg.type) {
             case MLMessageTypeFrom.T_DOWNLOAD_FILES:
                 (msg as MLMsgFromDownloadFile).elements.forEach((v) => this.handleValue(v))
+                this.expireDownloads()
                 break
             case MLMessageTypeFrom.T_FILE_DOWNLOADED:
-                this.removeWithKey((msg as MLMsgFromFileDownloaded).downloadId)
+                let _msg = msg as MLMsgFromFileDownloaded
+                let item = this.getWithKey(_msg.downloadId)
+                if (!item)
+                    return
+                item.downloaded = _msg.downloaded
+                this.expireDownloads()
                 break
             case MLMessageTypeFrom.T_FILE_INFO:
                 this.handleValue((msg as MLMsgFromFileInfo).downloadElement)
@@ -48,5 +54,12 @@ export class MLDownloadManager extends MLCollectionModel<number, MLMsgDownloadEl
 
     protected override keyFromValue(value: MLMsgDownloadElement): number {
         return value.downloadId
+    }
+
+    private expireDownloads() {
+        for (let i of this.elements.value.values()) {
+            if (i.downloaded >= i.size)
+                this.removeWithKey(i.downloadId)
+        }
     }
 }
