@@ -26,7 +26,7 @@ import * as net from 'net'
 import { WebSocket } from 'ws'
 import { logger } from './MLLogger'
 
-const HOST = 'localhost'
+const HOST = '127.0.0.1'
 const PORT = 4001
 
 /**
