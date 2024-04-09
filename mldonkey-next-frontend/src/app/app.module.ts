@@ -48,6 +48,7 @@ import { SectionTitleComponent } from './private/home/section-title/section-titl
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 import { MatProgressBarModule } from '@angular/material/progress-bar'
+import { MatCheckboxModule } from '@angular/material/checkbox'
 
 @NgModule({
     declarations: [
@@ -79,7 +80,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar'
         MatInputModule,
         MatFormFieldModule,
         MatProgressSpinnerModule,
-        MatProgressBarModule
+        MatProgressBarModule,
+        MatCheckboxModule
     ]
 })
 export class AppModule { }

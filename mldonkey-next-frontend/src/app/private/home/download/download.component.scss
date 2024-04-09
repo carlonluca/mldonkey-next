@@ -16,6 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+ @import "../../../css/shared.scss";
+
 .filename-element {
     margin-top: 5px;
 }
@@ -55,4 +57,15 @@ th::before {
     width: 100%; /* Cover the entire width of the parent */
     height: 100%; /* Cover the entire height of the parent */
     background-color: rgba(0,0,0,0.4);
+}
+
+#toolbar-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.toolbar-item {
+    margin: $defaultMargin;
 }

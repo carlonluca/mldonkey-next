@@ -21,15 +21,17 @@
  * Company: -
  * Date: 2023.11.05
  */
-import { Component, ViewChild, AfterViewInit, OnInit, OnDestroy } from '@angular/core';
-import { MatSort, MatSortable } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { interval } from 'rxjs';
-import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet';
-import { MLMsgDownloadElement } from 'src/app/data/MLDownloadFileInfo';
-import { MLMsgToGetDownload } from 'src/app/msg/MLMsg';
-import { DownloadingFilesService } from 'src/app/services/downloading-files.service';
-import { WebSocketService } from 'src/app/websocket-service.service';
+import { SelectionModel } from '@angular/cdk/collections'
+import { Component, ViewChild, AfterViewInit, OnInit, OnDestroy } from '@angular/core'
+import { MatSort, MatSortable } from '@angular/material/sort'
+import { MatTableDataSource } from '@angular/material/table'
+import { interval } from 'rxjs'
+import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
+import { MLMsgDownloadElement } from 'src/app/data/MLDownloadFileInfo'
+import { MLMsgToGetDownload } from 'src/app/msg/MLMsg'
+import { MLMsgToRemoveDownload } from 'src/app/msg/MLMsgRemoveDownload'
+import { DownloadingFilesService } from 'src/app/services/downloading-files.service'
+import { WebSocketService } from 'src/app/websocket-service.service'
 
 @Component({
     selector: 'app-download',
@@ -39,12 +41,14 @@ import { WebSocketService } from 'src/app/websocket-service.service';
 export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
     dataSource = new MatTableDataSource<MLMsgDownloadElement>([])
     displayedColumns: string[] = ['name', 'downloaded', 'size']
+    selection = new SelectionModel<MLMsgDownloadElement>(true, []);
+    selectionEnabled = false
 
     @ViewChild(MatSort) sort: MatSort
 
     private subscriptions = new MLSubscriptionSet()
 
-    constructor(private websocketService: WebSocketService, private downloadingService: DownloadingFilesService) {}
+    constructor(private websocketService: WebSocketService, private downloadingService: DownloadingFilesService) { }
 
     ngOnInit() {
         this.subscriptions.add(interval(1000).subscribe(() =>
@@ -61,14 +65,14 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
         this.dataSource.sort = this.sort
         this.dataSource.sortingDataAccessor = (item, prop) => {
             switch (prop) {
-            case "size":
-                return Number(item.size/1024n)
-            case "name":
-                return item.name
-            case "downloaded":
-                return Number(item.downloaded/1024n)
-            default:
-                return 0
+                case "size":
+                    return Number(item.size / 1024n)
+                case "name":
+                    return item.name
+                case "downloaded":
+                    return Number(item.downloaded / 1024n)
+                default:
+                    return 0
             }
         }
     }
@@ -78,6 +82,31 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     computeProgress(item: MLMsgDownloadElement): number {
-        return Number(item.downloaded*100n/item.size)
+        return Number(item.downloaded * 100n / item.size)
+    }
+
+    masterToggle() {
+        this.isAllSelected() ?
+            this.selection.clear() :
+            this.dataSource.data.forEach(row => this.selection.select(row));
+    }
+
+    isAllSelected() {
+        const numSelected = this.selection.selected.length;
+        const numRows = this.dataSource.data.length;
+        return numSelected === numRows;
+    }
+
+    toggleSelectionEnabled() {
+        if (this.selectionEnabled)
+            this.displayedColumns = ['select', 'name', 'downloaded', 'size']
+        else
+            this.displayedColumns = ['name', 'downloaded', 'size']
+    }
+
+    cancelDownloads() {
+        this.selection.selected.forEach((download) => {
+            this.websocketService.sendMsg(new MLMsgToRemoveDownload(download.downloadId))
+        })
     }
 }
