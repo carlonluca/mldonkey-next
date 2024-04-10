@@ -57,6 +57,7 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
         this.subscriptions.add(this.downloadingService.downloadingList.observable.subscribe((list) => {
             this.dataSource.data = list
             this.dataSource.sort = this.sort
+            this.refreshSelection()
         }))
     }
 
@@ -108,5 +109,15 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
         this.selection.selected.forEach((download) => {
             this.websocketService.sendMsg(new MLMsgToRemoveDownload(download.downloadId))
         })
+    }
+
+    refreshSelection() {
+        let newArray: MLMsgDownloadElement[] = []
+        this.selection.selected.forEach((item) => {
+            if (this.dataSource.data.indexOf(item) >= 0)
+                newArray.push(item)
+        })
+
+        this.selection = new SelectionModel(true, newArray)
     }
 }
