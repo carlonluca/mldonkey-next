@@ -39,8 +39,9 @@ import { WebSocketService } from 'src/app/websocket-service.service'
     styleUrls: ['./download.component.scss']
 })
 export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
+    mobileLayout = window.innerWidth <= 991
     dataSource = new MatTableDataSource<MLMsgDownloadElement>([])
-    displayedColumns: string[] = ['name', 'downloaded', 'size']
+    displayedColumns: string[] = this.displayColumns()
     selection = new SelectionModel<MLMsgDownloadElement>(true, []);
     selectionEnabled = false
 
@@ -51,6 +52,10 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
     constructor(private websocketService: WebSocketService, private downloadingService: DownloadingFilesService) { }
 
     ngOnInit() {
+        window.onresize = () => {
+            this.mobileLayout = window.innerWidth <= 991
+            this.toggleSelectionEnabled()
+        }
         this.subscriptions.add(interval(1000).subscribe(() =>
             this.websocketService.sendMsg(new MLMsgToGetDownload()))
         );
@@ -98,11 +103,18 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
         return numSelected === numRows;
     }
 
+    displayColumns(): string[] {
+        if (this.mobileLayout)
+            return ['name']
+        else
+            return ['name', 'downloaded', 'size']
+    }
+
     toggleSelectionEnabled() {
         if (this.selectionEnabled)
-            this.displayedColumns = ['select', 'name', 'downloaded', 'size']
+            this.displayedColumns = ['select', ...this.displayColumns()]
         else
-            this.displayedColumns = ['name', 'downloaded', 'size']
+            this.displayedColumns = this.displayColumns()
     }
 
     cancelDownloads() {

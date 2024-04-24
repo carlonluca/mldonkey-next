@@ -69,3 +69,11 @@ th::before {
 .toolbar-item {
     margin: $defaultMargin;
 }
+
+td {
+    padding: $defaultMargin;
+}
+
+.wrap-everywhere {
+    word-break: break-all;
+}
