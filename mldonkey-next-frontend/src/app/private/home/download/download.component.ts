@@ -124,7 +124,7 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     refreshSelection() {
-        let newArray: MLMsgDownloadElement[] = []
+        const newArray: MLMsgDownloadElement[] = []
         this.selection.selected.forEach((item) => {
             if (this.dataSource.data.indexOf(item) >= 0)
                 newArray.push(item)
