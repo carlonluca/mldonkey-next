@@ -44,6 +44,7 @@ import {
     faCaretDown,
     faMagnifyingGlass
 } from '@fortawesome/free-solid-svg-icons'
+import { UiServiceService } from 'src/app/services/ui-service.service'
 
 @Component({
     selector: 'app-search',
@@ -52,7 +53,7 @@ import {
 })
 export class SearchComponent implements AfterViewInit, OnInit, OnDestroy {
     dataSource = new MatTableDataSource<MLResultInfo>([])
-    displayedColumns: string[] = ['availability', "completesources", 'name', 'size']
+    displayedColumns: string[] = []
     searchText = ''
     faCaretDown = faCaretDown
     faMagnifyingGlass = faMagnifyingGlass
@@ -67,8 +68,11 @@ export class SearchComponent implements AfterViewInit, OnInit, OnDestroy {
     constructor(
         private websocketService: WebSocketService,
         private searchService: SearchesService,
-        private spinner: SpinnerService
+        private spinner: SpinnerService,
+        public uiService: UiServiceService
     ) {
+        this.subscriptions.add(this.uiService.mobileLayout.observable.subscribe(() => this.refreshDisplayedColumns()))
+        this.refreshDisplayedColumns()
         this.currentSearchResults = new MLSearchSessionManager(
             -1,
             searchService.searchManager,
@@ -170,5 +174,12 @@ export class SearchComponent implements AfterViewInit, OnInit, OnDestroy {
 
         const msg = new MLMsgToDownload(resultInfo.fileNames, resultInfo.id, MLDownloadMethod.M_FORCE)
         this.websocketService.sendMsg(msg)
+    }
+
+    refreshDisplayedColumns() {
+        if (this.uiService.mobileLayout.value)
+            this.displayedColumns = ["name"]
+        else
+            this.displayedColumns = ['availability', "completesources", 'name', 'size']
     }
 }

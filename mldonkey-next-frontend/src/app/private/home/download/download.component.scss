@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
- @import "../../../css/shared.scss";
+@import "../../../css/shared.scss";
 
 .filename-element {
     margin-top: 5px;
@@ -68,12 +68,4 @@ th::before {
 
 .toolbar-item {
     margin: $defaultMargin;
-}
-
-td {
-    padding: $defaultMargin;
-}
-
-.wrap-everywhere {
-    word-break: break-all;
 }

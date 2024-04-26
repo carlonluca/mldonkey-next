@@ -3,3 +3,11 @@ $dark2: #303030;
 $sectionFontSize: 21px;
 $defaultMargin: 10px;
 $textColor: white;
+
+.wrap-anywhere {
+    word-break: break-all;
+}
+
+.table-mobile-td {
+    padding: $defaultMargin;
+}
