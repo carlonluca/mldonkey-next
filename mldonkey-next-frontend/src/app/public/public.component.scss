@@ -23,7 +23,8 @@
 
 .login-container {
     @include centered-container();
-    width: 600px;
+    max-width: 600px;
+    width: calc(100% - 2*30px - 2*30px);
     padding: 30px;
     gap: 20px;
 }
