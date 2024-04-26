@@ -107,7 +107,7 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     displayColumns(): string[] {
-        if (this.uiSerivce.mobileLayout)
+        if (this.uiSerivce.mobileLayout.value)
             return ['name']
         else
             return ['name', 'downloaded', 'size']
