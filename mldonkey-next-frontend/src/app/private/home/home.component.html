@@ -15,7 +15,7 @@
 </mat-toolbar>
 
 <mat-sidenav-container>
-    <mat-sidenav [(opened)]="opened" mode="side">
+    <mat-sidenav [(opened)]="opened" [mode]="(this.uiService.mobileLayout.observable | async) ? 'over' : 'side'">
         <app-section-title [routerLinkValue]="['/home/download']"
             buttonText="Download"
             [iconDef]="faDownload">

@@ -31,6 +31,7 @@ import { MLMsgDownloadElement } from 'src/app/data/MLDownloadFileInfo'
 import { MLMsgToGetDownload } from 'src/app/msg/MLMsg'
 import { MLMsgToRemoveDownload } from 'src/app/msg/MLMsgRemoveDownload'
 import { DownloadingFilesService } from 'src/app/services/downloading-files.service'
+import { UiServiceService } from 'src/app/services/ui-service.service'
 import { WebSocketService } from 'src/app/websocket-service.service'
 
 @Component({
@@ -39,7 +40,6 @@ import { WebSocketService } from 'src/app/websocket-service.service'
     styleUrls: ['./download.component.scss']
 })
 export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
-    mobileLayout = window.innerWidth <= 991
     dataSource = new MatTableDataSource<MLMsgDownloadElement>([])
     displayedColumns: string[] = this.displayColumns()
     selection = new SelectionModel<MLMsgDownloadElement>(true, []);
@@ -49,13 +49,16 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
 
     private subscriptions = new MLSubscriptionSet()
 
-    constructor(private websocketService: WebSocketService, private downloadingService: DownloadingFilesService) { }
+    constructor(
+        private websocketService: WebSocketService,
+        private downloadingService: DownloadingFilesService,
+        public uiSerivce: UiServiceService
+    ) { }
 
     ngOnInit() {
-        window.onresize = () => {
-            this.mobileLayout = window.innerWidth <= 991
+        this.subscriptions.add(this.uiSerivce.mobileLayout.observable.subscribe(() =>
             this.toggleSelectionEnabled()
-        }
+        ))
         this.subscriptions.add(interval(1000).subscribe(() =>
             this.websocketService.sendMsg(new MLMsgToGetDownload()))
         );
@@ -104,7 +107,7 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     displayColumns(): string[] {
-        if (this.mobileLayout)
+        if (this.uiSerivce.mobileLayout)
             return ['name']
         else
             return ['name', 'downloaded', 'size']

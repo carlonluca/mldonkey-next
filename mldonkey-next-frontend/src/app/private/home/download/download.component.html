@@ -24,7 +24,7 @@
 </div>
 
 <!-- Desktop table -->
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort *ngIf="!this.mobileLayout">
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort *ngIf="!this.uiSerivce.mobileLayout.value">
     <ng-container matColumnDef="select">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
             <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
@@ -58,7 +58,7 @@
 </table>
 
 <!-- Mobile table -->
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort *ngIf="this.mobileLayout">
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort *ngIf="this.uiSerivce.mobileLayout.value">
     <ng-container matColumnDef="select">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
             <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
