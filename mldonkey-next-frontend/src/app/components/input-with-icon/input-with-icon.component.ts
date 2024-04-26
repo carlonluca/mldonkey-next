@@ -35,6 +35,8 @@ export class InputWithIconComponent {
     public userInput: string
     @Input()
     public type: string
+    @Input()
+    public autocapitalize: string
     @Output()
     public userInputChange = new EventEmitter<string>()
 }

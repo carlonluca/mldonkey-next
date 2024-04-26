@@ -21,6 +21,6 @@
     <button width="100%" matPrefix mat-icon-button color="white" (matTooltip)="tooltip" matTooltipPosition="below" tabindex="-1">
         <fa-icon [icon]="faIcon"></fa-icon>
     </button>
-    <input width="100%" matInput #inputValue class="fill-parent" [type]="this.type" [value]="this.userInput"
+    <input width="100%" matInput #inputValue class="fill-parent" [type]="this.type" [value]="this.userInput" [autocapitalize]="this.autocapitalize"
         (change)="this.userInputChange.emit(inputValue.value)" />
 </mat-form-field>

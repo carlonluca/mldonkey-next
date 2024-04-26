@@ -19,9 +19,9 @@
 <div id="full-screen-container" class="mat-app-background">
     <div class="login-container mat-elevation-z8">
         <app-input-with-icon class="full-screen-row" [faIcon]="faUser" [(userInput)]="inputUsr" label="Username"
-            tooltip="Your username" type="text" />
+            autocapitalize="none" tooltip="Your username" type="text" />
         <app-input-with-icon class="full-screen-row" [faIcon]="faKey" [(userInput)]="inputPwd" label="Password"
-            tooltip="Your password" type="password" />
+            autocapitalize="none" tooltip="Your password" type="password" />
         <button class="full-screen-row" mat-raised-button (click)="login()">Login</button>
         <div class="flex-container">
             <fa-icon class="flex-child" [icon]="this.connected ? faConnected : faDisconnected"></fa-icon>
