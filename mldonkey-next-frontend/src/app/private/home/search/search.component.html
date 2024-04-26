@@ -17,7 +17,7 @@
 -->
 
 <form id="main-container" [ngClass]="{'full-height': this.dataSource.data.length <= 0}">
-    <div id="query-container">
+    <div id="query-container" [ngClass]="{ 'flex-column': this.uiService.mobileLayout.value}">
         <mat-form-field id="searchForm" subscriptSizing="dynamic">
             <input matInput spellcheck="false" type="text" id="searchInput" name="searchInput"
                 placeholder="Enter a query here..." [(ngModel)]="searchText">
