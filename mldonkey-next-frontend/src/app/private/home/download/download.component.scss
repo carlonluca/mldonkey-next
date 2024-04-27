@@ -32,9 +32,11 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%; /* Cover the entire width of the parent */
-    height: 100%; /* Cover the entire height of the parent */
-    background-color: rgba(0,0,0,0.2);
+    width: 100%;
+    /* Cover the entire width of the parent */
+    height: 100%;
+    /* Cover the entire height of the parent */
+    background-color: rgba(0, 0, 0, 0.2);
 }
 
 .alternate {
@@ -54,9 +56,11 @@ th::before {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%; /* Cover the entire width of the parent */
-    height: 100%; /* Cover the entire height of the parent */
-    background-color: rgba(0,0,0,0.4);
+    width: 100%;
+    /* Cover the entire width of the parent */
+    height: 100%;
+    /* Cover the entire height of the parent */
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
 #toolbar-container {
@@ -64,6 +68,7 @@ th::before {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
+    align-items: center;
 }
 
 .toolbar-item {
@@ -72,4 +77,13 @@ th::before {
 
 td {
     margin: 0px;
+}
+
+.mdc-text-field--no-label:not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mat-mdc-form-field-infix {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.mat-mdc-form-field-infix {
+    min-height: 40px;
 }

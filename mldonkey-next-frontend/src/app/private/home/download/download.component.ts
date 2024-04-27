@@ -23,7 +23,7 @@
  */
 import { SelectionModel } from '@angular/cdk/collections'
 import { Component, ViewChild, AfterViewInit, OnInit, OnDestroy } from '@angular/core'
-import { MatSort, MatSortable } from '@angular/material/sort'
+import { MatSort, MatSortable, SortDirection } from '@angular/material/sort'
 import { MatTableDataSource } from '@angular/material/table'
 import { interval } from 'rxjs'
 import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
@@ -33,6 +33,15 @@ import { MLMsgToRemoveDownload } from 'src/app/msg/MLMsgRemoveDownload'
 import { DownloadingFilesService } from 'src/app/services/downloading-files.service'
 import { UiServiceService } from 'src/app/services/ui-service.service'
 import { WebSocketService } from 'src/app/websocket-service.service'
+
+class SortMode {
+    constructor(
+        public id: string,
+        public asc: boolean,
+        public label: string,
+        public selected: boolean = false
+    ) {}
+}
 
 @Component({
     selector: 'app-download',
@@ -44,6 +53,14 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
     displayedColumns: string[] = this.displayColumns()
     selection = new SelectionModel<MLMsgDownloadElement>(true, []);
     selectionEnabled = false
+    sortModes = [
+        new SortMode("name", true, "Name (a → z)", true),
+        new SortMode("name", false, "Name (z → a)"),
+        new SortMode("downloaded", true, "Downloaded ↑"),
+        new SortMode("downloaded", false, "Downloaded ↓"),
+        new SortMode("size", true, "Size ↑"),
+        new SortMode("size", false, "Size ↓")
+    ]
 
     @ViewChild(MatSort) sort: MatSort
 
@@ -134,5 +151,18 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
         })
 
         this.selection = new SelectionModel(true, newArray)
+    }
+
+    sortModeClicked(sortMode: SortMode) {
+        for (let sm of this.sortModes) {
+            sm.selected = (sortMode == sm)
+            if (sm.selected) {
+                if (this.dataSource.sort) {
+                    this.dataSource.sort.active = sm.id
+                    this.dataSource.sort.direction = sm.asc ? "asc" : "desc"
+                    this.dataSource.sort.sortChange.emit()
+                }
+            }
+        }
     }
 }

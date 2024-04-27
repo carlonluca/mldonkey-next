@@ -49,6 +49,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 import { MatProgressBarModule } from '@angular/material/progress-bar'
 import { MatCheckboxModule } from '@angular/material/checkbox'
+import { MatSelectModule } from '@angular/material/select'
+import { MatMenuModule } from '@angular/material/menu'
 
 @NgModule({
     declarations: [
@@ -81,7 +83,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox'
         MatFormFieldModule,
         MatProgressSpinnerModule,
         MatProgressBarModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        MatSelectModule,
+        MatMenuModule
     ]
 })
 export class AppModule { }
