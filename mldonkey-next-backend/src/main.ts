@@ -26,6 +26,9 @@ import WebSocket from 'ws'
 import { logger } from './core/MLLogger'
 import { MLBridgeManager } from './core/MLBridgeManager'
 import { IncomingMessage } from 'http';
+import express, { Express, Request, Response } from "express"
+import path from 'path'
+import http from 'http'
 
 const wss = new WebSocket.Server({ port: 4002 });
 const bridgeManager = new MLBridgeManager();
@@ -45,4 +48,14 @@ wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
     })
 })
 
-console.log('WebSocket server listening on port 4002');
+console.log('WebSocket server listening on port: 4002');
+
+const app = express()
+const port = process.env.PORT || 4081
+
+app.use(express.static(__dirname + '/dist/mldonkey-next'))
+app.get('/*', (req, res) => res.sendFile(path.join(__dirname)))
+
+const server = http.createServer(app)
+server.listen(port, () =>
+    console.log(`HTTP server listening on: http://localhost:${port}`))
