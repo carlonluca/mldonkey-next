@@ -19,17 +19,26 @@
 <form id="main-container" [ngClass]="{'full-height': this.dataSource.data.length <= 0}">
     <div id="query-container" [ngClass]="{ 'flex-column': this.uiService.mobileLayout.value}">
         <mat-form-field id="searchForm" subscriptSizing="dynamic">
-            <input matInput spellcheck="false" type="text" id="searchInput" name="searchInput"
+            <input matInput spellcheck="false" type="text" id="searchInput" class="toolbar-item" name="searchInput"
                 placeholder="Enter a query here..." [(ngModel)]="searchText">
         </mat-form-field>
-        <button mat-raised-button id="search-button" (click)="search()" [disabled]="searchText.length <= 0">
+        <button mat-raised-button id="search-button" class="toolbar-item" (click)="search()"
+            [disabled]="searchText.length <= 0">
             <fa-icon id="find-icon" [icon]="faMagnifyingGlass">mic</fa-icon>
             Search
         </button>
-        <button mat-raised-button id="refresh-button" (click)="refreshView()">
+        <button mat-raised-button id="refresh-button" class="toolbar-item" (click)="refreshView()">
             <fa-icon id="more-icon" [icon]="faCaretDown">mic</fa-icon>
             More results
         </button>
+        <button mat-icon-button color="basic" class="toolbar-item" [matMenuTriggerFor]="menu">
+            <mat-icon>sort</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item *ngFor="let sortMode of sortModes" (click)="this.sortModeClicked(sortMode)">
+                <span [ngStyle]="{'font-weight': sortMode.selected ? 'bold' : 'normal'}">{{ sortMode.label }}</span>
+            </button>
+        </mat-menu>
     </div>
 
     <div id="spinner-container" *ngIf="this.dataSource.data.length <= 0">
@@ -67,10 +76,11 @@
     *ngIf="this.uiService.mobileLayout.value">
     <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-        <td mat-cell *matCellDef="let result; let isEven = even" [ngClass]="{'alternate': isEven, 'wrap-anywhere': true, 'table-mobile-td': true}">
-            <div class=""></div><b>{{ result.fileNames[0] }}</b><br/>
-            Availability: {{ stringifyAvailability(result) }}<br/>
-            Complete sources: {{ stringifyCompleteSources(result) }}<br/>
+        <td mat-cell *matCellDef="let result; let isEven = even"
+            [ngClass]="{'alternate': isEven, 'wrap-anywhere': true, 'table-mobile-td': true}">
+            <div class=""></div><b>{{ result.fileNames[0] }}</b><br />
+            Availability: {{ stringifyAvailability(result) }}<br />
+            Complete sources: {{ stringifyCompleteSources(result) }}<br />
             Size: {{ result.fileSize | prettyBytes }}
         </td>
     </ng-container>

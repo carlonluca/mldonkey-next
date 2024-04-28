@@ -30,18 +30,10 @@ import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
 import { MLMsgDownloadElement } from 'src/app/data/MLDownloadFileInfo'
 import { MLMsgToGetDownload } from 'src/app/msg/MLMsg'
 import { MLMsgToRemoveDownload } from 'src/app/msg/MLMsgRemoveDownload'
+import { MLSortMode } from '../../../core/MLSortMode'
 import { DownloadingFilesService } from 'src/app/services/downloading-files.service'
 import { UiServiceService } from 'src/app/services/ui-service.service'
 import { WebSocketService } from 'src/app/websocket-service.service'
-
-class SortMode {
-    constructor(
-        public id: string,
-        public asc: boolean,
-        public label: string,
-        public selected: boolean = false
-    ) {}
-}
 
 @Component({
     selector: 'app-download',
@@ -54,12 +46,12 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
     selection = new SelectionModel<MLMsgDownloadElement>(true, []);
     selectionEnabled = false
     sortModes = [
-        new SortMode("name", true, "Name (a → z)", true),
-        new SortMode("name", false, "Name (z → a)"),
-        new SortMode("downloaded", true, "Downloaded ↑"),
-        new SortMode("downloaded", false, "Downloaded ↓"),
-        new SortMode("size", true, "Size ↑"),
-        new SortMode("size", false, "Size ↓")
+        new MLSortMode("name", true, "Name (a → z)", true),
+        new MLSortMode("name", false, "Name (z → a)"),
+        new MLSortMode("downloaded", true, "Downloaded ↑"),
+        new MLSortMode("downloaded", false, "Downloaded ↓"),
+        new MLSortMode("size", true, "Size ↑"),
+        new MLSortMode("size", false, "Size ↓")
     ]
 
     @ViewChild(MatSort) sort: MatSort
@@ -153,7 +145,7 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
         this.selection = new SelectionModel(true, newArray)
     }
 
-    sortModeClicked(sortMode: SortMode) {
+    sortModeClicked(sortMode: MLSortMode) {
         for (let sm of this.sortModes) {
             sm.selected = (sortMode == sm)
             if (sm.selected) {

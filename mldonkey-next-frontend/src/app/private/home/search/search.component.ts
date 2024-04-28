@@ -29,6 +29,7 @@ import { MLSearchInfo } from 'src/app/data/MLSearchInfo'
 import { MLSearchSessionManager } from 'src/app/core/MLSearchSessionManager'
 import { MatTableDataSource } from '@angular/material/table'
 import { MLResultInfo } from 'src/app/data/MLResultInfo'
+import { MLSortMode } from '../../../core/MLSortMode'
 import { MLDownloadMethod, MLMsgToDownload } from 'src/app/msg/MLMsgDownload'
 import { MLTagIn8, MLTagType, MLTagUint32 } from 'src/app/msg/MLtag'
 import { MatSort, MatSortable } from '@angular/material/sort'
@@ -62,6 +63,16 @@ export class SearchComponent implements AfterViewInit, OnInit, OnDestroy {
     currentSearchResults: MLSearchSessionManager
     subscriptions: MLSubscriptionSet = new MLSubscriptionSet()
     backendData: MLResultInfo[] = []
+    sortModes = [
+        new MLSortMode("availability", true, "Availability ↑"),
+        new MLSortMode("availability", false, "Availability ↓"),
+        new MLSortMode("completesources", true, "Complete sources ↑"),
+        new MLSortMode("completesources", false, "Complete sources ↓", true),
+        new MLSortMode("name", true, "Name (a → z)"),
+        new MLSortMode("name", false, "Name (z → a)"),
+        new MLSortMode("size", true, "Size ↑"),
+        new MLSortMode("size", false, "Size ↓")
+    ]
 
     @ViewChild(MatSort) sort: MatSort
 
@@ -82,7 +93,7 @@ export class SearchComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     ngAfterViewInit(): void {
-        this.sort.sort({ id: "size" } as MatSortable)
+        this.sort.sort({ id: "completesources", start: "desc" } as MatSortable)
         this.dataSource.sort = this.sort
         this.dataSource.sortingDataAccessor = (item, property) => {
             switch (property) {
@@ -181,5 +192,18 @@ export class SearchComponent implements AfterViewInit, OnInit, OnDestroy {
             this.displayedColumns = ["name"]
         else
             this.displayedColumns = ['availability', "completesources", 'name', 'size']
+    }
+
+    sortModeClicked(sortMode: MLSortMode) {
+        for (let sm of this.sortModes) {
+            sm.selected = (sortMode == sm)
+            if (sm.selected) {
+                if (this.dataSource.sort) {
+                    this.dataSource.sort.active = sm.id
+                    this.dataSource.sort.direction = sm.asc ? "asc" : "desc"
+                    this.dataSource.sort.sortChange.emit()
+                }
+            }
+        }
     }
 }
