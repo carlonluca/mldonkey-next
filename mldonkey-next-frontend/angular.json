@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "mldonket-next-frontend": {
+    "mldonkey-next-frontend": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/mldonket-next-frontend",
+            "outputPath": "dist/mldonkey-next-frontend",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -72,10 +72,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "mldonket-next-frontend:build:production"
+              "browserTarget": "mldonkey-next-frontend:build:production"
             },
             "development": {
-              "browserTarget": "mldonket-next-frontend:build:development"
+              "browserTarget": "mldonkey-next-frontend:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -83,7 +83,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "mldonket-next-frontend:build"
+            "browserTarget": "mldonkey-next-frontend:build"
           }
         },
         "test": {

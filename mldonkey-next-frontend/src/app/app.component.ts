@@ -1,5 +1,5 @@
 /*
- * This file is part of mldonket-next.
+ * This file is part of mldonkey-next.
  *
  * Copyright (c) 2023 Luca Carlon
  *
@@ -30,5 +30,5 @@ import { Component } from '@angular/core'
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-    title = 'mldonket-next-frontend'
+    title = 'mldonkey-next-frontend'
 }

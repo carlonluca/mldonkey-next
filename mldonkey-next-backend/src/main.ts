@@ -1,5 +1,5 @@
 /*
- * This file is part of mldonket-next.
+ * This file is part of mldonkey-next.
  *
  * Copyright (c) 2023 Luca Carlon
  *
@@ -53,7 +53,7 @@ console.log('WebSocket server listening on port: 4002');
 const app = express()
 const port = process.env.PORT || 4081
 
-app.use(express.static(__dirname + '/dist/mldonket-next-frontend'))
+app.use(express.static(__dirname + '/dist/mldonkey-next-frontend'))
 app.get('/*', (req, res) => res.sendFile(path.join(__dirname)))
 
 const server = http.createServer(app)
