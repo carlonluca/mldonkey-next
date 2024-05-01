@@ -51,8 +51,8 @@ wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
 console.log('WebSocket server listening on port: 4002');
 
 const app = express()
-const port = process.env.PORT || 4081
-const webappPath = path.join(__dirname, "dist", "mldonkey-next-frontend")
+const port = process.env.MLDONKEY_NEXT_WEBAPP_PORT || 4081
+const webappPath = process.env.MLDONKEY_NEXT_WEBAPP_ROOT
 
 app.get("/", function(req, res) {
     res.sendFile(path.join(webappPath, 'index.html'))
