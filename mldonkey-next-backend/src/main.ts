@@ -26,7 +26,7 @@ import WebSocket from 'ws'
 import { logger } from './core/MLLogger'
 import { MLBridgeManager } from './core/MLBridgeManager'
 import { IncomingMessage } from 'http';
-import express, { Express, Request, Response } from "express"
+import express from "express"
 import path from 'path'
 import http from 'http'
 
