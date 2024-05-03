@@ -16,4 +16,8 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<p>options works!</p>
+<mat-tab-group>
+    <mat-tab *ngFor="let o of this.optionService.sections" [label]="o.name">
+        <p *ngFor="let p of o.options">{{ p.name }}</p>
+    </mat-tab>
+</mat-tab-group>

@@ -51,6 +51,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar'
 import { MatCheckboxModule } from '@angular/material/checkbox'
 import { MatSelectModule } from '@angular/material/select'
 import { MatMenuModule } from '@angular/material/menu'
+import { MatTabsModule } from '@angular/material/tabs'
 
 @NgModule({
     declarations: [
@@ -85,7 +86,8 @@ import { MatMenuModule } from '@angular/material/menu'
         MatProgressBarModule,
         MatCheckboxModule,
         MatSelectModule,
-        MatMenuModule
+        MatMenuModule,
+        MatTabsModule
     ]
 })
 export class AppModule { }

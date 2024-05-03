@@ -36,6 +36,7 @@ import { WebSocketService } from 'src/app/websocket-service.service'
 import packageJson from '../../../../package.json'
 import { UiServiceService } from 'src/app/services/ui-service.service'
 import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
+import { OptionsService } from 'src/app/services/options.service'
 
 @Component({
     selector: 'app-home',
@@ -55,10 +56,12 @@ export class HomeComponent {
     version = packageJson.version
     versionAngular = VERSION
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     constructor(
         private webSocketService: WebSocketService,
         private router: Router,
         private storage: StorageService,
+        private optionService: OptionsService,
         public uiService: UiServiceService)
         {
             this.subscriptions.add(
