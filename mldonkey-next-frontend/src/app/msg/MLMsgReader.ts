@@ -33,6 +33,9 @@ import {
     MLTagUint32
 } from "./MLtag"
 
+export type MLStringPair = [string, string]
+export type MLStringPairList = MLStringPair[]
+
 export class MLBufferUtils {
     public static readRawData(buffer: ArrayBuffer, offset: number, length: number): [ArrayBuffer, number] {
         return [buffer.slice(offset, offset + length), length]
@@ -70,6 +73,22 @@ export class MLBufferUtils {
             const [s, consumedString] = this.readString(buffer, offset + consumed)
             consumed += consumedString
             ret.push(s)
+        }
+
+        return [ret, consumed]
+    }
+
+    public static readStringPairList(buffer: ArrayBuffer, offset: number): [MLStringPairList, number] {
+        let consumed = 0
+        const [size] = this.readInt16(buffer, offset)
+        consumed += 2
+        const ret: [string, string][] = []
+        for (let i = 0; i < size; i++) {
+            let [s1, consumedString1] = this.readString(buffer, offset + consumed)
+            consumed += consumedString1
+            let [s2, consumedString2] = this.readString(buffer, offset + consumed)
+            consumed += consumedString2
+            ret.push([s1, s2])
         }
 
         return [ret, consumed]
@@ -172,6 +191,10 @@ export class MLMsgReader {
         return MLBufferUtils.readStringList(this.data, offset)
     }
 
+    readStringPairList(offset: number): [MLStringPairList, number] {
+        return MLBufferUtils.readStringPairList(this.data, offset)
+    }
+
     readString(offset: number): [string, number] {
         return MLBufferUtils.readString(this.data, offset)
     }
@@ -224,6 +247,12 @@ export class MLMsgReader {
 
     takeStringList(): string[] {
         const [ret, consumed] = this.readStringList(this.offset)
+        this.offset += consumed
+        return ret
+    }
+
+    takeStringPairList(): [string, string][] {
+        const [ret, consumed] = this.readStringPairList(this.offset)
         this.offset += consumed
         return ret
     }
