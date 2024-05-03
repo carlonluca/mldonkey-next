@@ -195,7 +195,7 @@ export class SearchComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     sortModeClicked(sortMode: MLSortMode) {
-        for (let sm of this.sortModes) {
+        for (const sm of this.sortModes) {
             sm.selected = (sortMode == sm)
             if (sm.selected) {
                 if (this.dataSource.sort) {

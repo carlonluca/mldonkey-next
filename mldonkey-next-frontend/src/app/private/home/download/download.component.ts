@@ -23,7 +23,7 @@
  */
 import { SelectionModel } from '@angular/cdk/collections'
 import { Component, ViewChild, AfterViewInit, OnInit, OnDestroy } from '@angular/core'
-import { MatSort, MatSortable, SortDirection } from '@angular/material/sort'
+import { MatSort, MatSortable } from '@angular/material/sort'
 import { MatTableDataSource } from '@angular/material/table'
 import { interval } from 'rxjs'
 import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
@@ -146,7 +146,7 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     sortModeClicked(sortMode: MLSortMode) {
-        for (let sm of this.sortModes) {
+        for (const sm of this.sortModes) {
             sm.selected = (sortMode == sm)
             if (sm.selected) {
                 if (this.dataSource.sort) {
