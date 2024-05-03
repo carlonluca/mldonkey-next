@@ -203,8 +203,7 @@ export class WebSocketService {
             case MLMessageTypeFrom.T_SEARCH:
                 return [MLMsgFromSearch.fromBuffer(data), size + SIZE_HEADER, true]
             case MLMessageTypeFrom.T_OPTIONS_INFO:
-                let v: [MLMsgFrom | null, number, boolean] = [MLMsgFromOptionsInfo.fromBuffer(data), size + SIZE_HEADER, true]
-                return v
+                return [MLMsgFromOptionsInfo.fromBuffer(data), size + SIZE_HEADER, true]
             default:
                 wsLogger.warn(`Unknown msg with opcode: ${MLMessageTypeFrom[opcode]} (${opcode})`)
                 return [null, size + SIZE_HEADER, true]

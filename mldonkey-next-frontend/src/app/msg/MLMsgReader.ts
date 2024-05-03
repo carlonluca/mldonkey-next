@@ -84,9 +84,9 @@ export class MLBufferUtils {
         consumed += 2
         const ret: [string, string][] = []
         for (let i = 0; i < size; i++) {
-            let [s1, consumedString1] = this.readString(buffer, offset + consumed)
+            const [s1, consumedString1] = this.readString(buffer, offset + consumed)
             consumed += consumedString1
-            let [s2, consumedString2] = this.readString(buffer, offset + consumed)
+            const [s2, consumedString2] = this.readString(buffer, offset + consumed)
             consumed += consumedString2
             ret.push([s1, s2])
         }
