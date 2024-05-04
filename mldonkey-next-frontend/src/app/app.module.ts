@@ -51,7 +51,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar'
 import { MatCheckboxModule } from '@angular/material/checkbox'
 import { MatSelectModule } from '@angular/material/select'
 import { MatMenuModule } from '@angular/material/menu'
-import { MatTabsModule } from '@angular/material/tabs'
+import { MatTabsModule } from '@angular/material/tabs';
+import { OptionSectionComponent } from './private/home/options/option-section/option-section.component'
 
 @NgModule({
     declarations: [
@@ -63,7 +64,8 @@ import { MatTabsModule } from '@angular/material/tabs'
         ServersComponent,
         StatsComponent,
         OptionsComponent,
-        SectionTitleComponent
+        SectionTitleComponent,
+        OptionSectionComponent
     ],
     providers: [],
     bootstrap: [AppComponent],

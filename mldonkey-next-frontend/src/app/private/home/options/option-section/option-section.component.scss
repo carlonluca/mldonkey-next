@@ -1,0 +1,26 @@
+@import "../../../../css/shared.scss";
+
+td {
+    padding: $defaultMargin;
+}
+
+mat-form-field {
+    width: 100%;
+    margin-bottom: $defaultMargin;
+}
+
+.alternate::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    /* Cover the entire width of the parent */
+    height: 100%;
+    /* Cover the entire height of the parent */
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.alternate {
+    position: relative;
+}

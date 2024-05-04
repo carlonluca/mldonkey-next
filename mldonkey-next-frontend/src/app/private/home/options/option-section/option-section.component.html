@@ -1,0 +1,31 @@
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort *ngIf="!this.uiService.mobileLayout.value">
+    <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+        <td mat-cell *matCellDef="let option; let isEven = even" [ngClass]="{'alternate': isEven }">
+            <b>{{ computeDescription(option) }}</b>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="value">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Value</th>
+        <td mat-cell *matCellDef="let option; let isEven = even" [ngClass]="{'alternate': isEven }">
+            <mat-form-field subscriptSizing="dynamic">
+                <input matInput [value]="option.currentValue"/>
+            </mat-form-field>
+            <p>{{ option.help }}</p>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="default">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Value</th>
+        <td mat-cell *matCellDef="let option; let isEven = even" [ngClass]="{'alternate': isEven }">
+            {{ option.defaultValue }}
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Value</th>
+        <td mat-cell *matCellDef="let option; let isEven = even" [ngClass]="{'alternate': isEven }">
+            {{ option.type }}
+        </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="['name', 'value', 'default', 'type']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['name', 'value', 'default', 'type'];"></tr>
+</table>

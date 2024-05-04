@@ -1,7 +1,7 @@
 <!--
   This file is part of mldonkey-next.
 
-  Copyright (c) 2023 Luca Carlon
+  Copyright (c) 2024 Luca Carlon
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -18,6 +18,6 @@
 
 <mat-tab-group>
     <mat-tab *ngFor="let o of this.optionService.sections" [label]="o.name">
-        <p *ngFor="let p of o.options">{{ p.name }}</p>
+        <app-option-section [options]="o.options"></app-option-section>
     </mat-tab>
 </mat-tab-group>

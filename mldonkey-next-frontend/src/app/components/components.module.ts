@@ -4,7 +4,7 @@ import { InputWithIconComponent } from './input-with-icon/input-with-icon.compon
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { FormsModule } from '@angular/forms'
 import { MatInputModule } from '@angular/material/input'
-import { MatButtonModule } from '@angular/material/button'
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
     imports: [

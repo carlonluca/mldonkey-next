@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { OptionsService } from 'src/app/services/options.service';
+import { Component } from '@angular/core'
+import { OptionsService } from 'src/app/services/options.service'
 
 @Component({
     selector: 'app-options',
