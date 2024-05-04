@@ -7,7 +7,7 @@ Test_server:
   tags:
     - pihome
   script:
-    - npm config set fetch-timeout 60000
+    - npm config set fetch-timeout 600000
     - cd mldonkey-next-backend
     - npm i --maxsockets 1
     - npm run build
