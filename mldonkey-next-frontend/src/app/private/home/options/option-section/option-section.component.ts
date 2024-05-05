@@ -30,4 +30,13 @@ export class OptionSectionComponent implements OnInit {
         // Sometimes the string is not well formatted.
         return option.description.charAt(0).toUpperCase() + option.description.slice(1)
     }
+
+    computeHelp(option: MLMsgFromAddSectionOption): string {
+        if (!option.help)
+            return "-"
+        if (!option.help.endsWith("."))
+            return option.help.charAt(0).toUpperCase() + option.help.slice(1) + "."
+        else
+            return option.help.charAt(0).toUpperCase() + option.help.slice(1)
+    }
 }
