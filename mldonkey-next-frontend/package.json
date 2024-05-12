@@ -28,6 +28,7 @@
     "blob-to-buffer": "^1.2.9",
     "buffer": "^6.0.3",
     "loglevel": "^1.8.1",
+    "ngx-mask": "^15.2.3",
     "node": "20.5",
     "pretty-bytes": "^6.1.1",
     "rxjs": "~7.8.0",

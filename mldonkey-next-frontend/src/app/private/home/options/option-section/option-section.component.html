@@ -8,8 +8,15 @@
     <ng-container matColumnDef="value">
         <th mat-header-cell *matHeaderCellDef>Value</th>
         <td mat-cell *matCellDef="let option; let isEven = even" [ngClass]="{'alternate': isEven }">
-            <mat-form-field subscriptSizing="dynamic">
-                <input matInput [value]="option.currentValue"/>
+            <mat-form-field *ngIf="isString(option) || isInteger(option) || isIp(option) || isBool(option) || isFloat(option)" subscriptSizing="dynamic">
+                <input matInput type="text" *ngIf="isString(option)" [value]="option.currentValue" />
+                <input matInput type="text" *ngIf="isIp(option)" mask="IP" [ngModel]="option.currentValue" />
+                <input matInput type="number" *ngIf="isInteger(option)" [value]="option.currentValue" />
+                <input matInput type="number" *ngIf="isFloat(option)" [value]="option.currentValue"/>
+                <mat-select *ngIf="isBool(option)" [value]="option.currentValue.toLowerCase()">
+                    <mat-option value="true">true</mat-option>
+                    <mat-option value="false">false</mat-option>
+                </mat-select>
             </mat-form-field>
             <p>{{ option.help }}</p>
         </td>
@@ -36,7 +43,7 @@
         <td mat-cell *matCellDef="let option; let isEven = even" [ngClass]="{'alternate': isEven }">
             <p class="title"><b>{{ computeDescription(option) }}</b></p>
             <mat-form-field subscriptSizing="dynamic">
-                <input matInput [value]="option.currentValue"/>
+                <input matInput type="text" *ngIf="isString(option)" [value]="option.currentValue" />
             </mat-form-field>
             <p><b>Default</b>: {{ option.defaultValue }}</p>
             <p><b>Type</b>: {{ option.type }}</p>

@@ -53,6 +53,7 @@ import { MatSelectModule } from '@angular/material/select'
 import { MatMenuModule } from '@angular/material/menu'
 import { MatTabsModule } from '@angular/material/tabs';
 import { OptionSectionComponent } from './private/home/options/option-section/option-section.component'
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask'
 
 @NgModule({
     declarations: [
@@ -67,7 +68,9 @@ import { OptionSectionComponent } from './private/home/options/option-section/op
         SectionTitleComponent,
         OptionSectionComponent
     ],
-    providers: [],
+    providers: [
+        provideNgxMask()
+    ],
     bootstrap: [AppComponent],
     imports: [
         BrowserModule,
@@ -89,7 +92,10 @@ import { OptionSectionComponent } from './private/home/options/option-section/op
         MatCheckboxModule,
         MatSelectModule,
         MatMenuModule,
-        MatTabsModule
+        MatTabsModule,
+        NgxMaskDirective,
+        NgxMaskPipe
     ]
+    
 })
 export class AppModule { }

@@ -2,6 +2,25 @@ import { Component, Input, OnInit } from '@angular/core'
 import { MatTableDataSource } from '@angular/material/table'
 import { MLMsgFromAddSectionOption } from 'src/app/msg/MLMsgOptions'
 import { UiServiceService } from 'src/app/services/ui-service.service'
+import "../../../../core/extensions"
+
+class OptionItem extends MLMsgFromAddSectionOption {
+    public proposedValue: string | undefined = undefined
+
+    constructor(option: MLMsgFromAddSectionOption) {
+        super(
+            option.section,
+            option.description,
+            option.name,
+            option.optionType,
+            option.help,
+            option.currentValue,
+            option.defaultValue,
+            option.advanced
+        )
+        console.log("Option type:", option.name, option.optionType)
+    }
+}
 
 @Component({
     selector: 'app-option-section',
@@ -16,7 +35,7 @@ export class OptionSectionComponent implements OnInit {
     constructor(public uiService: UiServiceService) {}
 
     ngOnInit(): void {
-        this.dataSource = new MatTableDataSource<MLMsgFromAddSectionOption>(this.options)
+        this.dataSource = new MatTableDataSource<MLMsgFromAddSectionOption>(this.options.map(o => new OptionItem(o)))
     }
 
     computeDescription(option: MLMsgFromAddSectionOption): string {
@@ -38,5 +57,25 @@ export class OptionSectionComponent implements OnInit {
             return option.help.charAt(0).toUpperCase() + option.help.slice(1) + "."
         else
             return option.help.charAt(0).toUpperCase() + option.help.slice(1)
+    }
+
+    isString(option: OptionItem): Boolean {
+        return option.optionType.caseInsensitiveCompare("string")
+    }
+
+    isInteger(option: OptionItem): Boolean {
+        return option.optionType.caseInsensitiveCompare("int") || option.optionType.caseInsensitiveCompare("integer")
+    }
+
+    isIp(option: OptionItem): Boolean {
+        return option.optionType.caseInsensitiveCompare("ip")
+    }
+
+    isBool(option: OptionItem): Boolean {
+        return option.optionType.caseInsensitiveCompare("bool")
+    }
+
+    isFloat(option: OptionItem): Boolean {
+        return option.optionType.caseInsensitiveCompare("float")
     }
 }
