@@ -16,10 +16,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-String.prototype.caseInsensitiveCompare = function(s: string): boolean {
-    if (!s)
-        return true
-    return this.toLowerCase() == s.toLowerCase()
+interface String {
+    caseInsensitiveCompare(s: string): boolean;
 }
-
-export {}

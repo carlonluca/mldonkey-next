@@ -59,23 +59,23 @@ export class OptionSectionComponent implements OnInit {
             return option.help.charAt(0).toUpperCase() + option.help.slice(1)
     }
 
-    isString(option: OptionItem): Boolean {
+    isString(option: OptionItem): boolean {
         return option.optionType.caseInsensitiveCompare("string")
     }
 
-    isInteger(option: OptionItem): Boolean {
+    isInteger(option: OptionItem): boolean {
         return option.optionType.caseInsensitiveCompare("int") || option.optionType.caseInsensitiveCompare("integer")
     }
 
-    isIp(option: OptionItem): Boolean {
+    isIp(option: OptionItem): boolean {
         return option.optionType.caseInsensitiveCompare("ip")
     }
 
-    isBool(option: OptionItem): Boolean {
+    isBool(option: OptionItem): boolean {
         return option.optionType.caseInsensitiveCompare("bool")
     }
 
-    isFloat(option: OptionItem): Boolean {
+    isFloat(option: OptionItem): boolean {
         return option.optionType.caseInsensitiveCompare("float")
     }
 }
