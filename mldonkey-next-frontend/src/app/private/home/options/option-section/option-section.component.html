@@ -56,8 +56,29 @@
         <th mat-header-cell *matHeaderCellDef>Entry</th>
         <td mat-cell *matCellDef="let option; let isEven = even" [ngClass]="{'alternate': isEven }">
             <p class="title"><b>{{ computeDescription(option) }}</b></p>
-            <mat-form-field subscriptSizing="dynamic">
+            <mat-form-field
+                *ngIf="isString(option) || isInteger(option) || isIp(option) || isBool(option) || isFloat(option) || isStringList(option)"
+                subscriptSizing="dynamic">
                 <input matInput type="text" *ngIf="isString(option)" [value]="option.currentValue" />
+                <input matInput type="text" *ngIf="isIp(option)" mask="IP" [ngModel]="option.currentValue" />
+                <input matInput type="number" *ngIf="isInteger(option)" [value]="option.currentValue" />
+                <input matInput type="number" *ngIf="isFloat(option)" [value]="option.currentValue" />
+                <mat-chip-grid #chipGrid *ngIf="isStringList(option)" aria-label="Enter items">
+                    <mat-chip-row *ngFor="let v of this.computeList(option)" [editable]="true"
+                        (removed)="removeItem(v, option)" (edited)="editItem($event, v, option)"
+                        [aria-description]="'press enter to edit ' + v">
+                        {{v}}
+                        <button matChipRemove [attr.aria-label]="'remove ' + v">
+                            <mat-icon>cancel</mat-icon>
+                        </button>
+                    </mat-chip-row>
+                    <input placeholder="New item..." [matChipInputFor]="chipGrid"
+                        (matChipInputTokenEnd)="addItem($event, option)" />
+                </mat-chip-grid>
+                <mat-select *ngIf="isBool(option)" [value]="option.currentValue.toLowerCase()">
+                    <mat-option value="true">true</mat-option>
+                    <mat-option value="false">false</mat-option>
+                </mat-select>
             </mat-form-field>
             <p><b>Default</b>: {{ option.defaultValue }}</p>
             <p><b>Type</b>: {{ option.type }}</p>

@@ -145,10 +145,10 @@ export class OptionSectionComponent implements OnInit {
     }
 
     listToArray(values: string): string[] {
-        return values.split(" ")
+        return values.split(" ").filter(s => s)
     }
 
     listFromArray(values: string[]): string {
-        return values.join(" ")
+        return values.filter(s => s).join(" ")
     }
 }
