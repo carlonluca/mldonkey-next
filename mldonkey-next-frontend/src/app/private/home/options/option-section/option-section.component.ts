@@ -24,8 +24,8 @@ import { MatChipEditedEvent, MatChipInputEvent } from '@angular/material/chips'
 import "../../../../core/extensions"
 
 class OptionItem extends MLMsgFromAddSectionOption {
-    public proposedValue: string | undefined = undefined
-    
+    public proposedValue: string
+
     private static implementedTypes: string[] = [
         "string",
         "int",
@@ -50,6 +50,7 @@ class OptionItem extends MLMsgFromAddSectionOption {
             option.defaultValue,
             option.advanced
         )
+        this.proposedValue = this.currentValue
         if (!OptionItem.implementedTypes.find((t) => t.caseInsensitiveCompare(option.optionType)))
             console.log(`Option ${option.name} has an unimplemented type ${option.optionType}`)
     }
@@ -63,12 +64,12 @@ class OptionItem extends MLMsgFromAddSectionOption {
 export class OptionSectionComponent implements OnInit {
     @Input() options: MLMsgFromAddSectionOption[]
 
-    dataSource = new MatTableDataSource<MLMsgFromAddSectionOption>([])
+    dataSource = new MatTableDataSource<OptionItem>([])
 
-    constructor(public uiService: UiServiceService) {}
+    constructor(public uiService: UiServiceService) { }
 
     ngOnInit(): void {
-        this.dataSource = new MatTableDataSource<MLMsgFromAddSectionOption>(this.options.map(o => new OptionItem(o)))
+        this.dataSource = new MatTableDataSource(this.options.map(o => new OptionItem(o)))
     }
 
     computeDescription(option: MLMsgFromAddSectionOption): string {
@@ -93,27 +94,35 @@ export class OptionSectionComponent implements OnInit {
     }
 
     computeList(option: OptionItem): string[] {
-        return this.listToArray(option.currentValue)
+        return this.listToArray(option.proposedValue)
     }
 
     addItem(event: MatChipInputEvent, option: OptionItem) {
         const value = (event.value || '').trim()
-        option.currentValue += " " + value
+        option.proposedValue += " " + value
     }
 
     removeItem(value: string, option: OptionItem) {
-        let values = this.listToArray(option.currentValue)
+        let values = this.listToArray(option.proposedValue)
         values = values.filter(item => item != value)
-        option.currentValue = this.listFromArray(values)
+        option.proposedValue = this.listFromArray(values)
     }
 
     editItem(event: MatChipEditedEvent, oldValue: string, option: OptionItem) {
-        const values = this.listToArray(option.currentValue)
+        const values = this.listToArray(option.proposedValue)
         const idx = values.indexOf(oldValue)
         if (idx >= 0) {
             values[idx] = event.value
-            option.currentValue = this.listFromArray(values)
+            option.proposedValue = this.listFromArray(values)
         }
+    }
+
+    editEntry(option: OptionItem, newValue: string | null | undefined) {
+        console.log(option.currentValue, "=>", newValue)
+        if (option.currentValue == newValue)
+            option.proposedValue = option.currentValue
+        else
+            option.proposedValue = newValue ?? ""
     }
 
     isString(option: OptionItem): boolean {
@@ -122,14 +131,14 @@ export class OptionSectionComponent implements OnInit {
 
     isStringList(option: OptionItem): boolean {
         return option.optionType.caseInsensitiveCompare("string list")
-        || option.optionType.caseInsensitiveCompare("range list")
-        || option.optionType.caseInsensitiveCompare("ip list")
+            || option.optionType.caseInsensitiveCompare("range list")
+            || option.optionType.caseInsensitiveCompare("ip list")
     }
 
     isInteger(option: OptionItem): boolean {
         return option.optionType.caseInsensitiveCompare("int")
-        || option.optionType.caseInsensitiveCompare("integer")
-        || option.optionType.caseInsensitiveCompare("int64")
+            || option.optionType.caseInsensitiveCompare("integer")
+            || option.optionType.caseInsensitiveCompare("int64")
     }
 
     isIp(option: OptionItem): boolean {

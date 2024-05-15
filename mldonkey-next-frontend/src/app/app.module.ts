@@ -54,7 +54,8 @@ import { MatMenuModule } from '@angular/material/menu'
 import { MatTabsModule } from '@angular/material/tabs'
 import { MatChipsModule } from '@angular/material/chips'
 import { OptionSectionComponent } from './private/home/options/option-section/option-section.component'
-import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask'
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
+import { OptionElementsComponent } from './private/home/options/option-elements/option-elements.component'
 
 @NgModule({
     declarations: [
@@ -67,7 +68,8 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask'
         StatsComponent,
         OptionsComponent,
         SectionTitleComponent,
-        OptionSectionComponent
+        OptionSectionComponent,
+        OptionElementsComponent
     ],
     providers: [
         provideNgxMask()
