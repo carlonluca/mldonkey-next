@@ -29,7 +29,7 @@
                             <mat-icon>cancel</mat-icon>
                         </button>
                     </mat-chip-row>
-                    <input placeholder="New item..." [matChipInputFor]="chipGrid"
+                    <input placeholder="New item..." [matChipInputFor]="chipGrid" autocomplete="off"
                         (matChipInputTokenEnd)="addItem($event, option)" />
                 </mat-chip-grid>
                 <mat-select *ngIf="isBool(option)" [ngModel]="option.currentValue.toLowerCase()"

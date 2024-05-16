@@ -28,3 +28,8 @@ mat-form-field {
 .highlight {
     background-color: #C1175A;
 }
+
+.mat-mdc-table tr.mat-mdc-row:hover {
+    -webkit-filter: none;
+    filter: none;
+}
