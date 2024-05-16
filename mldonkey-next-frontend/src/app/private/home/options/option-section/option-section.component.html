@@ -8,7 +8,7 @@
     <ng-container matColumnDef="value">
         <th mat-header-cell *matHeaderCellDef>Value</th>
         <td mat-cell *matCellDef="let option; let isEven = even"
-            [ngClass]="{'alternate': isEven, 'highlight': option.currentValue != option.proposedValue}">
+            [ngClass]="{'alternate': isEven, 'highlight': option.currentValue !== option.proposedValue}">
             <mat-form-field
                 *ngIf="isString(option) || isInteger(option) || isIp(option) || isBool(option) || isFloat(option) || isStringList(option)"
                 subscriptSizing="dynamic">
