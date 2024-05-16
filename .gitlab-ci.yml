@@ -2,7 +2,7 @@ stages:
   - test
 
 Test_server:
-  image: node:21-bookworm
+  image: node:22-bookworm
   stage: test
   tags:
     - pihome
