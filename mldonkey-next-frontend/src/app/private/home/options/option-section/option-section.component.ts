@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Component, Input, OnInit } from '@angular/core'
+import { EventEmitter, Component, Input, OnInit, Output } from '@angular/core'
 import { MatTableDataSource } from '@angular/material/table'
 import { MLMsgFromAddSectionOption } from 'src/app/msg/MLMsgOptions'
 import { UiServiceService } from 'src/app/services/ui-service.service'
@@ -63,7 +63,9 @@ class OptionItem extends MLMsgFromAddSectionOption {
 })
 export class OptionSectionComponent implements OnInit {
     @Input() options: MLMsgFromAddSectionOption[]
+    @Output() confChanged = new EventEmitter<boolean>(false)
 
+    confChangedValue = false
     dataSource = new MatTableDataSource<OptionItem>([])
 
     constructor(public uiService: UiServiceService) { }
@@ -97,15 +99,30 @@ export class OptionSectionComponent implements OnInit {
         return this.listToArray(option.proposedValue)
     }
 
+    refreshConfChanged() {
+        for (const option of this.dataSource.data) {
+            if (option.proposedValue !== option.currentValue) {
+                this.confChangedValue = true
+                this.confChanged.emit(true)
+                return
+            }
+        }
+        
+        this.confChangedValue = false
+        this.confChanged.emit(false)
+    }
+
     addItem(event: MatChipInputEvent, option: OptionItem) {
         const value = (event.value || '').trim()
         option.proposedValue += " " + value
+        this.refreshConfChanged()
     }
 
     removeItem(value: string, option: OptionItem) {
         let values = this.listToArray(option.proposedValue)
         values = values.filter(item => item != value)
         option.proposedValue = this.listFromArray(values)
+        this.refreshConfChanged()
     }
 
     editItem(event: MatChipEditedEvent, oldValue: string, option: OptionItem) {
@@ -115,6 +132,7 @@ export class OptionSectionComponent implements OnInit {
             values[idx] = event.value
             option.proposedValue = this.listFromArray(values)
         }
+        this.refreshConfChanged()
     }
 
     editEntry(option: OptionItem, newValue: string | null | undefined) {
@@ -123,6 +141,7 @@ export class OptionSectionComponent implements OnInit {
             option.proposedValue = option.currentValue
         else
             option.proposedValue = newValue ?? ""
+        this.refreshConfChanged()
     }
 
     isString(option: OptionItem): boolean {

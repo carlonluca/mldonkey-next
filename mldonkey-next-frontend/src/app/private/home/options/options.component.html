@@ -16,8 +16,13 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 
+<div id="toolbar-container">
+  <button mat-button mat-flat-button [disabled]="!confChanged">Cancel</button>
+  <button mat-button mat-flat-button [disabled]="!confChanged" color="primary">SAVE</button>
+</div>
+
 <mat-tab-group animationDuration="0ms">
-    <mat-tab *ngFor="let o of this.optionService.sections" [label]="o.name">
-        <app-option-section [options]="o.options"></app-option-section>
-    </mat-tab>
+  <mat-tab *ngFor="let o of this.optionService.sections" [label]="o.name">
+    <app-option-section #optionSection [options]="o.options" [id]="o.name" (confChanged)="refreshChangedConf()"></app-option-section>
+  </mat-tab>
 </mat-tab-group>

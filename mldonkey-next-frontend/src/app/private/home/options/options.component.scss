@@ -1,0 +1,14 @@
+@import "../../../css/shared.scss";
+
+#toolbar-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+button {
+    margin: $defaultMargin;
+    margin-left: 0;
+}
