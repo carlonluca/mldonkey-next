@@ -29,4 +29,14 @@ export class OptionsComponent implements AfterViewInit {
 
         this.confChanged = false
     }
+
+    submitChanges() {
+        for (let section of this.optionSections.toArray())
+            section.submitChanges()
+    }
+
+    dropChanges() {
+        for (let section of this.optionSections.toArray())
+            section.dropChanges()
+    }
 }

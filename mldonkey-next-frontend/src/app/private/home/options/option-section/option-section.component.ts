@@ -16,11 +16,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { EventEmitter, Component, Input, OnInit, Output } from '@angular/core'
+import { EventEmitter, Component, Input, OnInit, Output, ViewChildren, QueryList } from '@angular/core'
 import { MatTableDataSource } from '@angular/material/table'
 import { MLMsgFromAddSectionOption } from 'src/app/msg/MLMsgOptions'
 import { UiServiceService } from 'src/app/services/ui-service.service'
 import { MatChipEditedEvent, MatChipInputEvent } from '@angular/material/chips'
+import { MatFormField } from '@angular/material/form-field'
 import "../../../../core/extensions"
 
 class OptionItem extends MLMsgFromAddSectionOption {
@@ -64,6 +65,7 @@ class OptionItem extends MLMsgFromAddSectionOption {
 export class OptionSectionComponent implements OnInit {
     @Input() options: MLMsgFromAddSectionOption[]
     @Output() confChanged = new EventEmitter<boolean>(false)
+    @ViewChildren(MatFormField) formFields: QueryList<MatFormField>;
 
     confChangedValue = false
     dataSource = new MatTableDataSource<OptionItem>([])
@@ -178,5 +180,15 @@ export class OptionSectionComponent implements OnInit {
 
     listFromArray(values: string[]): string {
         return values.filter(s => s).join(" ")
+    }
+
+    submitChanges() {
+
+    }
+
+    dropChanges() {
+        for (const option of this.dataSource.data)
+            option.proposedValue = option.currentValue
+        this.refreshConfChanged()
     }
 }

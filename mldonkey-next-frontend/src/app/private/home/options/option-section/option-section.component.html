@@ -12,13 +12,13 @@
             <mat-form-field
                 *ngIf="isString(option) || isInteger(option) || isIp(option) || isBool(option) || isFloat(option) || isStringList(option)"
                 subscriptSizing="dynamic">
-                <input matInput type="text" *ngIf="isString(option)" [ngModel]="option.currentValue"
+                <input matInput type="text" *ngIf="isString(option)" [(ngModel)]="option.proposedValue"
                     (ngModelChange)="editEntry(option, $event)" />
-                <input matInput type="text" *ngIf="isIp(option)" mask="IP" [ngModel]="option.currentValue"
+                <input matInput type="text" *ngIf="isIp(option)" mask="IP" [(ngModel)]="option.proposedValue"
                     [dropSpecialCharacters]="false" (ngModelChange)="editEntry(option, $event)" />
-                <input matInput type="number" *ngIf="isInteger(option)" [ngModel]="option.currentValue"
+                <input matInput type="number" *ngIf="isInteger(option)" [(ngModel)]="option.proposedValue"
                     (ngModelChange)="editEntry(option, $event)" />
-                <input matInput type="number" *ngIf="isFloat(option)" [ngModel]="option.currentValue"
+                <input matInput type="number" *ngIf="isFloat(option)" [(ngModel)]="option.proposedValue"
                     (ngModelChange)="editEntry(option, $event)" />
                 <mat-chip-grid #chipGrid *ngIf="isStringList(option)" aria-label="Enter items">
                     <mat-chip-row *ngFor="let v of this.computeList(option)" [editable]="true"
@@ -32,7 +32,7 @@
                     <input placeholder="New item..." [matChipInputFor]="chipGrid" autocomplete="off"
                         (matChipInputTokenEnd)="addItem($event, option)" />
                 </mat-chip-grid>
-                <mat-select *ngIf="isBool(option)" [ngModel]="option.currentValue.toLowerCase()"
+                <mat-select *ngIf="isBool(option)" [(ngModel)]="option.proposedValue"
                     (ngModelChange)="editEntry(option, $event)">
                     <mat-option value="true">true</mat-option>
                     <mat-option value="false">false</mat-option>
@@ -65,13 +65,13 @@
             <mat-form-field
                 *ngIf="isString(option) || isInteger(option) || isIp(option) || isBool(option) || isFloat(option) || isStringList(option)"
                 subscriptSizing="dynamic">
-                <input matInput type="text" *ngIf="isString(option)" [ngModel]="option.currentValue"
+                <input matInput type="text" *ngIf="isString(option)" [(ngModel)]="option.proposedValue"
                     (ngModelChange)="editEntry(option, $event)" />
-                <input matInput type="text" *ngIf="isIp(option)" mask="IP" [ngModel]="option.currentValue"
+                <input matInput type="text" *ngIf="isIp(option)" mask="IP" [(ngModel)]="option.proposedValue"
                     [dropSpecialCharacters]="false" (ngModelChange)="editEntry(option, $event)" />
-                <input matInput type="number" *ngIf="isInteger(option)" [ngModel]="option.currentValue"
+                <input matInput type="number" *ngIf="isInteger(option)" [(ngModel)]="option.proposedValue"
                     (ngModelChange)="editEntry(option, $event)" />
-                <input matInput type="number" *ngIf="isFloat(option)" [ngModel]="option.currentValue"
+                <input matInput type="number" *ngIf="isFloat(option)" [(ngModel)]="option.proposedValue"
                     (ngModelChange)="editEntry(option, $event)" />
                 <mat-chip-grid #chipGrid *ngIf="isStringList(option)" aria-label="Enter items">
                     <mat-chip-row *ngFor="let v of this.computeList(option)" [editable]="true"
@@ -82,10 +82,10 @@
                             <mat-icon>cancel</mat-icon>
                         </button>
                     </mat-chip-row>
-                    <input placeholder="New item..." [matChipInputFor]="chipGrid"
+                    <input placeholder="New item..." [matChipInputFor]="chipGrid" autocomplete="off"
                         (matChipInputTokenEnd)="addItem($event, option)" />
                 </mat-chip-grid>
-                <mat-select *ngIf="isBool(option)" [ngModel]="option.currentValue.toLowerCase()"
+                <mat-select *ngIf="isBool(option)" [(ngModel)]="option.proposedValue"
                     (ngModelChange)="editEntry(option, $event)">
                     <mat-option value="true">true</mat-option>
                     <mat-option value="false">false</mat-option>
