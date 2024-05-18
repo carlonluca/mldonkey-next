@@ -183,7 +183,9 @@ export class OptionSectionComponent implements OnInit {
     }
 
     submitChanges() {
-
+        for (const option of this.dataSource.data)
+            option.currentValue = option.proposedValue
+        this.refreshConfChanged()
     }
 
     dropChanges() {
