@@ -31,12 +31,12 @@ export class OptionsComponent implements AfterViewInit {
     }
 
     submitChanges() {
-        for (let section of this.optionSections.toArray())
+        for (const section of this.optionSections.toArray())
             section.submitChanges()
     }
 
     dropChanges() {
-        for (let section of this.optionSections.toArray())
+        for (const section of this.optionSections.toArray())
             section.dropChanges()
     }
 }
