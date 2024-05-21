@@ -22,7 +22,7 @@
  * Date: 2023.08.14
  */
 
-import { MLUtils } from '../core/MLUtils'
+import { MLStringPair, MLUtils } from '../core/MLUtils'
 
 /**
  * Supported messages.
@@ -216,12 +216,29 @@ export abstract class MLMsg {
      * @returns 
      */
     protected appendStringList(buffer: ArrayBuffer, strings: string[]): ArrayBuffer {
-        let tmpBuff = new ArrayBuffer(0)
-        tmpBuff = this.appendInt16(tmpBuff, strings.length)
+        let ret = new ArrayBuffer(0)
+        ret = this.appendInt16(ret, strings.length)
         strings.forEach((s) => {
-            tmpBuff = this.appendString(tmpBuff, s)
+            ret = this.appendString(ret, s)
         })
-        return tmpBuff
+        return MLUtils.concatArrayBuffers(buffer, ret)
+    }
+
+    /**
+     * Appends a list a string pairs.
+     * 
+     * @param buffer 
+     * @param strings 
+     * @returns 
+     */
+    protected appendStringPair(buffer: ArrayBuffer, strings: MLStringPair[]): ArrayBuffer {
+        let ret = new ArrayBuffer(0)
+        ret = this.appendInt16(ret, strings.length)
+        strings.forEach(item => {
+            ret = this.appendString(ret, item[0])
+            ret = this.appendString(ret, item[1])
+        })
+        return MLUtils.concatArrayBuffers(buffer, ret)
     }
 
     /**

@@ -55,6 +55,10 @@ class OptionItem extends MLMsgFromAddSectionOption {
         if (!OptionItem.implementedTypes.find((t) => t.caseInsensitiveCompare(option.optionType)))
             console.log(`Option ${option.name} has an unimplemented type ${option.optionType}`)
     }
+
+    isChanged(): boolean {
+        return this.proposedValue !== null && this.proposedValue !== this.currentValue
+    }
 }
 
 @Component({

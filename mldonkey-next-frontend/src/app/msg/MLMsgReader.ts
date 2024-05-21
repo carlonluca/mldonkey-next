@@ -21,6 +21,7 @@
  * Company: -
  * Date: 2023.08.15
  */
+import { MLStringPairList } from "../core/MLUtils"
 import {
     MLTag,
     MLTagIn16,
@@ -32,9 +33,6 @@ import {
     MLTagType,
     MLTagUint32
 } from "./MLtag"
-
-export type MLStringPair = [string, string]
-export type MLStringPairList = MLStringPair[]
 
 export class MLBufferUtils {
     public static readRawData(buffer: ArrayBuffer, offset: number, length: number): [ArrayBuffer, number] {

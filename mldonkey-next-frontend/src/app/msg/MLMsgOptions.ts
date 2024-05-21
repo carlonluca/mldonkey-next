@@ -22,7 +22,8 @@
  * Date: 2024.05.03
  */
 import { MLUPdateable } from "../core/MLUpdateable"
-import { MLMsgFrom, MLMessageTypeFrom } from "./MLMsg"
+import { MLStringPair } from "../core/MLUtils"
+import { MLMsgFrom, MLMessageTypeFrom, MLMsgTo, MLMessageTypeTo } from "./MLMsg"
 import { MLMsgReader } from "./MLMsgReader"
 
 export class MLMsgFromOptionsInfo extends MLMsgFrom {
@@ -80,5 +81,17 @@ export class MLMsgFromAddSectionOption extends MLMsgFrom implements MLUPdateable
             defaultValue,
             advanced
         )
+    }
+}
+
+export class MLMsgToSaveOptions extends MLMsgTo {
+    constructor(public options: MLStringPair[]) {
+        super(MLMessageTypeTo.T_SAVE_OPTIONS_QUERY)
+    }
+
+    public override toBuffer(): ArrayBuffer {
+        let ret = new ArrayBuffer(0)
+        ret = this.appendStringPair(ret, this.options)
+        return this.createEnvelope(ret)
     }
 }

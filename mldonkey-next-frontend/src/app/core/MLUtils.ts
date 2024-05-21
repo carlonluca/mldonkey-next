@@ -21,7 +21,10 @@
  * Company: -
  * Date: 2023.08.14
  */
-import prettyBytes from "pretty-bytes";
+import prettyBytes from "pretty-bytes"
+
+export type MLStringPair = [string, string]
+export type MLStringPairList = MLStringPair[]
 
 export class MLUtils {
     /**
