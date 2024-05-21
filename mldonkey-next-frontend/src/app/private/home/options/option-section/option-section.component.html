@@ -1,7 +1,8 @@
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="!this.uiService.mobileLayout.value">
     <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>Name</th>
-        <td mat-cell *matCellDef="let option; let isEven = even" [ngClass]="{'alternate': isEven }">
+        <td mat-cell *matCellDef="let option; let isEven = even"
+            [ngClass]="{'alternate': isEven, 'highlight': option.currentValue !== option.proposedValue}">
             <b>{{ computeDescription(option) }}</b>
         </td>
     </ng-container>
@@ -43,13 +44,15 @@
     </ng-container>
     <ng-container matColumnDef="default">
         <th mat-header-cell *matHeaderCellDef>Default</th>
-        <td mat-cell *matCellDef="let option; let isEven = even" [ngClass]="{'alternate': isEven }">
+        <td mat-cell *matCellDef="let option; let isEven = even"
+            [ngClass]="{'alternate': isEven, 'highlight': option.currentValue !== option.proposedValue}">
             {{ option.defaultValue }}
         </td>
     </ng-container>
     <ng-container matColumnDef="type">
         <th mat-header-cell *matHeaderCellDef>Type</th>
-        <td mat-cell *matCellDef="let option; let isEven = even" [ngClass]="{'alternate': isEven }">
+        <td mat-cell *matCellDef="let option; let isEven = even"
+            [ngClass]="{'alternate': isEven, 'highlight': option.currentValue !== option.proposedValue}">
             {{ option.type }}
         </td>
     </ng-container>
@@ -60,7 +63,8 @@
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="this.uiService.mobileLayout.value">
     <ng-container matColumnDef="value">
         <th mat-header-cell *matHeaderCellDef>Entry</th>
-        <td mat-cell *matCellDef="let option; let isEven = even" [ngClass]="{'alternate': isEven }">
+        <td mat-cell *matCellDef="let option; let isEven = even"
+            [ngClass]="{'alternate': isEven, 'highlight': option.currentValue !== option.proposedValue}">
             <p class="title"><b>{{ computeDescription(option) }}</b></p>
             <mat-form-field
                 *ngIf="isString(option) || isInteger(option) || isIp(option) || isBool(option) || isFloat(option) || isStringList(option)"
