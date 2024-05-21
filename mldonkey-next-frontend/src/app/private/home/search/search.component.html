@@ -20,7 +20,7 @@
     <div id="query-container" [ngClass]="{ 'flex-column': this.uiService.mobileLayout.value}">
         <mat-form-field id="searchForm" subscriptSizing="dynamic">
             <input matInput spellcheck="false" type="text" id="searchInput" class="toolbar-item" name="searchInput"
-                placeholder="Enter a query here..." [(ngModel)]="searchText">
+                placeholder="Enter a query here..." [(ngModel)]="searchText" autocomplete="off">
         </mat-form-field>
         <button mat-raised-button id="search-button" class="toolbar-item" (click)="search()"
             [disabled]="searchText.length <= 0">
