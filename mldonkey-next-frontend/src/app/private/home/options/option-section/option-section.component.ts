@@ -158,6 +158,7 @@ export class OptionSectionComponent implements OnInit {
         return option.optionType.caseInsensitiveCompare("string list")
             || option.optionType.caseInsensitiveCompare("range list")
             || option.optionType.caseInsensitiveCompare("ip list")
+            || option.optionType.caseInsensitiveCompare("int list")
     }
 
     isInteger(option: OptionItem): boolean {
