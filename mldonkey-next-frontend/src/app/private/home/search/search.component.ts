@@ -46,6 +46,8 @@ import {
     faMagnifyingGlass
 } from '@fortawesome/free-solid-svg-icons'
 import { UiServiceService } from 'src/app/services/ui-service.service'
+import { MLMessageTypeFrom } from 'src/app/msg/MLMsg'
+import { MLMsgFromConsole } from 'src/app/msg/MLMsgConsole'
 
 @Component({
     selector: 'app-search',

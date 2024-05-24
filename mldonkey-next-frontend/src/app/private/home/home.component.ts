@@ -21,7 +21,7 @@
  * Company: -
  * Date: 14.08.2023
  */
-import { Component, VERSION } from '@angular/core'
+import { Component, OnInit, VERSION } from '@angular/core'
 import { Router } from '@angular/router'
 import {
     faDownload,
@@ -29,7 +29,8 @@ import {
     faServer,
     faChartSimple,
     faGears,
-    faDoorOpen
+    faDoorOpen,
+    faMessage
 } from '@fortawesome/free-solid-svg-icons'
 import { StorageService } from 'src/app/services/storage.service'
 import { WebSocketService } from 'src/app/websocket-service.service'
@@ -37,6 +38,7 @@ import packageJson from '../../../../package.json'
 import { UiServiceService } from 'src/app/services/ui-service.service'
 import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
 import { OptionsService } from 'src/app/services/options.service'
+import { ConsoleService } from 'src/app/services/console.service'
 
 @Component({
     selector: 'app-home',
@@ -53,6 +55,7 @@ export class HomeComponent {
     faChartSimple = faChartSimple
     faGears = faGears
     faDoorOpen = faDoorOpen
+    faMessage = faMessage
     version = packageJson.version
     versionAngular = VERSION
 
@@ -62,13 +65,13 @@ export class HomeComponent {
         private router: Router,
         private storage: StorageService,
         private optionService: OptionsService,
-        public uiService: UiServiceService)
-        {
-            this.subscriptions.add(
-                this.uiService.mobileLayout.observable.subscribe(() => this.refreshOpenedState())
-            )
-            this.refreshOpenedState()
-        }
+        private consoleService: ConsoleService,
+        public uiService: UiServiceService) {
+        this.subscriptions.add(
+            this.uiService.mobileLayout.observable.subscribe(() => this.refreshOpenedState())
+        )
+        this.refreshOpenedState()
+    }
 
     logout() {
         this.storage.setLoginData(null)
