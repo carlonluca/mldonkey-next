@@ -22,14 +22,13 @@ import { MLConnectionState, WebSocketService } from '../websocket-service.servic
 import { MLMessageTypeFrom } from '../msg/MLMsg'
 import { MLMsgFromConsole } from '../msg/MLMsgConsole'
 import { MLObservableVariable } from '../core/MLObservableVariable'
-import { wsLogger } from '../core/MLLogger'
 
 @Injectable({
     providedIn: 'root'
 })
 export class ConsoleService {
     subscriptions: MLSubscriptionSet = new MLSubscriptionSet()
-    messages: string = ""
+    messages = ""
     console = new MLObservableVariable<string[]>([])
 
     constructor(public websocketService: WebSocketService) {

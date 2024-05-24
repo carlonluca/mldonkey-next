@@ -21,7 +21,7 @@
  * Company: -
  * Date: 14.08.2023
  */
-import { Component, OnInit, VERSION } from '@angular/core'
+import { Component, VERSION } from '@angular/core'
 import { Router } from '@angular/router'
 import {
     faDownload,
