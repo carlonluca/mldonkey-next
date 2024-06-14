@@ -56,7 +56,8 @@ import { MatChipsModule } from '@angular/material/chips'
 import { OptionSectionComponent } from './private/home/options/option-section/option-section.component'
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask'
 import { OptionElementsComponent } from './private/home/options/option-elements/option-elements.component'
-import { ConsoleComponent } from './private/home/console/console.component'
+import { ConsoleComponent } from './private/home/console/console.component';
+import { SysInfoComponent } from './private/home/sysinfo/sysinfo.component'
 
 @NgModule({
     declarations: [
@@ -71,7 +72,8 @@ import { ConsoleComponent } from './private/home/console/console.component'
         SectionTitleComponent,
         OptionSectionComponent,
         OptionElementsComponent,
-        ConsoleComponent
+        ConsoleComponent,
+        SysInfoComponent
     ],
     providers: [
         provideNgxMask()

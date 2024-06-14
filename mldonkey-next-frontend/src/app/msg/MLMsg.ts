@@ -86,7 +86,8 @@ export enum MLMessageTypeFrom {
     T_UPLOAD_FILES           = 55,
     T_PENDING                = 56,
     T_SEARCH                 = 57,
-    T_VERSION                = 58
+    T_VERSION                = 58,
+    T_SYSINFO                = 60
 }
 
 export enum MLMessageTypeTo {
@@ -158,7 +159,8 @@ export enum MLMessageTypeTo {
     T_INTERESTED_IN_SOURCES  = 64,
     T_GET_VERSION            = 65,
     T_SERVER_RENAME          = 66,
-    T_SERVER_SET_PREFERRED   = 67
+    T_SERVER_SET_PREFERRED   = 67,
+    T_GET_SYSINFO            = 69
 }
 
 

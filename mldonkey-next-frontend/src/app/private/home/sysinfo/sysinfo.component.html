@@ -1,0 +1,34 @@
+<!--
+  This file is part of mldonkey-next.
+
+  Copyright (c) 2024 Luca Carlon
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, version 3.
+
+  This program is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<table mat-table [dataSource]="dataSourceBuildInfo" class="mat-elevation-z8">
+    <ng-container matColumnDef="key">
+        <th mat-header-cell *matHeaderCellDef>Property</th>
+        <td mat-cell *matCellDef="let pair; let isEven = even" [ngClass]="{'alternate': isEven }">
+            <p>{{ pair.label }}</p>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="value">
+        <th mat-header-cell *matHeaderCellDef>Value</th>
+        <td mat-cell *matCellDef="let pair; let isEven = even" [ngClass]="{'alternate': isEven }">
+            <p>{{ pair.value }}</p>
+        </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="[ 'key', 'value' ]"></tr>
+    <tr mat-row *matRowDef="let row; columns: [ 'key', 'value' ];"></tr>
+</table>

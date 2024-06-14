@@ -33,6 +33,7 @@ import { StatsComponent } from './private/home/stats/stats.component'
 import { OptionsComponent } from './private/home/options/options.component'
 import { PublicComponent } from './public/public.component'
 import { ConsoleComponent } from './private/home/console/console.component'
+import { SysInfoComponent } from './private/home/sysinfo/sysinfo.component'
 
 const routes: Routes = [
     {
@@ -75,6 +76,10 @@ const routes: Routes = [
             path: "console",
             canActivate: [ AuthGuard ],
             component: ConsoleComponent
+        }, {
+            path: "sysinfo",
+            canActivate: [ AuthGuard ],
+            component: SysInfoComponent
         }]
     }
 ]

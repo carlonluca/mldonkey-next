@@ -30,7 +30,8 @@ import {
     faChartSimple,
     faGears,
     faDoorOpen,
-    faMessage
+    faMessage,
+    faComputer
 } from '@fortawesome/free-solid-svg-icons'
 import { StorageService } from 'src/app/services/storage.service'
 import { WebSocketService } from 'src/app/websocket-service.service'
@@ -39,6 +40,7 @@ import { UiServiceService } from 'src/app/services/ui-service.service'
 import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
 import { OptionsService } from 'src/app/services/options.service'
 import { ConsoleService } from 'src/app/services/console.service'
+import { SysinfoService } from 'src/app/services/sysinfo.service'
 
 @Component({
     selector: 'app-home',
@@ -56,6 +58,7 @@ export class HomeComponent {
     faGears = faGears
     faDoorOpen = faDoorOpen
     faMessage = faMessage
+    faComputer = faComputer
     version = packageJson.version
     versionAngular = VERSION
 
@@ -66,6 +69,7 @@ export class HomeComponent {
         private storage: StorageService,
         private optionService: OptionsService,
         private consoleService: ConsoleService,
+        private sysInfoService: SysinfoService,
         public uiService: UiServiceService) {
         this.subscriptions.add(
             this.uiService.mobileLayout.observable.subscribe(() => this.refreshOpenedState())
