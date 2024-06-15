@@ -16,17 +16,20 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 
+<br/>
+<h2>Build information</h2>
+
 <table mat-table [dataSource]="dataSourceBuildInfo" class="mat-elevation-z8">
     <ng-container matColumnDef="key">
         <th mat-header-cell *matHeaderCellDef>Property</th>
-        <td mat-cell *matCellDef="let pair; let isEven = even" [ngClass]="{'alternate': isEven }">
-            <p>{{ pair.label }}</p>
+        <td mat-cell *matCellDef="let pair; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+            <div class="wrap-anywhere alternate-row-content"><b>{{ pair.label }}</b></div>
         </td>
     </ng-container>
     <ng-container matColumnDef="value">
         <th mat-header-cell *matHeaderCellDef>Value</th>
-        <td mat-cell *matCellDef="let pair; let isEven = even" [ngClass]="{'alternate': isEven }">
-            <p>{{ pair.value }}</p>
+        <td mat-cell *matCellDef="let pair; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+            <div class="wrap-anywhere alternate-row-content">{{ pair.value }}</div>
         </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="[ 'key', 'value' ]"></tr>
