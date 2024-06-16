@@ -18,7 +18,7 @@
 
 import { Component, OnInit } from '@angular/core'
 import { MatTableDataSource } from '@angular/material/table'
-import { faDoorOpen, faHelmetSafety, faPersonRunning } from '@fortawesome/free-solid-svg-icons'
+import { faDoorOpen, faHardDrive, faHelmetSafety, faPersonRunning } from '@fortawesome/free-solid-svg-icons'
 import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
 import { MLMsgFromSysInfo } from 'src/app/msg/MLMsgSysInfo'
 import { SysinfoService } from 'src/app/services/sysinfo.service'
@@ -36,6 +36,15 @@ class PortData {
     network: string
     port: number
     type: string
+}
+
+class ShareData {
+    dir: string
+    strategy: string
+    used: number
+    free: number
+    percFree: number
+    filesystem: string
 }
 
 class Key {
@@ -58,10 +67,12 @@ export class SysInfoComponent implements OnInit {
     dataSourceBuildInfo = new MatTableDataSource<RowData>([])
     dataSourceRunInfo = new MatTableDataSource<RowData>([])
     dataSourcePortInfo = new MatTableDataSource<PortData>([])
+    dataSourceShareInfo = new MatTableDataSource<ShareData>([])
     subscriptions = new MLSubscriptionSet()
     faHelmetSafety = faHelmetSafety
     faPersonRunning = faPersonRunning
     faDoorOpen = faDoorOpen
+    faHardDrive = faHardDrive
 
     constructor(public sysinfoService: SysinfoService) {}
 
@@ -72,9 +83,51 @@ export class SysInfoComponent implements OnInit {
                     this.refreshBuildInfo(sysInfo)
                     this.refreshRunInfo(sysInfo)
                     this.refreshPortInfo(sysInfo)
+                    this.refreshShareInfo(sysInfo)
                 }
             })
         )
+    }
+
+    private refreshShareInfo(sysInfos: MLMsgFromSysInfo) {
+        const info = sysInfos.info
+        const items: ShareData[] = []
+        const keyRegex = /dir_(.+)/
+        const valueRegex = /(.+)\|(\d+)\|(\d+)\|(\d+)\|(.+)/
+        for (const infoData of info.keys()) {
+            if (!infoData.startsWith("dir_"))
+                continue
+            
+            const match1 = infoData.match(keyRegex)
+            const dirString = match1 ? match1[1] : null
+            if (!dirString)
+                continue
+
+            const value = info.get(infoData)
+            if (!value)
+                continue
+            const match2 = value.match(valueRegex)
+            if (!match2)
+                continue
+            
+            const strategy = match2[1]
+            const diskused = match2[2]
+            const diskfree = match2[3]
+            const percfree = match2[4]
+            const filesystem = match2[5]
+
+            const portData: ShareData = {
+                dir: dirString,
+                strategy: strategy,
+                used: parseInt(diskused),
+                free: parseInt(diskfree),
+                percFree: parseInt(percfree),
+                filesystem: filesystem
+            }
+            items.push(portData)
+        }
+
+        this.dataSourceShareInfo.data = items
     }
 
     private refreshBuildInfo(sysInfos: MLMsgFromSysInfo) {
