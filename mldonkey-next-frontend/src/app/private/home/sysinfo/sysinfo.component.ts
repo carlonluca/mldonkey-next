@@ -18,7 +18,7 @@
 
 import { Component, OnInit } from '@angular/core'
 import { MatTableDataSource } from '@angular/material/table'
-import { faHelmetSafety, faPersonRunning } from '@fortawesome/free-solid-svg-icons'
+import { faDoorOpen, faHelmetSafety, faPersonRunning } from '@fortawesome/free-solid-svg-icons'
 import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
 import { MLMsgFromSysInfo } from 'src/app/msg/MLMsgSysInfo'
 import { SysinfoService } from 'src/app/services/sysinfo.service'
@@ -30,6 +30,12 @@ class RowData {
     key: string
     label: string
     value: string
+}
+
+class PortData {
+    network: string
+    port: number
+    type: string
 }
 
 class Key {
@@ -51,9 +57,11 @@ class FormattableKey {
 export class SysInfoComponent implements OnInit {
     dataSourceBuildInfo = new MatTableDataSource<RowData>([])
     dataSourceRunInfo = new MatTableDataSource<RowData>([])
+    dataSourcePortInfo = new MatTableDataSource<PortData>([])
     subscriptions = new MLSubscriptionSet()
     faHelmetSafety = faHelmetSafety
     faPersonRunning = faPersonRunning
+    faDoorOpen = faDoorOpen
 
     constructor(public sysinfoService: SysinfoService) {}
 
@@ -63,6 +71,7 @@ export class SysInfoComponent implements OnInit {
                 if (sysInfo) {
                     this.refreshBuildInfo(sysInfo)
                     this.refreshRunInfo(sysInfo)
+                    this.refreshPortInfo(sysInfo)
                 }
             })
         )
@@ -246,6 +255,42 @@ export class SysInfoComponent implements OnInit {
         }]
         for (const property of properties)
             this.addKeyValuePair(property.key, property.label, sysInfo, this.dataSourceRunInfo.data, property.format)
+    }
+
+    private refreshPortInfo(sysInfo: MLMsgFromSysInfo) {
+        const info = sysInfo.info
+        const items: PortData[] = []
+        const keyRegex = /port_(\d+)/
+        const valueRegex = /(.+)\|(.+)/
+        for (const infoData of info.keys()) {
+            if (!infoData.startsWith("port_"))
+                continue
+            
+            const match1 = infoData.match(keyRegex)
+            const portString = match1 ? match1[1] : null
+            if (!portString)
+                continue
+            const port = parseInt(portString)
+
+            const value = info.get(infoData)
+            if (!value)
+                continue
+            const match2 = value.match(valueRegex)
+            if (!match2)
+                continue
+            
+            const net = match2[1]
+            const type = match2[2]
+
+            const portData: PortData = {
+                port: port,
+                type: type,
+                network: net
+            }
+            items.push(portData)
+        }
+
+        this.dataSourcePortInfo.data = items
     }
 
     private addValueIfNeeded(key: Key, infos: MLMsgFromSysInfo, list: RowData[]) {
