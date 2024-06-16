@@ -16,12 +16,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
-import { faHelmetSafety } from '@fortawesome/free-solid-svg-icons';
-import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet';
-import { MLMsgFromSysInfo } from 'src/app/msg/MLMsgSysInfo';
-import { SysinfoService } from 'src/app/services/sysinfo.service';
+import { Component, OnInit } from '@angular/core'
+import { MatTableDataSource } from '@angular/material/table'
+import { faHelmetSafety, faPersonRunning } from '@fortawesome/free-solid-svg-icons'
+import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
+import { MLMsgFromSysInfo } from 'src/app/msg/MLMsgSysInfo'
+import { SysinfoService } from 'src/app/services/sysinfo.service'
+import { DateTime } from 'luxon'
+import { MLUtils } from 'src/app/core/MLUtils'
+import prettyBytes from 'pretty-bytes'
 
 class RowData {
     key: string
@@ -34,6 +37,12 @@ class Key {
     label: string
 }
 
+class FormattableKey {
+    key: string
+    label: string
+    format: (s: string) => string
+}
+
 @Component({
     selector: 'app-sysinfo',
     templateUrl: './sysinfo.component.html',
@@ -41,22 +50,26 @@ class Key {
 })
 export class SysInfoComponent implements OnInit {
     dataSourceBuildInfo = new MatTableDataSource<RowData>([])
+    dataSourceRunInfo = new MatTableDataSource<RowData>([])
     subscriptions = new MLSubscriptionSet()
     faHelmetSafety = faHelmetSafety
+    faPersonRunning = faPersonRunning
 
     constructor(public sysinfoService: SysinfoService) {}
 
     ngOnInit(): void {
         this.subscriptions.add(
             this.sysinfoService.sysInfo.observable.subscribe(sysInfo => {
-                if (sysInfo)
+                if (sysInfo) {
                     this.refreshBuildInfo(sysInfo)
+                    this.refreshRunInfo(sysInfo)
+                }
             })
         )
     }
 
     private refreshBuildInfo(sysInfos: MLMsgFromSysInfo) {
-        const properties: Key[] = [
+        const properties = [
             { key: "buildinfo_version_core", label: "Core version" },
             { key: "buildinfo_version_scm", label: "SCM version" },
             { key: "buildinfo_version_ocaml", label: "ocaml compiler version" },
@@ -90,17 +103,177 @@ export class SysInfoComponent implements OnInit {
             this.addValueIfNeeded(properties[i], sysInfos, this.dataSourceBuildInfo.data)
     }
 
+    private refreshRunInfo(sysInfo: MLMsgFromSysInfo) {
+        const info = sysInfo.info
+        const properties: FormattableKey[] = [{
+            key: "runinfo_host_machine",
+            label: "Host machine",
+            format: s => s
+        }, {
+            key: "runinfo_host_machine_supported",
+            label: "Host machine supported",
+            format: s => this.displayBoolean(s, false)
+        }, {
+            key: "runinfo_user",
+            label: "Logged in user",
+            format: (s: string) => s
+        }, {
+            key: "runinfo_user_emptypwd",
+            label: "Password protected account",
+            format: (s: string) => this.displayBoolean(s, true)
+        }, {
+            key: "runinfo_core_start_time",
+            label: "Startup time",
+            format: (s: string) => this.displayUnixTimestamp(s)
+        }, {
+            key: "runinfo_core_uptime",
+            label: "Uptime",
+            format: (s: string) => {
+                const uptimeSecs = parseInt(s)
+                return MLUtils.prettyFormat(uptimeSecs*1000)
+            }
+        }, {
+            key: "runinfo_core_user",
+            label: "Running as",
+            format: (s: string) => {
+                const group = info.get("runinfo_core_group")
+                const parts = []
+                if (s)
+                    parts.push(s)
+                else
+                    parts.push("<unknown user>")
+                if (group)
+                    parts.push(group)
+                else
+                    parts.push("<unknown group>")
+                return parts.join(":")
+            }
+        }, {
+            key: "runinfo_net_donkey",
+            label: "Donkey network enabled",
+            format: s => this.displayBoolean(s, false)
+        }, {
+            key: "runinfo_net_overnet",
+            label: "Overnet network enabled",
+            format: s => this.displayBoolean(s, false)
+        }, {
+            key: "runinfo_net_kademlia",
+            label: "Kademlia network enabled",
+            format: s => this.displayBoolean(s, false)
+        }, {
+            key: "runinfo_net_bt",
+            label: "BitTorrent network enabled",
+            format: s => this.displayBoolean(s, false)
+        }, {
+            key: "runinfo_net_dc",
+            label: "DirectConnect network enabled",
+            format: s => this.displayBoolean(s, false)
+        }, {
+            key: "runinfo_net_ft",
+            label: "FastTrack network enabled",
+            format: s => this.displayBoolean(s, false)
+        }, {
+            key: "runinfo_net_gt",
+            label: "Gnutella network enabled",
+            format: s => this.displayBoolean(s, false)
+        }, {
+            key: "runinfo_net_gt2",
+            label: "Gnutella2 network enabled",
+            format: s => this.displayBoolean(s, false)
+        }, {
+            key: "runinfo_net_filetp",
+            label: "FileTP network enabled",
+            format: s => this.displayBoolean(s, false)
+        }, {
+            key: "runinfo_server_usage",
+            label: "Server usage",
+            format: s => this.displayBoolean(s, false)
+        }, {
+            key: "runinfo_geoip",
+            label: "Geoip enabled",
+            format: s => this.displayBoolean(s, false)
+        }, {
+            key: "runinfo_bloc_local",
+            label: "IP blocking",
+            format: s => {
+                const parts = []
+                if (s)
+                    parts.push(`local: ${s} ranges`)
+                if (info.get("runinfo_bloc_web"))
+                    parts.push(`web: ${info.get("runinfo_bloc_web")} ranges`)
+                return parts.join(" - ")
+            }
+        }, {
+            key: "runinfo_dns",
+            label: "DNS is working",
+            format: s => this.displayBoolean(s, false)
+        }, {
+            key: "runinfo_lang",
+            label: "Language",
+            format: s => s
+        }, {
+            key: "runinfo_locale",
+            label: "Locale",
+            format: s => s
+        }, {
+            key: "runinfo_tz",
+            label: "Server time zone",
+            format: s => s
+        }, {
+            key: "runinfo_max_string",
+            label: "Max string length",
+            format: s => s
+        }, {
+            key: "runinfo_word_size",
+            label: "Size of word",
+            format: s => s
+        }, {
+            key: "runinfo_max_arr_size",
+            label: "Max array size",
+            format: s => s
+        }, {
+            key: "runinfo_max_int_size",
+            label: "Max integer size",
+            format: s => s
+        }, {
+            key: "runinfo_max_fds",
+            label: "Max open file descriptors",
+            format: s => s
+        }, {
+            key: "runinfo_max_file_size",
+            label: "Max file size",
+            format: s => prettyBytes(parseInt(s))
+        }]
+        for (const property of properties)
+            this.addKeyValuePair(property.key, property.label, sysInfo, this.dataSourceRunInfo.data, property.format)
+    }
+
     private addValueIfNeeded(key: Key, infos: MLMsgFromSysInfo, list: RowData[]) {
         let value = infos.info.get(key.key)?.trim() ?? "?"
+        const lvalue = value.toLocaleLowerCase()
         if (value.length <= 0)
             value = "None"
-        if (value.toLocaleLowerCase() == "true")
-            value = "✓"
-        if (value.toLocaleLowerCase() == "false")
-            value = "✗"
+        if (lvalue == "true" || lvalue == "false")
+            value = this.displayBoolean(lvalue, false)
         const idx = list.findIndex(el => el.key === key.key)
         if (idx < 0)
             list.push({ key: key.key, label: key.label, value: value })
+        else if (list[idx].value !== value)
+            list[idx].value = value
+    }
+
+    private addKeyValuePair(key: string, label: string, infos: MLMsgFromSysInfo, list: RowData[], format: (s: string) => string) {
+        let value = infos.info.get(key)
+        if (!value)
+            return
+        value = format(value)
+        const idx = list.findIndex(el => el.key === key)
+        if (idx < 0)
+            list.push({
+                key: key,
+                label: label,
+                value: value
+            })
         else if (list[idx].value !== value)
             list[idx].value = value
     }
@@ -113,5 +286,17 @@ export class SysInfoComponent implements OnInit {
             list.splice(0, 0, { key: "buildinfo_version_build_machine", label: "Built on", value: value })
         else if (list[0].value !== value)
             list[0].value = value
+    }
+
+    private displayBoolean(s: string, inv: boolean) {
+        return (s.toLocaleLowerCase() == "true") ? (inv ? "✗" : "✓") : (inv ? "✓" : "✗")
+    }
+
+    private displayUnixTimestamp(s: string | undefined): string {
+        if (!s)
+            return ""
+        const timestamp = parseInt(s)
+        const date = DateTime.fromSeconds(timestamp)
+        return date.toLocaleString(DateTime.DATETIME_FULL)
     }
 }

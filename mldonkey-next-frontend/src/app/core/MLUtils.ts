@@ -77,4 +77,26 @@ export class MLUtils {
             return "" + size
         return prettyBytes(Number(size))
     }
+
+    public static prettyFormat(millis: number): string {
+        const totalSeconds = Math.floor(millis / 1000)
+        const seconds = totalSeconds % 60
+        const totalMinutes = Math.floor(totalSeconds / 60)
+        const minutes = totalMinutes % 60
+        const totalHours = Math.floor(totalMinutes / 60)
+        const hours = totalHours % 24
+        const days = Math.floor(totalHours / 24)
+
+        const parts = []
+        if (days > 0)
+            parts.push(`${days} ${days === 1 ? 'day' : 'days'}`)
+        if (hours > 0)
+            parts.push(`${hours} ${hours === 1 ? 'hour' : 'hours'}`)
+        if (minutes > 0)
+            parts.push(`${minutes} ${minutes === 1 ? 'minute' : 'minutes'}`)
+        if (seconds > 0)
+            parts.push(`${seconds} ${seconds === 1 ? 'second' : 'seconds'}`)
+
+        return parts.join(', ')
+    }
 }
