@@ -31,7 +31,9 @@
     <ng-container matColumnDef="value">
         <th mat-header-cell *matHeaderCellDef>Value</th>
         <td mat-cell *matCellDef="let pair; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-            <div class="wrap-anywhere alternate-row-content">{{ pair.value }}</div>
+            <div class="wrap-anywhere alternate-row-content"
+                [ngClass]="{'red-text': pair.value === '✗', 'green-text': pair.value === '✓' }">{{ pair.value
+                }}</div>
         </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="[ 'key', 'value' ]"></tr>
@@ -53,7 +55,8 @@
     <ng-container matColumnDef="value">
         <th mat-header-cell *matHeaderCellDef>Value</th>
         <td mat-cell *matCellDef="let pair; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-            <div class="wrap-anywhere alternate-row-content">{{ pair.value }}</div>
+            <div class="wrap-anywhere alternate-row-content"
+                [ngClass]="{'red-text': pair.value === '✗', 'green-text': pair.value === '✓' }">{{ pair.value }}</div>
         </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="[ 'key', 'value' ]"></tr>

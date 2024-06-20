@@ -3,6 +3,8 @@ $dark2: #303030;
 $sectionFontSize: 21px;
 $defaultMargin: 10px;
 $textColor: white;
+$green-color: green;
+$red-color: red;
 
 .wrap-anywhere {
     word-break: break-all;
@@ -10,4 +12,12 @@ $textColor: white;
 
 .table-mobile-td {
     padding: $defaultMargin;
+}
+
+.red-text {
+    color: $red-color;
+}
+
+.green-text {
+    color: $green-color;
 }
