@@ -91,7 +91,6 @@ export class SysInfoComponent implements OnInit {
 
     private refreshShareInfo(sysInfos: MLMsgFromSysInfo) {
         const info = sysInfos.info
-        const items: ShareData[] = []
         const keyRegex = /dir_(.+)/
         const valueRegex = /(.+)\|(\d+)\|(\d+)\|(\d+)\|(.+)/
         for (const infoData of info.keys()) {
@@ -116,18 +115,26 @@ export class SysInfoComponent implements OnInit {
             const percfree = match2[4]
             const filesystem = match2[5]
 
-            const portData: ShareData = {
-                dir: dirString,
-                strategy: strategy,
-                used: parseInt(diskused),
-                free: parseInt(diskfree),
-                percFree: parseInt(percfree),
-                filesystem: filesystem
+            const idx = this.dataSourceShareInfo.data.findIndex(el => el.dir === dirString)
+            if (idx < 0) {
+                this.dataSourceShareInfo.data.push({
+                    dir: dirString,
+                    strategy: strategy,
+                    used: parseInt(diskused),
+                    free: parseInt(diskfree),
+                    percFree: parseInt(percfree),
+                    filesystem: filesystem
+                })
+                this.dataSourceShareInfo = new MatTableDataSource(this.dataSourceShareInfo.data)
             }
-            items.push(portData)
+            else {
+                this.dataSourceShareInfo.data[idx].strategy = strategy
+                this.dataSourceShareInfo.data[idx].used = parseInt(diskused)
+                this.dataSourceShareInfo.data[idx].free = parseInt(diskfree)
+                this.dataSourceShareInfo.data[idx].percFree = parseInt(percfree)
+                this.dataSourceShareInfo.data[idx].filesystem = filesystem
+            }
         }
-
-        this.dataSourceShareInfo.data = items
     }
 
     private refreshBuildInfo(sysInfos: MLMsgFromSysInfo) {
@@ -312,7 +319,6 @@ export class SysInfoComponent implements OnInit {
 
     private refreshPortInfo(sysInfo: MLMsgFromSysInfo) {
         const info = sysInfo.info
-        const items: PortData[] = []
         const keyRegex = /port_(\d+)/
         const valueRegex = /(.+)\|(.+)/
         for (const infoData of info.keys()) {
@@ -335,15 +341,20 @@ export class SysInfoComponent implements OnInit {
             const net = match2[1]
             const type = match2[2]
 
-            const portData: PortData = {
-                port: port,
-                type: type,
-                network: net
+            const idx = this.dataSourcePortInfo.data.findIndex(el => el.port === port)
+            if (idx < 0) {
+                this.dataSourcePortInfo.data.push({
+                    port: port,
+                    type: type,
+                    network: net
+                })
+                this.dataSourcePortInfo = new MatTableDataSource(this.dataSourcePortInfo.data)
             }
-            items.push(portData)
+            else {
+                this.dataSourcePortInfo.data[idx].network = net
+                this.dataSourcePortInfo.data[idx].type = type
+            }
         }
-
-        this.dataSourcePortInfo.data = items
     }
 
     private addValueIfNeeded(key: Key, infos: MLMsgFromSysInfo, list: RowData[]) {
@@ -354,8 +365,10 @@ export class SysInfoComponent implements OnInit {
         if (lvalue == "true" || lvalue == "false")
             value = this.displayBoolean(lvalue, false)
         const idx = list.findIndex(el => el.key === key.key)
-        if (idx < 0)
+        if (idx < 0) {
             list.push({ key: key.key, label: key.label, value: value })
+            this.dataSourceBuildInfo = new MatTableDataSource(list)
+        }
         else if (list[idx].value !== value)
             list[idx].value = value
     }
@@ -366,12 +379,14 @@ export class SysInfoComponent implements OnInit {
             return
         value = format(value)
         const idx = list.findIndex(el => el.key === key)
-        if (idx < 0)
+        if (idx < 0) {
             list.push({
                 key: key,
                 label: label,
                 value: value
             })
+            this.dataSourceRunInfo = new MatTableDataSource(list)
+        }
         else if (list[idx].value !== value)
             list[idx].value = value
     }
