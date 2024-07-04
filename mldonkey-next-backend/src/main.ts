@@ -23,14 +23,16 @@
  */
 
 import WebSocket from 'ws'
-import { logger } from './core/MLLogger'
-import { MLBridgeManager } from './core/MLBridgeManager'
-import { IncomingMessage } from 'http';
 import express from "express"
 import path from 'path'
 import http from 'http'
+import * as fs from 'fs'
+import { logger } from './core/MLLogger'
+import { MLBridgeManager } from './core/MLBridgeManager'
+import { IncomingMessage } from 'http'
 
 const wss = new WebSocket.Server({ port: 4002 });
+const wssLog = new WebSocket.Server({ port: 4003 })
 const bridgeManager = new MLBridgeManager();
 
 wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
@@ -48,7 +50,47 @@ wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
     })
 })
 
-console.log('WebSocket server listening on port: 4002');
+logger.info('WebSocket server listening on port: 4002')
+
+fs.readFile(`/var/lib/mldonkey/downloads.ini`, {
+    encoding : 'utf-8'
+}, (err: NodeJS.ErrnoException | null, data: string) => {
+    if (err) {
+        logger.warn(`Cannot read mlnet conf file: ${err.message}`)
+        return
+    }
+
+    const regex = /log_file\s*=\s*"([^"]*)"/
+    const match = data.match(regex)
+    let logFile = "mlnet.log"
+    if (match && match[1])
+        logFile = match[1]
+    
+    logFile = `/var/lib/mldonkey/${logFile}`
+    wssLog.on("connection", (ws: WebSocket, req: IncomingMessage) => {
+        logger.info(`Client connected: ${req.socket.remoteAddress} ${ws}`)
+        if (!fs.existsSync(logFile)) {
+            ws.send("")
+            ws.close()
+            return
+        }
+        const fileStream = fs.createReadStream(logFile, { encoding: 'utf8', start: 0 })
+        fileStream.on('data', (chunk) => ws.send(chunk) )
+        fileStream.on('end', () => ws.close())
+        fileStream.on('error', () => ws.close())
+        ws.on('close', () => {
+            logger.info("WebSocket closed")
+            fileStream.close()
+        })
+        ws.on('error', (_ws: WebSocket, err: Error) => {
+            logger.warn(`WebSocket failed: ${err.message}`)
+            fileStream.close()
+        })
+    })
+
+    logger.debug(`mldonkey setup to store logs in ${logFile}`)
+    logger.info("WebSocket server listening on port: 4003")
+})
 
 const app = express()
 const port = process.env.MLDONKEY_NEXT_WEBAPP_PORT || 4081
@@ -61,4 +103,4 @@ app.use("/", express.static(webappPath))
 
 const server = http.createServer(app)
 server.listen(port, () =>
-    console.log(`HTTP server listening on: http://localhost:${port}`))
+    logger.info(`HTTP server listening on: http://localhost:${port}`))
