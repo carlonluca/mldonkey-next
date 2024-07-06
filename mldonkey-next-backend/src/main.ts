@@ -30,6 +30,7 @@ import * as fs from 'fs'
 import { logger } from './core/MLLogger'
 import { MLBridgeManager } from './core/MLBridgeManager'
 import { IncomingMessage } from 'http'
+import { Tail } from 'tail'
 
 const wss = new WebSocket.Server({ port: 4002 });
 const wssLog = new WebSocket.Server({ port: 4003 })
@@ -74,17 +75,23 @@ fs.readFile(`/var/lib/mldonkey/downloads.ini`, {
             ws.close()
             return
         }
-        const fileStream = fs.createReadStream(logFile, { encoding: 'utf8', start: 0 })
-        fileStream.on('data', (chunk) => ws.send(chunk) )
-        fileStream.on('end', () => ws.close())
-        fileStream.on('error', () => ws.close())
+        const tail = new Tail(logFile, {
+            separator: /[\r]{0,1}\n/,
+            fromBeginning: true,
+            follow: true
+        })
+        tail.on("line", (data: string) => ws.send(data + "\n"))
+        tail.on("error", (error: any) => {
+            logger.warn(`Error occurred following log file: ${error}`)
+            ws.close()
+        })
         ws.on('close', () => {
             logger.info("WebSocket closed")
-            fileStream.close()
+            tail.unwatch()
         })
         ws.on('error', (_ws: WebSocket, err: Error) => {
             logger.warn(`WebSocket failed: ${err.message}`)
-            fileStream.close()
+            tail.unwatch()
         })
     })
 
