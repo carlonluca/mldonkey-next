@@ -10,6 +10,10 @@ Desktop             |  Mobile
 
 mldonkey is currently a bit outdated and requires a specific setup to work properly. This is why I typically use it in docker: https://github.com/carlonluca/docker-mldonkey. mldonkey-next is provided as a dev version of that image, so you can install it by using one of the tags of that image. To choose a proper tag for your use case, refer to [this table](https://bugfreeblog.duckdns.org/docker-images-for-the-mldonkey-service).
 
+Using mldonkey-next without docker is not currently supported. 
+
+More information on how to install mldonkey-next can be found in the docker repo: https://github.com/carlonluca/docker-mldonkey.
+
 ## Webapp
 
 The new mldonkey-next gui is available in the container on port 4081. The old webapp is still available on port 4080. You can use both apps, even at the same time.
