@@ -24,6 +24,7 @@
 
 import WebSocket from 'ws'
 import express from "express"
+import cookieParser from 'cookie-parser'
 import path from 'path'
 import http from 'http'
 import * as fs from 'fs'
@@ -31,10 +32,12 @@ import { logger } from './core/MLLogger'
 import { MLBridgeManager } from './core/MLBridgeManager'
 import { IncomingMessage } from 'http'
 import { Tail } from 'tail'
+import crypto from 'crypto'
 
 const wss = new WebSocket.Server({ port: 4002 });
 const wssLog = new WebSocket.Server({ port: 4003 })
-const bridgeManager = new MLBridgeManager();
+const bridgeManager = new MLBridgeManager()
+const logToken = crypto.randomBytes(16).toString('hex')
 
 wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
     logger.info(`Client connected: ${req.socket.remoteAddress} ${ws}`)
@@ -103,10 +106,17 @@ const app = express()
 const port = process.env.MLDONKEY_NEXT_WEBAPP_PORT || 4081
 const webappPath = process.env.MLDONKEY_NEXT_WEBAPP_ROOT
 
-app.get("/", function(req, res) {
-    res.sendFile(path.join(webappPath, 'index.html'))
+app.use(cookieParser())
+app.use((req, res, next) => {
+    if (req.path.includes("/home/corelogs")) {
+        logger.debug("Add cookie")
+        res.cookie('log-token', logToken, { httpOnly: true })
+    }
+    next()
 })
 app.use("/", express.static(webappPath))
+app.get("/", (req, res) => res.sendFile(path.join(webappPath, 'index.html')))
+app.use((req, res, next) => res.redirect('/'))
 
 const server = http.createServer(app)
 server.listen(port, () =>
