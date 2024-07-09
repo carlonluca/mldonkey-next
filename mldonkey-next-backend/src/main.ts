@@ -25,6 +25,7 @@
 import WebSocket from 'ws'
 import express from "express"
 import cookieParser from 'cookie-parser'
+import cookie from 'cookie'
 import path from 'path'
 import http from 'http'
 import * as fs from 'fs'
@@ -72,6 +73,14 @@ fs.readFile(`/var/lib/mldonkey/downloads.ini`, {
     
     logFile = `/var/lib/mldonkey/${logFile}`
     wssLog.on("connection", (ws: WebSocket, req: IncomingMessage) => {
+        const cookies = cookie.parse(req.headers.cookie || '')
+        const token = cookies.logtoken
+        if (token !== logToken) {
+            logger.warn("Client refused")
+            ws.close()
+            return
+        }
+
         logger.info(`Client connected: ${req.socket.remoteAddress} ${ws}`)
         if (!fs.existsSync(logFile)) {
             ws.send("")
@@ -110,7 +119,7 @@ app.use(cookieParser())
 app.use((req, res, next) => {
     if (req.path.includes("/home/corelogs")) {
         logger.debug("Add cookie")
-        res.cookie('log-token', logToken, { httpOnly: true })
+        res.cookie('logtoken', logToken, { httpOnly: true })
     }
     next()
 })
