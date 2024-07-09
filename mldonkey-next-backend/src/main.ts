@@ -93,7 +93,7 @@ fs.readFile(`/var/lib/mldonkey/downloads.ini`, {
             follow: true
         })
         tail.on("line", (data: string) => ws.send(data + "\n"))
-        tail.on("error", (error: any) => {
+        tail.on("error", (error) => {
             logger.warn(`Error occurred following log file: ${error}`)
             ws.close()
         })
@@ -125,6 +125,7 @@ app.use((req, res, next) => {
 })
 app.use("/", express.static(webappPath))
 app.get("/", (req, res) => res.sendFile(path.join(webappPath, 'index.html')))
+/* eslint-disable @typescript-eslint/no-unused-vars */
 app.use((req, res, next) => res.redirect('/'))
 
 const server = http.createServer(app)
