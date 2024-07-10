@@ -75,7 +75,7 @@ fs.readFile(`/var/lib/mldonkey/downloads.ini`, {
     wssLog.on("connection", (ws: WebSocket, req: IncomingMessage) => {
         const cookies = cookie.parse(req.headers.cookie || '')
         const token = cookies.logtoken
-        if (token !== logToken) {
+        if (process.env.ML_DISABLE_LOGS_AUTH != "1" && token !== logToken) {
             logger.warn("Client refused")
             ws.close()
             return
