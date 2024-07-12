@@ -31,7 +31,8 @@ import {
     faGears,
     faDoorOpen,
     faMessage,
-    faComputer
+    faComputer,
+    faFileLines
 } from '@fortawesome/free-solid-svg-icons'
 import { StorageService } from 'src/app/services/storage.service'
 import { WebSocketService } from 'src/app/websocket-service.service'
@@ -59,6 +60,7 @@ export class HomeComponent {
     faDoorOpen = faDoorOpen
     faMessage = faMessage
     faComputer = faComputer
+    faFileLines = faFileLines
     version = packageJson.version
     versionAngular = VERSION
 

@@ -34,6 +34,7 @@ import { OptionsComponent } from './private/home/options/options.component'
 import { PublicComponent } from './public/public.component'
 import { ConsoleComponent } from './private/home/console/console.component'
 import { SysInfoComponent } from './private/home/sysinfo/sysinfo.component'
+import { CorelogsComponent } from './private/home/corelogs/corelogs.component'
 
 const routes: Routes = [
     {
@@ -80,6 +81,10 @@ const routes: Routes = [
             path: "sysinfo",
             canActivate: [ AuthGuard ],
             component: SysInfoComponent
+        }, {
+            path: "corelogs",
+            canActivate: [ AuthGuard ],
+            component: CorelogsComponent
         }]
     }
 ]

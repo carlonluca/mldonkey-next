@@ -57,7 +57,9 @@ import { OptionSectionComponent } from './private/home/options/option-section/op
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask'
 import { OptionElementsComponent } from './private/home/options/option-elements/option-elements.component'
 import { ConsoleComponent } from './private/home/console/console.component';
-import { SysInfoComponent } from './private/home/sysinfo/sysinfo.component'
+import { SysInfoComponent } from './private/home/sysinfo/sysinfo.component';
+import { CorelogsComponent } from './private/home/corelogs/corelogs.component'
+import { ScrollToBottomDirective } from './private/home/corelogs/scroll'
 
 @NgModule({
     declarations: [
@@ -73,7 +75,9 @@ import { SysInfoComponent } from './private/home/sysinfo/sysinfo.component'
         OptionSectionComponent,
         OptionElementsComponent,
         ConsoleComponent,
-        SysInfoComponent
+        SysInfoComponent,
+        CorelogsComponent,
+        ScrollToBottomDirective
     ],
     providers: [
         provideNgxMask()
@@ -103,7 +107,9 @@ import { SysInfoComponent } from './private/home/sysinfo/sysinfo.component'
         NgxMaskDirective,
         NgxMaskPipe,
         MatChipsModule
+    ],
+    exports: [
+        ScrollToBottomDirective
     ]
-    
 })
 export class AppModule { }
