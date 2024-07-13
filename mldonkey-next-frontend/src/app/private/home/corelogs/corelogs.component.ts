@@ -22,10 +22,15 @@
  * Date: 2024.07.07
  */
 
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, Renderer2 } from '@angular/core'
 import { interval } from 'rxjs'
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket'
 import { environment } from 'src/environments/environment'
+
+class LogLine {
+    public id: number = 0
+    public line: string = ""
+}
 
 @Component({
     selector: 'app-corelogs',
@@ -35,9 +40,11 @@ import { environment } from 'src/environments/environment'
 export class CorelogsComponent implements OnInit, OnDestroy {
     @ViewChild('scrollContainer') private scrollContainer: ElementRef
 
+    lastId = 0
     buffer: string[] = []
-    shownLogLines: string[] = []
     websocket: WebSocketSubject<string> | null = null
+
+    constructor(private renderer: Renderer2) { }
 
     ngOnInit(): void {
         this.websocket = webSocket<string>({
@@ -48,8 +55,14 @@ export class CorelogsComponent implements OnInit, OnDestroy {
         this.websocket.subscribe({
             next: (data: string) => this.handleLine(data)
         })
-        interval(1000).subscribe(() => {
-            this.shownLogLines = this.shownLogLines.concat(this.buffer)
+        interval(500).subscribe(() => {
+            this.buffer.forEach((e) => {
+                const paragraph = this.renderer.createElement('p')
+                const textNode = this.renderer.createText(e)
+                this.renderer.appendChild(paragraph, textNode)
+                this.renderer.appendChild(this.scrollContainer.nativeElement, paragraph)
+            })
+            this.scrollToBottom()
             this.buffer = []
         })
     }
@@ -60,5 +73,17 @@ export class CorelogsComponent implements OnInit, OnDestroy {
 
     handleLine(line: string) {
         this.buffer.push(line)
+    }
+
+    trackByLogId(index: number, log: LogLine) {
+        return log.id
+    }
+
+    private scrollToBottom(): void {
+        try {
+            this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight
+        } catch (err) {
+            console.error(err);
+        }
     }
 }
