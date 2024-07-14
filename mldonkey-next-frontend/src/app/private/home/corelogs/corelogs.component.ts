@@ -26,11 +26,8 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild, Renderer2 } from '
 import { interval } from 'rxjs'
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket'
 import { environment } from 'src/environments/environment'
-
-class LogLine {
-    public id: number = 0
-    public line: string = ""
-}
+import { ScrollToBottomDirective } from './scroll'
+import { faPersonWalkingArrowRight } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
     selector: 'app-corelogs',
@@ -38,11 +35,15 @@ class LogLine {
     styleUrls: ['./corelogs.component.scss']
 })
 export class CorelogsComponent implements OnInit, OnDestroy {
-    @ViewChild('scrollContainer') private scrollContainer: ElementRef
+    @ViewChild('scrollContainer') scrollContainer: ElementRef
+    @ViewChild(ScrollToBottomDirective) scrollDirective: ScrollToBottomDirective
+
+    faPersonWalkingArrowRight = faPersonWalkingArrowRight
 
     lastId = 0
     buffer: string[] = []
     websocket: WebSocketSubject<string> | null = null
+    follow = true
 
     constructor(private renderer: Renderer2) { }
 
@@ -56,13 +57,12 @@ export class CorelogsComponent implements OnInit, OnDestroy {
             next: (data: string) => this.handleLine(data)
         })
         interval(500).subscribe(() => {
-            this.buffer.forEach((e) => {
+            this.buffer.forEach(e => {
                 const paragraph = this.renderer.createElement('p')
                 const textNode = this.renderer.createText(e)
                 this.renderer.appendChild(paragraph, textNode)
                 this.renderer.appendChild(this.scrollContainer.nativeElement, paragraph)
             })
-            this.scrollToBottom()
             this.buffer = []
         })
     }
@@ -75,15 +75,13 @@ export class CorelogsComponent implements OnInit, OnDestroy {
         this.buffer.push(line)
     }
 
-    trackByLogId(index: number, log: LogLine) {
-        return log.id
+    onScroll(_event: WheelEvent) {
+        this.scrollDirective.follow = false
+        this.follow = false
     }
 
-    private scrollToBottom(): void {
-        try {
-            this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight
-        } catch (err) {
-            console.error(err);
-        }
+    doFollow() {
+        this.scrollDirective.follow = true
+        this.follow = true
     }
 }

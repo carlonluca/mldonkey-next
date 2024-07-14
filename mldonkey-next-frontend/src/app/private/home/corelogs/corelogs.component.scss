@@ -22,6 +22,8 @@
  * Date: 2024.07.07
  */
 
+@import "../../../css/shared.scss";
+
 p {
     margin: 0px;
 }
@@ -29,4 +31,10 @@ p {
 .scroll-container {
     overflow-y: auto;
     height: 100%;
+}
+
+#toolbar {
+    position: absolute;
+    right: calc($defaultMargin*4);
+    bottom: calc($defaultMargin*4);
 }

@@ -16,5 +16,11 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<div appScrollToBottom #scrollContainer class="scroll-container">
+<div appScrollToBottom #scrollContainer (wheel)="onScroll($event)" class="scroll-container">
+</div>
+
+<div id="toolbar">
+    <button id="follow-button" mat-fab extended [disabled]="this.follow" (click)="this.doFollow()">
+        <fa-icon [icon]="faPersonWalkingArrowRight"></fa-icon>
+    </button>
 </div>
