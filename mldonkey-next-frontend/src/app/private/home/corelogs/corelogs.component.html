@@ -16,11 +16,34 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<div appScrollToBottom #scrollContainer (wheel)="onScroll($event)" class="scroll-container">
+<div id="downloading-logs" *ngIf="showWaitingMessage">
+    <p id="downloading-logs-label">Downloading logs...</p>
 </div>
 
-<div id="toolbar">
-    <button id="follow-button" mat-fab extended [disabled]="this.follow" (click)="this.doFollow()">
+<div id="log-root-view" *ngIf="!showWaitingMessage">
+    <div id="log-toolbar">
+        <mat-form-field>
+            <mat-select [(ngModel)]="selectedRange" (selectionChange)="selectedRangeChanged()">
+                <mat-option value="all">All</mat-option>
+                <mat-option value="1year">Last 365 days</mat-option>
+                <mat-option value="1month">Last 30 days</mat-option>
+                <mat-option value="1week">Last 7 days</mat-option>
+                <mat-option value="1day">Last 24 hours</mat-option>
+                <mat-option value="1hour" ngDefaultControl>Last hour</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+
+    <div id="log-view" appScrollToBottom #scrollContainer (wheel)="onScroll($event)" class="scroll-container">
+    </div>
+</div>
+
+<div id="toolbar" *ngIf="!showWaitingMessage">
+    <button mat-fab extended [disabled]="this.isAtTop()" (click)="this.scrollToTop()">
+        <fa-icon [icon]="faArrowUp"></fa-icon>
+    </button>
+
+    <button mat-fab extended [disabled]="this.follow" (click)="this.doFollow()">
         <fa-icon [icon]="faPersonWalkingArrowRight"></fa-icon>
     </button>
 </div>
