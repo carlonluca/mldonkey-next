@@ -75,7 +75,7 @@ fs.readFile(`/var/lib/mldonkey/downloads.ini`, {
     wssLog.on("connection", (ws: WebSocket, req: IncomingMessage) => {
         const cookies = cookie.parse(req.headers.cookie || '')
         const token = cookies.logtoken
-        if (process.env.ML_DISABLE_LOGS_AUTH != "1" && token !== logToken) {
+        if (process.env.MLDONKEY_DISABLE_LOGS_AUTH != "1" && token !== logToken) {
             logger.warn("Client refused")
             ws.close()
             return
@@ -89,7 +89,7 @@ fs.readFile(`/var/lib/mldonkey/downloads.ini`, {
         }
         const tail = new Tail(logFile, {
             separator: /[\r]{0,1}\n/,
-            fromBeginning: true,
+            fromBeginning: process.env.MLDONKEY_LOGS_FROM_BEGINNING == "1",
             follow: true
         })
         tail.on("line", (data: string) => ws.send(data + "\n"))
