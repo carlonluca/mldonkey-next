@@ -56,10 +56,11 @@ import { MatChipsModule } from '@angular/material/chips'
 import { OptionSectionComponent } from './private/home/options/option-section/option-section.component'
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask'
 import { OptionElementsComponent } from './private/home/options/option-elements/option-elements.component'
-import { ConsoleComponent } from './private/home/console/console.component';
-import { SysInfoComponent } from './private/home/sysinfo/sysinfo.component';
+import { ConsoleComponent } from './private/home/console/console.component'
+import { SysInfoComponent } from './private/home/sysinfo/sysinfo.component'
 import { CorelogsComponent } from './private/home/corelogs/corelogs.component'
 import { ScrollToBottomDirective } from './private/home/corelogs/scroll'
+import { MatDividerModule } from '@angular/material/divider'
 
 @NgModule({
     declarations: [
@@ -106,7 +107,8 @@ import { ScrollToBottomDirective } from './private/home/corelogs/scroll'
         MatTabsModule,
         NgxMaskDirective,
         NgxMaskPipe,
-        MatChipsModule
+        MatChipsModule,
+        MatDividerModule
     ],
     exports: [
         ScrollToBottomDirective

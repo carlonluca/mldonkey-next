@@ -1,5 +1,4 @@
 import { Directive, ElementRef, AfterContentChecked } from '@angular/core'
-import { uiLogger } from 'src/app/core/MLLogger';
 
 @Directive({
     selector: '[appScrollToBottom]'

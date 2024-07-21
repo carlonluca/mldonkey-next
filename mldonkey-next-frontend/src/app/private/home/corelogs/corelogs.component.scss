@@ -33,6 +33,10 @@ p {
     height: 100%;
 }
 
+.span-tag {
+    color: $primary-color;
+}
+
 #toolbar {
     position: absolute;
     right: calc($defaultMargin*4);
@@ -61,9 +65,26 @@ p {
 }
 
 #log-toolbar {
+    display: flex;
     flex: 0;
+    width: 100%;
+    justify-content: right;
+    align-items: center;
+    margin: 0px;
+}
+
+#log-range-selector {
+    margin: $defaultMargin;
 }
 
 #log-view {
     flex: 1;
+}
+
+#toolbar {
+    opacity: 0.8;
+}
+
+#toobar-divider {
+    margin: 0px;
 }
