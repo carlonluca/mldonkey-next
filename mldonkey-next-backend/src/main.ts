@@ -117,10 +117,7 @@ const webappPath = process.env.MLDONKEY_NEXT_WEBAPP_ROOT
 
 app.use(cookieParser())
 app.use((req, res, next) => {
-    if (req.path.includes("/home/corelogs")) {
-        logger.debug("Add cookie")
-        res.cookie('logtoken', logToken, { httpOnly: true })
-    }
+    res.cookie('logtoken', logToken, { httpOnly: true })
     next()
 })
 app.use("/", express.static(webappPath))
