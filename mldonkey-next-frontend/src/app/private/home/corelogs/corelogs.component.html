@@ -16,11 +16,15 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<div id="downloading-logs" *ngIf="showWaitingMessage">
+<div id="downloading-logs" *ngIf="showWaitingMessage && this.showError.length < 0">
     <p id="downloading-logs-label">Downloading logs...</p>
 </div>
 
-<div id="log-root-view" *ngIf="!showWaitingMessage">
+<div id="error-logs" *ngIf="this.showError.length > 0">
+    <p id="error-logs-label">{{ this.showError }}</p>
+</div>
+
+<div id="log-root-view" *ngIf="!showWaitingMessage && this.showError.length <= 0">
     <div id="log-toolbar">
         <mat-form-field id="log-range-selector" subscriptSizing="dynamic">
             <mat-select id="log-range-select" [(ngModel)]="selectedRange" (selectionChange)="selectedRangeChanged()">
@@ -40,7 +44,7 @@
     </div>
 </div>
 
-<div id="toolbar" *ngIf="!showWaitingMessage">
+<div id="toolbar" *ngIf="!showWaitingMessage && this.showError.length <= 0">
     <button mat-fab extended [disabled]="this.isAtTop()" (click)="this.scrollToTop()">
         <fa-icon [icon]="faArrowUp"></fa-icon>
     </button>

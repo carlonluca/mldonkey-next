@@ -56,6 +56,17 @@ p {
     margin: auto;
 }
 
+#error-logs {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+#error-logs-label {
+    margin: auto;
+    color: $red-color;
+}
+
 #log-root-view {
     display: flex;
     flex-direction: column;

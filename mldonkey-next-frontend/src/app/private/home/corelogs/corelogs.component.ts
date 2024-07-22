@@ -71,6 +71,7 @@ export class CorelogsComponent implements OnInit, OnDestroy {
     follow = true
     subscribed = new MLSubscriptionSet()
     showWaitingMessage = true
+    showError = ""
     selectedRange = "1hour"
 
     constructor(private renderer: Renderer2) { }
@@ -82,7 +83,8 @@ export class CorelogsComponent implements OnInit, OnDestroy {
             serializer: (b: string) => b
         })
         this.subscribed.add(this.websocket.subscribe({
-            next: (data: string) => this.handleLine(data)
+            next: (data: string) => this.handleLine(data),
+            error: (error: unknown) => this.handleError(error)
         }))
         this.subscribed.add(interval(500).subscribe(() => {
             requestAnimationFrame(() => this.processPendingLogs())
@@ -123,6 +125,11 @@ export class CorelogsComponent implements OnInit, OnDestroy {
             if (l.timestamp >= since)
                 this.toProcess.push(l)
         }
+    }
+
+    handleError(error: unknown) {
+        this.showError = "An error occurred trying to retrieve the logs."
+        this.websocket?.unsubscribe()
     }
 
     onScroll(_event: WheelEvent) {
