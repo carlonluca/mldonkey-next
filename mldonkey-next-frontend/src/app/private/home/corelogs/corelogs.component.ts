@@ -127,7 +127,7 @@ export class CorelogsComponent implements OnInit, OnDestroy {
         }
     }
 
-    handleError(error: unknown) {
+    handleError(_error: unknown) {
         this.showError = "An error occurred trying to retrieve the logs."
         this.websocket?.unsubscribe()
     }
