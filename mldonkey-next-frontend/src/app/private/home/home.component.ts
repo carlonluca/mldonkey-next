@@ -21,7 +21,7 @@
  * Company: -
  * Date: 14.08.2023
  */
-import { Component, VERSION } from '@angular/core'
+import { Component, VERSION, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
 import {
     faDownload,
@@ -42,6 +42,7 @@ import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
 import { OptionsService } from 'src/app/services/options.service'
 import { ConsoleService } from 'src/app/services/console.service'
 import { SysinfoService } from 'src/app/services/sysinfo.service'
+import { MatSidenav } from '@angular/material/sidenav'
 
 @Component({
     selector: 'app-home',
@@ -49,6 +50,8 @@ import { SysinfoService } from 'src/app/services/sysinfo.service'
     styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
+    @ViewChild(MatSidenav) sidenav: MatSidenav;
+
     private subscriptions = new MLSubscriptionSet()
 
     opened = true

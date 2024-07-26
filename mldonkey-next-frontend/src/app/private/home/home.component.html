@@ -33,7 +33,7 @@
 </mat-toolbar>
 
 <mat-sidenav-container>
-    <mat-sidenav [(opened)]="opened" [mode]="(this.uiService.mobileLayout.observable | async) ? 'over' : 'side'">
+    <mat-sidenav [(opened)]="opened" [mode]="(this.uiService.mobileLayout.observable | async) ? 'over' : 'side'" (click)="sidenav.mode === 'side' || sidenav.close()">
         <app-section-title [routerLinkValue]="['/home/download']" buttonText="Download" [iconDef]="faDownload">
         </app-section-title>
         <app-section-title [routerLinkValue]="['/home/search']" buttonText="Search" [iconDef]="faMagnifyingGlass">
