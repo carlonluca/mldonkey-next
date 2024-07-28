@@ -66,6 +66,9 @@ export class PublicComponent {
                         this.storage.setLoginData(new Credentials(this.inputUsr, this.inputPwd))
                     break
                 case MLConnectionState.S_CONNECTED: {
+                    if (!this.webSocketService.autoConnectionEnabled)
+                        return
+                    this.webSocketService.autoConnectionEnabled = false
                     this.connected = true
                     const data = this.storage.getLoginData()
                     if (data) {

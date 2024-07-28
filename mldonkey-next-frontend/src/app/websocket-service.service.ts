@@ -53,6 +53,7 @@ export class WebSocketService {
     public lastMessage: MLObservableVariable<ML.MLMsgFrom> =
         new MLObservableVariable<ML.MLMsgFrom>(new ML.MLMsgFromNone())
     public networkManager: MLNetworkManager
+    public autoConnectionEnabled = true
 
     private buffer: ArrayBuffer = new ArrayBuffer(0)
     private protocol = 0
@@ -126,10 +127,12 @@ export class WebSocketService {
 
     private onError(error: unknown): void {
         wsLogger.error('WebSocket error:', error)
+        this.connectionState.value = MLConnectionState.S_NOT_CONNECTED
     }
 
     private onClose(): void {
         wsLogger.info('WebSocket connection closed.')
+        this.connectionState.value = MLConnectionState.S_NOT_CONNECTED
     }
 
     /**

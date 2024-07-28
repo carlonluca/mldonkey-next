@@ -35,7 +35,7 @@ import {
     faFileLines
 } from '@fortawesome/free-solid-svg-icons'
 import { StorageService } from 'src/app/services/storage.service'
-import { WebSocketService } from 'src/app/websocket-service.service'
+import { MLConnectionState, WebSocketService } from 'src/app/websocket-service.service'
 import packageJson from '../../../../package.json'
 import { UiServiceService } from 'src/app/services/ui-service.service'
 import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
@@ -80,6 +80,11 @@ export class HomeComponent {
             this.uiService.mobileLayout.observable.subscribe(() => this.refreshOpenedState())
         )
         this.refreshOpenedState()
+
+        this.subscriptions.add(
+            this.webSocketService.connectionState.observable.subscribe(state => this.handleState(state))
+        )
+        this.handleState(this.webSocketService.connectionState.value)
     }
 
     logout() {
@@ -90,5 +95,11 @@ export class HomeComponent {
 
     refreshOpenedState() {
         this.opened = !this.uiService.mobileLayout.value
+    }
+
+    handleState(state: MLConnectionState) {
+        if (state == MLConnectionState.S_NOT_CONNECTED) {
+            this.router.navigate(["/"])
+        }
     }
 }
