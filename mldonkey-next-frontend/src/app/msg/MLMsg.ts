@@ -199,7 +199,8 @@ export abstract class MLMsg {
      * @param s 
      */
     protected appendString(buffer: ArrayBuffer, s: string): ArrayBuffer {
-        const sSize = s.length
+        const data = MLUtils.stringToUtf8ArrayBuffer(s)
+        const sSize = data.byteLength
         let ret = new ArrayBuffer(0)
         if (sSize >= 0xffff) {
             ret = this.appendInt16(ret, 0xffff)
@@ -207,7 +208,7 @@ export abstract class MLMsg {
         }
         else
             ret = this.appendInt16(ret, sSize)
-        return MLUtils.concatArrayBuffers(buffer, ret, MLUtils.stringToUtf8ArrayBuffer(s))
+        return MLUtils.concatArrayBuffers(buffer, ret, data)
     }
 
     /**
