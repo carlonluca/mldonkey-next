@@ -34,6 +34,7 @@ import { MLSortMode } from '../../../core/MLSortMode'
 import { DownloadingFilesService } from 'src/app/services/downloading-files.service'
 import { UiServiceService } from 'src/app/services/ui-service.service'
 import { WebSocketService } from 'src/app/websocket-service.service'
+import { faArrowDown, faPause } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
     selector: 'app-download',
@@ -53,6 +54,9 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
         new MLSortMode("size", true, "Size ↑"),
         new MLSortMode("size", false, "Size ↓")
     ]
+
+    faPause = faPause
+    faArrowDown = faArrowDown
 
     @ViewChild(MatSort) sort: MatSort
 
@@ -89,6 +93,8 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
                     return item.name
                 case "downloaded":
                     return Number(item.downloaded / 1024n)
+                case "speed":
+                    return Number(item.speed)
                 default:
                     return 0
             }
@@ -119,7 +125,7 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
         if (this.uiSerivce.mobileLayout.value)
             return ['name']
         else
-            return ['name', 'downloaded', 'size']
+            return ['name', 'downloaded', 'size', 'speed']
     }
 
     toggleSelectionEnabled() {

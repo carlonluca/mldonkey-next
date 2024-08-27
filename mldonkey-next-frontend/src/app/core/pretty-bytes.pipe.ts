@@ -33,3 +33,13 @@ export class PrettyBytesPipe implements PipeTransform {
         return MLUtils.beautifySize(value)
     }
 }
+
+@Pipe({
+    standalone: true,
+    name: 'prettyBytesSpeed'
+})
+export class PrettyBytesSpeedPipe implements PipeTransform {
+    transform(value: bigint | number): string {
+        return MLUtils.beautifySize(value) + "/s"
+    }
+}

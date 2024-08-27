@@ -43,7 +43,7 @@ import { ServersComponent } from './private/home/servers/servers.component'
 import { StatsComponent } from './private/home/stats/stats.component'
 import { OptionsComponent } from './private/home/options/options.component'
 import { FormsModule } from '@angular/forms'
-import { PrettyBytesPipe } from "./core/pretty-bytes.pipe"
+import { PrettyBytesPipe, PrettyBytesSpeedPipe } from "./core/pretty-bytes.pipe"
 import { SectionTitleComponent } from './private/home/section-title/section-title.component'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
@@ -61,6 +61,7 @@ import { SysInfoComponent } from './private/home/sysinfo/sysinfo.component'
 import { CorelogsComponent } from './private/home/corelogs/corelogs.component'
 import { ScrollToBottomDirective } from './private/home/corelogs/scroll'
 import { MatDividerModule } from '@angular/material/divider'
+import { TurtleIconComponent } from './components/turtle-icon/turtle-icon.component'
 
 @NgModule({
     declarations: [
@@ -78,7 +79,8 @@ import { MatDividerModule } from '@angular/material/divider'
         ConsoleComponent,
         SysInfoComponent,
         CorelogsComponent,
-        ScrollToBottomDirective
+        ScrollToBottomDirective,
+        TurtleIconComponent
     ],
     providers: [
         provideNgxMask()
@@ -94,6 +96,7 @@ import { MatDividerModule } from '@angular/material/divider'
         MatSidenavModule,
         FormsModule,
         PrettyBytesPipe,
+        PrettyBytesSpeedPipe,
         FontAwesomeModule,
         MatIconModule,
         MatButtonModule,
