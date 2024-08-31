@@ -35,7 +35,6 @@ import { DownloadingFilesService } from 'src/app/services/downloading-files.serv
 import { UiServiceService } from 'src/app/services/ui-service.service'
 import { WebSocketService } from 'src/app/websocket-service.service'
 import { faArrowDown, faPause } from '@fortawesome/free-solid-svg-icons'
-import { uiLogger } from 'src/app/core/MLLogger'
 
 @Component({
     selector: 'app-download',
