@@ -23,7 +23,7 @@
  */
 import { SelectionModel } from '@angular/cdk/collections'
 import { Component, ViewChild, AfterViewInit, OnInit, OnDestroy } from '@angular/core'
-import { MatSort, MatSortable } from '@angular/material/sort'
+import { MatSort, MatSortable, Sort } from '@angular/material/sort'
 import { MatTableDataSource } from '@angular/material/table'
 import { interval } from 'rxjs'
 import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
@@ -35,6 +35,7 @@ import { DownloadingFilesService } from 'src/app/services/downloading-files.serv
 import { UiServiceService } from 'src/app/services/ui-service.service'
 import { WebSocketService } from 'src/app/websocket-service.service'
 import { faArrowDown, faPause } from '@fortawesome/free-solid-svg-icons'
+import { uiLogger } from 'src/app/core/MLLogger'
 
 @Component({
     selector: 'app-download',
@@ -52,7 +53,9 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
         new MLSortMode("downloaded", true, "Downloaded ↑"),
         new MLSortMode("downloaded", false, "Downloaded ↓"),
         new MLSortMode("size", true, "Size ↑"),
-        new MLSortMode("size", false, "Size ↓")
+        new MLSortMode("size", false, "Size ↓"),
+        new MLSortMode("speed", true, "Speed ↑"),
+        new MLSortMode("speed", false, "Speed ↓")
     ]
 
     faPause = faPause
@@ -103,6 +106,32 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.subscriptions.unsubscribe(null)
+    }
+
+    onSortChange(sortState: Sort) {
+        this.sortModes.forEach(m => {
+            if (!sortState) {
+                m.selected = false
+                return
+            }
+
+            if (sortState.active !== m.id) {
+                m.selected = false
+                return
+            }
+
+            if (sortState.direction === "asc" && m.asc) {
+                m.selected = true
+                return
+            }
+
+            if (sortState.direction === "desc" && !m.asc) {
+                m.selected = true
+                return
+            }
+
+            m.selected = false
+        })
     }
 
     computeProgress(item: MLMsgDownloadElement): number {

@@ -32,7 +32,7 @@
 </div>
 
 <!-- Desktop table -->
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort *ngIf="!this.uiSerivce.mobileLayout.value">
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort *ngIf="!this.uiSerivce.mobileLayout.value" (matSortChange)="onSortChange($event)">
     <ng-container matColumnDef="select">
         <th mat-header-cell *matHeaderCellDef mat-sort-header disabled="true">
             <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
