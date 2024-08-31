@@ -110,12 +110,13 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     masterToggle() {
-        this.isAllSelected() ?
-            this.selection.clear() :
-            this.dataSource.data.forEach(row => this.selection.select(row));
+        if (this.isAllSelected())
+            this.selection.clear()
+        else
+            this.dataSource.data.forEach(row => this.selection.select(row))
     }
 
-    isAllSelected() {
+    isAllSelected(): boolean {
         const numSelected = this.selection.selected.length;
         const numRows = this.dataSource.data.length;
         return numSelected === numRows;
