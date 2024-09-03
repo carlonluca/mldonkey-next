@@ -36,6 +36,7 @@ import { MLMsgFromResultInfo, MLMsgFromSearch, MLMsgFromSearchResult } from './m
 import { wsLogger } from './core/MLLogger'
 import { MLMsgFromAddSectionOption, MLMsgFromOptionsInfo } from './msg/MLMsgOptions'
 import { MLMsgFromSysInfo } from './msg/MLMsgSysInfo'
+import { MLMsgFromClientStats } from './msg/MLMsgClientStats'
 
 export enum MLConnectionState {
     S_NOT_CONNECTED,
@@ -210,6 +211,11 @@ export class WebSocketService {
                 return [MLMsgFromOptionsInfo.fromBuffer(data), size + SIZE_HEADER, true]
             case MLMessageTypeFrom.T_ADD_SECTION_OPTION:
                 return [MLMsgFromAddSectionOption.fromBuffer(data), size + SIZE_HEADER, true]
+            case MLMessageTypeFrom.T_CLIENT_STATS:
+            case MLMessageTypeFrom.T_CLIENT_STATS_V1:
+            case MLMessageTypeFrom.T_CLIENT_STATS_V2:
+            case MLMessageTypeFrom.T_CLIENT_STATS_V3:
+                return [MLMsgFromClientStats.fromBuffer(data), size + SIZE_HEADER, true]
             case MLMessageTypeFrom.T_SYSINFO:
                 return [MLMsgFromSysInfo.fromBuffer(data), size + SIZE_HEADER, true]
             default:

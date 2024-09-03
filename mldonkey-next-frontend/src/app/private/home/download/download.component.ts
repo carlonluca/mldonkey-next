@@ -35,6 +35,9 @@ import { DownloadingFilesService } from 'src/app/services/downloading-files.serv
 import { UiServiceService } from 'src/app/services/ui-service.service'
 import { WebSocketService } from 'src/app/websocket-service.service'
 import { faArrowDown, faPause } from '@fortawesome/free-solid-svg-icons'
+import { StatsService } from 'src/app/services/stats.service'
+import prettyBytes from 'pretty-bytes'
+import { MLMsgFromClientStats } from 'src/app/msg/MLMsgClientStats'
 
 @Component({
     selector: 'app-download',
@@ -67,6 +70,7 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
     constructor(
         private websocketService: WebSocketService,
         private downloadingService: DownloadingFilesService,
+        public clientStatsService: StatsService,
         public uiSerivce: UiServiceService
     ) { }
 
@@ -191,5 +195,40 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
                 }
             }
         }
+    }
+
+    displaySizeBytes(bytes: bigint | null | undefined) {
+        if (bytes === null || bytes === undefined)
+            return "?"
+        return prettyBytes(Number(bytes))
+    }
+
+    displaySummary(stats: MLMsgFromClientStats | null): string {
+        if (!stats)
+            return `Upload: ? - Download: ?`
+
+        const totUp = stats.tcpUpSpeed + stats.udpUpSpeed
+        const totDown = stats.tcpDownSpeed + stats.udpDownSpeed
+        return `Upload: ${prettyBytes(totUp)} - Download: ${prettyBytes(totDown)}`
+    }
+
+    displayDownloadSpeed(stats: MLMsgFromClientStats | null): string {
+        if (!stats)
+            return "?"
+        const totDown = stats.tcpDownSpeed + stats.udpDownSpeed
+        return prettyBytes(totDown) + "/s"
+    }
+
+    displayUploadSpeed(stats: MLMsgFromClientStats | null): string {
+        if (!stats)
+            return "?"
+        const totUp = stats.tcpUpSpeed + stats.udpUpSpeed
+        return prettyBytes(totUp) + "/s"
+    }
+
+    displaySpeedSafe(speed: number | null | undefined) {
+        if (speed === null || speed === undefined)
+            return "?"
+        return prettyBytes(speed) + "/s"
     }
 }

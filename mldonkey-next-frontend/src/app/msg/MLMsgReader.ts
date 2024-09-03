@@ -21,7 +21,7 @@
  * Company: -
  * Date: 2023.08.15
  */
-import { MLStringPairList } from "../core/MLUtils"
+import { MLNumPairList, MLStringPairList } from "../core/MLUtils"
 import {
     MLTag,
     MLTagIn16,
@@ -62,34 +62,46 @@ export class MLBufferUtils {
         return [ret, consumed]
     }
 
-    public static readStringList(buffer: ArrayBuffer, offset: number): [string[], number] {
+    private static readList<T>(buffer: ArrayBuffer, offset: number, parseItem: (buffer: ArrayBuffer, offset: number) => [T, number]): [Array<T>, number] {
         let consumed = 0
         const [size] = this.readInt16(buffer, offset)
         consumed += 2
-        const ret: string[] = []
+        const ret: Array<T> = []
         for (let i = 0; i < size; i++) {
-            const [s, consumedString] = this.readString(buffer, offset + consumed)
-            consumed += consumedString
-            ret.push(s)
+            const [element, consumedElement] = parseItem(buffer, offset + consumed)
+            consumed += consumedElement
+            ret.push(element)
         }
 
         return [ret, consumed]
     }
 
+    public static readStringList(buffer: ArrayBuffer, offset: number): [string[], number] {
+        return this.readList(buffer, offset, (buffer: ArrayBuffer, offset: number) =>
+            this.readString(buffer, offset)
+        )
+    }
+
     public static readStringPairList(buffer: ArrayBuffer, offset: number): [MLStringPairList, number] {
-        let consumed = 0
-        const [size] = this.readInt16(buffer, offset)
-        consumed += 2
-        const ret: [string, string][] = []
-        for (let i = 0; i < size; i++) {
-            const [s1, consumedString1] = this.readString(buffer, offset + consumed)
+        return this.readList(buffer, offset, (buffer: ArrayBuffer, offset: number) => {
+            let consumed = 0
+            const [s1, consumedString1] = this.readString(buffer, offset)
             consumed += consumedString1
             const [s2, consumedString2] = this.readString(buffer, offset + consumed)
             consumed += consumedString2
-            ret.push([s1, s2])
-        }
+            return [[s1, s2], consumed]
+        })
+    }
 
-        return [ret, consumed]
+    public static readInt32PairList(buffer: ArrayBuffer, offset: number): [MLNumPairList, number] {
+        return this.readList(buffer, offset, (buffer: ArrayBuffer, offset: number) => {
+            let consumed = 0
+            const [e1, consumed1] = this.readInt32(buffer, offset)
+            consumed += consumed1
+            const [e2, consumed2] = this.readInt32(buffer, offset + consumed)
+            consumed += consumed2
+            return [[e1, e2], consumed]
+        })
     }
 
     public static readInt8(buffer: ArrayBuffer, offset: number): [number, number] {
@@ -193,6 +205,10 @@ export class MLMsgReader {
         return MLBufferUtils.readStringPairList(this.data, offset)
     }
 
+    readInt32PairList(offset: number): [MLNumPairList, number] {
+        return MLBufferUtils.readInt32PairList(this.data, offset)
+    }
+
     readString(offset: number): [string, number] {
         return MLBufferUtils.readString(this.data, offset)
     }
@@ -251,6 +267,12 @@ export class MLMsgReader {
 
     takeStringPairList(): [string, string][] {
         const [ret, consumed] = this.readStringPairList(this.offset)
+        this.offset += consumed
+        return ret
+    }
+
+    takeInt32PairList(): [number, number][] {
+        const [ret, consumed] = this.readInt32PairList(this.offset)
         this.offset += consumed
         return ret
     }

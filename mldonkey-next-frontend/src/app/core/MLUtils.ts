@@ -25,6 +25,8 @@ import prettyBytes from "pretty-bytes"
 
 export type MLStringPair = [string, string]
 export type MLStringPairList = MLStringPair[]
+export type MLNumPair = [number, number]
+export type MLNumPairList = MLNumPair[]
 
 export class MLUtils {
     /**

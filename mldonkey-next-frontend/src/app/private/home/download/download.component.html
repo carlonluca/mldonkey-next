@@ -118,3 +118,9 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
+
+<p id="summary" style="text-align: center;">
+    <b>Download</b>: {{ this.displayDownloadSpeed(this.clientStatsService.stats) }} - 
+    <b>Upload</b>: {{ this.displayUploadSpeed(this.clientStatsService.stats) }} - 
+    <b>Downloading</b>: {{ this.clientStatsService.stats?.countDownloads ?? "?" }}
+</p>
