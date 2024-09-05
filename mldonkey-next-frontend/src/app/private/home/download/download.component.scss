@@ -64,3 +64,21 @@ td {
 #summary {
     margin: $defaultMargin;
 }
+
+#aggregate-progress-bar {
+    flex: 1;
+}
+
+.default-margin {
+    margin: $defaultMargin;
+}
+
+.progress-bar-div {
+    display: flex;
+    flex-direction: row;
+    gap: $defaultMargin;
+}
+
+.flex-center {
+    align-items: center;
+}

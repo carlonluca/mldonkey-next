@@ -42,6 +42,7 @@
             <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
                 [checked]="selection.isSelected(row)"></mat-checkbox>
         </td>
+        <td mat-footer-cell *matFooterCellDef></td>
     </ng-container>
     <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
@@ -50,12 +51,18 @@
             <mat-progress-bar class="file-progress pos-relative" mode="determinate"
                 [value]="computeProgress(download)"></mat-progress-bar>
         </td>
+        <td mat-footer-cell *matFooterCellDef="let isEven = even" [ngClass]="{'alternate-row': isEven }">
+            <div class="filename-element alternate-row-content">Overall</div>
+            <mat-progress-bar class="file-progress pos-relative" mode="determinate"
+                [value]="this.downPerc"></mat-progress-bar>
+        </td>
     </ng-container>
     <ng-container matColumnDef="downloaded">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Downloaded</th>
         <td mat-cell *matCellDef="let download; let isEven = even" [ngClass]="{'alternate-row': isEven }">
             <div class="alternate-row-content">{{ download.downloaded | prettyBytes }}</div>
         </td>
+        <td mat-footer-cell *matFooterCellDef>{{ this.downProgress | prettyBytes }}</td>
     </ng-container>
     <ng-container matColumnDef="size">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Size</th>
@@ -64,6 +71,7 @@
                 {{ download.size | prettyBytes }}
             </div>
         </td>
+        <td mat-footer-cell *matFooterCellDef>{{ this.downTotal | prettyBytes }}</td>
     </ng-container>
     <ng-container matColumnDef="speed">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Speed</th>
@@ -77,9 +85,20 @@
                 {{ download.speed | prettyBytesSpeed }}
             </div>
         </td>
+        <td mat-footer-cell *matFooterCellDef="let download; let isEven = even"
+            [ngClass]="{'alternate-row': isEven, 'downloading': (this.downSpeed ?? 0) > 0 }">
+            <div class="alternate-row-content">
+                <fa-icon [icon]="this.faArrowDown" *ngIf="(this.downSpeed ?? 0) > 0"
+                    [ngClass]="{'downloading': (this.downSpeed ?? 0) > 0, 'no-margins': true}">
+                </fa-icon>
+                <app-turtle-icon *ngIf="(this.downSpeed ?? 0) <= 0"></app-turtle-icon>
+                {{ this.downSpeed| prettyBytesSpeed }}
+            </div>
+        </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
 </table>
 
 <!-- Mobile table -->
@@ -93,6 +112,7 @@
             <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
                 [checked]="selection.isSelected(row)"></mat-checkbox>
         </td>
+        <td mat-footer-cell *matFooterCellDef></td>
     </ng-container>
     <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
@@ -114,13 +134,32 @@
                 </mat-progress-bar>
             </div>
         </td>
+        <td mat-footer-cell *matFooterCellDef="let isEven = even"
+            [ngClass]="{'alternate-row': isEven, 'table-mobile-td': true }">
+            <div class="wrap-anywhere alternate-row-content">
+                <b>Overall</b><br />
+                {{ this.downProgress | prettyBytes }} of {{ this.downTotal | prettyBytes }}
+                <span class="no-margins"> - </span>
+                <fa-icon [icon]="this.faArrowDown" *ngIf="(this.downSpeed ?? 0) > 0"
+                    [ngClass]="{'downloading': this.downSpeed ?? 0 > 0, 'no-margins': true}">
+                </fa-icon>
+                <app-turtle-icon *ngIf="(this.downSpeed ?? 0) <= 0"></app-turtle-icon>
+                <span [ngClass]="{'downloading': this.downSpeed ?? 0 > 0, 'no-margins': true}">
+                    {{ this.downSpeed | prettyBytesSpeed }}
+                </span>
+                <mat-progress-bar class="file-progress pos-relative" mode="determinate"
+                    [value]="this.downPerc">
+                </mat-progress-bar>
+            </div>
+        </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
 </table>
 
 <p id="summary" style="text-align: center;">
-    <b>Download</b>: {{ this.displayDownloadSpeed(this.clientStatsService.stats) }} - 
-    <b>Upload</b>: {{ this.displayUploadSpeed(this.clientStatsService.stats) }} - 
-    <b>Downloading</b>: {{ this.clientStatsService.stats?.countDownloads ?? "?" }}
+    <b>Download</b>: {{ this.downSpeed | prettyBytesSpeed }} - 
+    <b>Upload</b>: {{ this.upSpeed | prettyBytesSpeed }} - 
+    <b>Downloading</b>: {{ this.clientStatsService.stats.value?.countDownloads ?? "?" }}
 </p>

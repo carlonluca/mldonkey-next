@@ -29,7 +29,9 @@ import { MLUtils } from "./MLUtils";
     name: 'prettyBytes'
 })
 export class PrettyBytesPipe implements PipeTransform {
-    transform(value: bigint | number): string {
+    transform(value: bigint | number | null | undefined): string {
+        if (value === null || value === undefined)
+            return "-"
         return MLUtils.beautifySize(value)
     }
 }
@@ -39,7 +41,9 @@ export class PrettyBytesPipe implements PipeTransform {
     name: 'prettyBytesSpeed'
 })
 export class PrettyBytesSpeedPipe implements PipeTransform {
-    transform(value: bigint | number): string {
+    transform(value: bigint | number | null | undefined): string {
+        if (value === null || value === undefined)
+            return "-"
         return MLUtils.beautifySize(value) + "/s"
     }
 }

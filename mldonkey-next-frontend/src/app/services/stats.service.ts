@@ -27,6 +27,7 @@ import { WebSocketService } from '../websocket-service.service'
 import { MLMessageTypeFrom } from '../msg/MLMsg'
 import { MLSubscriptionSet } from '../core/MLSubscriptionSet'
 import { MLMsgFromClientStats } from '../msg/MLMsgClientStats'
+import { MLObservableVariable } from '../core/MLObservableVariable'
 
 @Injectable({
     providedIn: 'root'
@@ -34,13 +35,17 @@ import { MLMsgFromClientStats } from '../msg/MLMsgClientStats'
 export class StatsService implements OnDestroy {
     private subscriptions = new MLSubscriptionSet()
 
-    public stats: MLMsgFromClientStats | null = null
+    public stats: MLObservableVariable<MLMsgFromClientStats | null> =
+        new MLObservableVariable<MLMsgFromClientStats | null>(null)
 
     constructor(private websocketService: WebSocketService) {
         this.subscriptions.add(
             this.websocketService.lastMessage.observable.subscribe(msg => {
                 if (msg.type === MLMessageTypeFrom.T_CLIENT_STATS) {
-                    this.stats = msg as MLMsgFromClientStats
+                    if (!this.stats)
+                        this.stats = new MLObservableVariable<MLMsgFromClientStats | null>(msg as MLMsgFromClientStats)
+                    else
+                        this.stats.value = msg as MLMsgFromClientStats
                 }
             })
         )

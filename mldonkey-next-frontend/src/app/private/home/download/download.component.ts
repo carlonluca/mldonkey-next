@@ -27,7 +27,7 @@ import { MatSort, MatSortable, Sort } from '@angular/material/sort'
 import { MatTableDataSource } from '@angular/material/table'
 import { interval } from 'rxjs'
 import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
-import { MLMsgDownloadElement } from 'src/app/data/MLDownloadFileInfo'
+import { MLMsgDownloadElement, MLMsgFromDownloadState } from 'src/app/data/MLDownloadFileInfo'
 import { MLMsgToGetDownload } from 'src/app/msg/MLMsg'
 import { MLMsgToRemoveDownload } from 'src/app/msg/MLMsgRemoveDownload'
 import { MLSortMode } from '../../../core/MLSortMode'
@@ -49,6 +49,11 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
     displayedColumns: string[] = this.displayColumns()
     selection = new SelectionModel<MLMsgDownloadElement>(true, []);
     selectionEnabled = false
+    downTotal: bigint | null = null
+    downProgress: bigint | null = null
+    downPerc = 100
+    downSpeed: number | null = null
+    upSpeed: number | null = null
     sortModes = [
         new MLSortMode("name", true, "Name (a → z)", true),
         new MLSortMode("name", false, "Name (z → a)"),
@@ -85,7 +90,13 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
             this.dataSource.data = list
             this.dataSource.sort = this.sort
             this.refreshSelection()
+            this.refreshProgress()
         }))
+        this.subscriptions.add(
+            this.clientStatsService.stats.observable.subscribe(stats => {
+                this.refreshStats(stats)
+            })
+        )
     }
 
     ngAfterViewInit() {
@@ -184,6 +195,34 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
         this.selection = new SelectionModel(true, newArray)
     }
 
+    refreshProgress() {
+        let tot: bigint = BigInt(0)
+        let done: bigint = BigInt(0)
+        this.downloadingService.downloadingFiles.elements.value.forEach(d => {
+            if (d.state !== MLMsgFromDownloadState.S_DOWNLOADING)
+                return
+            tot += d.size
+            done += d.downloaded
+        })
+
+        this.downTotal = tot
+        this.downProgress = done
+        this.downPerc = this.downTotal === BigInt(0) ? 100 : Math.min(Math.max(0, Number(this.downProgress)/Number(this.downTotal)*100), 100)
+    }
+
+    refreshStats(stats: MLMsgFromClientStats | null) {
+        if (!stats) {
+            this.downSpeed = null
+            this.upSpeed = null
+        }
+        else {
+            const totDown = stats.tcpDownSpeed + stats.udpDownSpeed
+            const totUp = stats.tcpUpSpeed + stats.udpUpSpeed
+            this.downSpeed = totDown
+            this.upSpeed = totUp
+        }
+    }
+
     sortModeClicked(sortMode: MLSortMode) {
         for (const sm of this.sortModes) {
             sm.selected = (sortMode == sm)
@@ -212,23 +251,11 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
         return `Upload: ${prettyBytes(totUp)} - Download: ${prettyBytes(totDown)}`
     }
 
-    displayDownloadSpeed(stats: MLMsgFromClientStats | null): string {
-        if (!stats)
-            return "?"
-        const totDown = stats.tcpDownSpeed + stats.udpDownSpeed
-        return prettyBytes(totDown) + "/s"
-    }
-
-    displayUploadSpeed(stats: MLMsgFromClientStats | null): string {
-        if (!stats)
-            return "?"
-        const totUp = stats.tcpUpSpeed + stats.udpUpSpeed
-        return prettyBytes(totUp) + "/s"
-    }
-
-    displaySpeedSafe(speed: number | null | undefined) {
+    displaySpeedSafe(speed: number | bigint | null | undefined) {
         if (speed === null || speed === undefined)
             return "?"
+        if (typeof(speed) === "bigint")
+            return prettyBytes(Number(speed))
         return prettyBytes(speed) + "/s"
     }
 }
