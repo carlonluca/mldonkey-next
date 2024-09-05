@@ -51,7 +51,9 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
     downTotal: bigint | null = null
     downProgress: bigint | null = null
     downPerc = 100
+    // downSpeed includes protocol overhead probably. downSpeedSum is just a sum of the downloads.
     downSpeed: number | null = null
+    downSpeedSum: number | null = null
     upSpeed: number | null = null
     sortModes = [
         new MLSortMode("name", true, "Name (a → z)", true),
@@ -194,15 +196,18 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
     refreshProgress() {
         let tot: bigint = BigInt(0)
         let done: bigint = BigInt(0)
+        let speed = 0
         this.downloadingService.downloadingFiles.elements.value.forEach(d => {
             if (d.state !== MLMsgFromDownloadState.S_DOWNLOADING)
                 return
             tot += d.size
             done += d.downloaded
+            speed += d.speed
         })
 
         this.downTotal = tot
         this.downProgress = done
+        this.downSpeedSum = speed
         this.downPerc = this.downTotal === BigInt(0) ? 100 : Math.min(Math.max(0, Number(this.downProgress)/Number(this.downTotal)*100), 100)
     }
 
