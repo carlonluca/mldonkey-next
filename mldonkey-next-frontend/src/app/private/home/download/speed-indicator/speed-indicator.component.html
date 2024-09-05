@@ -16,7 +16,7 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<div style="display: inline;" [ngClass]="{'downloading': this.speed > 0, 'no-margins': true}">
+<div style="display: inline;" [ngClass]="{'downloading': this.speed > 0, 'no-margins': true, 'bold-font': this.bold}">
     <fa-icon [icon]="this.faArrowDown" *ngIf="this.speed > 0"></fa-icon>
     <app-turtle-icon *ngIf="this.speed <= 0"></app-turtle-icon>
     {{ this.speed | prettyBytesSpeed }}
