@@ -34,10 +34,9 @@ import { MLSortMode } from '../../../core/MLSortMode'
 import { DownloadingFilesService } from 'src/app/services/downloading-files.service'
 import { UiServiceService } from 'src/app/services/ui-service.service'
 import { WebSocketService } from 'src/app/websocket-service.service'
-import { faArrowDown, faPause } from '@fortawesome/free-solid-svg-icons'
 import { StatsService } from 'src/app/services/stats.service'
-import prettyBytes from 'pretty-bytes'
 import { MLMsgFromClientStats } from 'src/app/msg/MLMsgClientStats'
+import prettyBytes from 'pretty-bytes'
 
 @Component({
     selector: 'app-download',
@@ -64,9 +63,6 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
         new MLSortMode("speed", true, "Speed ↑"),
         new MLSortMode("speed", false, "Speed ↓")
     ]
-
-    faPause = faPause
-    faArrowDown = faArrowDown
 
     @ViewChild(MatSort) sort: MatSort
 

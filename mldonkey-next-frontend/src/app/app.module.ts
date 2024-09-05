@@ -62,6 +62,7 @@ import { CorelogsComponent } from './private/home/corelogs/corelogs.component'
 import { ScrollToBottomDirective } from './private/home/corelogs/scroll'
 import { MatDividerModule } from '@angular/material/divider'
 import { TurtleIconComponent } from './components/turtle-icon/turtle-icon.component'
+import { SpeedIndicatorComponent } from './private/home/download/speed-indicator/speed-indicator.component'
 
 @NgModule({
     declarations: [
@@ -80,7 +81,8 @@ import { TurtleIconComponent } from './components/turtle-icon/turtle-icon.compon
         SysInfoComponent,
         CorelogsComponent,
         ScrollToBottomDirective,
-        TurtleIconComponent
+        TurtleIconComponent,
+        SpeedIndicatorComponent
     ],
     providers: [
         provideNgxMask()
