@@ -35,6 +35,7 @@ import { PublicComponent } from './public/public.component'
 import { ConsoleComponent } from './private/home/console/console.component'
 import { SysInfoComponent } from './private/home/sysinfo/sysinfo.component'
 import { CorelogsComponent } from './private/home/corelogs/corelogs.component'
+import { UploadComponent } from './private/home/upload/upload.component'
 
 const routes: Routes = [
     {
@@ -57,6 +58,10 @@ const routes: Routes = [
             path: "download",
             canActivate: [ AuthGuard ],
             component: DownloadComponent
+        }, {
+            path: "upload",
+            canActivate: [ AuthGuard ],
+            component: UploadComponent
         }, {
             path: "search",
             canActivate: [ AuthGuard ],

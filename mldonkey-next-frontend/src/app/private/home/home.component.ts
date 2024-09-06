@@ -32,7 +32,8 @@ import {
     faDoorOpen,
     faMessage,
     faComputer,
-    faFileLines
+    faFileLines,
+    faUpload
 } from '@fortawesome/free-solid-svg-icons'
 import { StorageService } from 'src/app/services/storage.service'
 import { MLConnectionState, WebSocketService } from 'src/app/websocket-service.service'
@@ -56,6 +57,7 @@ export class HomeComponent {
 
     opened = true
     faDownload = faDownload
+    faUpload = faUpload
     faMagnifyingGlass = faMagnifyingGlass
     faServer = faServer
     faChartSimple = faChartSimple
