@@ -21,7 +21,7 @@
  * Company: -
  * Date: 2023.08.15
  */
-import { MLNumPairList, MLStringPairList } from "../core/MLUtils"
+import { MLNumPair, MLNumPairList, MLStringPairList } from "../core/MLUtils"
 import {
     MLTag,
     MLTagIn16,
@@ -104,16 +104,22 @@ export class MLBufferUtils {
         })
     }
 
-    public static readInt8(buffer: ArrayBuffer, offset: number): [number, number] {
+    public static readInt8(buffer: ArrayBuffer, offset: number): MLNumPair {
         return [new DataView(buffer).getInt8(offset), 1]
     }
 
-    public static readInt16(buffer: ArrayBuffer, offset: number): [number, number] {
+    public static readInt16(buffer: ArrayBuffer, offset: number): MLNumPair {
         return [new DataView(buffer).getInt16(offset, true), 2]
     }
 
-    public static readInt32(buffer: ArrayBuffer, offset: number): [number, number] {
+    public static readInt32(buffer: ArrayBuffer, offset: number): MLNumPair {
         return [new DataView(buffer).getInt32(offset, true), 4]
+    }
+
+    public static readInt32List(buffer: ArrayBuffer, offset: number): [number[], number] {
+        return this.readList(buffer, offset, (buffer: ArrayBuffer, offset: number) => {
+            return this.readInt32(buffer, offset)
+        })
     }
 
     public static readInt64(buffer: ArrayBuffer, offset: number): [bigint, number] {
@@ -205,6 +211,10 @@ export class MLMsgReader {
         return MLBufferUtils.readStringPairList(this.data, offset)
     }
 
+    readInt32List(offset: number): [number[], number] {
+        return MLBufferUtils.readInt32List(this.data, offset)
+    }
+
     readInt32PairList(offset: number): [MLNumPairList, number] {
         return MLBufferUtils.readInt32PairList(this.data, offset)
     }
@@ -265,8 +275,14 @@ export class MLMsgReader {
         return ret
     }
 
-    takeStringPairList(): [string, string][] {
+    takeStringPairList(): MLStringPairList {
         const [ret, consumed] = this.readStringPairList(this.offset)
+        this.offset += consumed
+        return ret
+    }
+
+    takeInt32List(): number[] {
+        const [ret, consumed] = this.readInt32List(this.offset)
         this.offset += consumed
         return ret
     }
