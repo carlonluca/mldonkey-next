@@ -19,7 +19,9 @@ Test_webapp:
     - npx ng build
 
 Test_app:
-  image: carlonluca/qt-dev:6.7.3
+  image:
+    name: carlonluca/qt-dev:6.7.3
+    entrypoint: [""]
   stage: test_app
   tags:
     - amd64
