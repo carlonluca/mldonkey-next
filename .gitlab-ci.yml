@@ -1,9 +1,10 @@
 stages:
-  - test
+  - test_webapp
+  - test_app
 
-Test_server:
+Test_webapp:
   image: node:22-bookworm
-  stage: test
+  stage: test_webapp
   tags:
     - pihome
   script:
@@ -16,3 +17,14 @@ Test_server:
     - npm i --maxsockets 1
     - npm run lint
     - npx ng build
+
+Test_app:
+  image: carlonluca/qt-dev:6.7.3
+  stage: test_app
+  tags:
+    - amd64
+  script:
+    - mkdir -p app/build
+    - cd app/build
+    - cmake ..
+    - cmake --build .
