@@ -1,0 +1,3 @@
+[submodule "deps/lightlogger"]
+	path = deps/lightlogger
+	url = https://github.com/carlonluca/LightLogger.git
