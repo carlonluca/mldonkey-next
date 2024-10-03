@@ -1,3 +1,6 @@
 [submodule "deps/lightlogger"]
 	path = deps/lightlogger
 	url = https://github.com/carlonluca/LightLogger.git
+[submodule "deps/lqtutils"]
+	path = deps/lqtutils
+	url = https://github.com/carlonluca/lqtutils.git

@@ -24,7 +24,14 @@ project(mldonkey-next-proj VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Quick WebEngineQuick)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../deps/lqtutils ${CMAKE_CURRENT_BINARY_DIR}/lqtutils)
+
+find_package(Qt6 6.5
+    REQUIRED COMPONENTS
+        Quick
+        WebEngineQuick
+        WebSockets
+)
 
 qt_standard_project_setup(REQUIRES 6.5)
 
@@ -37,6 +44,8 @@ qt_add_qml_module(mldonkey-next
     VERSION 1.0
     QML_FILES
         Main.qml
+    SOURCES
+        mlwebsocketbridge.h mlwebsocketbridge.cpp
 )
 
 qt_add_resources(mldonkey-next "webapp"
@@ -65,11 +74,15 @@ set_target_properties(mldonkey-next PROPERTIES
 )
 
 target_include_directories(mldonkey-next PRIVATE ../deps)
-
+target_link_directories(mldonkey-next PRIVATE
+    lqtutils_build
+)
 target_link_libraries(mldonkey-next
     PRIVATE
         Qt6::Quick
         Qt6::WebEngineQuick
+        Qt6::WebSockets
+        lqtutils
 )
 
 include(GNUInstallDirs)
