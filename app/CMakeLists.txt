@@ -64,6 +64,8 @@ set_target_properties(mldonkey-next PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
+target_include_directories(mldonkey-next PRIVATE ../deps)
+
 target_link_libraries(mldonkey-next
     PRIVATE
         Qt6::Quick

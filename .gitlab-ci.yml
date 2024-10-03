@@ -5,6 +5,8 @@ stages:
 Test_webapp:
   image: node:22-bookworm
   stage: test_webapp
+  artifacts:
+    untracked: true
   tags:
     - pihome
   script:
@@ -16,13 +18,15 @@ Test_webapp:
     - cd ../mldonkey-next-frontend
     - npm i --maxsockets 1
     - npm run lint
-    - npx ng build
+    - npx ng build --output-hashing none
 
 Test_app:
   image:
     name: carlonluca/qt-dev:6.7.3
     entrypoint: [""]
   stage: test_app
+  dependencies:
+    - Test_webapp
   tags:
     - amd64
   script:

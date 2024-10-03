@@ -34,5 +34,8 @@ Window {
     WebEngineView {
         anchors.fill: parent
         url: "qrc:/index.html"
+        onJavaScriptConsoleMessage: function(level: JavaScriptConsoleMessageLevel, message: string, lineNumber: int, sourceId: string) {
+
+        }
     }
 }
