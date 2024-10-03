@@ -33,6 +33,6 @@ Window {
 
     WebEngineView {
         anchors.fill: parent
-        url: "http://bugfreeblog.duckdns.org"
+        url: "qrc:/index.html"
     }
 }

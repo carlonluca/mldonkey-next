@@ -39,6 +39,20 @@ qt_add_qml_module(mldonkey-next
         Main.qml
 )
 
+qt_add_resources(mldonkey-next "webapp"
+    PREFIX "/"
+    BASE ../mldonkey-next-frontend/dist/mldonkey-next-frontend/browser
+    FILES
+        ../mldonkey-next-frontend/dist/mldonkey-next-frontend/browser/chunk-VSA7IDHT.js
+        ../mldonkey-next-frontend/dist/mldonkey-next-frontend/browser/chunk-ZTIRTMFC.js
+        ../mldonkey-next-frontend/dist/mldonkey-next-frontend/browser/favicon.ico
+        ../mldonkey-next-frontend/dist/mldonkey-next-frontend/browser/index.html
+        ../mldonkey-next-frontend/dist/mldonkey-next-frontend/browser/main.js
+        ../mldonkey-next-frontend/dist/mldonkey-next-frontend/browser/polyfills.js
+        ../mldonkey-next-frontend/dist/mldonkey-next-frontend/browser/styles.css
+        ../mldonkey-next-frontend/dist/mldonkey-next-frontend/browser/assets/turtle.svg
+)
+
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.

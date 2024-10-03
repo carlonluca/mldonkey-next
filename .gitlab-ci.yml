@@ -26,6 +26,10 @@ Test_app:
   tags:
     - amd64
   script:
+    - cd mldonkey-next-frontend
+    - npm i --maxsockets 1
+    - npx ng build --output-hashing none
+    - cd ..
     - mkdir -p app/build
     - cd app/build
     - cmake ..
