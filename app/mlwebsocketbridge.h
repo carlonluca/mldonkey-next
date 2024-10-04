@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QWebSocketServer>
+#include <QTcpSocket>
 
 class QWebSocket;
 
@@ -20,6 +21,7 @@ signals:
 
 private:
     QWebSocket* m_socket;
+    QTcpSocket* m_tcpSocket;
 };
 
 class MLWebSocketBridgeManager : public QObject

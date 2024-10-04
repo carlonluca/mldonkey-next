@@ -6,7 +6,8 @@
 
 MLWebSocketBridge::MLWebSocketBridge(QWebSocket* socket, QObject* parent) :
     QObject(parent),
-    m_socket(socket)
+    m_socket(socket),
+    m_tcpSocket(new QTcpSocket)
 {
     connect(m_socket, &QWebSocket::disconnected,
             this, &MLWebSocketBridge::socketDisconnected);
@@ -16,6 +17,28 @@ MLWebSocketBridge::MLWebSocketBridge(QWebSocket* socket, QObject* parent) :
         qWarning() << "Socket failed:" << m_socket->errorString();
         emit socketDisconnected();
     });
+    connect(m_socket, &QWebSocket::binaryMessageReceived, this, [this] (const QByteArray& msg) {
+        qDebug() << "Sending data to mlnet core";
+        m_tcpSocket->write(msg);
+    });
+
+    // TODO: Addr and port to UI
+    connect(m_tcpSocket, &QTcpSocket::connected, this, [this] {
+        qInfo() << "Connected to 192.168.0.2:4001";
+    });
+    connect(m_tcpSocket, &QTcpSocket::readyRead, this, [this] {
+        qDebug() << "Sending data to client";
+        m_socket->sendBinaryMessage(m_tcpSocket->readAll());
+    });
+    connect(m_tcpSocket, &QTcpSocket::disconnected, this, [this] {
+        qDebug() << "Connection closed";
+        emit socketDisconnected();
+    });
+    connect(m_tcpSocket, &QTcpSocket::errorOccurred, this, [this] {
+        qWarning() << "TCP connection failed:" << m_tcpSocket->errorString();
+        emit socketDisconnected();
+    });
+    m_tcpSocket->connectToHost(QHostAddress("192.168.0.2"), 4001);
 }
 
 MLWebSocketBridge::~MLWebSocketBridge()
@@ -23,6 +46,11 @@ MLWebSocketBridge::~MLWebSocketBridge()
     if (m_socket) {
         m_socket->close();
         m_socket->deleteLater();
+    }
+
+    if (m_tcpSocket) {
+        m_tcpSocket->close();
+        m_tcpSocket->deleteLater();
     }
 }
 

@@ -26,8 +26,8 @@ import QtQuick
 import QtWebEngine
 
 Window {
-    width: 640
-    height: 480
+    width: 720
+    height: 1280
     visible: true
     title: qsTr("Hello World")
 
