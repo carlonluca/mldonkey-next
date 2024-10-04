@@ -94,7 +94,8 @@ export class PublicComponent {
                 this.storage.setLoginData(null)
         })
 
-        this.webSocketService.connect(`ws://${environment.mldonkeyWsAddr}:${environment.mldonkeyWsPort}`)
+        const wsAddr = environment.mldonkeyWsAddr.length <= 0 ? "localhost" : environment.mldonkeyWsAddr
+        this.webSocketService.connect(`ws://${wsAddr}:${environment.mldonkeyWsPort}`)
     }
 
     /**

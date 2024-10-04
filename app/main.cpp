@@ -25,19 +25,24 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QtWebEngineQuick/qtwebenginequickglobal.h>
+#include <QTimer>
+
+#include "mlwebsocketbridge.h"
 
 #define COLORING_ENABLED
 #define LOG_TAG "mldonkey-next"
 #include <lightlogger/lc_logging.h>
 lightlogger::custom_log_func lightlogger::global_log_func = log_to_default;
 
-int main(int argc, char *argv[])
+int main(int argc, char** argv)
 {
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
     QtWebEngineQuick::initialize();
     qInstallMessageHandler(lightlogger::log_handler);
 
     QGuiApplication app(argc, argv);
+
+    MLWebSocketBridgeManager bridge;
 
     QQmlApplicationEngine engine;
     QObject::connect(

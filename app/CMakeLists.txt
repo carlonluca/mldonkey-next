@@ -52,8 +52,8 @@ qt_add_resources(mldonkey-next "webapp"
     PREFIX "/"
     BASE ../mldonkey-next-frontend/dist/mldonkey-next-frontend/browser
     FILES
-        ../mldonkey-next-frontend/dist/mldonkey-next-frontend/browser/chunk-VSA7IDHT.js
-        ../mldonkey-next-frontend/dist/mldonkey-next-frontend/browser/chunk-ZTIRTMFC.js
+        ../mldonkey-next-frontend/dist/mldonkey-next-frontend/browser/chunk-COSFYJWR.js
+        ../mldonkey-next-frontend/dist/mldonkey-next-frontend/browser/chunk-6Z6LXSWS.js
         ../mldonkey-next-frontend/dist/mldonkey-next-frontend/browser/favicon.ico
         ../mldonkey-next-frontend/dist/mldonkey-next-frontend/browser/index.html
         ../mldonkey-next-frontend/dist/mldonkey-next-frontend/browser/main.js
