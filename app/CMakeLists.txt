@@ -20,7 +20,7 @@
 
 cmake_minimum_required(VERSION 3.16)
 
-project(mldonkey-next-proj VERSION 0.1 LANGUAGES CXX)
+project(mldonkey-next-proj VERSION 0.1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -31,6 +31,11 @@ find_package(Qt6 6.5
         Quick
         WebEngineQuick
         WebSockets
+)
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/version.h.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/version.h"
 )
 
 qt_standard_project_setup(REQUIRES 6.5)
@@ -46,6 +51,7 @@ qt_add_qml_module(mldonkey-next
         Main.qml
     SOURCES
         mlwebsocketbridge.h mlwebsocketbridge.cpp
+        mlsettings.h mlsettings.cpp
 )
 
 qt_add_resources(mldonkey-next "webapp"
@@ -73,7 +79,10 @@ set_target_properties(mldonkey-next PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
-target_include_directories(mldonkey-next PRIVATE ../deps)
+target_include_directories(mldonkey-next PRIVATE
+    ../deps
+    "${CMAKE_CURRENT_BINARY_DIR}"
+)
 target_link_directories(mldonkey-next PRIVATE
     lqtutils_build
 )

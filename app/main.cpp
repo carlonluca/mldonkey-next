@@ -27,7 +27,11 @@
 #include <QtWebEngineQuick/qtwebenginequickglobal.h>
 #include <QTimer>
 
+#include <lqtutils_qsl.h>
+
 #include "mlwebsocketbridge.h"
+#include "mlsettings.h"
+#include "version.h"
 
 #define COLORING_ENABLED
 #define LOG_TAG "mldonkey-next"
@@ -41,10 +45,13 @@ int main(int argc, char** argv)
     qInstallMessageHandler(lightlogger::log_handler);
 
     QGuiApplication app(argc, argv);
+    app.setApplicationName(QSL("mldonkey-next"));
+    app.setApplicationVersion(PROJECT_VERSION);
 
     MLWebSocketBridgeManager bridge;
 
     QQmlApplicationEngine engine;
+    engine.rootContext()->setContextProperty("userSettings", &MLSettings::notifier());
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreationFailed,

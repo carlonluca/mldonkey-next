@@ -1,8 +1,33 @@
+/*
+ * This file is part of mldonkey-next.
+ *
+ * Copyright (c) 2024 Luca Carlon
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 3.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * Author:  Luca Carlon
+ * Company: -
+ * Date:    2024.10.04
+ */
+
 #include <QWebSocket>
 
 #include <lqtutils/lqtutils_qsl.h>
 
 #include "mlwebsocketbridge.h"
+#include "mlsettings.h"
 
 MLWebSocketBridge::MLWebSocketBridge(QWebSocket* socket, QObject* parent) :
     QObject(parent),
@@ -22,9 +47,10 @@ MLWebSocketBridge::MLWebSocketBridge(QWebSocket* socket, QObject* parent) :
         m_tcpSocket->write(msg);
     });
 
-    // TODO: Addr and port to UI
-    connect(m_tcpSocket, &QTcpSocket::connected, this, [this] {
-        qInfo() << "Connected to 192.168.0.2:4001";
+    const QHostAddress mldonkeyHost(MLSettings::notifier().mldonkeyHost());
+    const int mldonkeyPort = MLSettings::notifier().mldonkeyPort();
+    connect(m_tcpSocket, &QTcpSocket::connected, this, [this, mldonkeyHost, mldonkeyPort] {
+        qInfo() << "Connected to" << QString("%1:%2").arg(mldonkeyHost.toString(), mldonkeyPort);
     });
     connect(m_tcpSocket, &QTcpSocket::readyRead, this, [this] {
         qDebug() << "Sending data to client";
@@ -38,7 +64,7 @@ MLWebSocketBridge::MLWebSocketBridge(QWebSocket* socket, QObject* parent) :
         qWarning() << "TCP connection failed:" << m_tcpSocket->errorString();
         emit socketDisconnected();
     });
-    m_tcpSocket->connectToHost(QHostAddress("192.168.0.2"), 4001);
+    m_tcpSocket->connectToHost(mldonkeyHost, mldonkeyPort);
 }
 
 MLWebSocketBridge::~MLWebSocketBridge()
