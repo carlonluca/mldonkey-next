@@ -83,9 +83,6 @@ target_include_directories(mldonkey-next PRIVATE
     ../deps
     "${CMAKE_CURRENT_BINARY_DIR}"
 )
-target_link_directories(mldonkey-next PRIVATE
-    lqtutils_build
-)
 target_link_libraries(mldonkey-next
     PRIVATE
         Qt6::Quick
