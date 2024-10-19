@@ -11,7 +11,7 @@ Test_webapp:
   artifacts:
     untracked: true
   tags:
-    - pihome
+    - amd64
   script:
     - npm config set fetch-timeout 600000
     - cd mldonkey-next-backend
@@ -22,6 +22,8 @@ Test_webapp:
     - npm i --maxsockets 1
     - npm run lint
     - npx ng build --output-hashing none
+    - cd ../app
+    - ./build_angular_resources.sh
 
 Test_app:
   image:
