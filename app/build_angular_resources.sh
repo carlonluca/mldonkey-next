@@ -10,6 +10,11 @@ cp -r * ../../../../app/webapp
 cd ../../../../app
 
 BASE_DIR="webapp"
+HASH_CMD="sha256sum"
+HASH=$(find "$BASE_DIR" -type f -exec $HASH_CMD {} + | awk '{print $1}' | tr -d '\n' | $HASH_CMD | awk '{print $1}')
+
+echo "$HASH" > webapp/index.txt
+
 OUTPUT_FILE="resources.cmake"
 cat <<EOL > "$OUTPUT_FILE"
 qt_add_resources(mldonkey-next "webapp"
