@@ -26,7 +26,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../deps/lqtutils ${CMAKE_CURRENT_BINARY_DIR}/lqtutils)
 
-find_package(Qt6 6.5
+find_package(Qt6 6.7
     REQUIRED COMPONENTS
         Quick
         WebEngineQuick
@@ -54,19 +54,8 @@ qt_add_qml_module(mldonkey-next
         mlsettings.h mlsettings.cpp
 )
 
-qt_add_resources(mldonkey-next "webapp"
-    PREFIX "/"
-    BASE ../mldonkey-next-frontend/dist/mldonkey-next-frontend/browser
-    FILES
-        ../mldonkey-next-frontend/dist/mldonkey-next-frontend/browser/chunk-COSFYJWR.js
-        ../mldonkey-next-frontend/dist/mldonkey-next-frontend/browser/chunk-6Z6LXSWS.js
-        ../mldonkey-next-frontend/dist/mldonkey-next-frontend/browser/favicon.ico
-        ../mldonkey-next-frontend/dist/mldonkey-next-frontend/browser/index.html
-        ../mldonkey-next-frontend/dist/mldonkey-next-frontend/browser/main.js
-        ../mldonkey-next-frontend/dist/mldonkey-next-frontend/browser/polyfills.js
-        ../mldonkey-next-frontend/dist/mldonkey-next-frontend/browser/styles.css
-        ../mldonkey-next-frontend/dist/mldonkey-next-frontend/browser/assets/turtle.svg
-)
+# Build this file using the build_angular_resources.sh script.
+include(resources.cmake)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
