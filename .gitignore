@@ -263,3 +263,6 @@ compile_commands.json
 
 *_qmlcache.qrc
 build
+
+app/resources_root.cmake
+app/resources_subdir.cmake
