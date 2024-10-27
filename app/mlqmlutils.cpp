@@ -22,19 +22,40 @@
  * Date:    2024.10.24
  */
 
-#ifndef MLSETTINGS_H
-#define MLSETTINGS_H
+#include <QStandardPaths>
 
-#include <QObject>
+#include <lqtutils_qsl.h>
+#include <lqtutils_string.h>
 
-#include <lqtutils_prop.h>
-#include <lqtutils_settings.h>
+#include "mlqmlutils.h"
 
-Q_NAMESPACE
+MLQmlUtils::MLQmlUtils(QObject *parent)
+    : QObject{parent}
+{}
 
-L_DECLARE_SETTINGS(MLSettings, new QSettings())
-L_DEFINE_VALUE(QString, mldonkeyHost, QString())
-L_DEFINE_VALUE(quint16, mldonkeyPort, 4001)
-L_END_CLASS
+QUrl MLQmlUtils::webappUrl()
+{
+#ifdef ML_EXTRACT_WEBAPP
+    const QString privDataPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    const QString webappPath = lqt::path_combine({
+        privDataPath,
+        QSL("webapp")
+    });
 
-#endif // MLSETTINGS_H
+    return QUrl::fromLocalFile(lqt::path_combine({
+        webappPath,
+        QSL("index.html")
+    }));
+#else
+    return QUrl(QSL("qrc:/index.html"));
+#endif
+}
+
+bool MLQmlUtils::extractWebApp()
+{
+#ifdef ML_EXTRACT_WEBAPP
+    return true;
+#else
+    return false;
+#endif
+}

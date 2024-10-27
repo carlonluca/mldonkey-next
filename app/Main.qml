@@ -24,7 +24,6 @@
 
 import QtQuick
 import QtQuick.Controls
-import QtWebEngine
 
 Window {
     property bool configMode: configModeRequested || userSettings.mldonkeyHost.length <= 0
@@ -40,35 +39,14 @@ Window {
 
     Loader {
         active: !configMode
-        sourceComponent: webViewComponent
         anchors.fill: parent
+        source: qmlUtils.extractWebApp() ? "qrc:/qt/qml/mldonkeynext/MLWebView.qml" : "qrc:/qt/qml/mldonkeynext/MLWebEngineView.qml"
     }
 
     Loader {
         active: configMode
         sourceComponent: configComponent
         anchors.fill: parent
-    }
-
-    Component {
-        id: webViewComponent
-        WebEngineView {
-            anchors.fill: parent
-            url: "qrc:/index.html"
-            onJavaScriptConsoleMessage: function(level, message, lineNumber, sourceId) {
-                switch (level) {
-                case WebEngineView.InfoMessageLevel:
-                    console.info(sourceId, lineNumber, message)
-                    return
-                case WebEngineView.WarningMessageLevel:
-                    console.warn(sourceId, lineNumber, message)
-                    return
-                case WebEngineView.ErrorMessageLevel:
-                    console.error(sourceId, lineNumber, message)
-                    return
-                }
-            }
-        }
     }
 
     Component {

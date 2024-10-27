@@ -22,19 +22,19 @@
  * Date:    2024.10.24
  */
 
-#ifndef MLSETTINGS_H
-#define MLSETTINGS_H
+#ifndef MLQMLUTILS_H
+#define MLQMLUTILS_H
 
 #include <QObject>
+#include <QUrl>
 
-#include <lqtutils_prop.h>
-#include <lqtutils_settings.h>
+class MLQmlUtils : public QObject
+{
+    Q_OBJECT
+public:
+    explicit MLQmlUtils(QObject *parent = nullptr);
+    Q_INVOKABLE QUrl webappUrl();
+    Q_INVOKABLE bool extractWebApp();
+};
 
-Q_NAMESPACE
-
-L_DECLARE_SETTINGS(MLSettings, new QSettings())
-L_DEFINE_VALUE(QString, mldonkeyHost, QString())
-L_DEFINE_VALUE(quint16, mldonkeyPort, 4001)
-L_END_CLASS
-
-#endif // MLSETTINGS_H
+#endif // MLQMLUTILS_H

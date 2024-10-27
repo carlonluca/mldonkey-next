@@ -24,13 +24,21 @@
 
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include <QtWebEngineQuick/qtwebenginequickglobal.h>
 #include <QTimer>
+#include <QStandardPaths>
+#ifdef ML_EXTRACT_WEBAPP
+#include <QtWebView/QtWebView>
+#else
+#include <QtWebEngineQuick/qtwebenginequickglobal.h>
+#endif
 
 #include <lqtutils_qsl.h>
+#include <lqtutils_string.h>
+#include <lqtutils_data.h>
 
 #include "mlwebsocketbridge.h"
 #include "mlsettings.h"
+#include "mlqmlutils.h"
 #include "version.h"
 
 #define COLORING_ENABLED
@@ -38,20 +46,86 @@
 #include <lightlogger/lc_logging.h>
 lightlogger::custom_log_func lightlogger::global_log_func = log_to_default;
 
+inline bool extract_files()
+{
+    const QString privDataPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    const QString webappPath = lqt::path_combine({
+        privDataPath,
+        QSL("webapp")
+    });
+
+    QDir webappDir(webappPath);
+    if (!webappDir.removeRecursively())
+        qWarning() << "Failed to remove previous webapp version";
+
+    if (!QDir(privDataPath).mkpath(".")) {
+        qWarning() << "Failed to create webapp directory";
+        return false;
+    }
+
+    qInfo() << "Extract webapp to" << webappPath;
+    return lqt::copy_path(QSL(":/webapp"), webappPath);
+}
+
+inline bool deploy_webapp()
+{
+    const QString privDataPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    const QString webappPath = lqt::path_combine({
+        privDataPath,
+        QSL("webapp")
+    });
+
+    if (!QDir(webappPath).exists()) {
+        qInfo() << "Webapp data missing, extact...";
+        return extract_files();
+    }
+
+    const QString indexPath = lqt::path_combine({
+        webappPath,
+        QSL("index.txt")
+    });
+
+    if (!QFile(indexPath).exists()) {
+        qInfo() << "Index missing, extract...";
+        return extract_files();
+    };
+
+    QFile expectedIndexFile(QSL(":/webapp/index.txt"));
+    QFile currentIndexFile(indexPath);
+    const QByteArray expectedHash = lqt::read_all(&expectedIndexFile);
+    const QByteArray currentHash = lqt::read_all(&currentIndexFile);
+    if (expectedHash == currentHash) {
+        qDebug() << "Webapp already extracted";
+        return true;
+    }
+
+    return extract_files();
+}
+
 int main(int argc, char** argv)
 {
-    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+    qputenv("QTWEBENGINE_CHROMIUM_FLAGS", "--enable-logging --log-level=0 -v=1");
+#ifndef ML_EXTRACT_WEBAPP
     QtWebEngineQuick::initialize();
+#else
+    QtWebView::initialize();
+#endif
+    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
     qInstallMessageHandler(lightlogger::log_handler);
 
     QGuiApplication app(argc, argv);
     app.setApplicationName(QSL("mldonkey-next"));
     app.setApplicationVersion(PROJECT_VERSION);
 
+#ifdef ML_EXTRACT_WEBAPP
+    deploy_webapp();
+#endif
+
     MLWebSocketBridgeManager bridge;
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("userSettings", &MLSettings::notifier());
+    engine.rootContext()->setContextProperty("qmlUtils", new MLQmlUtils(qApp));
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreationFailed,

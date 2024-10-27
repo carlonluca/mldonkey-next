@@ -15,15 +15,29 @@ HASH=$(find "$BASE_DIR" -type f -exec $HASH_CMD {} + | awk '{print $1}' | tr -d 
 
 echo "$HASH" > webapp/index.txt
 
-OUTPUT_FILE="resources.cmake"
+OUTPUT_FILE="resources_root.cmake"
 cat <<EOL > "$OUTPUT_FILE"
 qt_add_resources(mldonkey-next "webapp"
     PREFIX "/"
     BASE $BASE_DIR
     FILES
 EOL
-for file in "$BASE_DIR"/*; do
+find "$BASE_DIR" -type f | while read -r file; do
     echo "        $file" >> "$OUTPUT_FILE"
 done
 echo ")" >> "$OUTPUT_FILE"
+
+echo "CMake resource file generated at $OUTPUT_FILE"
+
+OUTPUT_FILE="resources_subdir.cmake"
+cat <<EOL > "$OUTPUT_FILE"
+qt_add_resources(mldonkey-next "webapp"
+    PREFIX "/"
+    FILES
+EOL
+find "$BASE_DIR" -type f | while read -r file; do
+    echo "        $file" >> "$OUTPUT_FILE"
+done
+echo ")" >> "$OUTPUT_FILE"
+
 echo "CMake resource file generated at $OUTPUT_FILE"
