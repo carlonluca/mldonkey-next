@@ -35,6 +35,9 @@
 #include <lqtutils_qsl.h>
 #include <lqtutils_string.h>
 #include <lqtutils_data.h>
+#ifdef Q_OS_ANDROID
+#include <lqtutils_ui.h>
+#endif
 
 #include "mlwebsocketbridge.h"
 #include "mlsettings.h"
@@ -116,6 +119,13 @@ int main(int argc, char** argv)
     QGuiApplication app(argc, argv);
     app.setApplicationName(QSL("mldonkey-next"));
     app.setApplicationVersion(PROJECT_VERSION);
+
+#ifdef Q_OS_ANDROID
+    lqt::QmlUtils qmlUtils;
+    qmlUtils.setBarColorLight(false, false);
+    qmlUtils.setNavBarColor(QColor(32, 32, 32));
+    qmlUtils.setStatusBarColor(QColor(32, 32, 32));
+#endif
 
 #ifdef ML_EXTRACT_WEBAPP
     deploy_webapp();
