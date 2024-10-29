@@ -50,7 +50,7 @@ MLWebSocketBridge::MLWebSocketBridge(QWebSocket* socket, QObject* parent) :
     const QHostAddress mldonkeyHost(MLSettings::notifier().mldonkeyHost());
     const int mldonkeyPort = MLSettings::notifier().mldonkeyPort();
     connect(m_tcpSocket, &QTcpSocket::connected, this, [this, mldonkeyHost, mldonkeyPort] {
-        qInfo() << "Connected to" << QString("%1:%2").arg(mldonkeyHost.toString(), mldonkeyPort);
+        qInfo() << "Connected to" << QString("%1:%2").arg(mldonkeyHost.toString()).arg(mldonkeyPort);
     });
     connect(m_tcpSocket, &QTcpSocket::readyRead, this, [this] {
         qDebug() << "Sending data to client";

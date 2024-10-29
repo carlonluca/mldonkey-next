@@ -107,7 +107,6 @@ inline bool deploy_webapp()
 
 int main(int argc, char** argv)
 {
-    qputenv("QTWEBENGINE_CHROMIUM_FLAGS", "--enable-logging --log-level=0 -v=1");
 #ifndef ML_EXTRACT_WEBAPP
     QtWebEngineQuick::initialize();
 #else

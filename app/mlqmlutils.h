@@ -35,6 +35,7 @@ public:
     explicit MLQmlUtils(QObject *parent = nullptr);
     Q_INVOKABLE QUrl webappUrl();
     Q_INVOKABLE bool extractWebApp();
+    Q_INVOKABLE bool isSetupRequested(const QUrl& url);
 };
 
 #endif // MLQMLUTILS_H

@@ -59,3 +59,8 @@ bool MLQmlUtils::extractWebApp()
     return false;
 #endif
 }
+
+bool MLQmlUtils::isSetupRequested(const QUrl& url)
+{
+    return url.toString().contains(QSL("action=openSetup"));
+}

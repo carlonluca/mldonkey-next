@@ -30,6 +30,7 @@ Window {
     property bool configModeRequested: false
     property int controlMargin: 10
 
+    id: mainWindow
     width: 720
     height: 1280
     visible: true

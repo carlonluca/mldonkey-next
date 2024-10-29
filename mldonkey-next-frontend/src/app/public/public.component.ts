@@ -25,12 +25,16 @@
 import { Component } from '@angular/core'
 import { MLConnectionState, WebSocketService } from '../websocket-service.service'
 import { SpinnerService } from '../services/spinner.service'
-import { Router } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { environment } from '../../environments/environment'
 import { Credentials, StorageService } from '../services/storage.service'
 import { MLMessageTypeFrom } from '../msg/MLMsg'
 import { uiLogger } from '../core/MLLogger'
 import { faUser, faKey, faLink, faLinkSlash } from '@fortawesome/free-solid-svg-icons'
+
+declare global {
+    interface Window { location: Location; }
+  }
 
 @Component({
     selector: 'app-public',
@@ -55,6 +59,7 @@ export class PublicComponent {
         private webSocketService: WebSocketService,
         private spinner: SpinnerService,
         private router: Router,
+        private route: ActivatedRoute,
         private storage: StorageService) {
         webSocketService.connectionState.observable.subscribe(state => {
             switch (state) {
@@ -115,5 +120,21 @@ export class PublicComponent {
         // TODO: introduce some kind of timeout here
         this.spinner.show()
         this.webSocketService.login(username, passwd)
+    }
+
+    doSetup() {
+        // Define the new parameter to add
+        const newParam = { action: 'openSetup' }
+
+        // Merge with current parameters and navigate without reloading
+        this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: newParam,
+            queryParamsHandling: 'merge'
+        })
+    }
+
+    isWebView(): boolean {
+        return window.location.href.startsWith("qrc:/") || window.location.href.startsWith("file://")
     }
 }
