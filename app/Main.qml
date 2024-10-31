@@ -24,6 +24,7 @@
 
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Controls.Material
 
 Window {
     property bool configMode: configModeRequested || userSettings.mldonkeyHost.length <= 0
@@ -35,6 +36,9 @@ Window {
     height: 1280
     visible: true
     title: "mldonkey-next " + Qt.application.version
+
+    Material.theme: Material.Dark
+    Material.accent: Material.Pink
 
     SystemPalette { id: myPalette; colorGroup: SystemPalette.Active }
 
@@ -59,6 +63,16 @@ Window {
                 anchors.centerIn: parent
                 width: 720/3
                 spacing: controlMargin
+                Label {
+                    scale: 3
+                    text: qsTr("mldonkey-next setup")
+                    width: parent.width
+                    horizontalAlignment: Text.AlignHCenter
+                }
+                Item {
+                    width: parent.width
+                    height: 20
+                }
                 Label {
                     font.bold: true
                     width: parent.width
