@@ -105,15 +105,49 @@ inline bool deploy_webapp()
     return extract_files();
 }
 
+void setup_env()
+{
+    if (!qEnvironmentVariableIsSet("APPDIR"))
+        return;
+
+    qInfo() << "Running AppImage format...";
+    const QByteArray appDirData = qgetenv("APPDIR");
+    const QString webengineResources = lqt::path_combine({
+        appDirData,
+        "/opt/qt/6.8.0/gcc_64/resources"
+    });
+    const QByteArray webengineResourcesData = webengineResources.toUtf8();
+    const QString webengineProcPath = lqt::path_combine({
+        appDirData,
+        "/opt/qt/6.8.0/gcc_64/libexec/QtWebEngineProcess"
+    });
+    const QByteArray webengineProcData = webengineProcPath.toUtf8();
+    const QString webengineLocalesPath = lqt::path_combine({
+        appDirData,
+        "/opt/qt/6.8.0/gcc_64/translations/qtwebengine_locales"
+    });
+    const QByteArray webengineLocalesData = webengineLocalesPath.toUtf8();
+
+    qputenv("QTWEBENGINE_RESOURCES_PATH", webengineResourcesData);
+    qputenv("QTWEBENGINEPROCESS_PATH", webengineProcData);
+    qputenv("QTWEBENGINE_LOCALES_PATH", webengineLocalesData);
+    qputenv("QT_QPA_PLATFORM", "xcb");
+}
+
 int main(int argc, char** argv)
 {
+    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+    qInstallMessageHandler(lightlogger::log_handler);
+
+#ifdef Q_OS_LINUX
+    setup_env();
+#endif
+
 #ifndef ML_EXTRACT_WEBAPP
     QtWebEngineQuick::initialize();
 #else
     QtWebView::initialize();
 #endif
-    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
-    qInstallMessageHandler(lightlogger::log_handler);
 
     QGuiApplication app(argc, argv);
     app.setApplicationName(QSL("mldonkey-next"));
