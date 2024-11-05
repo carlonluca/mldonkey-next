@@ -76,6 +76,7 @@ android {
     }
 
     defaultConfig {
+        applicationId "luke.mldonkeynext"
         resConfig "en"
         minSdkVersion qtMinSdkVersion
         targetSdkVersion qtTargetSdkVersion
