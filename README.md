@@ -12,6 +12,8 @@ Desktop             |  Mobile
 
 The webapp can be used in your preferred browser. It requires the installation of a bridge (named backend in the repo). The backend provides a bridge to the mldonkey core and serves the mldonkey-next webapp.
 
+For mroe info: https://bugfreeblog.duckdns.org/2024/05/mldonkey-next.html.
+
 ### Installation
 
 mldonkey is currently a bit outdated and requires a specific setup to work properly. This is why I typically use it in docker: https://github.com/carlonluca/docker-mldonkey. mldonkey-next is provided as a dev version of that image, so you can install it by using one of the tags of that image. To choose a proper tag for your use case, refer to [this table](https://bugfreeblog.duckdns.org/docker-images-for-the-mldonkey-service). The image includes the core of mldonkey, the bridge and the webapp.
@@ -29,3 +31,5 @@ Desktop             |  Mobile
 The native app is a Qt app embedding the webapp. The native app does not need the bridge and can connect to a generic mldonkey server. Unfortunately, a generic server is missing some patches that I only applied to my fork, so the docker image is still encouraged.
 
 The native app is cross platform, and may work on all major platforms. However, I only tested on Linux and Android. For Android, an apk is provided for armv7, arm64, x86 and x64. For Linux, an AppImage is provided.
+
+For more info: https://bugfreeblog.duckdns.org/2024/11/mldonkey-native-app.html.
