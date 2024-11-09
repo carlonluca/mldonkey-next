@@ -30,7 +30,7 @@
 #include "mlqmlutils.h"
 
 MLQmlUtils::MLQmlUtils(QObject *parent)
-    : QObject{parent}
+    : lqt::QmlUtils{parent}
 {}
 
 QUrl MLQmlUtils::webappUrl()

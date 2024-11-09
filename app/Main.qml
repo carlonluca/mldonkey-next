@@ -40,6 +40,18 @@ Window {
     Material.theme: Material.Dark
     Material.accent: Material.Pink
 
+    Component.onCompleted: {
+        // It seems that there still is a bug in Qt: with anything else than Fullscreen,
+        // there is a white vertical line on the right border of the screen.
+        if (qmlUtils.isMobile())
+            mainWindow.visibility = Window.FullScreen
+        else {
+            mainWindow.visibility = Window.Windowed
+            mainWindow.width = 720
+            mainWindow.height = 1280
+        }
+    }
+
     SystemPalette { id: myPalette; colorGroup: SystemPalette.Active }
 
     Loader {

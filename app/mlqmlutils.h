@@ -28,7 +28,9 @@
 #include <QObject>
 #include <QUrl>
 
-class MLQmlUtils : public QObject
+#include <lqtutils_ui.h>
+
+class MLQmlUtils : public lqt::QmlUtils
 {
     Q_OBJECT
 public:
