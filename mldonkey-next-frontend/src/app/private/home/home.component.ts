@@ -44,6 +44,8 @@ import { OptionsService } from 'src/app/services/options.service'
 import { ConsoleService } from 'src/app/services/console.service'
 import { SysinfoService } from 'src/app/services/sysinfo.service'
 import { MatSidenav } from '@angular/material/sidenav'
+import { ClientStatsService } from 'src/app/services/clientstats.service'
+import { StatsService } from 'src/app/services/stats.service'
 
 @Component({
     selector: 'app-home',
@@ -77,6 +79,8 @@ export class HomeComponent {
         private optionService: OptionsService,
         private consoleService: ConsoleService,
         private sysInfoService: SysinfoService,
+        private clientStatsService: ClientStatsService,
+        private statsService: StatsService,
         public uiService: UiServiceService) {
         this.subscriptions.add(
             this.uiService.mobileLayout.observable.subscribe(() => this.refreshOpenedState())

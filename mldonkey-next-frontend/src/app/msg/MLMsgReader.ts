@@ -62,7 +62,7 @@ export class MLBufferUtils {
         return [ret, consumed]
     }
 
-    private static readList<T>(buffer: ArrayBuffer, offset: number, parseItem: (buffer: ArrayBuffer, offset: number) => [T, number]): [Array<T>, number] {
+    public static readList<T>(buffer: ArrayBuffer, offset: number, parseItem: (buffer: ArrayBuffer, offset: number) => [T, number]): [Array<T>, number] {
         let consumed = 0
         const [size] = this.readInt16(buffer, offset)
         consumed += 2
@@ -203,6 +203,10 @@ export class MLMsgReader {
         return MLBufferUtils.readMd4(this.data, offset)
     }
 
+    readList<T>(offset: number, parseItem: (buffer: ArrayBuffer, offset: number) => [T, number]): [T[], number] {
+        return MLBufferUtils.readList(this.data, offset, parseItem)
+    }
+
     readStringList(offset: number): [string[], number] {
         return MLBufferUtils.readStringList(this.data, offset)
     }
@@ -265,6 +269,12 @@ export class MLMsgReader {
 
     takeMd4(): ArrayBuffer {
         const [ret, consumed] = this.readMd4(this.offset)
+        this.offset += consumed
+        return ret
+    }
+
+    takeList<T>(parseItem: (buffer: ArrayBuffer, offset: number) => [T, number]): T[] {
+        const [ret, consumed] = this.readList<T>(this.offset, parseItem)
         this.offset += consumed
         return ret
     }

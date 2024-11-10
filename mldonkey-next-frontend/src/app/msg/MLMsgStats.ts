@@ -16,7 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { MLMessageTypeTo, MLMsgTo } from "./MLMsg";
+import { MLMessageTypeFrom, MLMessageTypeTo, MLMsgFrom, MLMsgTo } from "./MLMsg"
+import { MLMsgReader } from "./MLMsgReader"
 
 /**
  * Author:  Luca Carlon
@@ -24,12 +25,81 @@ import { MLMessageTypeTo, MLMsgTo } from "./MLMsg";
  * Date: 2024.07.30
  */
 
-export class MLMsgGetStats extends MLMsgTo {
-    constructor() { super(MLMessageTypeTo.T_GET_STATS) }
+export class MLMsgToGetStats extends MLMsgTo {
+    constructor(public networkId: number) { super(MLMessageTypeTo.T_GET_STATS) }
 
     public override toBuffer(): ArrayBuffer {
         let buffer = new ArrayBuffer(0)
-        buffer = this.appendInt32(buffer, 0)
+        buffer = this.appendInt32(buffer, this.networkId)
         return this.createEnvelope(buffer)
+    }
+}
+
+export class MLStat {
+    constructor(
+        public clientDescriptionLong: string,
+        public clientDescriptionShort: string,
+        public seenSecs: number,
+        public banned: number,
+        public requests: number,
+        public downloaded: bigint,
+        public uploaded: bigint) {}
+}
+
+export class MLStatSet {
+    constructor(
+        public name: string,
+        public uptime: number,
+        public stats: MLStat[]
+    ) {}
+}
+
+export class MLMsgFromStats extends MLMsgFrom {
+    constructor(public networkId: number, public stats: MLStatSet[]) {
+        super(MLMessageTypeFrom.T_STATS)
+    }
+
+    public static fromBuffer(buffer: ArrayBuffer): MLMsgFromStats {
+        const reader = new MLMsgReader(buffer)
+        const networkId = reader.takeInt32()
+        const statElements = reader.takeList((_buffer: ArrayBuffer, offset: number) => {
+            let consumed = 0
+            // The name is the name of the set of stats: "global clients" or "session clients".
+            const [name, consumed1] = reader.readString(offset)
+            consumed += consumed1
+            // Uptime of this stat set.
+            const [uptime, consumed2] = reader.readInt32(offset + consumed1)
+            consumed += consumed2
+            // Stats per client type.
+            const [stats, consumed3] = reader.readList(offset + consumed1 + consumed2, (buffer2: ArrayBuffer, offset2: number) => {
+                let consumed = 0
+                const [clientDescriptionLong, consumed4] = reader.readString(offset2)
+                consumed += consumed4
+                const [clientDescriptionShort, consumed5] = reader.readString(offset2 + consumed)
+                consumed += consumed5
+                const [seenSecs, consumed6] = reader.readInt32(offset2 + consumed)
+                consumed += consumed6
+                const [banned, consumed7] = reader.readInt32(offset2 + consumed)
+                consumed += consumed7
+                const [requests, consumed8] = reader.readInt32(offset2 + consumed)
+                consumed += consumed8
+                const [downloaded, consumed9] = reader.readInt64(offset2 + consumed)
+                consumed += consumed9
+                const [uploaded, consumed10] = reader.readInt64(offset2 + consumed)
+                consumed += consumed10
+                return [new MLStat(
+                    clientDescriptionLong,
+                    clientDescriptionShort,
+                    seenSecs,
+                    banned,
+                    requests,
+                    downloaded,
+                    uploaded
+                ), consumed]
+            })
+            consumed += consumed3
+            return [new MLStatSet(name, uptime, stats), consumed]
+        })
+        return new MLMsgFromStats(networkId, statElements)
     }
 }

@@ -34,7 +34,7 @@ import { MLSortMode } from '../../../core/MLSortMode'
 import { DownloadingFilesService } from 'src/app/services/downloading-files.service'
 import { UiServiceService } from 'src/app/services/ui-service.service'
 import { WebSocketService } from 'src/app/websocket-service.service'
-import { StatsService } from 'src/app/services/stats.service'
+import { ClientStatsService } from 'src/app/services/clientstats.service'
 import { MLMsgFromClientStats } from 'src/app/msg/MLMsgClientStats'
 import prettyBytes from 'pretty-bytes'
 
@@ -73,7 +73,7 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
     constructor(
         private websocketService: WebSocketService,
         private downloadingService: DownloadingFilesService,
-        public clientStatsService: StatsService,
+        public clientStatsService: ClientStatsService,
         public uiSerivce: UiServiceService
     ) { }
 

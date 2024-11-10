@@ -19,33 +19,39 @@
 /**
  * Author:  Luca Carlon
  * Company: -
- * Date: 2024.11.10
+ * Date: 2024.09.01
  */
 
-import { Injectable } from '@angular/core'
-import { MLSubscriptionSet } from '../core/MLSubscriptionSet'
+import { Injectable, OnDestroy } from '@angular/core'
 import { WebSocketService } from '../websocket-service.service'
 import { MLMessageTypeFrom } from '../msg/MLMsg'
-import { interval } from 'rxjs'
-import { MLMsgToGetStats } from '../msg/MLMsgStats'
+import { MLSubscriptionSet } from '../core/MLSubscriptionSet'
+import { MLMsgFromClientStats } from '../msg/MLMsgClientStats'
+import { MLObservableVariable } from '../core/MLObservableVariable'
 
 @Injectable({
     providedIn: 'root'
 })
-export class StatsService {
+export class ClientStatsService implements OnDestroy {
     private subscriptions = new MLSubscriptionSet()
-    
+
+    public stats: MLObservableVariable<MLMsgFromClientStats | null> =
+        new MLObservableVariable<MLMsgFromClientStats | null>(null)
+
     constructor(private websocketService: WebSocketService) {
         this.subscriptions.add(
-            this.websocketService.lastMessage.observable.subscribe(m => {
-                if (m.type !== MLMessageTypeFrom.T_STATS)
-                    return
+            this.websocketService.lastMessage.observable.subscribe(msg => {
+                if (msg.type === MLMessageTypeFrom.T_CLIENT_STATS) {
+                    if (!this.stats)
+                        this.stats = new MLObservableVariable<MLMsgFromClientStats | null>(msg as MLMsgFromClientStats)
+                    else
+                        this.stats.value = msg as MLMsgFromClientStats
+                }
             })
         )
-        this.subscriptions.add(
-            interval(10000).subscribe(() => {
-                this.websocketService.sendMsg(new MLMsgToGetStats(8))
-            })
-        )
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions.unsubscribe(null)
     }
 }
