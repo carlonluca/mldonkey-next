@@ -22,12 +22,13 @@
  * Date:    2023.12.03
  */
 import { Component } from '@angular/core';
+import { StatsService } from 'src/app/services/stats.service';
 
 @Component({
-  selector: 'app-stats',
-  templateUrl: './stats.component.html',
-  styleUrls: ['./stats.component.scss']
+    selector: 'app-stats',
+    templateUrl: './stats.component.html',
+    styleUrls: ['./stats.component.scss']
 })
 export class StatsComponent {
-
+    constructor(public statsService: StatsService) { }
 }

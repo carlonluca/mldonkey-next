@@ -16,14 +16,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { MLMessageTypeFrom, MLMessageTypeTo, MLMsgFrom, MLMsgTo } from "./MLMsg"
-import { MLMsgReader } from "./MLMsgReader"
-
 /**
  * Author:  Luca Carlon
  * Company: -
  * Date: 2024.07.30
  */
+
+import { MLUPdateable } from "../core/MLUpdateable"
+import { MLMessageTypeFrom, MLMessageTypeTo, MLMsgFrom, MLMsgTo } from "./MLMsg"
+import { MLMsgReader } from "./MLMsgReader"
 
 export class MLMsgToGetStats extends MLMsgTo {
     constructor(public networkId: number) { super(MLMessageTypeTo.T_GET_STATS) }
@@ -35,7 +36,7 @@ export class MLMsgToGetStats extends MLMsgTo {
     }
 }
 
-export class MLStat {
+export class MLClientStat implements MLUPdateable<MLClientStat> {
     constructor(
         public clientDescriptionLong: string,
         public clientDescriptionShort: string,
@@ -44,18 +45,28 @@ export class MLStat {
         public requests: number,
         public downloaded: bigint,
         public uploaded: bigint) {}
+
+    update(update: MLClientStat): void {
+        this.clientDescriptionLong = update.clientDescriptionLong
+        this.clientDescriptionShort = update.clientDescriptionShort
+        this.seenSecs = update.seenSecs
+        this.banned = update.banned
+        this.requests = update.requests
+        this.downloaded = update.downloaded
+        this.uploaded = update.uploaded
+    }
 }
 
-export class MLStatSet {
+export class MLSessionStatSet {
     constructor(
         public name: string,
         public uptime: number,
-        public stats: MLStat[]
+        public stats: MLClientStat[]
     ) {}
 }
 
 export class MLMsgFromStats extends MLMsgFrom {
-    constructor(public networkId: number, public stats: MLStatSet[]) {
+    constructor(public networkId: number, public stats: MLSessionStatSet[]) {
         super(MLMessageTypeFrom.T_STATS)
     }
 
@@ -87,7 +98,7 @@ export class MLMsgFromStats extends MLMsgFrom {
                 consumed += consumed9
                 const [uploaded, consumed10] = reader.readInt64(offset2 + consumed)
                 consumed += consumed10
-                return [new MLStat(
+                return [new MLClientStat(
                     clientDescriptionLong,
                     clientDescriptionShort,
                     seenSecs,
@@ -98,7 +109,7 @@ export class MLMsgFromStats extends MLMsgFrom {
                 ), consumed]
             })
             consumed += consumed3
-            return [new MLStatSet(name, uptime, stats), consumed]
+            return [new MLSessionStatSet(name, uptime, stats), consumed]
         })
         return new MLMsgFromStats(networkId, statElements)
     }

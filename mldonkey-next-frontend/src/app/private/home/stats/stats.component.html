@@ -1,1 +1,3 @@
-<p>stats works!</p>
+<p *ngFor="let e of this.statsService.elements.value.values()">
+    {{ e.networkId }}
+</p>
