@@ -23,6 +23,7 @@
  */
 import { Component } from '@angular/core';
 import { StatsService } from 'src/app/services/stats.service';
+import { WebSocketService } from 'src/app/websocket-service.service';
 
 @Component({
     selector: 'app-stats',
@@ -30,5 +31,9 @@ import { StatsService } from 'src/app/services/stats.service';
     styleUrls: ['./stats.component.scss']
 })
 export class StatsComponent {
-    constructor(public statsService: StatsService) { }
+    constructor(public statsService: StatsService, private websocketService: WebSocketService) { }
+
+    networkInfo(networkNum: number) {
+        return this.websocketService.networkManager.getWithKey(networkNum)
+    }
 }

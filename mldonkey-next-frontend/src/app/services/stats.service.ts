@@ -31,29 +31,6 @@ import { MLMsgToGetStats, MLSessionStatSet, MLMsgFromStats } from '../msg/MLMsgS
 import { MLCollectionModel } from '../core/MLCollectionModel'
 import { MLUPdateable } from '../core/MLUpdateable'
 
-/*class MLClientStatCollection extends MLCollectionModel<string, MLClientStat> {
-    protected override keyFromValue(value: MLClientStat): string {
-        return value.clientDescriptionShort
-    }
-}
-
-class MLSessionStatModel extends MLSessionStatSet implements MLUPdateable<MLSessionStatModel> {
-    public statsModel: MLClientStatCollection
-
-    update(update: MLSessionStatModel): void {
-        this.name = update.name
-        this.uptime = update.uptime
-        this.stats = update.stats
-        this.statsModel.update(update.statsModel)
-    }
-}
-
-class MLSessionStatCollection extends MLCollectionModel<string, MLSessionStatModel> {
-    protected override keyFromValue(value: MLSessionStatSet): string {
-        return value.name
-    }   
-}*/
-
 class MLNetworkStatModel implements MLUPdateable<MLNetworkStatModel> {
     constructor(
         public networkId: number,
