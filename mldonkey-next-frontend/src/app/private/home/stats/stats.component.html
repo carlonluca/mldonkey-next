@@ -1,7 +1,7 @@
-<div *ngFor="let e of this.statsService.elements.value.values()">
-    <p>{{ e.networkId }} {{ this.networkInfo(e.networkId)?.name }} {{ this.networkInfo(e.networkId)?.downloaded }}</p>
+<div *ngFor="let e of this.statsService.elements.value | keyvalue">
+    <p>{{ e.value.networkId }} {{ this.networkInfo(e.value.networkId)?.name }} {{ this.networkInfo(e.value.networkId)?.downloaded }}</p>
     <ul>
-        <li *ngFor="let s of e.sessionStats">
+        <li *ngFor="let s of e.value.sessionStats">
             {{ s.name }} {{ s.uptime }}
             <ul>
                 <li *ngFor="let c of s.stats">
