@@ -30,6 +30,7 @@ import { interval } from 'rxjs'
 import { MLMsgToGetStats, MLSessionStatSet, MLMsgFromStats } from '../msg/MLMsgStats'
 import { MLCollectionModel } from '../core/MLCollectionModel'
 import { MLUPdateable } from '../core/MLUpdateable'
+import { MLObservableVariable } from '../core/MLObservableVariable'
 
 class MLNetworkStatModel implements MLUPdateable<MLNetworkStatModel> {
     constructor(
@@ -43,10 +44,29 @@ class MLNetworkStatModel implements MLUPdateable<MLNetworkStatModel> {
     }
 }
 
+export class MLNetworkSummaryModel {
+    constructor(
+        public networkNum: number,
+        public networkName: string,
+        public enabled: boolean,
+        public uptimeSecs: number,
+        public uptimePerc: number,
+        public requests: number,
+        public requestsPerc: number,
+        public banned: number,
+        public bannedPerc: number,
+        public uploadedBytes: number,
+        public uploadedPerc: number,
+        public downloadedBytes: number,
+        public downloadedPerc: number
+    ) {}
+}
+
 @Injectable({
     providedIn: 'root'
 })
 export class StatsService extends MLCollectionModel<number, MLNetworkStatModel> {
+    public byNetworkStats = new MLObservableVariable<MLNetworkSummaryModel[]>([])
     private subscriptions = new MLSubscriptionSet()
     
     constructor(private websocketService: WebSocketService) {
@@ -61,6 +81,7 @@ export class StatsService extends MLCollectionModel<number, MLNetworkStatModel> 
                 })
                 msg.stats.sort((a, b) => a.name.localeCompare(b.name))
                 this.handleValue(new MLNetworkStatModel(msg.networkId, msg.stats))
+                this.refreshStats()
             })
         )
         this.subscriptions.add(
@@ -69,12 +90,59 @@ export class StatsService extends MLCollectionModel<number, MLNetworkStatModel> 
             })
         )
         this.refresh()
+        this.refreshStats()
     }
 
     refresh() {
         this.websocketService.networkManager.elements.value.forEach(n => {
             this.websocketService.sendMsg(new MLMsgToGetStats(n.netNum))
         })
+    }
+
+    refreshStats() {
+        let totalUptime = 0
+        this.elements.value.forEach((netStatModel, _netNum) => {
+            netStatModel.sessionStats.forEach(sessionStats => {
+                if (sessionStats.name.toUpperCase().includes("GLOBAL")) {
+                    totalUptime += sessionStats.uptime
+                }
+            })
+        })
+
+        const summary: MLNetworkSummaryModel[] = []
+        this.elements.value.forEach((netStatModel, netNum) => {
+            netStatModel.sessionStats.forEach(sessionStats => {
+                if (sessionStats.name.toUpperCase().includes("GLOBAL")) {
+                    const netInfo = this.websocketService.networkManager.getWithKey(netNum)
+                    if (!netInfo)
+                        return
+                    const summaryModel = new MLNetworkSummaryModel(
+                        netNum,
+                        netInfo.name,
+                        netInfo.enabled,
+                        sessionStats.uptime,
+                        totalUptime === 0 ? 0 : sessionStats.uptime/totalUptime,
+                        0, 0, 0, 0, 0, 0, 0, 0
+                    )
+                    summary.push(summaryModel)
+                }
+            })
+        })
+
+        this.websocketService.networkManager.elements.value.forEach(n => {
+            if (!summary.find(v => v.networkNum == n.netNum)) {
+                summary.push(new MLNetworkSummaryModel(
+                    n.netNum,
+                    n.name,
+                    n.enabled,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+                ))
+            }
+        })
+
+        summary.sort((a, b) => a.networkNum - b.networkNum)
+
+        this.byNetworkStats.observable.next(summary)
     }
 
     protected override keyFromValue(value: MLNetworkStatModel): number {
