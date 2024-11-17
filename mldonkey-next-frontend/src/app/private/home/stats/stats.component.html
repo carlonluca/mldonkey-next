@@ -15,11 +15,35 @@
                 </div>
             </td>
         </ng-container>
-        <tr mat-header-row *matHeaderRowDef="['netName', 'enabled']"></tr>
-        <tr mat-row *matRowDef="let row; columns: ['netName', 'enabled'];"></tr>
+        <ng-container matColumnDef="uptime">
+            <th mat-header-cell *matHeaderCellDef>Uptime</th>
+            <td mat-cell *matCellDef="let statElement; let isEven = even">
+                <div class="wrap-anywhere alternate-row-content">
+                    {{ statElement.uptimeSecs | prettySecsShort }}
+                </div>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="uploaded">
+            <th mat-header-cell *matHeaderCellDef>Uploaded</th>
+            <td mat-cell *matCellDef="let statElement; let isEven = even">
+                <div class="wrap-anywhere alternate-row-content">
+                    {{ statElement.uploadedBytes | prettyBytes }} ({{ statElement.uploadedPerc }}%)
+                </div>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="downloaded">
+            <th mat-header-cell *matHeaderCellDef>Downloaded</th>
+            <td mat-cell *matCellDef="let statElement; let isEven = even">
+                <div class="wrap-anywhere alternate-row-content">
+                    {{ statElement.downloadedBytes | prettyBytes }} ({{ statElement.downloadedPerc }}%)
+                </div>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="['netName', 'uptime', 'uploaded', 'downloaded']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['netName', 'uptime', 'uploaded', 'downloaded'];"></tr>
     </table>
 
-    <div *ngFor="let e of this.statsService.elements.value | keyvalue">
+    <!--<div *ngFor="let e of this.statsService.elements.value | keyvalue">
         <div class="title">
             <fa-icon [icon]="(this.networkInfo(e.value.networkId)?.connected ?? false) ? this.faPlug : this.faUnplugged"
                 size="2x"
@@ -37,5 +61,5 @@
                 </ul>
             </li>
         </ul>
-    </div>
+    </div>-->
 </div>

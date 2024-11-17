@@ -55,9 +55,9 @@ export class MLNetworkSummaryModel {
         public requestsPerc: number,
         public banned: number,
         public bannedPerc: number,
-        public uploadedBytes: number,
+        public uploadedBytes: bigint,
         public uploadedPerc: number,
-        public downloadedBytes: number,
+        public downloadedBytes: bigint,
         public downloadedPerc: number
     ) {}
 }
@@ -101,10 +101,16 @@ export class StatsService extends MLCollectionModel<number, MLNetworkStatModel> 
 
     refreshStats() {
         let totalUptime = 0
+        let totalUploaded = BigInt(0)
+        let totalDownloaded = BigInt(0)
         this.elements.value.forEach((netStatModel, _netNum) => {
             netStatModel.sessionStats.forEach(sessionStats => {
                 if (sessionStats.name.toUpperCase().includes("GLOBAL")) {
                     totalUptime += sessionStats.uptime
+                    sessionStats.stats.forEach(clientStats => {
+                        totalUploaded += clientStats.uploaded
+                        totalDownloaded += clientStats.downloaded
+                    })
                 }
             })
         })
@@ -116,13 +122,23 @@ export class StatsService extends MLCollectionModel<number, MLNetworkStatModel> 
                     const netInfo = this.websocketService.networkManager.getWithKey(netNum)
                     if (!netInfo)
                         return
+                    let uploadForNet = BigInt(0)
+                    let downloadForNet = BigInt(0)
+                    sessionStats.stats.forEach(clientStat => {
+                        uploadForNet += clientStat.uploaded
+                        downloadForNet += clientStat.downloaded
+                    })
                     const summaryModel = new MLNetworkSummaryModel(
                         netNum,
                         netInfo.name,
                         netInfo.enabled,
                         sessionStats.uptime,
                         totalUptime === 0 ? 0 : sessionStats.uptime/totalUptime,
-                        0, 0, 0, 0, 0, 0, 0, 0
+                        0, 0, 0, 0,
+                        uploadForNet,
+                        Math.round(Number(uploadForNet)/Number(totalUploaded)*100),
+                        downloadForNet,
+                        Math.round(Number(downloadForNet)/Number(totalDownloaded)*100)
                     )
                     summary.push(summaryModel)
                 }
@@ -135,7 +151,7 @@ export class StatsService extends MLCollectionModel<number, MLNetworkStatModel> 
                     n.netNum,
                     n.name,
                     n.enabled,
-                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+                    0, 0, 0, 0, 0, 0, BigInt(0), 0, BigInt(0), 0
                 ))
             }
         })
