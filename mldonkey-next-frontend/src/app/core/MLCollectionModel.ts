@@ -25,7 +25,7 @@
 import { MLObservableVariable } from "./MLObservableVariable"
 import { MLUPdateable } from "./MLUpdateable"
 
-export abstract class MLCollectionModel<K, V extends MLUPdateable<V>> {
+export abstract class MLCollectionModel<K, V extends MLUPdateable<V>> implements MLUPdateable<MLCollectionModel<K, V>> {
     public elements: MLObservableVariable<Map<K, V>> = new MLObservableVariable(new Map())
 
     public getWithKey(key: K): V | undefined {
@@ -45,5 +45,19 @@ export abstract class MLCollectionModel<K, V extends MLUPdateable<V>> {
 
     protected removeWithKey(value: K) {
         this.elements.value.delete(value)
+    }
+
+    update(update: MLCollectionModel<K, V>): void {
+        update.elements.value.forEach((v, k) => {
+            if (this.elements.value.has(k))
+                this.elements.value.get(k)?.update(v)
+            else
+                this.elements.value.set(k, v)
+        })
+        this.elements.value.forEach((_v, k) => {
+            if (!update.elements.value.has(k))
+                this.elements.value.delete(k)
+        })
+        this.elements.observable.next(this.elements.value)
     }
 }

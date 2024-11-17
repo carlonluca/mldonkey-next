@@ -21,6 +21,7 @@
  * Company: -
  * Date:    2023.11.19
  */
+
 import { Pipe, PipeTransform } from "@angular/core";
 import { MLUtils } from "./MLUtils";
 

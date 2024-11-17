@@ -1,1 +1,65 @@
-<p>stats works!</p>
+<div class="main-container">
+    <table mat-table [dataSource]="this.networkSummaryDataSource" class="mat-elevation-z8">
+        <ng-container matColumnDef="netName">
+            <th mat-header-cell *matHeaderCellDef>Name</th>
+            <td mat-cell *matCellDef="let statElement; let isEven = even">
+                {{ statElement.networkName }}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="enabled">
+            <th mat-header-cell *matHeaderCellDef>Enabled</th>
+            <td mat-cell *matCellDef="let statElement; let isEven = even">
+                <div class="wrap-anywhere alternate-row-content"
+                    [ngClass]="{'red-text': !statElement.enabled, 'green-text': statElement.enabled }">
+                    {{ statElement.enabled ? "✓" : "✗" }}
+                </div>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="uptime">
+            <th mat-header-cell *matHeaderCellDef>Uptime</th>
+            <td mat-cell *matCellDef="let statElement; let isEven = even">
+                <div class="wrap-anywhere alternate-row-content">
+                    {{ statElement.uptimeSecs | prettySecsShort }}
+                </div>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="uploaded">
+            <th mat-header-cell *matHeaderCellDef>Uploaded</th>
+            <td mat-cell *matCellDef="let statElement; let isEven = even">
+                <div class="wrap-anywhere alternate-row-content">
+                    {{ statElement.uploadedBytes | prettyBytes }} ({{ statElement.uploadedPerc }}%)
+                </div>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="downloaded">
+            <th mat-header-cell *matHeaderCellDef>Downloaded</th>
+            <td mat-cell *matCellDef="let statElement; let isEven = even">
+                <div class="wrap-anywhere alternate-row-content">
+                    {{ statElement.downloadedBytes | prettyBytes }} ({{ statElement.downloadedPerc }}%)
+                </div>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="['netName', 'uptime', 'uploaded', 'downloaded']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['netName', 'uptime', 'uploaded', 'downloaded'];"></tr>
+    </table>
+
+    <!--<div *ngFor="let e of this.statsService.elements.value | keyvalue">
+        <div class="title">
+            <fa-icon [icon]="(this.networkInfo(e.value.networkId)?.connected ?? false) ? this.faPlug : this.faUnplugged"
+                size="2x"
+                [ngClass]="{'plugged': this.networkInfo(e.value.networkId)?.connected, 'unplugged': !this.networkInfo(e.value.networkId)?.connected }">
+            </fa-icon>
+            <h1>{{ this.networkInfo(e.value.networkId)?.name }}</h1>
+        </div>
+        <ul>
+            <li *ngFor="let s of e.value.sessionStats">
+                {{ s.name }} {{ s.uptime }}
+                <ul>
+                    <li *ngFor="let c of s.stats">
+                        {{ c.clientDescriptionLong }} {{ c.downloaded }}
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>-->
+</div>

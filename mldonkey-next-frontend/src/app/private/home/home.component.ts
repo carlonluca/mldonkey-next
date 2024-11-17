@@ -33,7 +33,8 @@ import {
     faMessage,
     faComputer,
     faFileLines,
-    faUpload
+    faUpload,
+    faChartPie
 } from '@fortawesome/free-solid-svg-icons'
 import { StorageService } from 'src/app/services/storage.service'
 import { MLConnectionState, WebSocketService } from 'src/app/websocket-service.service'
@@ -68,6 +69,7 @@ export class HomeComponent {
     faMessage = faMessage
     faComputer = faComputer
     faFileLines = faFileLines
+    faPie = faChartPie
     version = packageJson.version
     versionAngular = VERSION
 

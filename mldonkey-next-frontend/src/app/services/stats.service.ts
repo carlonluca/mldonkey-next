@@ -27,25 +27,141 @@ import { MLSubscriptionSet } from '../core/MLSubscriptionSet'
 import { WebSocketService } from '../websocket-service.service'
 import { MLMessageTypeFrom } from '../msg/MLMsg'
 import { interval } from 'rxjs'
-import { MLMsgToGetStats } from '../msg/MLMsgStats'
+import { MLMsgToGetStats, MLSessionStatSet, MLMsgFromStats } from '../msg/MLMsgStats'
+import { MLCollectionModel } from '../core/MLCollectionModel'
+import { MLUPdateable } from '../core/MLUpdateable'
+import { MLObservableVariable } from '../core/MLObservableVariable'
+
+class MLNetworkStatModel implements MLUPdateable<MLNetworkStatModel> {
+    constructor(
+        public networkId: number,
+        public sessionStats: MLSessionStatSet[]
+    ) {}
+    
+    update(update: MLNetworkStatModel): void {
+        this.networkId = update.networkId
+        this.sessionStats = update.sessionStats
+    }
+}
+
+export class MLNetworkSummaryModel {
+    constructor(
+        public networkNum: number,
+        public networkName: string,
+        public enabled: boolean,
+        public uptimeSecs: number,
+        public uptimePerc: number,
+        public requests: number,
+        public requestsPerc: number,
+        public banned: number,
+        public bannedPerc: number,
+        public uploadedBytes: bigint,
+        public uploadedPerc: number,
+        public downloadedBytes: bigint,
+        public downloadedPerc: number
+    ) {}
+}
 
 @Injectable({
     providedIn: 'root'
 })
-export class StatsService {
+export class StatsService extends MLCollectionModel<number, MLNetworkStatModel> {
+    public byNetworkStats = new MLObservableVariable<MLNetworkSummaryModel[]>([])
     private subscriptions = new MLSubscriptionSet()
     
     constructor(private websocketService: WebSocketService) {
+        super()
         this.subscriptions.add(
             this.websocketService.lastMessage.observable.subscribe(m => {
                 if (m.type !== MLMessageTypeFrom.T_STATS)
                     return
+                const msg = m as MLMsgFromStats
+                msg.stats.forEach(sessionStat => {
+                    sessionStat.stats?.sort((a, b) => a.clientDescriptionLong.localeCompare(b.clientDescriptionLong))
+                })
+                msg.stats.sort((a, b) => a.name.localeCompare(b.name))
+                this.handleValue(new MLNetworkStatModel(msg.networkId, msg.stats))
+                this.refreshStats()
             })
         )
         this.subscriptions.add(
             interval(10000).subscribe(() => {
-                this.websocketService.sendMsg(new MLMsgToGetStats(8))
+                this.refresh()
             })
         )
+        this.refresh()
+        this.refreshStats()
+    }
+
+    refresh() {
+        this.websocketService.networkManager.elements.value.forEach(n => {
+            this.websocketService.sendMsg(new MLMsgToGetStats(n.netNum))
+        })
+    }
+
+    refreshStats() {
+        let totalUptime = 0
+        let totalUploaded = BigInt(0)
+        let totalDownloaded = BigInt(0)
+        this.elements.value.forEach((netStatModel, _netNum) => {
+            netStatModel.sessionStats.forEach(sessionStats => {
+                if (sessionStats.name.toUpperCase().includes("GLOBAL")) {
+                    totalUptime += sessionStats.uptime
+                    sessionStats.stats.forEach(clientStats => {
+                        totalUploaded += clientStats.uploaded
+                        totalDownloaded += clientStats.downloaded
+                    })
+                }
+            })
+        })
+
+        const summary: MLNetworkSummaryModel[] = []
+        this.elements.value.forEach((netStatModel, netNum) => {
+            netStatModel.sessionStats.forEach(sessionStats => {
+                if (sessionStats.name.toUpperCase().includes("GLOBAL")) {
+                    const netInfo = this.websocketService.networkManager.getWithKey(netNum)
+                    if (!netInfo)
+                        return
+                    let uploadForNet = BigInt(0)
+                    let downloadForNet = BigInt(0)
+                    sessionStats.stats.forEach(clientStat => {
+                        uploadForNet += clientStat.uploaded
+                        downloadForNet += clientStat.downloaded
+                    })
+                    const summaryModel = new MLNetworkSummaryModel(
+                        netNum,
+                        netInfo.name,
+                        netInfo.enabled,
+                        sessionStats.uptime,
+                        totalUptime === 0 ? 0 : sessionStats.uptime/totalUptime,
+                        0, 0, 0, 0,
+                        uploadForNet,
+                        Math.round(Number(uploadForNet)/Number(totalUploaded)*100),
+                        downloadForNet,
+                        Math.round(Number(downloadForNet)/Number(totalDownloaded)*100)
+                    )
+                    summary.push(summaryModel)
+                }
+            })
+        })
+
+        this.websocketService.networkManager.elements.value.forEach(n => {
+            if (!summary.find(v => v.networkNum == n.netNum)) {
+                summary.push(new MLNetworkSummaryModel(
+                    n.netNum,
+                    n.name,
+                    n.enabled,
+                    0, 0, 0, 0, 0, 0, BigInt(0), 0, BigInt(0), 0
+                ))
+            }
+        })
+
+        summary.sort((a, b) => a.networkNum - b.networkNum)
+
+        this.byNetworkStats.observable.next(summary)
+    }
+
+    protected override keyFromValue(value: MLNetworkStatModel): number {
+        return value.networkId
     }
 }

@@ -44,6 +44,7 @@ import { StatsComponent } from './private/home/stats/stats.component'
 import { OptionsComponent } from './private/home/options/options.component'
 import { FormsModule } from '@angular/forms'
 import { PrettyBytesPipe, PrettyBytesSpeedPipe } from "./core/pretty-bytes.pipe"
+import { PrettySecsPipe, PrettySecsShortPipe } from "./core/pretty-time.ppe"
 import { SectionTitleComponent } from './private/home/section-title/section-title.component'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
@@ -89,32 +90,34 @@ import { SpeedIndicatorComponent } from './private/home/download/speed-indicator
     ],
     bootstrap: [AppComponent],
     imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        MatToolbarModule,
-        MatTableModule,
-        MatSortModule,
-        MatSidenavModule,
-        FormsModule,
-        PrettyBytesPipe,
-        PrettyBytesSpeedPipe,
-        FontAwesomeModule,
-        MatIconModule,
-        MatButtonModule,
-        MatInputModule,
-        MatFormFieldModule,
-        MatProgressSpinnerModule,
-        MatProgressBarModule,
-        MatCheckboxModule,
-        MatSelectModule,
-        MatMenuModule,
-        MatTabsModule,
-        NgxMaskDirective,
-        NgxMaskPipe,
-        MatChipsModule,
-        MatDividerModule
-    ],
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatToolbarModule,
+    MatTableModule,
+    MatSortModule,
+    MatSidenavModule,
+    FormsModule,
+    PrettyBytesPipe,
+    PrettyBytesSpeedPipe,
+    PrettySecsPipe,
+    FontAwesomeModule,
+    MatIconModule,
+    MatButtonModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatProgressSpinnerModule,
+    MatProgressBarModule,
+    MatCheckboxModule,
+    MatSelectModule,
+    MatMenuModule,
+    MatTabsModule,
+    NgxMaskDirective,
+    NgxMaskPipe,
+    MatChipsModule,
+    MatDividerModule,
+    PrettySecsShortPipe
+],
     exports: [
         ScrollToBottomDirective
     ]

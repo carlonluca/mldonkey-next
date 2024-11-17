@@ -22,12 +22,29 @@
  * Date:    2023.12.03
  */
 import { Component } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
+import { faPlug, faPlugCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import { MLNetworkSummaryModel, StatsService } from 'src/app/services/stats.service';
+import { WebSocketService } from 'src/app/websocket-service.service';
 
 @Component({
-  selector: 'app-stats',
-  templateUrl: './stats.component.html',
-  styleUrls: ['./stats.component.scss']
+    selector: 'app-stats',
+    templateUrl: './stats.component.html',
+    styleUrls: ['./stats.component.scss']
 })
 export class StatsComponent {
+    faPlug = faPlug
+    faUnplugged = faPlugCircleXmark
+    networkSummaryDataSource = new MatTableDataSource<MLNetworkSummaryModel>([])
 
+    constructor(public statsService: StatsService, private websocketService: WebSocketService) {
+        this.statsService.byNetworkStats.observable.subscribe((stats) => {
+            this.networkSummaryDataSource.data = stats
+        })
+        this.networkSummaryDataSource.data = this.statsService.byNetworkStats.value
+    }
+
+    networkInfo(networkNum: number) {
+        return this.websocketService.networkManager.getWithKey(networkNum)
+    }
 }
