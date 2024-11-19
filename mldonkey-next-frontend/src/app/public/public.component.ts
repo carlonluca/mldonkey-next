@@ -67,8 +67,7 @@ export class PublicComponent {
                     this.connected = true
                     this.spinner.hide()
                     this.router.navigateByUrl("/home")
-                    if (this.inputUsr && this.inputPwd)
-                        this.storage.setLoginData(new Credentials(this.inputUsr, this.inputPwd))
+                    this.storage.setLoginData(new Credentials(this.inputUsr, this.inputPwd))
                     break
                 case MLConnectionState.S_CONNECTED: {
                     if (!this.webSocketService.autoConnectionEnabled)

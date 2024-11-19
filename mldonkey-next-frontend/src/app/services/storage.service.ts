@@ -33,7 +33,7 @@ export class StorageService {
     getLoginData(): Credentials | null {
         const username = localStorage.getItem(StorageService.KEY_LOGIN_USER)
         const passwd = localStorage.getItem(StorageService.KEY_LOGIN_PASSWD)
-        if (username && passwd)
+        if (username !== null && passwd !== null)
             return new Credentials(username, passwd)
         return null
     }
