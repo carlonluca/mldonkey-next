@@ -43,6 +43,9 @@
         <tr mat-row *matRowDef="let row; columns: ['netName', 'uptime', 'uploaded', 'downloaded'];"></tr>
     </table>
 
+    <div echarts [options]="usageByNetworkChart" [autoResize]="true" [merge]="usageByNetworkChartMergeOption"
+        class="usage-by-network-chart"></div>
+
     <!--<div *ngFor="let e of this.statsService.elements.value | keyvalue">
         <div class="title">
             <fa-icon [icon]="(this.networkInfo(e.value.networkId)?.connected ?? false) ? this.faPlug : this.faUnplugged"

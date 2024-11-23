@@ -58,6 +58,12 @@ body {
 th {
     position: relative;
     font-weight: bold !important;
+    padding: 10px !important;
+}
+
+td {
+    font-size: x-small;
+    padding: 10px !important;
 }
 
 th::before {

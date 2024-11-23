@@ -1,7 +1,7 @@
 /*
  * This file is part of mldonkey-next.
  *
- * Copyright (c) 2023 Luca Carlon
+ * Copyright (c) 2024 Luca Carlon
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,13 +19,14 @@
 /**
  * Author:  Luca Carlon
  * Company: -
- * Date:    2023.12.03
+ * Date:    2024.11.20
  */
-import { Component } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
-import { faPlug, faPlugCircleXmark } from '@fortawesome/free-solid-svg-icons';
-import { MLNetworkSummaryModel, StatsService } from 'src/app/services/stats.service';
-import { WebSocketService } from 'src/app/websocket-service.service';
+import { Component } from '@angular/core'
+import { MatTableDataSource } from '@angular/material/table'
+import { faPlug, faPlugCircleXmark } from '@fortawesome/free-solid-svg-icons'
+import { MLNetworkSummaryModel, StatsService } from 'src/app/services/stats.service'
+import { WebSocketService } from 'src/app/websocket-service.service'
+import type { EChartsOption } from 'echarts'
 
 @Component({
     selector: 'app-stats',
@@ -37,14 +38,91 @@ export class StatsComponent {
     faUnplugged = faPlugCircleXmark
     networkSummaryDataSource = new MatTableDataSource<MLNetworkSummaryModel>([])
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    usageByNetworkChartMergeOption: any;
+    usageByNetworkChart: EChartsOption = {
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        legend: {
+            textStyle: {
+                color: "white"
+            }
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'value',
+            boundaryGap: [0, 0.01],
+            axisLabel: {
+                show: true,
+                rotate: 45,
+            }
+        },
+        yAxis: {
+            type: 'category',
+            data: []
+        },
+        series: [
+            {
+                name: 'Uploaded',
+                type: 'bar',
+                data: []
+            },
+            {
+                name: 'Downloaded',
+                type: 'bar',
+                data: []
+            }
+        ]
+    }
+
     constructor(public statsService: StatsService, private websocketService: WebSocketService) {
         this.statsService.byNetworkStats.observable.subscribe((stats) => {
             this.networkSummaryDataSource.data = stats
+            this.refreshByNetworkChart(stats)
         })
         this.networkSummaryDataSource.data = this.statsService.byNetworkStats.value
+        this.refreshByNetworkChart(this.statsService.byNetworkStats.value)
     }
 
     networkInfo(networkNum: number) {
         return this.websocketService.networkManager.getWithKey(networkNum)
+    }
+
+    refreshByNetworkChart(summary: MLNetworkSummaryModel[]) {
+        const networkNames: string[] = []
+        const uploadedData: number[] = []
+        const downloadedData: number[] = []
+        summary?.forEach(n => {
+            networkNames.push(n.networkName)
+            uploadedData.push(Number(n.uploadedBytes / BigInt(1024 * 1024)))
+            downloadedData.push(Number(n.downloadedBytes / BigInt(1024 * 1024)))
+        })
+        this.usageByNetworkChartMergeOption = {
+            series: [
+                {
+                    name: "Uploaded",
+                    type: "bar",
+                    data: uploadedData
+                },
+                {
+                    name: "Downloaded",
+                    type: "bar",
+                    data: downloadedData
+                }
+            ],
+            yAxis: {
+                type: 'category',
+                data: networkNames
+            }
+        }
     }
 }

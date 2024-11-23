@@ -19,7 +19,7 @@
 /**
  * Author:  Luca Carlon
  * Company: -
- * Date: 14.08.2023
+ * Date:    2023.08.14
  */
 
 import { NgModule } from '@angular/core'
@@ -64,6 +64,7 @@ import { ScrollToBottomDirective } from './private/home/corelogs/scroll'
 import { MatDividerModule } from '@angular/material/divider'
 import { TurtleIconComponent } from './components/turtle-icon/turtle-icon.component'
 import { SpeedIndicatorComponent } from './private/home/download/speed-indicator/speed-indicator.component'
+import { NgxEchartsModule } from 'ngx-echarts'
 
 @NgModule({
     declarations: [
@@ -90,34 +91,35 @@ import { SpeedIndicatorComponent } from './private/home/download/speed-indicator
     ],
     bootstrap: [AppComponent],
     imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MatToolbarModule,
-    MatTableModule,
-    MatSortModule,
-    MatSidenavModule,
-    FormsModule,
-    PrettyBytesPipe,
-    PrettyBytesSpeedPipe,
-    PrettySecsPipe,
-    FontAwesomeModule,
-    MatIconModule,
-    MatButtonModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatProgressSpinnerModule,
-    MatProgressBarModule,
-    MatCheckboxModule,
-    MatSelectModule,
-    MatMenuModule,
-    MatTabsModule,
-    NgxMaskDirective,
-    NgxMaskPipe,
-    MatChipsModule,
-    MatDividerModule,
-    PrettySecsShortPipe
-],
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MatToolbarModule,
+        MatTableModule,
+        MatSortModule,
+        MatSidenavModule,
+        FormsModule,
+        PrettyBytesPipe,
+        PrettyBytesSpeedPipe,
+        PrettySecsPipe,
+        FontAwesomeModule,
+        MatIconModule,
+        MatButtonModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatProgressSpinnerModule,
+        MatProgressBarModule,
+        MatCheckboxModule,
+        MatSelectModule,
+        MatMenuModule,
+        MatTabsModule,
+        NgxMaskDirective,
+        NgxMaskPipe,
+        MatChipsModule,
+        MatDividerModule,
+        PrettySecsShortPipe,
+        NgxEchartsModule.forRoot({ echarts: () => import('echarts') })
+    ],
     exports: [
         ScrollToBottomDirective
     ]
