@@ -34,7 +34,7 @@ import { faUser, faKey, faLink, faLinkSlash } from '@fortawesome/free-solid-svg-
 
 declare global {
     interface Window { location: Location; }
-  }
+}
 
 @Component({
     selector: 'app-public',
@@ -61,6 +61,13 @@ export class PublicComponent {
         private router: Router,
         private route: ActivatedRoute,
         private storage: StorageService) {
+
+        const loginData = storage.getLoginData()
+        if (loginData) {
+            this.inputUsr = loginData.username
+            this.inputPwd = loginData.passwd
+        }
+
         webSocketService.connectionState.observable.subscribe(state => {
             switch (state) {
                 case MLConnectionState.S_AUTHENTICATED:
