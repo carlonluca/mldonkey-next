@@ -28,10 +28,23 @@ export class UiServiceService {
     constructor() {
         window.onresize = () => {
             this.mobileLayout.value = UiServiceService.isMobile()
+            this.refreshCss()
         }
+        this.refreshCss()
     }
 
     public static isMobile(): boolean {
         return window.innerWidth <= 991
+    }
+
+    public static getTableFontSize(): string {
+        if (this.isMobile())
+            return "small"
+        else
+            return "var(--mat-table-header-headline-size, var(--mat-app-title-small-size, 14px))"
+    }
+
+    private refreshCss() {
+        window.document.documentElement.style.setProperty("--table-font-size", UiServiceService.getTableFontSize())
     }
 }

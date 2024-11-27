@@ -16,6 +16,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+::root {
+    --table-font-size: medium;
+}
+
 html,
 body {
     height: 100%;
@@ -62,7 +66,7 @@ th {
 }
 
 td {
-    font-size: x-small;
+    font-size: var(--table-font-size);
     padding: 10px !important;
 }
 
