@@ -26,7 +26,8 @@ import { MatTableDataSource } from '@angular/material/table'
 import { faPlug, faPlugCircleXmark } from '@fortawesome/free-solid-svg-icons'
 import { MLNetworkSummaryModel, StatsService } from 'src/app/services/stats.service'
 import { WebSocketService } from 'src/app/websocket-service.service'
-import type { EChartsOption } from 'echarts'
+import { type EChartsOption } from 'echarts'
+import { MLUtils } from 'src/app/core/MLUtils'
 
 @Component({
     selector: 'app-stats',
@@ -45,7 +46,8 @@ export class StatsComponent {
             trigger: 'axis',
             axisPointer: {
                 type: 'shadow'
-            }
+            },
+            valueFormatter: value => MLUtils.beautifySize(BigInt((value as number)*1024*1024))
         },
         legend: {
             textStyle: {
@@ -64,6 +66,7 @@ export class StatsComponent {
             axisLabel: {
                 show: true,
                 rotate: 45,
+                formatter: value => MLUtils.beautifySize(BigInt((value as number)*1024*1024))
             }
         },
         yAxis: {
