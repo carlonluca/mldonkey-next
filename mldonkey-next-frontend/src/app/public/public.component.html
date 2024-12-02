@@ -23,8 +23,9 @@
         <app-input-with-icon class="full-screen-row" [faIcon]="faKey" [(userInput)]="inputPwd" label="Password"
             autocapitalize="none" tooltip="Your password" type="password" />
         <button class="full-screen-row" mat-raised-button (click)="login()">Login</button>
-        <mat-divider id="divider"></mat-divider>
-        <button class="full-screen-row" mat-raised-button (click)="doSetup()">Server setup</button>
+        <mat-divider id="divider" *ngIf="this.isWebView()"></mat-divider>
+        <button class="full-screen-row" mat-raised-button (click)="doSetup()" *ngIf="this.isWebView()">Server
+            setup</button>
         <div class="flex-container">
             <fa-icon class="flex-child" [icon]="this.connected ? faConnected : faDisconnected"></fa-icon>
             <p>{{ this.connected ? "Connected to the core" : "Not connected to the core" }}</p>
