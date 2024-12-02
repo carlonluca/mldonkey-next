@@ -16,8 +16,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-::root {
+@import 'app/css/shared.scss';
+
+:root {
     --table-font-size: medium;
+    --bar-chart-color1: #{lighten($primary-color, 20%)};
+    --bar-chart-color2: #{darken($primary-color, 20%)};
 }
 
 html,

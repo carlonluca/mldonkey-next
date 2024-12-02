@@ -35,6 +35,8 @@ import { MLUtils } from 'src/app/core/MLUtils'
     styleUrls: ['./stats.component.scss']
 })
 export class StatsComponent {
+    private computedStyle = getComputedStyle(document.documentElement)
+
     faPlug = faPlug
     faUnplugged = faPlugCircleXmark
     networkSummaryDataSource = new MatTableDataSource<MLNetworkSummaryModel>([])
@@ -47,7 +49,7 @@ export class StatsComponent {
             axisPointer: {
                 type: 'shadow'
             },
-            valueFormatter: value => MLUtils.beautifySize(BigInt((value as number)*1024*1024))
+            valueFormatter: value => MLUtils.beautifySize(BigInt((value as number) * 1024 * 1024))
         },
         legend: {
             textStyle: {
@@ -66,7 +68,7 @@ export class StatsComponent {
             axisLabel: {
                 show: true,
                 rotate: 45,
-                formatter: value => MLUtils.beautifySize(BigInt((value as number)*1024*1024))
+                formatter: value => MLUtils.beautifySize(BigInt((value as number) * 1024 * 1024))
             }
         },
         yAxis: {
@@ -77,11 +79,17 @@ export class StatsComponent {
             {
                 name: 'Uploaded',
                 type: 'bar',
+                itemStyle: {
+                    color: this.computedStyle.getPropertyValue("--bar-chart-color1")
+                },
                 data: []
             },
             {
                 name: 'Downloaded',
                 type: 'bar',
+                itemStyle: {
+                    color: this.computedStyle.getPropertyValue("--bar-chart-color2")
+                },
                 data: []
             }
         ]
