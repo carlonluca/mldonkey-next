@@ -39,6 +39,7 @@ import { MLMsgFromSysInfo } from './msg/MLMsgSysInfo'
 import { MLMsgFromClientStats } from './msg/MLMsgClientStats'
 import { MLMsgFromUploaders } from './msg/MLMsgUploaders'
 import { MLMsgFromStats } from './msg/MLMsgStats'
+import { MLSubscriptionSet } from './core/MLSubscriptionSet'
 
 export enum MLConnectionState {
     S_NOT_CONNECTED,
@@ -56,36 +57,42 @@ export class WebSocketService {
     public lastMessage: MLObservableVariable<ML.MLMsgFrom> =
         new MLObservableVariable<ML.MLMsgFrom>(new ML.MLMsgFromNone())
     public networkManager: MLNetworkManager
-    public autoConnectionEnabled = true
 
     private buffer: ArrayBuffer = new ArrayBuffer(0)
     private protocol = 0
+    private subscriptions = new MLSubscriptionSet()
 
     constructor() {
         this.networkManager = new MLNetworkManager(this)
     }
 
     public connect(url: string): void {
+        if (this.connectionState.value != MLConnectionState.S_NOT_CONNECTED)
+            return
+        this.disconnect()
         this.webSocket = webSocket<ArrayBuffer>({
             url: url,
             binaryType: "arraybuffer",
             deserializer: (e: MessageEvent) => e.data,
             serializer: (b: ArrayBuffer) => b,
             openObserver: {
-                next: value => {
-                    this.connectionState.value = value ? MLConnectionState.S_CONNECTED : MLConnectionState.S_NOT_CONNECTED
+                next: _ => {
+                    this.connectionState.value = MLConnectionState.S_CONNECTED
                 }
             }
         })
-        this.webSocket.subscribe({
-            next: (data: ArrayBuffer) => this.onMessageReceived(data),
-            error: (error) => this.onError(error),
-            complete: () => this.onClose()
-        })
+        this.subscriptions.add(
+            this.webSocket.subscribe({
+                next: (data: ArrayBuffer) => this.onMessageReceived(data),
+                error: (error) => this.onError(error),
+                complete: () => this.onClose()
+            })
+        )
     }
 
     public disconnect(): void {
-        this.webSocket.unsubscribe()
+        this.webSocket?.complete()
+        this.subscriptions.unsubscribe(null)
         this.connectionState.value = MLConnectionState.S_NOT_CONNECTED
     }
 

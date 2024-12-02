@@ -22,7 +22,7 @@
  * Date: 14.08.2023
  */
 
-import { Component } from '@angular/core'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { MLConnectionState, WebSocketService } from '../websocket-service.service'
 import { SpinnerService } from '../services/spinner.service'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -31,6 +31,8 @@ import { Credentials, StorageService } from '../services/storage.service'
 import { MLMessageTypeFrom } from '../msg/MLMsg'
 import { uiLogger } from '../core/MLLogger'
 import { faUser, faKey, faLink, faLinkSlash } from '@fortawesome/free-solid-svg-icons'
+import { MLSubscriptionSet } from '../core/MLSubscriptionSet'
+import { interval } from 'rxjs'
 
 declare global {
     interface Window { location: Location; }
@@ -41,7 +43,12 @@ declare global {
     templateUrl: './public.component.html',
     styleUrls: ['./public.component.scss']
 })
-export class PublicComponent {
+export class PublicComponent implements OnInit, OnDestroy {
+    private static readonly retryInterval = 7000
+    private observables = new MLSubscriptionSet()
+    private wsAddr = environment.mldonkeyWsAddr.length <= 0 ? "localhost" : environment.mldonkeyWsAddr
+    private wsUrl = `ws://${this.wsAddr}:${environment.mldonkeyWsPort}`
+
     faUser = faUser
     faKey = faKey
     faConnected = faLink
@@ -77,9 +84,6 @@ export class PublicComponent {
                     this.storage.setLoginData(new Credentials(this.inputUsr, this.inputPwd))
                     break
                 case MLConnectionState.S_CONNECTED: {
-                    if (!this.webSocketService.autoConnectionEnabled)
-                        return
-                    this.webSocketService.autoConnectionEnabled = false
                     this.connected = true
                     const data = this.storage.getLoginData()
                     if (data) {
@@ -105,8 +109,22 @@ export class PublicComponent {
                 this.storage.setLoginData(null)
         })
 
-        const wsAddr = environment.mldonkeyWsAddr.length <= 0 ? "localhost" : environment.mldonkeyWsAddr
-        this.webSocketService.connect(`ws://${wsAddr}:${environment.mldonkeyWsPort}`)
+        this.webSocketService.connect(this.wsUrl)
+    }
+
+    ngOnInit(): void {
+        this.observables.add(
+            interval(PublicComponent.retryInterval).subscribe(() => {
+                if (this.connected)
+                    return
+                this.webSocketService.disconnect()
+                this.webSocketService.connect(this.wsUrl)
+            })
+        )
+    }
+
+    ngOnDestroy(): void {
+        this.observables.unsubscribe(null)
     }
 
     /**
