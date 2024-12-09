@@ -24,9 +24,10 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-servers',
-  templateUrl: './servers.component.html',
-  styleUrls: ['./servers.component.scss']
+    selector: 'app-servers',
+    templateUrl: './servers.component.html',
+    styleUrls: ['./servers.component.scss'],
+    standalone: false
 })
 export class ServersComponent {
 

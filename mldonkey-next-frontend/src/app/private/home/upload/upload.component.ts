@@ -7,7 +7,6 @@ import { WebSocketService } from 'src/app/websocket-service.service';
 
 @Component({
     selector: 'app-upload',
-    standalone: true,
     imports: [],
     templateUrl: './upload.component.html',
     styleUrl: './upload.component.scss'
