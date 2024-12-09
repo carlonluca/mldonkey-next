@@ -27,7 +27,7 @@ Test_webapp:
 
 Test_app:
   image:
-    name: carlonluca/qt-dev:6.8.0
+    name: carlonluca/qt-dev:6.8.1
     entrypoint: [""]
   stage: test_app
   dependencies:

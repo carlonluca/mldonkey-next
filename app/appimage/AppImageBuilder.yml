@@ -1,9 +1,9 @@
 version: 1
 script:
-- mkdir -p AppDir/opt/qt/6.8.0/gcc_64/
-- cp -r /opt/qt/6.8.0/gcc_64/plugins AppDir/opt/qt/6.8.0/gcc_64/
-- cp -r /opt/qt/6.8.0/gcc_64/qml AppDir/opt/qt/6.8.0/gcc_64/
-- cp -r /opt/qt/6.8.0/gcc_64/resources AppDir/opt/qt/6.8.0/gcc_64/
+- mkdir -p AppDir/opt/qt/6.8.1/gcc_64/
+- cp -r /opt/qt/6.8.1/gcc_64/plugins AppDir/opt/qt/6.8.1/gcc_64/
+- cp -r /opt/qt/6.8.1/gcc_64/qml AppDir/opt/qt/6.8.1/gcc_64/
+- cp -r /opt/qt/6.8.1/gcc_64/resources AppDir/opt/qt/6.8.1/gcc_64/
 AppDir:
   path: /mldonkeyapp/app/build/appimage/AppDir
   app_info:
@@ -37,7 +37,7 @@ AppDir:
     - xkb-data
   files:
     include:
-    - /opt/qt/6.8.0/gcc_64/libexec/QtWebEngineProcess
+    - /opt/qt/6.8.1/gcc_64/libexec/QtWebEngineProcess
     - /lib/x86_64-linux-gnu/libLLVM-17.so.1
     - /lib/x86_64-linux-gnu/libelf.so.1
     - /lib/x86_64-linux-gnu/libfreeblpriv3.so
@@ -46,49 +46,49 @@ AppDir:
     - /lib/x86_64-linux-gnu/libsensors.so.5
     - /lib/x86_64-linux-gnu/libsoftokn3.so
     - /lib/x86_64-linux-gnu/libssl.so.3
-    - /opt/qt/6.8.0/gcc_64/lib/libQt6WebEngineQuick.so.6
-    - /opt/qt/6.8.0/gcc_64/lib/libQt6WebSockets.so.6
-    - /opt/qt/6.8.0/gcc_64/libexec/../lib/libQt6WebEngineCore.so.6
-    - /opt/qt/6.8.0/gcc_64/plugins/platforminputcontexts/libcomposeplatforminputcontextplugin.so
-    - /opt/qt/6.8.0/gcc_64/plugins/platforminputcontexts/libibusplatforminputcontextplugin.so
-    - /opt/qt/6.8.0/gcc_64/plugins/platforminputcontexts/libqtvirtualkeyboardplugin.so
-    - /opt/qt/6.8.0/gcc_64/plugins/platforms/libqeglfs.so
-    - /opt/qt/6.8.0/gcc_64/plugins/platforms/libqlinuxfb.so
-    - /opt/qt/6.8.0/gcc_64/plugins/platforms/libqminimal.so
-    - /opt/qt/6.8.0/gcc_64/plugins/platforms/libqminimalegl.so
-    - /opt/qt/6.8.0/gcc_64/plugins/platforms/libqoffscreen.so
-    - /opt/qt/6.8.0/gcc_64/plugins/platforms/libqvnc.so
-    - /opt/qt/6.8.0/gcc_64/plugins/platforms/libqwayland-egl.so
-    - /opt/qt/6.8.0/gcc_64/plugins/platforms/libqwayland-generic.so
-    - /opt/qt/6.8.0/gcc_64/plugins/platforms/libqxcb.so
-    - /opt/qt/6.8.0/gcc_64/plugins/platformthemes/libqxdgdesktopportal.so
-    - /opt/qt/6.8.0/gcc_64/plugins/tls/libqcertonlybackend.so
-    - /opt/qt/6.8.0/gcc_64/plugins/tls/libqopensslbackend.so
-    - /opt/qt/6.8.0/gcc_64/plugins/xcbglintegrations/libqxcb-egl-integration.so
-    - /opt/qt/6.8.0/gcc_64/plugins/xcbglintegrations/libqxcb-glx-integration.so
-    - /opt/qt/6.8.0/gcc_64/qml/QtQuick/Controls/Basic/libqtquickcontrols2basicstyleplugin.so
-    - /opt/qt/6.8.0/gcc_64/qml/QtQuick/Controls/Basic/qmldir
-    - /opt/qt/6.8.0/gcc_64/qml/QtQuick/Controls/Fusion/libqtquickcontrols2fusionstyleplugin.so
-    - /opt/qt/6.8.0/gcc_64/qml/QtQuick/Controls/Fusion/qmldir
-    - /opt/qt/6.8.0/gcc_64/qml/QtQuick/Controls/Material/impl/libqtquickcontrols2materialstyleimplplugin.so
-    - /opt/qt/6.8.0/gcc_64/qml/QtQuick/Controls/Material/impl/qmldir
-    - /opt/qt/6.8.0/gcc_64/qml/QtQuick/Controls/Material/libqtquickcontrols2materialstyleplugin.so
-    - /opt/qt/6.8.0/gcc_64/qml/QtQuick/Controls/Material/qmldir
-    - /opt/qt/6.8.0/gcc_64/qml/QtQuick/Controls/impl/libqtquickcontrols2implplugin.so
-    - /opt/qt/6.8.0/gcc_64/qml/QtQuick/Controls/impl/qmldir
-    - /opt/qt/6.8.0/gcc_64/qml/QtQuick/Controls/libqtquickcontrols2plugin.so
-    - /opt/qt/6.8.0/gcc_64/qml/QtQuick/Controls/qmldir
-    - /opt/qt/6.8.0/gcc_64/qml/QtQuick/Templates/libqtquicktemplates2plugin.so
-    - /opt/qt/6.8.0/gcc_64/qml/QtQuick/Templates/qmldir
-    - /opt/qt/6.8.0/gcc_64/qml/QtWebEngine/libqtwebenginequickplugin.so
-    - /opt/qt/6.8.0/gcc_64/qml/QtWebEngine/qmldir
-    - /opt/qt/6.8.0/gcc_64/resources/icudtl.dat
-    - /opt/qt/6.8.0/gcc_64/resources/qtwebengine_devtools_resources.pak
-    - /opt/qt/6.8.0/gcc_64/resources/qtwebengine_resources.pak
-    - /opt/qt/6.8.0/gcc_64/resources/qtwebengine_resources_100p.pak
-    - /opt/qt/6.8.0/gcc_64/resources/qtwebengine_resources_200p.pak
-    - /opt/qt/6.8.0/gcc_64/resources/v8_context_snapshot.bin
-    - /opt/qt/6.8.0/gcc_64/translations/qtwebengine_locales/en-US.pak
+    - /opt/qt/6.8.1/gcc_64/lib/libQt6WebEngineQuick.so.6
+    - /opt/qt/6.8.1/gcc_64/lib/libQt6WebSockets.so.6
+    - /opt/qt/6.8.1/gcc_64/libexec/../lib/libQt6WebEngineCore.so.6
+    - /opt/qt/6.8.1/gcc_64/plugins/platforminputcontexts/libcomposeplatforminputcontextplugin.so
+    - /opt/qt/6.8.1/gcc_64/plugins/platforminputcontexts/libibusplatforminputcontextplugin.so
+    - /opt/qt/6.8.1/gcc_64/plugins/platforminputcontexts/libqtvirtualkeyboardplugin.so
+    - /opt/qt/6.8.1/gcc_64/plugins/platforms/libqeglfs.so
+    - /opt/qt/6.8.1/gcc_64/plugins/platforms/libqlinuxfb.so
+    - /opt/qt/6.8.1/gcc_64/plugins/platforms/libqminimal.so
+    - /opt/qt/6.8.1/gcc_64/plugins/platforms/libqminimalegl.so
+    - /opt/qt/6.8.1/gcc_64/plugins/platforms/libqoffscreen.so
+    - /opt/qt/6.8.1/gcc_64/plugins/platforms/libqvnc.so
+    - /opt/qt/6.8.1/gcc_64/plugins/platforms/libqwayland-egl.so
+    - /opt/qt/6.8.1/gcc_64/plugins/platforms/libqwayland-generic.so
+    - /opt/qt/6.8.1/gcc_64/plugins/platforms/libqxcb.so
+    - /opt/qt/6.8.1/gcc_64/plugins/platformthemes/libqxdgdesktopportal.so
+    - /opt/qt/6.8.1/gcc_64/plugins/tls/libqcertonlybackend.so
+    - /opt/qt/6.8.1/gcc_64/plugins/tls/libqopensslbackend.so
+    - /opt/qt/6.8.1/gcc_64/plugins/xcbglintegrations/libqxcb-egl-integration.so
+    - /opt/qt/6.8.1/gcc_64/plugins/xcbglintegrations/libqxcb-glx-integration.so
+    - /opt/qt/6.8.1/gcc_64/qml/QtQuick/Controls/Basic/libqtquickcontrols2basicstyleplugin.so
+    - /opt/qt/6.8.1/gcc_64/qml/QtQuick/Controls/Basic/qmldir
+    - /opt/qt/6.8.1/gcc_64/qml/QtQuick/Controls/Fusion/libqtquickcontrols2fusionstyleplugin.so
+    - /opt/qt/6.8.1/gcc_64/qml/QtQuick/Controls/Fusion/qmldir
+    - /opt/qt/6.8.1/gcc_64/qml/QtQuick/Controls/Material/impl/libqtquickcontrols2materialstyleimplplugin.so
+    - /opt/qt/6.8.1/gcc_64/qml/QtQuick/Controls/Material/impl/qmldir
+    - /opt/qt/6.8.1/gcc_64/qml/QtQuick/Controls/Material/libqtquickcontrols2materialstyleplugin.so
+    - /opt/qt/6.8.1/gcc_64/qml/QtQuick/Controls/Material/qmldir
+    - /opt/qt/6.8.1/gcc_64/qml/QtQuick/Controls/impl/libqtquickcontrols2implplugin.so
+    - /opt/qt/6.8.1/gcc_64/qml/QtQuick/Controls/impl/qmldir
+    - /opt/qt/6.8.1/gcc_64/qml/QtQuick/Controls/libqtquickcontrols2plugin.so
+    - /opt/qt/6.8.1/gcc_64/qml/QtQuick/Controls/qmldir
+    - /opt/qt/6.8.1/gcc_64/qml/QtQuick/Templates/libqtquicktemplates2plugin.so
+    - /opt/qt/6.8.1/gcc_64/qml/QtQuick/Templates/qmldir
+    - /opt/qt/6.8.1/gcc_64/qml/QtWebEngine/libqtwebenginequickplugin.so
+    - /opt/qt/6.8.1/gcc_64/qml/QtWebEngine/qmldir
+    - /opt/qt/6.8.1/gcc_64/resources/icudtl.dat
+    - /opt/qt/6.8.1/gcc_64/resources/qtwebengine_devtools_resources.pak
+    - /opt/qt/6.8.1/gcc_64/resources/qtwebengine_resources.pak
+    - /opt/qt/6.8.1/gcc_64/resources/qtwebengine_resources_100p.pak
+    - /opt/qt/6.8.1/gcc_64/resources/qtwebengine_resources_200p.pak
+    - /opt/qt/6.8.1/gcc_64/resources/v8_context_snapshot.bin
+    - /opt/qt/6.8.1/gcc_64/translations/qtwebengine_locales/en-US.pak
     - /root/.pki/nssdb/cert9.db
     - /root/.pki/nssdb/key4.db
     - /root/.pki/nssdb/pkcs11.txt
