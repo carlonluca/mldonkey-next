@@ -32,7 +32,8 @@ import { MLUtils } from 'src/app/core/MLUtils'
 @Component({
     selector: 'app-stats',
     templateUrl: './stats.component.html',
-    styleUrls: ['./stats.component.scss']
+    styleUrls: ['./stats.component.scss'],
+    standalone: false
 })
 export class StatsComponent {
     private computedStyle = getComputedStyle(document.documentElement)

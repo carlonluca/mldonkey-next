@@ -27,7 +27,8 @@ import { IconDefinition, faQuestion } from '@fortawesome/free-solid-svg-icons'
 @Component({
     selector: 'app-section-title',
     templateUrl: './section-title.component.html',
-    styleUrls: ['./section-title.component.scss']
+    styleUrls: ['./section-title.component.scss'],
+    standalone: false
 })
 export class SectionTitleComponent {
     @Input() routerLinkValue: string[] = []

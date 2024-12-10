@@ -24,7 +24,8 @@ import { WebSocketService } from 'src/app/websocket-service.service'
 @Component({
     selector: 'app-console',
     templateUrl: './console.component.html',
-    styleUrls: ['./console.component.scss']
+    styleUrls: ['./console.component.scss'],
+    standalone: false
 })
 export class ConsoleComponent implements OnInit, OnDestroy {
     subscriptions: MLSubscriptionSet = new MLSubscriptionSet()

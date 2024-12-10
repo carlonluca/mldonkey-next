@@ -22,7 +22,8 @@ import { IconDefinition } from '@fortawesome/free-solid-svg-icons'
 @Component({
     selector: 'app-input-with-icon',
     templateUrl: './input-with-icon.component.html',
-    styleUrls: ['./input-with-icon.component.scss']
+    styleUrls: ['./input-with-icon.component.scss'],
+    standalone: false
 })
 export class InputWithIconComponent {
     @Input()

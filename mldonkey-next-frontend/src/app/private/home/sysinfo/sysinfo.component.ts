@@ -61,7 +61,8 @@ class FormattableKey {
 @Component({
     selector: 'app-sysinfo',
     templateUrl: './sysinfo.component.html',
-    styleUrls: ['./sysinfo.component.scss']
+    styleUrls: ['./sysinfo.component.scss'],
+    standalone: false
 })
 export class SysInfoComponent implements OnInit {
     dataSourceBuildInfo = new MatTableDataSource<RowData>([])
