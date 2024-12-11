@@ -33,7 +33,8 @@
 </mat-toolbar>
 
 <mat-sidenav-container>
-    <mat-sidenav opened="true" mode="side">
+    <mat-sidenav [(opened)]="opened" mode="side"
+        (click)="sidenav.mode === 'side' || sidenav.close()">
         <app-section-title [routerLinkValue]="['/home/download']" buttonText="Download" [iconDef]="faDownload">
         </app-section-title>
         <!--<app-section-title [routerLinkValue]="['/home/upload']" buttonText="Upload" [iconDef]="faUpload">
