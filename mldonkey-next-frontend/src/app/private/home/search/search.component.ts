@@ -94,7 +94,9 @@ export class SearchComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     ngAfterViewInit(): void {
-        this.sort.sort({ id: "completesources", start: "desc" } as MatSortable)
+        setTimeout(() => {
+            this.sort.sort({ id: "completesources", start: "desc" } as MatSortable)
+        }, 0)
         this.dataSource.sort = this.sort
         this.dataSource.sortingDataAccessor = (item, property) => {
             switch (property) {

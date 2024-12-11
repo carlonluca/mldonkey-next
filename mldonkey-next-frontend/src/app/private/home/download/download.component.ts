@@ -99,7 +99,9 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     ngAfterViewInit() {
-        this.sort.sort({ id: "name" } as MatSortable)
+        setTimeout(() => {
+            this.sort.sort({ id: "name" } as MatSortable)
+        }, 0)
         this.dataSource.sort = this.sort
         this.dataSource.sortingDataAccessor = (item, prop) => {
             switch (prop) {

@@ -100,7 +100,7 @@ export class HomeComponent implements OnInit {
         // NOTE: this seems to fix a wrong state of the sidebar. When migrating from angular 18 to angular 19,
         // the sidebar started to appear overlapped to the content, even though 'side' was set. This
         // toggle seems to fix the problem.
-        this.sidenav.toggle()
+        //this.sidenav.toggle()
     }
 
     logout() {
