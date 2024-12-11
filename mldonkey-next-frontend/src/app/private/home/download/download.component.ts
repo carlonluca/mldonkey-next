@@ -41,7 +41,8 @@ import prettyBytes from 'pretty-bytes'
 @Component({
     selector: 'app-download',
     templateUrl: './download.component.html',
-    styleUrls: ['./download.component.scss']
+    styleUrls: ['./download.component.scss'],
+    standalone: false
 })
 export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
     dataSource = new MatTableDataSource<MLMsgDownloadElement>([])

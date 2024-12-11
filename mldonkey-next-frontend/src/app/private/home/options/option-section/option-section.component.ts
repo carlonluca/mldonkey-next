@@ -64,7 +64,8 @@ class OptionItem extends MLMsgFromAddSectionOption {
 @Component({
     selector: 'app-option-section',
     templateUrl: './option-section.component.html',
-    styleUrls: ['./option-section.component.scss']
+    styleUrls: ['./option-section.component.scss'],
+    standalone: false
 })
 export class OptionSectionComponent implements OnInit {
     @Input() options: MLMsgFromAddSectionOption[]

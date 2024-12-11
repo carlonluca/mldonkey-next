@@ -41,7 +41,8 @@ declare global {
 @Component({
     selector: 'app-public',
     templateUrl: './public.component.html',
-    styleUrls: ['./public.component.scss']
+    styleUrls: ['./public.component.scss'],
+    standalone: false
 })
 export class PublicComponent implements OnInit, OnDestroy {
     private static readonly retryInterval = 7000

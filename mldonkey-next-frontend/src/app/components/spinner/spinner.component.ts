@@ -30,6 +30,7 @@ import { SpinnerService } from '../../services/spinner.service'
     selector: 'app-spinner',
     templateUrl: './spinner.component.html',
     styleUrls: ['./spinner.component.scss'],
+    standalone: false
 })
 export class SpinnerComponent implements OnInit, OnDestroy {
     showSpinner = false;

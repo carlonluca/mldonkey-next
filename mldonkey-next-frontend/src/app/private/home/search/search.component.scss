@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-@import "../../../css/shared.scss";
+@use "../../../css/shared.scss" as *;
 
 #main-container {
     display: flex;

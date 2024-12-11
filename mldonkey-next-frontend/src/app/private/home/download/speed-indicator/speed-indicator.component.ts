@@ -28,7 +28,8 @@ import { faArrowDown } from '@fortawesome/free-solid-svg-icons';
 @Component({
     selector: 'app-speed-indicator',
     templateUrl: './speed-indicator.component.html',
-    styleUrl: './speed-indicator.component.scss'
+    styleUrl: './speed-indicator.component.scss',
+    standalone: false
 })
 export class SpeedIndicatorComponent {
     @Input({ required: true }) speed: number;

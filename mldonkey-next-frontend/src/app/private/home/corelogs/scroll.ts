@@ -24,7 +24,8 @@
 import { Directive, ElementRef, AfterContentChecked } from '@angular/core'
 
 @Directive({
-    selector: '[appScrollToBottom]'
+    selector: '[appScrollToBottom]',
+    standalone: false
 })
 export class ScrollToBottomDirective implements AfterContentChecked {
     follow = true

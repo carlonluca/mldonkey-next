@@ -16,12 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-@import 'app/css/shared.scss';
+@use "app/css/shared.scss" as *;
+@use 'sass:color';
 
 :root {
     --table-font-size: medium;
-    --bar-chart-color1: #{lighten($primary-color, 20%)};
-    --bar-chart-color2: #{darken($primary-color, 20%)};
+    --bar-chart-color1: #{color.adjust($primary-color, $lightness: 20%)};
+    --bar-chart-color2: #{color.adjust($primary-color, $blackness: 20%)};
 }
 
 html,

@@ -65,6 +65,7 @@ import { MatDividerModule } from '@angular/material/divider'
 import { TurtleIconComponent } from './components/turtle-icon/turtle-icon.component'
 import { SpeedIndicatorComponent } from './private/home/download/speed-indicator/speed-indicator.component'
 import { NgxEchartsModule } from 'ngx-echarts'
+import { RouterModule } from '@angular/router'
 
 @NgModule({
     declarations: [
@@ -90,7 +91,8 @@ import { NgxEchartsModule } from 'ngx-echarts'
         provideNgxMask()
     ],
     bootstrap: [AppComponent],
-    imports: [
+    imports:[
+        RouterModule,
         BrowserModule,
         AppRoutingModule,
         BrowserAnimationsModule,
@@ -118,6 +120,7 @@ import { NgxEchartsModule } from 'ngx-echarts'
         MatChipsModule,
         MatDividerModule,
         PrettySecsShortPipe,
+        RouterModule,
         NgxEchartsModule.forRoot({ echarts: () => import('echarts') })
     ],
     exports: [

@@ -21,7 +21,7 @@
  * Company: -
  * Date: 14.08.2023
  */
-import { Component, VERSION, ViewChild } from '@angular/core'
+import { Component, OnInit, VERSION, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
 import {
     faDownload,
@@ -51,9 +51,10 @@ import { StatsService } from 'src/app/services/stats.service'
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
-    styleUrls: ['./home.component.scss']
+    styleUrls: ['./home.component.scss'],
+    standalone: false
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
     @ViewChild(MatSidenav) sidenav: MatSidenav;
 
     private subscriptions = new MLSubscriptionSet()
@@ -93,6 +94,13 @@ export class HomeComponent {
             this.webSocketService.connectionState.observable.subscribe(state => this.handleState(state))
         )
         this.handleState(this.webSocketService.connectionState.value)
+    }
+
+    ngOnInit(): void {
+        // NOTE: this seems to fix a wrong state of the sidebar. When migrating from angular 18 to angular 19,
+        // the sidebar started to appear overlapped to the content, even though 'side' was set. This
+        // toggle seems to fix the problem.
+        this.sidenav.toggle()
     }
 
     logout() {

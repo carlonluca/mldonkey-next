@@ -55,7 +55,8 @@ class LogLine {
 @Component({
     selector: 'app-corelogs',
     templateUrl: './corelogs.component.html',
-    styleUrls: ['./corelogs.component.scss']
+    styleUrls: ['./corelogs.component.scss'],
+    standalone: false
 })
 export class CorelogsComponent implements OnInit, OnDestroy {
     @ViewChild('scrollContainer') scrollContainer: ElementRef

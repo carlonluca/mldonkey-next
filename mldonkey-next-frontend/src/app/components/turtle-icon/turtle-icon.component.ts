@@ -20,7 +20,8 @@ import { AfterViewInit, Component, ElementRef, Renderer2 } from '@angular/core'
 
 @Component({
     selector: 'app-turtle-icon',
-    templateUrl: '../../../assets/turtle.svg'
+    templateUrl: '../../../assets/turtle.svg',
+    standalone: false
 })
 export class TurtleIconComponent implements AfterViewInit {
     fillColor = 'rgb(255, 255, 255)'
