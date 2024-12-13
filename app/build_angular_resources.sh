@@ -5,7 +5,7 @@ mkdir webapp
 cd ..
 cd mldonkey-next-frontend
 npm i
-npx ng build --output-hashing=none
+npm run build
 cd dist/mldonkey-next-frontend/browser
 cp -r * ../../../../app/webapp
 cd ../../../../app

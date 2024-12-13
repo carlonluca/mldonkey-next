@@ -34,7 +34,8 @@ import {
     faComputer,
     faFileLines,
     faUpload,
-    faChartPie
+    faChartPie,
+    faCircleInfo
 } from '@fortawesome/free-solid-svg-icons'
 import { StorageService } from 'src/app/services/storage.service'
 import { MLConnectionState, WebSocketService } from 'src/app/websocket-service.service'
@@ -47,6 +48,8 @@ import { SysinfoService } from 'src/app/services/sysinfo.service'
 import { MatSidenav } from '@angular/material/sidenav'
 import { ClientStatsService } from 'src/app/services/clientstats.service'
 import { StatsService } from 'src/app/services/stats.service'
+import { MatDialog } from '@angular/material/dialog'
+import { AboutComponent } from './about/about.component'
 
 @Component({
     selector: 'app-home',
@@ -71,6 +74,7 @@ export class HomeComponent implements OnInit {
     faComputer = faComputer
     faFileLines = faFileLines
     faPie = faChartPie
+    faCircleInfo = faCircleInfo
     version = packageJson.version
     versionAngular = VERSION
 
@@ -84,7 +88,8 @@ export class HomeComponent implements OnInit {
         private sysInfoService: SysinfoService,
         private clientStatsService: ClientStatsService,
         private statsService: StatsService,
-        public uiService: UiServiceService) {
+        public uiService: UiServiceService,
+        public dialog: MatDialog) {
         this.subscriptions.add(
             this.uiService.mobileLayout.observable.subscribe(() => this.refreshOpenedState())
         )
@@ -117,5 +122,9 @@ export class HomeComponent implements OnInit {
         if (state == MLConnectionState.S_NOT_CONNECTED) {
             this.router.navigate(["/"])
         }
+    }
+
+    openAbout() {
+        this.dialog.open(AboutComponent, {})
     }
 }

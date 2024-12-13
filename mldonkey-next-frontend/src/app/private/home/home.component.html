@@ -61,8 +61,13 @@
             [iconDef]="faFileLines"></app-section-title>
         <app-section-title (click)="logout()" buttonText="Logout" [iconDef]="faDoorOpen">
         </app-section-title>
+
+        <mat-divider></mat-divider>
+
+        <app-section-title (click)="openAbout()" buttonText="About" [iconDef]="faCircleInfo">
+        </app-section-title>
     </mat-sidenav>
     <mat-sidenav-content>
         <router-outlet></router-outlet>
     </mat-sidenav-content>
-</mat-sidenav-container>
+</mat-sidenav-container>a

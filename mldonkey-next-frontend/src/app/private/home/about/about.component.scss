@@ -1,0 +1,61 @@
+@use "../../../css/shared.scss" as *;
+
+.container {
+    display: flex;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.left-column {
+    flex: 0 0 200px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.left-column .image {
+    width: 100%;
+    height: auto;
+}
+
+.right-column {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: $textColor;
+}
+
+.right-column p {
+    margin: 0;
+    line-height: 1.5;
+}
+
+#logo {
+    width: 100%;
+    border-radius: 10px;
+}
+
+/* unvisited link */
+a:link {
+    color: $textColor;
+}
+
+/* visited link */
+a:visited {
+    color: $textColor;
+}
+
+/* mouse over link */
+a:hover {
+    color: $textColor;
+}
+
+/* selected link */
+a:active {
+    color: $textColor;
+}

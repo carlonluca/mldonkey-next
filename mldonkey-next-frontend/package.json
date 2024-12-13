@@ -3,9 +3,9 @@
   "version": "0.4.2",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
+    "start": "npx angular-build-info && npx ng serve",
+    "build": "npx angular-build-info && npx ng build --output-hashing none",
+    "watch": "npx angular-build-info && npx ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint"
   },
@@ -54,6 +54,7 @@
     "@typescript-eslint/parser": "^8.18.0",
     "@typescript-eslint/types": "^8.18.0",
     "@typescript-eslint/utils": "^8.18.0",
+    "angular-build-info": "^2.0.1",
     "eslint": "^9.11.1",
     "jasmine-core": "~5.2.0",
     "karma": "~6.4.4",

@@ -21,7 +21,7 @@ Test_webapp:
     - cd ../mldonkey-next-frontend
     - npm i --maxsockets 1
     - npm run lint
-    - npx ng build --output-hashing none
+    - npm run build
     - cd ../app
     - ./build_angular_resources.sh
 
