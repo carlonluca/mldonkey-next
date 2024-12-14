@@ -10,6 +10,8 @@ import {
 import packageJson from '../../../../../package.json'
 import build from "../../../../build"
 import { MatDivider } from '@angular/material/divider'
+import { UiServiceService } from 'src/app/services/ui-service.service'
+import { CommonModule } from '@angular/common'
 
 @Component({
     selector: 'app-about',
@@ -19,7 +21,8 @@ import { MatDivider } from '@angular/material/divider'
         MatDialogActions,
         MatDialogClose,
         MatButtonModule,
-        MatDivider
+        MatDivider,
+        CommonModule
     ],
     templateUrl: './about.component.html',
     styleUrl: './about.component.scss'
@@ -29,4 +32,5 @@ export class AboutComponent {
     readonly version = packageJson.version
     readonly angularVersion = VERSION.full
     readonly buildInfo = build
+    readonly uiService = inject(UiServiceService)
 }

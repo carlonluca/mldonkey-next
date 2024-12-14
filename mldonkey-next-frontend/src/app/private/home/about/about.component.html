@@ -2,9 +2,11 @@
 <mat-divider></mat-divider>
 <mat-dialog-content>
     <div class="container">
-        <div class="left-column">
-            <img id="logo" src="../../../../assets/icon.svg">
-        </div>
+        @if ((this.uiService.mobileLayout.observable | async) === false) {
+            <div class="left-column">
+                <img id="logo" src="../../../../assets/icon.svg">
+            </div>
+        }
         <div class="right-column">
             <h2>mldonkey-next {{ this.version }} (<a target="_blank"
                     [href]="'https://github.com/carlonluca/mldonkey-next/tree/' + this.buildInfo.git.hash">{{
