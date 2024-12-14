@@ -3,7 +3,9 @@
 .container {
     display: flex;
     border-radius: 10px;
-    overflow: hidden;
+    width: 100%;
+    box-sizing: border-box;
+    display: block;
 }
 
 .left-column {
@@ -32,6 +34,11 @@
 .right-column p {
     margin: 0;
     line-height: 1.5;
+}
+
+p {
+    word-break: break-word;
+    font-size: small;
 }
 
 #logo {

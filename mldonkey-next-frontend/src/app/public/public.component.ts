@@ -33,6 +33,7 @@ import { uiLogger } from '../core/MLLogger'
 import { faUser, faKey, faLink, faLinkSlash } from '@fortawesome/free-solid-svg-icons'
 import { MLSubscriptionSet } from '../core/MLSubscriptionSet'
 import { interval } from 'rxjs'
+import { MLUtils } from '../core/MLUtils'
 
 declare global {
     interface Window { location: Location; }
@@ -160,6 +161,6 @@ export class PublicComponent implements OnInit, OnDestroy {
     }
 
     isWebView(): boolean {
-        return window.location.href.startsWith("qrc:/") || window.location.href.startsWith("file://")
+        return MLUtils.isWebView()
     }
 }

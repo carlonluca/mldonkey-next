@@ -38,6 +38,8 @@ public:
     Q_INVOKABLE QUrl webappUrl();
     Q_INVOKABLE bool extractWebApp();
     Q_INVOKABLE bool isSetupRequested(const QUrl& url);
+    Q_INVOKABLE QString openUrlRequested(const QUrl& url);
+    Q_INVOKABLE void openUrl(const QString& urlString);
 };
 
 #endif // MLQMLUTILS_H

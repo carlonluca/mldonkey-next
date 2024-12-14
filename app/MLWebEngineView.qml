@@ -52,5 +52,10 @@ WebEngineView {
     onUrlChanged: {
         if (qmlUtils.isSetupRequested(url))
             userSettings.mldonkeyHost = ""
+        else {
+            let openUrl = qmlUtils.openUrlRequested(url)
+            if (openUrl)
+                qmlUtils.openUrl(openUrl)
+        }
     }
 }

@@ -101,4 +101,8 @@ export class MLUtils {
 
         return parts.join(', ')
     }
+
+    public static isWebView(): boolean {
+        return window.location.href.startsWith("qrc:/") || window.location.href.startsWith("file://")
+    }
 }

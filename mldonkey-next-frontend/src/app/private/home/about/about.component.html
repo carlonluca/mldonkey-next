@@ -3,15 +3,17 @@
 <mat-dialog-content>
     <div class="container">
         @if ((this.uiService.mobileLayout.observable | async) === false) {
-            <div class="left-column">
-                <img id="logo" src="../../../../assets/icon.svg">
-            </div>
+        <div class="left-column">
+            <img id="logo" src="../../../../assets/icon.svg">
+        </div>
         }
         <div class="right-column">
             <h2>mldonkey-next {{ this.version }} (<a target="_blank"
+                    (click)="hrefClicked($event, 'https://github.com/carlonluca/mldonkey-next/tree/' + this.buildInfo.git.hash)"
                     [href]="'https://github.com/carlonluca/mldonkey-next/tree/' + this.buildInfo.git.hash">{{
                     this.buildInfo.git.hash }}</a>)</h2>
             <p>Author: <b>Luca Carlon (<a target="_blank"
+                        (click)="hrefClicked($event, 'https://bugfreeblog.duckdns.org')"
                         href="https://bugfreeblog.duckdns.org">https://bugfreeblog.duckdns.org</a>)</b></p>
             <br />
             <p>Based on Angular version <b>{{ this.angularVersion }}</b></p>
@@ -20,9 +22,11 @@
                     this.buildInfo.git.hash }}</b></p>
             <br />
             <p>mldonkey-next is released under the <a target="_blank"
+                    (click)="hrefClicked($event, 'https://www.gnu.org/licenses/gpl-3.0.en.html')"
                     href="https://www.gnu.org/licenses/gpl-3.0.en.html">GPLv3 license</a>.</p>
             <br />
             <p>For the changelog and more info on mldonkey-next: <a target="_blank"
+                    (click)="hrefClicked($event, 'https://bugfreeblog.duckdns.org/mldonkey-next')"
                     href="https://bugfreeblog.duckdns.org/mldonkey-next">https://bugfreeblog.duckdns.org/mldonkey-next</a>.
             </p>
         </div>

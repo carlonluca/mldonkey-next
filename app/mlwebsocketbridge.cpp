@@ -29,6 +29,8 @@
 #include "mlwebsocketbridge.h"
 #include "mlsettings.h"
 
+//#define VERBOSE_WEBSOCKET
+
 MLWebSocketBridge::MLWebSocketBridge(QWebSocket* socket, QObject* parent) :
     QObject(parent),
     m_socket(socket),
@@ -43,7 +45,9 @@ MLWebSocketBridge::MLWebSocketBridge(QWebSocket* socket, QObject* parent) :
         emit socketDisconnected();
     });
     connect(m_socket, &QWebSocket::binaryMessageReceived, this, [this] (const QByteArray& msg) {
+#ifdef VERBOSE_WEBSOCKET
         qDebug() << "Sending data to mlnet core";
+#endif
         m_tcpSocket->write(msg);
     });
 
@@ -53,7 +57,9 @@ MLWebSocketBridge::MLWebSocketBridge(QWebSocket* socket, QObject* parent) :
         qInfo() << "Connected to" << QString("%1:%2").arg(mldonkeyHost.toString()).arg(mldonkeyPort);
     });
     connect(m_tcpSocket, &QTcpSocket::readyRead, this, [this] {
+#ifdef VERBOSE_WEBSOCKET
         qDebug() << "Sending data to client";
+#endif
         m_socket->sendBinaryMessage(m_tcpSocket->readAll());
     });
     connect(m_tcpSocket, &QTcpSocket::disconnected, this, [this] {

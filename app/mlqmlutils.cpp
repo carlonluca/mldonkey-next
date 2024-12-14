@@ -23,6 +23,8 @@
  */
 
 #include <QStandardPaths>
+#include <QUrlQuery>
+#include <QDesktopServices>
 
 #include <lqtutils_qsl.h>
 #include <lqtutils_string.h>
@@ -63,4 +65,20 @@ bool MLQmlUtils::extractWebApp()
 bool MLQmlUtils::isSetupRequested(const QUrl& url)
 {
     return url.toString().contains(QSL("action=openSetup"));
+}
+
+QString MLQmlUtils::openUrlRequested(const QUrl& url)
+{
+    const QStringList chunks = url.toString().split('?');
+    if (chunks.size() < 2)
+        return QString();
+
+    QUrlQuery query(chunks[1]);
+    const auto hexUrl = query.queryItemValue(QSL("openUrl"));
+    return QByteArray::fromHex(hexUrl.toUtf8());
+}
+
+void MLQmlUtils::openUrl(const QString& urlString)
+{
+    QDesktopServices::openUrl(urlString);
 }
