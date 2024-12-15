@@ -33,3 +33,9 @@ The native app is a Qt app embedding the webapp. The native app does not need th
 The native app is cross platform, and may work on all major platforms. However, I only tested on Linux and Android. For Android, an apk is provided for armv7, arm64, x86 and x64. For Linux, an AppImage is provided.
 
 For more info: https://bugfreeblog.duckdns.org/2024/11/mldonkey-native-app.html.
+
+### Installation
+
+The AppImage and the Android app can be downloaded from the [GitHub releases](https://github.com/carlonluca/mldonkey-next/releases).
+
+For the Android app, I suggest you use [Obtainium](https://github.com/ImranR98/Obtainium), that will also notify and update your app when a new release is uploaded.
