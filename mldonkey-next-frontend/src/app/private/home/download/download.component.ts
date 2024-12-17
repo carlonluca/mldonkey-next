@@ -80,7 +80,7 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
 
     ngOnInit() {
         this.subscriptions.add(this.uiSerivce.mobileLayout.observable.subscribe(() =>
-            this.toggleSelectionEnabled()
+            this.refreshColumns()
         ))
         this.subscriptions.add(interval(1000).subscribe(() =>
             this.websocketService.sendMsg(new MLMsgToGetDownload()))
@@ -125,10 +125,8 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
 
     onSortChange(sortState: Sort) {
         this.sortModes.forEach(m => {
-            if (!sortState) {
-                m.selected = false
+            if (!sortState)
                 return
-            }
 
             if (sortState.active !== m.id) {
                 m.selected = false
@@ -174,16 +172,21 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     toggleSelectionEnabled() {
-        if (this.selectionEnabled)
-            this.displayedColumns = ['select', ...this.displayColumns()]
-        else
-            this.displayedColumns = this.displayColumns()
+        this.selectionEnabled = !this.selectionEnabled
+        this.refreshColumns()
     }
 
     cancelDownloads() {
         this.selection.selected.forEach((download) => {
             this.websocketService.sendMsg(new MLMsgToRemoveDownload(download.downloadId))
         })
+    }
+
+    refreshColumns() {
+        if (this.selectionEnabled)
+            this.displayedColumns = ['select', ...this.displayColumns()]
+        else
+            this.displayedColumns = this.displayColumns()
     }
 
     refreshSelection() {
@@ -231,6 +234,7 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
         for (const sm of this.sortModes) {
             sm.selected = (sortMode == sm)
             if (sm.selected) {
+                console.log("Selected mode:", sortMode.label)
                 if (this.dataSource.sort) {
                     this.dataSource.sort.active = sm.id
                     this.dataSource.sort.direction = sm.asc ? "asc" : "desc"

@@ -21,7 +21,7 @@
  * Company: -
  * Date: 14.08.2023
  */
-import { Component, OnInit, VERSION, ViewChild } from '@angular/core'
+import { AfterViewInit, Component, VERSION, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
 import {
     faDownload,
@@ -57,7 +57,7 @@ import { AboutComponent } from './about/about.component'
     styleUrls: ['./home.component.scss'],
     standalone: false
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements AfterViewInit {
     @ViewChild(MatSidenav) sidenav: MatSidenav;
 
     private subscriptions = new MLSubscriptionSet()
@@ -101,7 +101,7 @@ export class HomeComponent implements OnInit {
         this.handleState(this.webSocketService.connectionState.value)
     }
 
-    ngOnInit(): void {
+    ngAfterViewInit(): void {
         // NOTE: this seems to fix a wrong state of the sidebar. When migrating from angular 18 to angular 19,
         // the sidebar started to appear overlapped to the content, even though 'side' was set. This
         // toggle seems to fix the problem.
