@@ -32,7 +32,7 @@
     </mat-toolbar-row>
 </mat-toolbar>
 
-<mat-sidenav-container>
+<mat-sidenav-container autosize>
     <mat-sidenav [(opened)]="opened" [mode]="(this.uiService.mobileLayout.observable | async) ? 'over' : 'side'"
         (click)="sidenav.mode === 'side' || sidenav.close()">
         <app-section-title [routerLinkValue]="['/home/download']" buttonText="Download" [iconDef]="faDownload">
