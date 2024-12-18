@@ -35,10 +35,20 @@ import { IncomingMessage } from 'http'
 import { Tail } from 'tail'
 import crypto from 'crypto'
 
-const wss = new WebSocket.Server({ port: 4002 });
-const wssLog = new WebSocket.Server({ port: 4003 })
 const bridgeManager = new MLBridgeManager()
 const logToken = crypto.randomBytes(16).toString('hex')
+const app = express()
+const server = http.createServer()
+const port = process.env.MLDONKEY_NEXT_WEBAPP_PORT || 4081
+const webappPath = process.env.MLDONKEY_NEXT_WEBAPP_ROOT
+const wss = new WebSocket.Server({
+    server: server
+})
+const wssLog = new WebSocket.Server({
+    port: 4003
+})
+
+server.on('request', app)
 
 wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
     logger.info(`Client connected: ${req.socket.remoteAddress} ${ws}`)
@@ -54,8 +64,6 @@ wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
         bridgeManager.clientDisconnected(ws)
     })
 })
-
-logger.info('WebSocket server listening on port: 4002')
 
 fs.readFile(`/var/lib/mldonkey/downloads.ini`, {
     encoding : 'utf-8'
@@ -111,10 +119,6 @@ fs.readFile(`/var/lib/mldonkey/downloads.ini`, {
     logger.info("WebSocket server listening on port: 4003")
 })
 
-const app = express()
-const port = process.env.MLDONKEY_NEXT_WEBAPP_PORT || 4081
-const webappPath = process.env.MLDONKEY_NEXT_WEBAPP_ROOT
-
 app.use(cookieParser())
 app.use((req, res, next) => {
     res.cookie('logtoken', logToken, { httpOnly: true })
@@ -125,6 +129,5 @@ app.get("/", (req, res) => res.sendFile(path.join(webappPath, 'index.html')))
 /* eslint-disable @typescript-eslint/no-unused-vars */
 app.use((req, res, next) => res.redirect('/'))
 
-const server = http.createServer(app)
 server.listen(port, () =>
     logger.info(`HTTP server listening on: http://localhost:${port}`))

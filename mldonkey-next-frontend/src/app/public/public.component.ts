@@ -49,7 +49,10 @@ export class PublicComponent implements OnInit, OnDestroy {
     private static readonly retryInterval = 7000
     private observables = new MLSubscriptionSet()
     private wsAddr = environment.mldonkeyWsAddr.length <= 0 ? "localhost" : environment.mldonkeyWsAddr
-    private wsUrl = `ws://${this.wsAddr}:${environment.mldonkeyWsPort}`
+    private wsPort = environment.mldonkeyWsAddr.length <= 0 ? 4002 : environment.mldonkeyWsPort
+    private wsUrlSuffix = this.wsPort === null ? '' : `:${this.wsPort}`
+    private wsSchema = window.location.protocol === 'https:' ? 'wss' : 'ws'
+    private wsUrl = `${this.wsSchema}://${this.wsAddr}${this.wsUrlSuffix}`
 
     faUser = faUser
     faKey = faKey
