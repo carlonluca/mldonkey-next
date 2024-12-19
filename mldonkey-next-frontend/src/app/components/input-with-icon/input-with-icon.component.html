@@ -26,6 +26,6 @@
             <mat-icon>{{ this.matIcon }}</mat-icon>
         }
     </button>
-    <input width="100%" matInput #inputValue class="fill-parent" [type]="this.type" [value]="this.userInput" [autocapitalize]="this.autocapitalize"
-        (change)="this.userInputChange.emit(inputValue.value)" />
+    <input width="100%" matInput #inputValue class="fill-parent" [type]="this.type" [(ngModel)]="this.userInput" [autocapitalize]="this.autocapitalize"
+        (ngModelChange)="this.userInputChange.emit(inputValue.value)" />
 </mat-form-field>
