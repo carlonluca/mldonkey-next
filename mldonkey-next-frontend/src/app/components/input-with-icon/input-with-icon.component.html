@@ -19,7 +19,12 @@
 <mat-form-field [style.width.%]="100">
     <mat-label width="100%">{{ label }}</mat-label>
     <button width="100%" matPrefix mat-icon-button color="white" (matTooltip)="tooltip" matTooltipPosition="below" tabindex="-1">
-        <fa-icon [icon]="faIcon"></fa-icon>
+        @if (this.faIcon) {
+            <fa-icon [icon]="faIcon"></fa-icon>
+        }
+        @if (this.matIcon) {
+            <mat-icon>{{ this.matIcon }}</mat-icon>
+        }
     </button>
     <input width="100%" matInput #inputValue class="fill-parent" [type]="this.type" [value]="this.userInput" [autocapitalize]="this.autocapitalize"
         (change)="this.userInputChange.emit(inputValue.value)" />

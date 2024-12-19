@@ -86,3 +86,18 @@ td {
 #main-menu {
     margin-right: $defaultMargin;
 }
+
+#filter-field-container {
+    display: flex;
+    margin: $defaultMargin;
+    gap: $defaultMargin;
+    align-items: center;
+}
+
+#filter-icon {
+    flex-shrink: 0;
+}
+
+#filter-form {
+    flex-grow: 1;
+}

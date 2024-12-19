@@ -47,7 +47,7 @@ import prettyBytes from 'pretty-bytes'
 export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
     dataSource = new MatTableDataSource<MLMsgDownloadElement>([])
     displayedColumns: string[] = this.displayColumns()
-    selection = new SelectionModel<MLMsgDownloadElement>(true, []);
+    selection = new SelectionModel<MLMsgDownloadElement>(true, [])
     selectionEnabled = false
     downTotal: bigint | null = null
     downProgress: bigint | null = null
@@ -56,6 +56,7 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
     downSpeed: number | null = null
     downSpeedSum: number | null = null
     upSpeed: number | null = null
+    filterString: string | null = null
     sortModes = [
         new MLSortMode("name", true, "Name (a → z)", true),
         new MLSortMode("name", false, "Name (z → a)"),
@@ -176,6 +177,14 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
         this.refreshColumns()
     }
 
+    toggleFilter() {
+        if (this.filterString !== null)
+            this.filterString = null
+        else
+            this.filterString = ""
+        this.refreshFilter()
+    }
+
     cancelDownloads() {
         this.selection.selected.forEach((download) => {
             this.websocketService.sendMsg(new MLMsgToRemoveDownload(download.downloadId))
@@ -228,6 +237,10 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
             this.downSpeed = totDown
             this.upSpeed = totUp
         }
+    }
+
+    refreshFilter() {
+        this.dataSource.filter = this.filterString ?? ""
     }
 
     sortModeClicked(sortMode: MLSortMode) {

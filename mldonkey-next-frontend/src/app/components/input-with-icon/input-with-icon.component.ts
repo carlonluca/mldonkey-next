@@ -29,6 +29,8 @@ export class InputWithIconComponent {
     @Input()
     public faIcon: IconDefinition
     @Input()
+    public matIcon: string
+    @Input()
     public label: string
     @Input()
     public tooltip: string

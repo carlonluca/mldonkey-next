@@ -31,8 +31,12 @@
             <span>Abort</span>
         </button>
         <button mat-menu-item (click)="this.toggleSelectionEnabled()">
-            <mat-icon style="opacity: 0">home</mat-icon>
-            <span>{{ this.selectionEnabled ? "Make not selectable" : "Make selectable" }}</span>
+            <mat-icon>{{ this.selectionEnabled ? "check_box" : "check_box_outline_blank" }}</mat-icon>
+            <span>Selectable</span>
+        </button>
+        <button mat-menu-item (click)="this.toggleFilter()">
+            <mat-icon>{{ this.filterString !== null ? "check_box" : "check_box_outline_blank" }}</mat-icon>
+            <span>Show filer</span>
         </button>
     </mat-menu>
     <mat-menu #menu="matMenu">
@@ -40,6 +44,12 @@
             <span [ngStyle]="{'font-weight': sortMode.selected ? 'bold' : 'normal'}">{{ sortMode.label }}</span>
         </button>
     </mat-menu>
+</div>
+
+<!-- Filter bar -->
+<div id="filter-field-container" *ngIf="this.filterString !== null">
+    <app-input-with-icon id="filter-form" class="full-screen-row" [(userInput)]="this.filterString" label="Filter" matIcon="filter_list"
+        autocapitalize="none" tooltip="Filter text" type="text" (userInputChange)="this.refreshFilter()" />
 </div>
 
 <!-- Desktop table -->
@@ -111,8 +121,7 @@
             <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
                 [indeterminate]="selection.hasValue() && !isAllSelected()"></mat-checkbox>
         </th>
-        <td mat-cell *matCellDef="let row; let download; let isEven = even"
-            [ngClass]="{'alternate-row': isEven }">
+        <td mat-cell *matCellDef="let row; let download; let isEven = even" [ngClass]="{'alternate-row': isEven }">
             <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
                 [checked]="selection.isSelected(row)"></mat-checkbox>
         </td>

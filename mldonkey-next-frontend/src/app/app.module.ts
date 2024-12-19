@@ -66,6 +66,7 @@ import { TurtleIconComponent } from './components/turtle-icon/turtle-icon.compon
 import { SpeedIndicatorComponent } from './private/home/download/speed-indicator/speed-indicator.component'
 import { NgxEchartsModule } from 'ngx-echarts'
 import { RouterModule } from '@angular/router'
+import { ComponentsModule } from "./components/components.module";
 
 @NgModule({
     declarations: [
@@ -91,38 +92,39 @@ import { RouterModule } from '@angular/router'
         provideNgxMask()
     ],
     bootstrap: [AppComponent],
-    imports:[
-        RouterModule,
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        MatToolbarModule,
-        MatTableModule,
-        MatSortModule,
-        MatSidenavModule,
-        FormsModule,
-        PrettyBytesPipe,
-        PrettyBytesSpeedPipe,
-        PrettySecsPipe,
-        FontAwesomeModule,
-        MatIconModule,
-        MatButtonModule,
-        MatInputModule,
-        MatFormFieldModule,
-        MatProgressSpinnerModule,
-        MatProgressBarModule,
-        MatCheckboxModule,
-        MatSelectModule,
-        MatMenuModule,
-        MatTabsModule,
-        NgxMaskDirective,
-        NgxMaskPipe,
-        MatChipsModule,
-        MatDividerModule,
-        PrettySecsShortPipe,
-        RouterModule,
-        NgxEchartsModule.forRoot({ echarts: () => import('echarts') })
-    ],
+    imports: [
+    RouterModule,
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatToolbarModule,
+    MatTableModule,
+    MatSortModule,
+    MatSidenavModule,
+    FormsModule,
+    PrettyBytesPipe,
+    PrettyBytesSpeedPipe,
+    PrettySecsPipe,
+    FontAwesomeModule,
+    MatIconModule,
+    MatButtonModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatProgressSpinnerModule,
+    MatProgressBarModule,
+    MatCheckboxModule,
+    MatSelectModule,
+    MatMenuModule,
+    MatTabsModule,
+    NgxMaskDirective,
+    NgxMaskPipe,
+    MatChipsModule,
+    MatDividerModule,
+    PrettySecsShortPipe,
+    RouterModule,
+    NgxEchartsModule.forRoot({ echarts: () => import('echarts') }),
+    ComponentsModule
+],
     exports: [
         ScrollToBottomDirective
     ]
