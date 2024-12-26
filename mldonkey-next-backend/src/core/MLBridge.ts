@@ -51,7 +51,7 @@ export class MLBridge {
             logger.info(`Connected to: ${HOST}:${PORT}`)
         })
         this.mlSocket.on('data', (data: Buffer) => {
-            logger.verbose(`Sending data to client`)
+            //logger.verbose(`Sending data to client`)
             this.webSocket.send(data)
         })
         this.mlSocket.on('close', () => {
@@ -66,7 +66,7 @@ export class MLBridge {
             this.webSocket.close()
         })
         this.webSocket.on("message", data => {
-            logger.verbose(`Sending data to mlnet core`)
+            //logger.verbose(`Sending data to mlnet core`)
             this.mlSocket.write(data as Buffer)
         })
     }
