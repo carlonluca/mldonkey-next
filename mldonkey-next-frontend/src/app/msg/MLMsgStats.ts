@@ -19,7 +19,7 @@
 /**
  * Author:  Luca Carlon
  * Company: -
- * Date: 2024.07.30
+ * Date:    2024.07.30
  */
 
 import { MLUPdateable } from "../core/MLUpdateable"
@@ -34,6 +34,20 @@ export class MLMsgToGetStats extends MLMsgTo {
         buffer = this.appendInt32(buffer, this.networkId)
         return this.createEnvelope(buffer)
     }
+}
+
+class MLMsgToGetBwUpDownBase extends MLMsgTo {
+    public override toBuffer(): ArrayBuffer {
+        return this.createEnvelope(new ArrayBuffer(0))
+    }
+}
+
+export class MLMsgToGetBwUpDown extends MLMsgToGetBwUpDownBase {
+    constructor() { super(MLMessageTypeTo.T_GET_BW_UP_DOWN) }
+}
+
+export class MLMsgToGetBwHUpDown extends MLMsgToGetBwUpDownBase {
+    constructor() { super(MLMessageTypeTo.T_GET_BW_H_UP_DOWN) }
 }
 
 export class MLClientStat implements MLUPdateable<MLClientStat> {
@@ -112,5 +126,47 @@ export class MLMsgFromStats extends MLMsgFrom {
             return [new MLSessionStatSet(name, uptime, stats), consumed]
         })
         return new MLMsgFromStats(networkId, statElements)
+    }
+}
+
+export class MLMsgFromBwUpDownBase extends MLMsgFrom {
+    constructor(
+        public timeFlag: number,
+        public stepSecs: number,
+        public uploadSamples: number[],
+        public downloadSamples: number[],
+        msgType: MLMessageTypeFrom
+    ) {
+        super(msgType)
+    }
+}
+
+export class MLMsgFromBwUpDown extends MLMsgFromBwUpDownBase {
+    constructor(timeFlag: number, stepSecs: number, uploadSamples: number[], downloadSamples: number[]) {
+        super(timeFlag, stepSecs, uploadSamples, downloadSamples, MLMessageTypeFrom.T_BW_UP_DOWN)
+    }
+
+    public static fromBuffer(buffer: ArrayBuffer): MLMsgFromBwUpDown {
+        const reader = new MLMsgReader(buffer)
+        const timeFlag = reader.takeDecimal()
+        const stepSecs = reader.takeInt32()
+        const uploadSamples = reader.takeInt32List()
+        const downloadSamples = reader.takeInt32List()
+        return new MLMsgFromBwUpDown(timeFlag, stepSecs, uploadSamples, downloadSamples)
+    }
+}
+
+export class MLMsgFromBwHUpDown extends MLMsgFromBwUpDownBase {
+    constructor(timeFlag: number, stepSecs: number, uploadSamples: number[], downloadSamples: number[]) {
+        super(timeFlag, stepSecs, uploadSamples, downloadSamples, MLMessageTypeFrom.T_BW_H_UP_DOWN)
+    }
+
+    public static fromBuffer(buffer: ArrayBuffer): MLMsgFromBwHUpDown {
+        const reader = new MLMsgReader(buffer)
+        const timeFlag = reader.takeDecimal()
+        const stepSecs = reader.takeInt32()
+        const uploadSamples = reader.takeInt32List()
+        const downloadSamples = reader.takeInt32List()
+        return new MLMsgFromBwHUpDown(timeFlag, stepSecs, uploadSamples, downloadSamples)
     }
 }

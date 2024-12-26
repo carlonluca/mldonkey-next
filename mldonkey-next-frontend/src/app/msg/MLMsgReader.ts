@@ -104,6 +104,12 @@ export class MLBufferUtils {
         })
     }
 
+    public static readDecimalList(buffer: ArrayBuffer, offset: number): [number[], number] {
+        return this.readList(buffer, offset, (buffer: ArrayBuffer, offset: number) => {
+            return this.readDecimal(buffer, offset)
+        })
+    }
+
     public static readInt8(buffer: ArrayBuffer, offset: number): MLNumPair {
         return [new DataView(buffer).getInt8(offset), 1]
     }
@@ -223,6 +229,10 @@ export class MLMsgReader {
         return MLBufferUtils.readInt32PairList(this.data, offset)
     }
 
+    readDecimalList(offset: number): [number[], number] {
+        return MLBufferUtils.readDecimalList(this.data, offset)
+    }
+
     readString(offset: number): [string, number] {
         return MLBufferUtils.readString(this.data, offset)
     }
@@ -299,6 +309,12 @@ export class MLMsgReader {
 
     takeInt32PairList(): [number, number][] {
         const [ret, consumed] = this.readInt32PairList(this.offset)
+        this.offset += consumed
+        return ret
+    }
+
+    takeDecimalList(): number[] {
+        const [ret, consumed] = this.readDecimalList(this.offset)
         this.offset += consumed
         return ret
     }

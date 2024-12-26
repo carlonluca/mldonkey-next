@@ -22,15 +22,23 @@
  * Date: 2024.11.10
  */
 
+import { interval } from 'rxjs'
 import { Injectable } from '@angular/core'
 import { MLSubscriptionSet } from '../core/MLSubscriptionSet'
 import { WebSocketService } from '../websocket-service.service'
 import { MLMessageTypeFrom } from '../msg/MLMsg'
-import { interval } from 'rxjs'
-import { MLMsgToGetStats, MLSessionStatSet, MLMsgFromStats } from '../msg/MLMsgStats'
 import { MLCollectionModel } from '../core/MLCollectionModel'
 import { MLUPdateable } from '../core/MLUpdateable'
 import { MLObservableVariable } from '../core/MLObservableVariable'
+import {
+    MLMsgToGetStats,
+    MLSessionStatSet,
+    MLMsgFromStats,
+    MLMsgToGetBwUpDown,
+    MLMsgToGetBwHUpDown,
+    MLMsgFromBwUpDown,
+    MLMsgFromBwHUpDown
+} from '../msg/MLMsgStats'
 
 class MLNetworkStatModel implements MLUPdateable<MLNetworkStatModel> {
     constructor(
@@ -67,21 +75,36 @@ export class MLNetworkSummaryModel {
 })
 export class StatsService extends MLCollectionModel<number, MLNetworkStatModel> {
     public byNetworkStats = new MLObservableVariable<MLNetworkSummaryModel[]>([])
+    public bwStats = new MLObservableVariable<MLMsgFromBwUpDown | null>(null)
+    public bwHStats = new MLObservableVariable<MLMsgFromBwHUpDown | null>(null)
     private subscriptions = new MLSubscriptionSet()
     
     constructor(private websocketService: WebSocketService) {
         super()
         this.subscriptions.add(
             this.websocketService.lastMessage.observable.subscribe(m => {
-                if (m.type !== MLMessageTypeFrom.T_STATS)
+                if (m.type === MLMessageTypeFrom.T_STATS) {
+                    const msg = m as MLMsgFromStats
+                    msg.stats.forEach(sessionStat => {
+                        sessionStat.stats?.sort((a, b) => a.clientDescriptionLong.localeCompare(b.clientDescriptionLong))
+                    })
+                    msg.stats.sort((a, b) => a.name.localeCompare(b.name))
+                    this.handleValue(new MLNetworkStatModel(msg.networkId, msg.stats))
+                    this.refreshStats()
                     return
-                const msg = m as MLMsgFromStats
-                msg.stats.forEach(sessionStat => {
-                    sessionStat.stats?.sort((a, b) => a.clientDescriptionLong.localeCompare(b.clientDescriptionLong))
-                })
-                msg.stats.sort((a, b) => a.name.localeCompare(b.name))
-                this.handleValue(new MLNetworkStatModel(msg.networkId, msg.stats))
-                this.refreshStats()
+                }
+
+                if (m.type === MLMessageTypeFrom.T_BW_UP_DOWN) {
+                    const msg = m as MLMsgFromBwUpDown
+                    this.bwStats.value = msg
+                    return
+                }
+
+                if (m.type == MLMessageTypeFrom.T_BW_H_UP_DOWN) {
+                    const msg = m as MLMsgFromBwHUpDown
+                    this.bwHStats.value = msg
+                    return
+                }
             })
         )
         this.subscriptions.add(
@@ -96,6 +119,8 @@ export class StatsService extends MLCollectionModel<number, MLNetworkStatModel> 
     refresh() {
         this.websocketService.networkManager.elements.value.forEach(n => {
             this.websocketService.sendMsg(new MLMsgToGetStats(n.netNum))
+            this.websocketService.sendMsg(new MLMsgToGetBwUpDown())
+            this.websocketService.sendMsg(new MLMsgToGetBwHUpDown())
         })
     }
 

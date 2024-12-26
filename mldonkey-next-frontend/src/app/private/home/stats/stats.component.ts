@@ -21,13 +21,15 @@
  * Company: -
  * Date:    2024.11.20
  */
+
 import { Component } from '@angular/core'
 import { MatTableDataSource } from '@angular/material/table'
 import { faPlug, faPlugCircleXmark } from '@fortawesome/free-solid-svg-icons'
 import { MLNetworkSummaryModel, StatsService } from 'src/app/services/stats.service'
 import { WebSocketService } from 'src/app/websocket-service.service'
-import { type EChartsOption } from 'echarts'
+import { LegendComponentOption, type EChartsOption } from 'echarts'
 import { MLUtils } from 'src/app/core/MLUtils'
+import { MLMsgFromBwUpDownBase } from 'src/app/msg/MLMsgStats'
 
 @Component({
     selector: 'app-stats',
@@ -43,7 +45,7 @@ export class StatsComponent {
     networkSummaryDataSource = new MatTableDataSource<MLNetworkSummaryModel>([])
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    usageByNetworkChartMergeOption: any;
+    usageByNetworkChartMergeOption: any
     usageByNetworkChart: EChartsOption = {
         tooltip: {
             trigger: 'axis',
@@ -96,13 +98,157 @@ export class StatsComponent {
         ]
     }
 
+    fontColor = this.computedStyle.getPropertyValue("--chart-font-color")
+    bandwidthChartLegend: LegendComponentOption = {
+        type: "plain",
+        data: ["Uploaded", "Downloaded"],
+        orient: 'horizontal',
+        top: "auto",
+        show: true,
+        icon: "circle",
+        textStyle: {
+            color: this.fontColor
+        }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    bandwidthChartMergeOption: any
+    bandwidthChartData = []
+    bandwidthChart: EChartsOption = {
+        darkMode: true,
+        legend: this.bandwidthChartLegend,
+        tooltip: {
+            trigger: 'axis',
+            valueFormatter: value => MLUtils.beautifySize(value as number)
+        },
+        xAxis: {
+            type: 'value',
+            splitLine: {
+                show: false
+            },
+            axisLabel: {
+                rotate: 45,
+                formatter: v => this.timeFormatter(v),
+                color: this.fontColor
+            },
+            axisPointer: {
+                label: {
+                    formatter: params => this.timeFormatter(params.value as number)
+                }
+            }
+        },
+        yAxis: {
+            type: 'value',
+            splitLine: {
+                show: false
+            },
+            axisLabel: {
+                show: true,
+                formatter: value => MLUtils.beautifySize(value),
+                color: this.fontColor
+            }
+        },
+        series: [
+            {
+                name: 'Uploaded',
+                type: 'line',
+                showSymbol: false,
+                data: [],
+                itemStyle: {
+                    color: this.computedStyle.getPropertyValue("--bar-chart-color1")
+                }
+            },
+            {
+                name: 'Downloaded',
+                type: 'line',
+                showSymbol: false,
+                data: [],
+                itemStyle: {
+                    color: this.computedStyle.getPropertyValue("--bar-chart-color2")
+                }
+            }
+        ]
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    bandwidthHChartMergeOption: any
+    bandwidthHChartData = []
+    bandwidthHChart: EChartsOption = {
+        tooltip: {
+            trigger: 'axis',
+            valueFormatter: value => MLUtils.beautifySize(value as number)
+        },
+        legend: this.bandwidthChartLegend,
+        xAxis: {
+            type: 'value',
+            splitLine: {
+                show: false
+            },
+            axisLabel: {
+                rotate: 45,
+                formatter: v => this.dateTimeFormatter(v),
+                color: this.fontColor
+            },
+            axisPointer: {
+                label: {
+                    formatter: params => this.dateTimeFormatter(params.value as number)
+                }
+            }
+        },
+        yAxis: {
+            type: 'value',
+            boundaryGap: [0, '100%'],
+            splitLine: {
+                show: false
+            },
+            axisLabel: {
+                show: true,
+                formatter: value => MLUtils.beautifySize(value),
+                color: this.fontColor
+            },
+            axisPointer: {
+                label: {
+                    formatter: params => MLUtils.beautifySize(params.value as number)
+                }
+            }
+        },
+        series: [
+            {
+                name: 'Uploaded',
+                type: 'line',
+                showSymbol: false,
+                data: [],
+                itemStyle: {
+                    color: this.computedStyle.getPropertyValue("--bar-chart-color1")
+                }
+            },
+            {
+                name: 'Downloaded',
+                type: 'line',
+                showSymbol: false,
+                data: [],
+                itemStyle: {
+                    color: this.computedStyle.getPropertyValue("--bar-chart-color2")
+                }
+            }
+        ]
+    }
+
     constructor(public statsService: StatsService, private websocketService: WebSocketService) {
         this.statsService.byNetworkStats.observable.subscribe((stats) => {
             this.networkSummaryDataSource.data = stats
             this.refreshByNetworkChart(stats)
         })
+        this.statsService.bwStats.observable.subscribe((bw) => {
+            this.bandwidthChartMergeOption = this.mergeOptionsFromData(bw)
+        })
+        this.statsService.bwHStats.observable.subscribe((bwh) => {
+            this.bandwidthHChartMergeOption = this.mergeOptionsFromData(bwh)
+        })
         this.networkSummaryDataSource.data = this.statsService.byNetworkStats.value
         this.refreshByNetworkChart(this.statsService.byNetworkStats.value)
+        this.bandwidthChartMergeOption = this.mergeOptionsFromData(this.statsService.bwStats.value)
+        this.bandwidthHChartMergeOption = this.mergeOptionsFromData(this.statsService.bwHStats.value)
     }
 
     networkInfo(networkNum: number) {
@@ -136,5 +282,53 @@ export class StatsComponent {
                 data: networkNames
             }
         }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    mergeOptionsFromData(bw: MLMsgFromBwUpDownBase | null): any {
+        const bwUploadSamples = !bw ? [] : this.optionsFromMsg(bw, bw.uploadSamples)
+        const bwDownloadSamples = !bw ? [] : this.optionsFromMsg(bw, bw.downloadSamples)
+
+        return {
+            series: [{
+                data: bwUploadSamples
+            }, {
+                data: bwDownloadSamples
+            }],
+            xAxis: {
+                max: !bw ? 0 : bw.timeFlag + bw.stepSecs,
+                min: !bw ? 0 : bw.timeFlag - bw.stepSecs * Math.max(bwUploadSamples.length, bwDownloadSamples.length)
+            }
+        }
+    }
+
+    private optionsFromMsg(msg: MLMsgFromBwUpDownBase, samples: number[]) {
+        const data = []
+        const baseTimestamp = msg.timeFlag
+        for (let i = samples.length - 1; i >= 0; i--) {
+            const number = samples[i]
+            data.push([
+                baseTimestamp - ((samples.length - 1) - i) * msg.stepSecs,
+                number
+            ])
+        }
+        return data
+    }
+
+    private timeFormatter(value: number) {
+        const date = new Date(value * 1000)
+        const hours = date.getHours().toString().padStart(2, '0')
+        const minutes = date.getMinutes().toString().padStart(2, '0')
+        const seconds = date.getSeconds().toString().padStart(2, '0')
+        return `${hours}:${minutes}:${seconds}`
+    }
+
+    private dateTimeFormatter(value: number) {
+        const date = new Date(value * 1000)
+        const month = date.getMonth() + 1
+        const day = date.getDate()
+        const hours = date.getHours().toString().padStart(2, '0')
+        const minutes = date.getMinutes().toString().padStart(2, '0')
+        return `${day}/${month} ${hours}:${minutes}`
     }
 }

@@ -2,6 +2,11 @@
 
 .main-container {
     margin: $defaultMargin;
+    margin-top: $defaultMargin;
+}
+
+.chart-div {
+    width: 100%;
 }
 
 .title {
@@ -21,9 +26,4 @@
 
 .unplugged {
     color: $red-color;
-}
-
-.usage-by-network-chart {
-    width: 100%;
-    margin-top: $defaultMargin;
 }

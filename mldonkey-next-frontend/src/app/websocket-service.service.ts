@@ -38,7 +38,7 @@ import { MLMsgFromAddSectionOption, MLMsgFromOptionsInfo } from './msg/MLMsgOpti
 import { MLMsgFromSysInfo } from './msg/MLMsgSysInfo'
 import { MLMsgFromClientStats } from './msg/MLMsgClientStats'
 import { MLMsgFromUploaders } from './msg/MLMsgUploaders'
-import { MLMsgFromStats } from './msg/MLMsgStats'
+import { MLMsgFromBwHUpDown, MLMsgFromBwUpDown, MLMsgFromStats } from './msg/MLMsgStats'
 import { MLSubscriptionSet } from './core/MLSubscriptionSet'
 
 export enum MLConnectionState {
@@ -123,9 +123,11 @@ export class WebSocketService {
                 continue
             wsLogger.info("<- Message received:", msg.type)
             if (msg.type == ML.MLMessageTypeFrom.T_CORE_PROTOCOL) {
-                const msg = new ML.MLMessageGuiProtocol(33)
-                this.sendMsg(msg)
-                this.protocol = msg.version
+                const protocolMsg = msg as MLMessageCoreProtocol
+                wsLogger.info(`Core protocol version: ${protocolMsg.version}`)
+                const response = new ML.MLMessageGuiProtocol(33)
+                this.sendMsg(response)
+                this.protocol = protocolMsg.version
             }
             else if (msg.type != ML.MLMessageTypeFrom.T_BAD_PASSWORD)
                 this.connectionState.value = MLConnectionState.S_AUTHENTICATED
@@ -231,6 +233,10 @@ export class WebSocketService {
                 return [MLMsgFromUploaders.fromBuffer(data), size + SIZE_HEADER, true]
             case MLMessageTypeFrom.T_STATS:
                 return [MLMsgFromStats.fromBuffer(data), size + SIZE_HEADER, true]
+            case MLMessageTypeFrom.T_BW_UP_DOWN:
+                return [MLMsgFromBwUpDown.fromBuffer(data), size + SIZE_HEADER, true]
+            case MLMessageTypeFrom.T_BW_H_UP_DOWN:
+                return [MLMsgFromBwHUpDown.fromBuffer(data), size + SIZE_HEADER, true]
             default:
                 wsLogger.warn(`Unknown msg with opcode: ${MLMessageTypeFrom[opcode]} (${opcode})`)
                 return [null, size + SIZE_HEADER, true]

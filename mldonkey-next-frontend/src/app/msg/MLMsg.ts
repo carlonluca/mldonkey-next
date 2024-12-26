@@ -23,6 +23,7 @@
  */
 
 import { MLStringPair, MLUtils } from '../core/MLUtils'
+import { MLMsgReader } from './MLMsgReader'
 
 /**
  * Supported messages.
@@ -88,7 +89,9 @@ export enum MLMessageTypeFrom {
     T_SEARCH                 = 57,
     T_VERSION                = 58,
     T_STATS                  = 59,
-    T_SYSINFO                = 60
+    T_SYSINFO                = 60,
+    T_BW_UP_DOWN             = 61,
+    T_BW_H_UP_DOWN           = 62
 }
 
 export enum MLMessageTypeTo {
@@ -162,7 +165,9 @@ export enum MLMessageTypeTo {
     T_SERVER_RENAME          = 66,
     T_SERVER_SET_PREFERRED   = 67,
     T_GET_STATS              = 68,
-    T_GET_SYSINFO            = 69
+    T_GET_SYSINFO            = 69,
+    T_GET_BW_UP_DOWN         = 70,
+    T_GET_BW_H_UP_DOWN       = 71
 }
 
 
@@ -333,18 +338,23 @@ export class MLMsgFromNone extends MLMsgFrom {
  * Core protocol message.
  */
 export class MLMessageCoreProtocol extends MLMsgFrom {
-    public version: number
-
     /**
      * Ctor.
      */
-    constructor(version: number) {
+    constructor(
+        public version: number,
+        public maxOpcodeToGui: number,
+        public maxOpcodeAcceptedByCore: number
+    ) {
         super(MLMessageTypeFrom.T_CORE_PROTOCOL)
-        this.version = version
     }
 
     public static fromBuffer(buffer: ArrayBuffer): MLMessageCoreProtocol {
-        return new MLMessageCoreProtocol(new DataView(buffer).getInt32(2, true))
+        const reader = new MLMsgReader(buffer)
+        const version = reader.takeInt32()
+        const maxToGui = reader.takeInt32()
+        const maxByCore = reader.takeInt32()
+        return new MLMessageCoreProtocol(version, maxToGui, maxByCore)
     }
 }
 

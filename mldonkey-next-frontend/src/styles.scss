@@ -23,6 +23,7 @@
     --table-font-size: medium;
     --bar-chart-color1: #{color.adjust($primary-color, $lightness: 20%)};
     --bar-chart-color2: #{color.adjust($primary-color, $blackness: 20%)};
+    --chart-font-color: #{color.adjust($textColor, $blackness: 30%)};
 }
 
 html,
