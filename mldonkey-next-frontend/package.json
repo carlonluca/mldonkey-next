@@ -31,7 +31,6 @@
     "luxon": "^3.5.0",
     "ngx-echarts": "^19.0.0",
     "ngx-mask": "^19.0.6",
-    "node": "23.5.0",
     "pretty-bytes": "^6.1.1",
     "rxjs": "~7.8.1",
     "tslib": "^2.7.0",
