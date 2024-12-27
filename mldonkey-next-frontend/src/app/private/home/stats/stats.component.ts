@@ -39,6 +39,21 @@ import { MLMsgFromBwUpDownBase } from 'src/app/msg/MLMsgStats'
 })
 export class StatsComponent {
     private computedStyle = getComputedStyle(document.documentElement)
+    private fontColor = this.computedStyle.getPropertyValue("--chart-font-color")
+    private noDataGraphics = [
+        {
+            type: 'text',
+            left: 'center',
+            top: 'middle',
+            z: 101,
+            style: {
+                text: 'No data',
+                fontSize: 20,
+                fontWeight: 'bold',
+                fill: this.fontColor
+            }
+        }
+    ]
 
     faPlug = faPlug
     faUnplugged = faPlugCircleXmark
@@ -98,7 +113,6 @@ export class StatsComponent {
         ]
     }
 
-    fontColor = this.computedStyle.getPropertyValue("--chart-font-color")
     bandwidthChartLegend: LegendComponentOption = {
         type: "plain",
         data: ["Uploaded", "Downloaded"],
@@ -113,7 +127,6 @@ export class StatsComponent {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     bandwidthChartMergeOption: any
-    bandwidthChartData = []
     bandwidthChart: EChartsOption = {
         darkMode: true,
         legend: this.bandwidthChartLegend,
@@ -167,12 +180,12 @@ export class StatsComponent {
                     color: this.computedStyle.getPropertyValue("--bar-chart-color2")
                 }
             }
-        ]
+        ],
+        graphic: this.noDataGraphics
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     bandwidthHChartMergeOption: any
-    bandwidthHChartData = []
     bandwidthHChart: EChartsOption = {
         tooltip: {
             trigger: 'axis',
@@ -231,7 +244,8 @@ export class StatsComponent {
                     color: this.computedStyle.getPropertyValue("--bar-chart-color2")
                 }
             }
-        ]
+        ],
+        graphic: this.noDataGraphics
     }
 
     constructor(public statsService: StatsService, private websocketService: WebSocketService) {
@@ -241,14 +255,18 @@ export class StatsComponent {
         })
         this.statsService.bwStats.observable.subscribe((bw) => {
             this.bandwidthChartMergeOption = this.mergeOptionsFromData(bw)
+            this.bandwidthChart.graphic = !this.isBandwidthDataAvailable() ? this.noDataGraphics : []
         })
         this.statsService.bwHStats.observable.subscribe((bwh) => {
             this.bandwidthHChartMergeOption = this.mergeOptionsFromData(bwh)
+            this.bandwidthHChart.graphic = !this.isBandwidthHDataAvailable() ? this.noDataGraphics : []
         })
         this.networkSummaryDataSource.data = this.statsService.byNetworkStats.value
         this.refreshByNetworkChart(this.statsService.byNetworkStats.value)
         this.bandwidthChartMergeOption = this.mergeOptionsFromData(this.statsService.bwStats.value)
         this.bandwidthHChartMergeOption = this.mergeOptionsFromData(this.statsService.bwHStats.value)
+        this.bandwidthChart.graphic = !this.isBandwidthDataAvailable() ? this.noDataGraphics : []
+        this.bandwidthHChart.graphic = !this.isBandwidthHDataAvailable() ? this.noDataGraphics : []
     }
 
     networkInfo(networkNum: number) {
@@ -300,6 +318,14 @@ export class StatsComponent {
                 min: !bw ? 0 : bw.timeFlag - bw.stepSecs * Math.max(bwUploadSamples.length, bwDownloadSamples.length)
             }
         }
+    }
+
+    isBandwidthDataAvailable() {
+        return (this.statsService.bwStats.value?.downloadSamples?.length ?? 0) > 0
+    }
+
+    isBandwidthHDataAvailable() {
+        return (this.statsService.bwHStats.value?.downloadSamples?.length ?? 0) > 0
     }
 
     private optionsFromMsg(msg: MLMsgFromBwUpDownBase, samples: number[]) {
