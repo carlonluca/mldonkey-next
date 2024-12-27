@@ -9,6 +9,7 @@ mldonkey-next is a modern implementation of clients for mldonkey. mldonkey-next 
 Desktop             |  Mobile
 :-------------------------:|:-------------------------:
 ![desktop](docs/mldonkey-next_desktop.png)  |  ![mobile](docs/mldonkey-next_mobile.png)
+![desktop](docs/mldonkey-next_desktop2.png)  |  ![mobile](docs/mldonkey-next_mobile2.png)
 
 The webapp can be used in your preferred browser. It requires the installation of a bridge (named backend in the repo). The backend provides a bridge to the mldonkey core and serves the mldonkey-next webapp.
 
@@ -27,6 +28,7 @@ More information on how to install mldonkey-next can be found in the docker repo
 Desktop             |  Mobile
 :-------------------------:|:-------------------------:
 ![desktop](docs/mldonkey-next_desktop_app.png)  |  ![mobile](docs/mldonkey-next_mobile_app.png)
+![desktop](docs/mldonkey-next_desktop_app2.png)  |  ![mobile](docs/mldonkey-next_mobile_app2.png)
 
 The native app is a Qt app embedding the webapp. The native app does not need the bridge and can connect to a generic mldonkey server. Unfortunately, a generic server is missing some patches that I only applied to my fork, so the docker image is still encouraged.
 
