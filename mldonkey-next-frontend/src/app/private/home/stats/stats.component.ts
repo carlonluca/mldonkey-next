@@ -132,7 +132,7 @@ export class StatsComponent {
         legend: this.bandwidthChartLegend,
         tooltip: {
             trigger: 'axis',
-            valueFormatter: value => MLUtils.beautifySize(value as number)
+            valueFormatter: value => MLUtils.beautifySpeed(value as number)
         },
         xAxis: {
             type: 'value',
@@ -157,7 +157,7 @@ export class StatsComponent {
             },
             axisLabel: {
                 show: true,
-                formatter: value => MLUtils.beautifySize(value),
+                formatter: value => MLUtils.beautifySpeed(value),
                 color: this.fontColor
             }
         },
@@ -189,7 +189,7 @@ export class StatsComponent {
     bandwidthHChart: EChartsOption = {
         tooltip: {
             trigger: 'axis',
-            valueFormatter: value => MLUtils.beautifySize(value as number)
+            valueFormatter: value => MLUtils.beautifySpeed(value as number)
         },
         legend: this.bandwidthChartLegend,
         xAxis: {
@@ -216,12 +216,12 @@ export class StatsComponent {
             },
             axisLabel: {
                 show: true,
-                formatter: value => MLUtils.beautifySize(value),
+                formatter: value => MLUtils.beautifySpeed(value),
                 color: this.fontColor
             },
             axisPointer: {
                 label: {
-                    formatter: params => MLUtils.beautifySize(params.value as number)
+                    formatter: params => MLUtils.beautifySpeed(params.value as number)
                 }
             }
         },

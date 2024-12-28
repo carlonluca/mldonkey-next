@@ -80,6 +80,12 @@ export class MLUtils {
         return prettyBytes(Number(size))
     }
 
+    public static beautifySpeed(bytes: bigint | number): string {
+        if (bytes > Number.MAX_SAFE_INTEGER)
+            return "" + bytes
+        return prettyBytes(Number(bytes)) + "/s"
+    }
+
     public static prettyFormat(millis: number): string {
         const totalSeconds = Math.floor(millis / 1000)
         const seconds = totalSeconds % 60

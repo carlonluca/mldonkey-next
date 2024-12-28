@@ -45,6 +45,6 @@ export class PrettyBytesSpeedPipe implements PipeTransform {
     transform(value: bigint | number | null | undefined): string {
         if (value === null || value === undefined)
             return "-"
-        return MLUtils.beautifySize(value) + "/s"
+        return MLUtils.beautifySpeed(value)
     }
 }
