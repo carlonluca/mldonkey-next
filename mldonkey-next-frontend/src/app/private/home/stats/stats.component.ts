@@ -137,7 +137,11 @@ export class StatsComponent {
         xAxis: {
             type: 'value',
             splitLine: {
-                show: false
+                show: true,
+                lineStyle: {
+                    color: this.fontColor,
+                    type: 'dashed'
+                }
             },
             axisLabel: {
                 rotate: 45,
@@ -153,7 +157,11 @@ export class StatsComponent {
         yAxis: {
             type: 'value',
             splitLine: {
-                show: false
+                show: true,
+                lineStyle: {
+                    color: this.fontColor,
+                    type: 'dashed'
+                }
             },
             axisLabel: {
                 show: true,
@@ -165,6 +173,7 @@ export class StatsComponent {
             {
                 name: 'Uploaded',
                 type: 'line',
+                smooth: true,
                 showSymbol: false,
                 data: [],
                 itemStyle: {
@@ -174,6 +183,7 @@ export class StatsComponent {
             {
                 name: 'Downloaded',
                 type: 'line',
+                smooth: true,
                 showSymbol: false,
                 data: [],
                 itemStyle: {
@@ -195,7 +205,11 @@ export class StatsComponent {
         xAxis: {
             type: 'value',
             splitLine: {
-                show: false
+                show: true,
+                lineStyle: {
+                    color: this.fontColor,
+                    type: 'dashed'
+                }
             },
             axisLabel: {
                 rotate: 45,
@@ -212,7 +226,11 @@ export class StatsComponent {
             type: 'value',
             boundaryGap: [0, '100%'],
             splitLine: {
-                show: false
+                show: true,
+                lineStyle: {
+                    color: this.fontColor,
+                    type: 'dashed'
+                }
             },
             axisLabel: {
                 show: true,
@@ -229,6 +247,7 @@ export class StatsComponent {
             {
                 name: 'Uploaded',
                 type: 'line',
+                smooth: true,
                 showSymbol: false,
                 data: [],
                 itemStyle: {
@@ -238,6 +257,7 @@ export class StatsComponent {
             {
                 name: 'Downloaded',
                 type: 'line',
+                smooth: true,
                 showSymbol: false,
                 data: [],
                 itemStyle: {
