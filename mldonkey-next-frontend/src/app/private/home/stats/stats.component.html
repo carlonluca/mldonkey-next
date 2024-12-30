@@ -1,9 +1,13 @@
 <div class="main-container">
     <h1>Bandwidth Stats</h1>
     <div echarts [ngClass]="{'chart-div': true, 'no-data': !this.isBandwidthDataAvailable()}" [options]="bandwidthChart" [autoResize]="true" [merge]="bandwidthChartMergeOption"></div>
+
+    <mat-divider></mat-divider>
     
     <h1>Bandwidth History</h1>
     <div echarts [ngClass]="{'chart-div': true, 'no-data': !this.isBandwidthHDataAvailable()}" [options]="bandwidthHChart" [autoResize]="true" [merge]="bandwidthHChartMergeOption"></div>
+
+    <mat-divider></mat-divider>
     
     <h1>Network Stats</h1>
     <table mat-table [dataSource]="this.networkSummaryDataSource" class="mat-elevation-z8">
