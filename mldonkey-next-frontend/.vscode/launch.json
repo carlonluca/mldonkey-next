@@ -1,6 +1,6 @@
 {
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-  "version": "0.7.0",
+  "version": "0.7.1",
   "configurations": [
     {
       "name": "ng serve",
