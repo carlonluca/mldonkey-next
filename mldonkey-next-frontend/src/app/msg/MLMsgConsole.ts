@@ -22,7 +22,7 @@
  * Date: 14.08.2023
  */
 
-import { MLMsgFrom, MLMessageTypeFrom } from "./MLMsg"
+import { MLMsgFrom, MLMessageTypeFrom, MLMsgTo, MLMessageTypeTo } from "./MLMsg"
 import { MLMsgReader } from "./MLMsgReader"
 
 export class MLMsgFromConsole extends MLMsgFrom {
@@ -32,5 +32,20 @@ export class MLMsgFromConsole extends MLMsgFrom {
 
     public static fromBuffer(buffer: ArrayBuffer): MLMsgFromConsole {
         return new MLMsgFromConsole(new MLMsgReader(buffer).takeString())
+    }
+}
+
+
+export class MLMsgConsoleCommand extends MLMsgTo {
+    constructor(
+        public command: string
+    ) {
+        super(MLMessageTypeTo.T_COMMAND)
+    }
+
+    public override toBuffer(): ArrayBuffer {
+        let ret = new ArrayBuffer(0)
+        ret = this.appendString(ret, this.command)
+        return this.createEnvelope(ret)
     }
 }
