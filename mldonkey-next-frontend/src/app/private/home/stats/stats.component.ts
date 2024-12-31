@@ -169,6 +169,9 @@ export class StatsComponent {
                 color: this.fontColor
             }
         },
+        grid:  {
+            containLabel: true
+        },
         series: [
             {
                 name: 'Uploaded',
@@ -242,6 +245,9 @@ export class StatsComponent {
                     formatter: params => MLUtils.beautifySpeed(params.value as number)
                 }
             }
+        },
+        grid:  {
+            containLabel: true
         },
         series: [
             {
