@@ -16,10 +16,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
 import { ConsoleService } from 'src/app/services/console.service'
 import { WebSocketService } from 'src/app/websocket-service.service'
+import { ScrollToBottomDirective } from '../corelogs/scroll'
 
 @Component({
     selector: 'app-console',
@@ -28,10 +29,14 @@ import { WebSocketService } from 'src/app/websocket-service.service'
     standalone: false
 })
 export class ConsoleComponent implements OnInit, OnDestroy {
+    @ViewChild('scrollContainer') scrollContainer: ElementRef
+    @ViewChild(ScrollToBottomDirective) scrollDirective: ScrollToBottomDirective
+
     subscriptions: MLSubscriptionSet = new MLSubscriptionSet()
     messages: string[] = []
+    follow = true
 
-    constructor(public websocketService: WebSocketService, public consoleService: ConsoleService) {}
+    constructor(public websocketService: WebSocketService, public consoleService: ConsoleService) { }
 
     ngOnInit(): void {
         this.subscriptions.add(
@@ -41,5 +46,36 @@ export class ConsoleComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe(null)
+    }
+
+    onScroll(_event: WheelEvent) {
+        this.dontFollow()
+    }
+
+    doFollow() {
+        this.scrollDirective.follow = true
+        this.follow = true
+        this.scrollToBottom()
+    }
+
+    scrollToTop() {
+        this.dontFollow()
+        this.scrollContainer.nativeElement.scrollTop = 0
+    }
+
+    scrollToBottom() {
+        if (this.scrollDirective)
+            this.scrollDirective.scrollToBottom()
+    }
+
+    dontFollow() {
+        this.scrollDirective.follow = false
+        this.follow = false
+    }
+
+    isAtTop() {
+        if (!this.scrollContainer)
+            return true
+        return this.scrollContainer.nativeElement.scrollTop === 0
     }
 }

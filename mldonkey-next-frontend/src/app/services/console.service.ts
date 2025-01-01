@@ -44,7 +44,8 @@ export class ConsoleService {
                     const hours = pad(date.getHours())
                     const minutes = pad(date.getMinutes())
                     const seconds = pad(date.getSeconds())
-                    const line = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}: ${(m as MLMsgFromConsole).command}`
+                    const command = (m as MLMsgFromConsole).command
+                    const line = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}\n${command}`
                     messages.push(line)
                 }
             })

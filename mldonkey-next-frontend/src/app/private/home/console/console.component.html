@@ -16,4 +16,6 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<p *ngFor="let message of messages; index as i" [ngClass]="{'alternate': i%2 === 0 }">{{ message }}</p>
+<app-follow-content-view>
+    <p *ngFor="let message of messages; index as i" [ngClass]="{'alternate': i%2 === 0 }">{{ message }}</p>
+</app-follow-content-view>

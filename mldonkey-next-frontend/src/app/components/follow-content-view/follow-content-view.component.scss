@@ -1,7 +1,7 @@
 /*
  * This file is part of mldonkey-next.
  *
- * Copyright (c) 2024 Luca Carlon
+ * Copyright (c) 2025 Luca Carlon
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,27 +19,14 @@
 /**
  * Author:  Luca Carlon
  * Company: -
- * Date: 2024.07.07
+ * Date:    2025.01.01
  */
 
-@use "../../../css/shared.scss" as *;
-
-p {
-    margin: 0px;
-}
-
-div {
-    font-family: monospace;
-    word-wrap: break-word;
-}
+@use "../../css/shared.scss" as *;
 
 .scroll-container {
     overflow-y: auto;
     height: 100%;
-}
-
-.span-tag {
-    color: $primary-color;
 }
 
 #toolbar {
@@ -51,56 +38,10 @@ div {
     gap: $defaultMargin;
 }
 
-#downloading-logs {
-    display: flex;
-    width: 100%;
-    height: 100%;
-}
-
-#downloading-logs-label {
-    margin: auto;
-}
-
-#error-logs {
-    display: flex;
-    width: 100%;
-    height: 100%;
-}
-
-#error-logs-label {
-    margin: auto;
-    color: $red-color;
-}
-
-#log-root-view {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    width: 100%;
-    height: 100%;
-}
-
-#log-toolbar {
-    display: flex;
-    flex: 0;
-    width: 100%;
-    justify-content: right;
-    align-items: center;
-    margin: 0px;
-}
-
-#log-range-selector {
-    margin: $defaultMargin;
-}
-
 #log-view {
     flex: 1;
 }
 
 #toolbar {
     opacity: 0.8;
-}
-
-#toobar-divider {
-    margin: 0px;
 }
