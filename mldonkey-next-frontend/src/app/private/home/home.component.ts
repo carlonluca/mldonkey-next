@@ -30,7 +30,6 @@ import {
     faChartSimple,
     faGears,
     faDoorOpen,
-    faMessage,
     faComputer,
     faFileLines,
     faUpload,

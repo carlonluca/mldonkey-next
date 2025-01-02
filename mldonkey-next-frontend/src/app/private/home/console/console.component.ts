@@ -16,12 +16,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
 import { ConsoleService } from 'src/app/services/console.service'
 import { WebSocketService } from 'src/app/websocket-service.service'
-import { ScrollToBottomDirective } from '../corelogs/scroll'
 import { faTerminal } from '@fortawesome/free-solid-svg-icons'
+import { MLMsgToConsoleCommand } from 'src/app/msg/MLMsgConsole'
 
 @Component({
     selector: 'app-console',
@@ -30,9 +30,6 @@ import { faTerminal } from '@fortawesome/free-solid-svg-icons'
     standalone: false
 })
 export class ConsoleComponent implements OnInit, OnDestroy {
-    @ViewChild('scrollContainer') scrollContainer: ElementRef
-    @ViewChild(ScrollToBottomDirective) scrollDirective: ScrollToBottomDirective
-
     subscriptions: MLSubscriptionSet = new MLSubscriptionSet()
     messages: string[] = []
     follow = true
@@ -51,34 +48,10 @@ export class ConsoleComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe(null)
     }
 
-    onScroll(_event: WheelEvent) {
-        this.dontFollow()
-    }
-
-    doFollow() {
-        this.scrollDirective.follow = true
-        this.follow = true
-        this.scrollToBottom()
-    }
-
-    scrollToTop() {
-        this.dontFollow()
-        this.scrollContainer.nativeElement.scrollTop = 0
-    }
-
-    scrollToBottom() {
-        if (this.scrollDirective)
-            this.scrollDirective.scrollToBottom()
-    }
-
-    dontFollow() {
-        this.scrollDirective.follow = false
-        this.follow = false
-    }
-
-    isAtTop() {
-        if (!this.scrollContainer)
-            return true
-        return this.scrollContainer.nativeElement.scrollTop === 0
+    submitCommand() {
+        if (this.commandString) {
+            this.websocketService.sendMsg(new MLMsgToConsoleCommand(this.commandString))
+            this.commandString = ""
+        }
     }
 }

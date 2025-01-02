@@ -16,16 +16,18 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<mat-form-field [style.width.%]="100">
+<mat-form-field [style.width.%]="100" subscriptSizing="dynamic">
     <mat-label width="100%">{{ label }}</mat-label>
-    <button width="100%" matPrefix mat-icon-button color="white" (matTooltip)="tooltip" matTooltipPosition="below" tabindex="-1">
+    <button width="100%" matPrefix mat-icon-button color="white" (matTooltip)="tooltip" matTooltipPosition="below"
+        tabindex="-1">
         @if (this.faIcon) {
-            <fa-icon [icon]="faIcon"></fa-icon>
+        <fa-icon [icon]="faIcon"></fa-icon>
         }
         @if (this.matIcon) {
-            <mat-icon>{{ this.matIcon }}</mat-icon>
+        <mat-icon>{{ this.matIcon }}</mat-icon>
         }
     </button>
-    <input width="100%" matInput #inputValue class="fill-parent" [type]="this.type" [(ngModel)]="this.userInput" [autocapitalize]="this.autocapitalize"
-        (ngModelChange)="this.userInputChange.emit(inputValue.value)" />
+    <input width="100%" matInput #inputValue class="fill-parent" [type]="this.type" [(ngModel)]="this.userInput"
+        [autocapitalize]="this.autocapitalize" (ngModelChange)="this.changeEvent(inputValue.value)"
+        (keydown.enter)="this.submitEvent(this.userInput)" />
 </mat-form-field>

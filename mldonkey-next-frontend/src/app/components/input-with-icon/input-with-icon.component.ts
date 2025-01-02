@@ -42,4 +42,14 @@ export class InputWithIconComponent {
     public autocapitalize: string
     @Output()
     public userInputChange = new EventEmitter<string>()
+    @Output()
+    public userInputSubmit = new EventEmitter<string>()
+
+    changeEvent(inputString: string) {
+        this.userInputChange.emit(inputString)
+    }
+
+    submitEvent(inputString: string) {
+        this.userInputSubmit.emit(inputString)
+    }
 }

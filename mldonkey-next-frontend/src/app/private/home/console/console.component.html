@@ -19,8 +19,8 @@
 <div id="container">
     <div id="command-bar">
         <app-input-with-icon id="command-input" [faIcon]="faTerminal" [(userInput)]="commandString" label="Command"
-            autocapitalize="none" tooltip="Enter your command" type="text" />
-        <button mat-mini-fab>
+            autocapitalize="none" tooltip="Enter your command" type="text" (userInputSubmit)="this.submitCommand()" />
+        <button mat-mini-fab [disabled]="this.commandString.length <= 0" (click)="this.submitCommand()">
             <mat-icon>keyboard_return</mat-icon>
         </button>
     </div>
