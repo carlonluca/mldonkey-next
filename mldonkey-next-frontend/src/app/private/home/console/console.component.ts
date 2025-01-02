@@ -21,6 +21,7 @@ import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
 import { ConsoleService } from 'src/app/services/console.service'
 import { WebSocketService } from 'src/app/websocket-service.service'
 import { ScrollToBottomDirective } from '../corelogs/scroll'
+import { faTerminal } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
     selector: 'app-console',
@@ -35,6 +36,8 @@ export class ConsoleComponent implements OnInit, OnDestroy {
     subscriptions: MLSubscriptionSet = new MLSubscriptionSet()
     messages: string[] = []
     follow = true
+    faTerminal = faTerminal
+    commandString = ""
 
     constructor(public websocketService: WebSocketService, public consoleService: ConsoleService) { }
 

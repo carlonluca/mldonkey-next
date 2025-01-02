@@ -24,8 +24,15 @@
 
 @use "../../css/shared.scss" as *;
 
-.scroll-container {
-    overflow-y: auto;
+#container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+#scrollable-container {
+    overflow-y: scroll;
+    width: 100%;
     height: 100%;
 }
 
@@ -36,10 +43,6 @@
     display: flex;
     flex-direction: column;
     gap: $defaultMargin;
-}
-
-#log-view {
-    flex: 1;
 }
 
 #toolbar {

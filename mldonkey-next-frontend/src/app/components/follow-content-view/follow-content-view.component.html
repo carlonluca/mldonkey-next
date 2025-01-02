@@ -1,4 +1,7 @@
-<div id="log-view" appScrollToBottom #scrollContainer (wheel)="onScroll($event)" class="scroll-container">
+<div id="container">
+    <div id="scrollable-container" appScrollToBottom #scrollContainer #contentSection (wheel)="onScroll($event)">
+        <ng-content></ng-content>
+    </div>
     <div id="toolbar">
         <button mat-fab extended [disabled]="this.isAtTop()" (click)="this.scrollToTop()">
             <fa-icon [icon]="faArrowUp"></fa-icon>
@@ -7,8 +10,5 @@
         <button mat-fab extended [disabled]="this.follow" (click)="this.doFollow()">
             <fa-icon [icon]="faPersonWalkingArrowRight"></fa-icon>
         </button>
-    </div>
-    <div #contentSection class="content-section">
-        <ng-content></ng-content>
     </div>
 </div>

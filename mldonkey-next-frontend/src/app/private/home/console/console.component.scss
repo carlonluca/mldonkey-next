@@ -27,4 +27,29 @@ p {
     margin: 0px;
     white-space: pre-wrap;
     font-family: monospace;
+    word-wrap: break-word;
+}
+
+#container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+#command-bar {
+    margin: $defaultMargin;
+    display: flex;
+    gap: $defaultMargin;
+    align-items: center;
+}
+
+#command-input {
+    flex: 1;
+}
+
+#command-output {
+    overflow-y: hidden;
+    flex: 1;
+    width: 100%;
 }

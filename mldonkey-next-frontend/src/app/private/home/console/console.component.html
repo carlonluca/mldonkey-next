@@ -16,6 +16,15 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<app-follow-content-view>
-    <p *ngFor="let message of messages; index as i" [ngClass]="{'alternate': i%2 === 0 }">{{ message }}</p>
-</app-follow-content-view>
+<div id="container">
+    <div id="command-bar">
+        <app-input-with-icon id="command-input" [faIcon]="faTerminal" [(userInput)]="commandString" label="Command"
+            autocapitalize="none" tooltip="Enter your command" type="text" />
+        <button mat-mini-fab>
+            <mat-icon>keyboard_return</mat-icon>
+        </button>
+    </div>
+    <app-follow-content-view id="command-output">
+        <p *ngFor="let message of messages; index as i" [ngClass]="{'alternate': i%2 === 0 }">{{ message }}</p>
+    </app-follow-content-view>
+</div>
