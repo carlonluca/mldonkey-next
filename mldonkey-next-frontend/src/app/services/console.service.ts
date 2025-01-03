@@ -20,7 +20,7 @@ import { Injectable } from '@angular/core'
 import { MLSubscriptionSet } from '../core/MLSubscriptionSet'
 import { MLConnectionState, WebSocketService } from '../websocket-service.service'
 import { MLMessageTypeFrom } from '../msg/MLMsg'
-import { MLMsgFromConsole } from '../msg/MLMsgConsole'
+import { MLMsgFromConsole, MLMsgToConsoleCommand } from '../msg/MLMsgConsole'
 import { MLObservableVariable } from '../core/MLObservableVariable'
 
 @Injectable({
@@ -30,6 +30,7 @@ export class ConsoleService {
     subscriptions: MLSubscriptionSet = new MLSubscriptionSet()
     messages = ""
     console = new MLObservableVariable<string[]>([])
+    longhelpString: string | null = null
 
     constructor(public websocketService: WebSocketService) {
         this.subscriptions.add(
@@ -47,14 +48,20 @@ export class ConsoleService {
                     const command = (m as MLMsgFromConsole).command
                     const line = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}\n${command}`
                     messages.push(line)
+
+                    if (!this.longhelpString && line.indexOf("Eval command: longhelp") >= 0)
+                        this.longhelpString = command.trim()
                 }
             })
         )
         this.subscriptions.add(
             this.websocketService.connectionState.observable.subscribe(state => {
-                if (state === MLConnectionState.S_NOT_CONNECTED)
+                if (state === MLConnectionState.S_NOT_CONNECTED) {
                     this.console.value = []
+                    this.longhelpString = null
+                }
             })
         )
+        this.websocketService.sendMsg(new MLMsgToConsoleCommand("longhelp"))
     }
 }

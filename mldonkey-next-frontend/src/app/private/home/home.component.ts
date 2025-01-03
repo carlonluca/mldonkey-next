@@ -35,7 +35,8 @@ import {
     faUpload,
     faChartPie,
     faCircleInfo,
-    faTerminal
+    faTerminal,
+    faQuestion
 } from '@fortawesome/free-solid-svg-icons'
 import { StorageService } from 'src/app/services/storage.service'
 import { MLConnectionState, WebSocketService } from 'src/app/websocket-service.service'
@@ -73,6 +74,7 @@ export class HomeComponent {
     faTerminal = faTerminal
     faComputer = faComputer
     faFileLines = faFileLines
+    faQuestion = faQuestion
     faPie = faChartPie
     faCircleInfo = faCircleInfo
     version = packageJson.version
