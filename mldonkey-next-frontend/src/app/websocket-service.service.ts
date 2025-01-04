@@ -125,7 +125,7 @@ export class WebSocketService {
             if (msg.type == ML.MLMessageTypeFrom.T_CORE_PROTOCOL) {
                 const protocolMsg = msg as MLMessageCoreProtocol
                 wsLogger.info(`Core protocol version: ${protocolMsg.version}`)
-                const response = new ML.MLMessageGuiProtocol(33)
+                const response = new ML.MLMessageGuiProtocol(protocolMsg.version)
                 this.sendMsg(response)
                 this.protocol = protocolMsg.version
             }

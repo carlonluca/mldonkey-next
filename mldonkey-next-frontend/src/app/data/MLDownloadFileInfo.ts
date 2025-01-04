@@ -23,6 +23,8 @@
  */
 import { MLMsgReader } from "../msg/MLMsgReader"
 import { MLUPdateable } from "../core/MLUpdateable"
+import { MLSubFile } from "../msg/MLSubFile"
+import { MLFileComment } from "../msg/MLFileComment"
 
 export enum MLMsgFromDownloadState {
     S_DOWNLOADING = 0,
@@ -58,13 +60,18 @@ export class MLMsgDownloadElement implements MLUPdateable<MLMsgDownloadElement> 
         public lastSeen: number,
         public priority: number,
         public comment: string,
-        public uids: string[]
+        public uids: string[],
+        public subFiles: MLSubFile[],
+        public fileFormat: string,
+        public fileComments: MLFileComment[],
+        public fileUser: string,
+        public fileGroup: string
         ) { }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
     update(update: MLMsgDownloadElement): void {
         this.netId = update.netId
-        this.names = [...update.names]
+        this.names = [...update.names] // TODO: reimplement
         this.md4 = update.md4
         this.size = update.size
         this.downloaded = update.downloaded
@@ -75,7 +82,7 @@ export class MLMsgDownloadElement implements MLUPdateable<MLMsgDownloadElement> 
         this.chunks = update.chunks
         this.availability = update.availability
         this.speed = update.speed
-        this.chunksAge = [...update.chunksAge]
+        this.chunksAge = [...update.chunksAge] // TODO: reimplement
         this.age = update.age
         this.format = update.format
         this.formatInfo = update.formatInfo
@@ -83,7 +90,12 @@ export class MLMsgDownloadElement implements MLUPdateable<MLMsgDownloadElement> 
         this.lastSeen = update.lastSeen
         this.priority = update.priority
         this.comment = update.comment
-        this.uids = update.uids
+        this.uids = [...update.uids] // TODO: reimplement
+        this.subFiles = [...update.subFiles] // TODO: reimplement
+        this.fileFormat = update.fileFormat
+        this.fileComments = update.fileComments // TODO: reimplement
+        this.fileUser = update.fileUser
+        this.fileGroup = update.fileGroup
     }
 
     public static fromReader(reader: MLMsgReader): MLMsgDownloadElement {
@@ -296,6 +308,11 @@ export class MLMsgDownloadElement implements MLUPdateable<MLMsgDownloadElement> 
         const comment = reader.takeString()
         // TODO: check protocol
         const uids = reader.takeStringList()
+        const subFiles = reader.takeSubFileList()
+        const fileFormat = reader.takeString()
+        const fileComments = reader.takeFileCommentList()
+        const fileUser = reader.takeString()
+        const fileGroup = reader.takeString()
         return new MLMsgDownloadElement(
             downloadId,
             netId,
@@ -318,7 +335,12 @@ export class MLMsgDownloadElement implements MLUPdateable<MLMsgDownloadElement> 
             lastSeen,
             priority,
             comment,
-            uids
+            uids,
+            subFiles,
+            fileFormat,
+            fileComments,
+            fileUser,
+            fileGroup
         )
     }
 

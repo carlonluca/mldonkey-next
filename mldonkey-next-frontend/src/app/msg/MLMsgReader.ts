@@ -22,6 +22,8 @@
  * Date: 2023.08.15
  */
 import { MLNumPair, MLNumPairList, MLStringPairList } from "../core/MLUtils"
+import { MLFileComment } from "./MLFileComment"
+import { MLSubFile } from "./MLSubFile"
 import {
     MLTag,
     MLTagIn16,
@@ -110,6 +112,18 @@ export class MLBufferUtils {
         })
     }
 
+    public static readSubFileList(buffer: ArrayBuffer, offset: number): [MLSubFile[], number] {
+        return this.readList(buffer, offset, (buffer: ArrayBuffer, offset: number) => {
+            return this.readSubFile(buffer, offset)
+        })
+    }
+
+    public static readFileCommentList(buffer: ArrayBuffer, offset: number): [MLFileComment[], number] {
+        return this.readList(buffer, offset, (buffer: ArrayBuffer, offset: number) => {
+            return this.readFileComment(buffer, offset)
+        })
+    }
+
     public static readInt8(buffer: ArrayBuffer, offset: number): MLNumPair {
         return [new DataView(buffer).getInt8(offset), 1]
     }
@@ -192,6 +206,38 @@ export class MLBufferUtils {
             return [undefined, 0]
         }
     }
+
+    public static readSubFile(data: ArrayBuffer, offset: number): [MLSubFile, number] {
+        let consumed = 0
+        const [name, consumedName] = this.readString(data, offset)
+        consumed += consumedName
+        const [size, consumedSize] = this.readInt64(data, offset + consumed)
+        consumed += consumedSize
+        const [format, consumedFormat] = this.readString(data, offset + consumed)
+        consumed += consumedFormat
+        return [
+            new MLSubFile(name, size, format),
+            consumed
+        ]
+    }
+
+    public static readFileComment(data: ArrayBuffer, offset: number): [MLFileComment, number] {
+        let consumed = 0
+        const [ip, consumedIp] = this.readInt32(data, offset)
+        consumed += consumedIp
+        const [countryCode, consumedCc] = this.readInt8(data, offset + consumed)
+        consumed += consumedCc
+        const [name, consumedName] = this.readString(data, offset + consumed)
+        consumed += consumedName
+        const [rating, consumedRating] = this.readInt8(data, offset + consumed)
+        consumed += consumedRating
+        const [comment, consumedComment] = this.readString(data, offset + consumed)
+        consumed += consumedComment
+        return [
+            new MLFileComment(ip, countryCode, name, rating, comment),
+            consumed
+        ]
+    }
 }
 
 export class MLMsgReader {
@@ -215,6 +261,14 @@ export class MLMsgReader {
 
     readStringList(offset: number): [string[], number] {
         return MLBufferUtils.readStringList(this.data, offset)
+    }
+
+    readSubFileList(offset: number): [MLSubFile[], number] {
+        return MLBufferUtils.readSubFileList(this.data, offset)
+    }
+
+    readFileCommentList(offset: number): [MLFileComment[], number] {
+        return MLBufferUtils.readFileCommentList(this.data, offset)
     }
 
     readStringPairList(offset: number): [MLStringPairList, number] {
@@ -263,6 +317,14 @@ export class MLMsgReader {
 
     readTag(offset: number): [MLTag | undefined, number] {
         return MLBufferUtils.readTag(this.data, offset)
+    }
+
+    readSubFile(offset: number): [MLSubFile, number] {
+        return MLBufferUtils.readSubFile(this.data, offset)
+    }
+
+    readFileComment(offset: number): [MLFileComment, number] {
+        return MLBufferUtils.readFileComment(this.data, offset)
     }
 
     takeRawData(length: number): ArrayBuffer {
@@ -315,6 +377,18 @@ export class MLMsgReader {
 
     takeDecimalList(): number[] {
         const [ret, consumed] = this.readDecimalList(this.offset)
+        this.offset += consumed
+        return ret
+    }
+
+    takeSubFileList(): MLSubFile[] {
+        const [ret, consumed] = this.readSubFileList(this.offset)
+        this.offset += consumed
+        return ret
+    }
+
+    takeFileCommentList(): MLFileComment[] {
+        const [ret, consumed] = this.readFileCommentList(this.offset)
         this.offset += consumed
         return ret
     }
