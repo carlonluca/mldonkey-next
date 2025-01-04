@@ -111,4 +111,13 @@ export class MLUtils {
     public static isWebView(): boolean {
         return window.location.href.startsWith("qrc:/") || window.location.href.startsWith("file://")
     }
+
+    public static int32ToIPv4(int32: number): string {
+        const unsigned = int32 >>> 0
+        const octet1 = (unsigned >>> 24) & 0xFF
+        const octet2 = (unsigned >>> 16) & 0xFF
+        const octet3 = (unsigned >>> 8) & 0xFF
+        const octet4 = unsigned & 0xFF
+        return `${octet1}.${octet2}.${octet3}.${octet4}`;
+    }
 }

@@ -32,7 +32,7 @@ export class MLServerManager extends MLCollectionModel<number, MLMsgFromServerIn
         super()
         websocketService.lastMessage.observable.subscribe(msg => {
             if (msg.type === MLMessageTypeFrom.T_SERVER_INFO) {
-                this.handleValue((msg as MLMsgFromServerInfo))
+                this.handleValue(msg as MLMsgFromServerInfo)
             }
         })
     }

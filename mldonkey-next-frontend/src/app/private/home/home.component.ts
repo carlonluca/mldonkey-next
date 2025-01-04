@@ -51,6 +51,7 @@ import { ClientStatsService } from 'src/app/services/clientstats.service'
 import { StatsService } from 'src/app/services/stats.service'
 import { MatDialog } from '@angular/material/dialog'
 import { AboutComponent } from './about/about.component'
+import { ServersService } from 'src/app/services/servers.service'
 
 @Component({
     selector: 'app-home',
@@ -90,6 +91,7 @@ export class HomeComponent {
         private sysInfoService: SysinfoService,
         private clientStatsService: ClientStatsService,
         private statsService: StatsService,
+        private serverService: ServersService,
         public uiService: UiServiceService,
         public dialog: MatDialog) {
         this.subscriptions.add(
