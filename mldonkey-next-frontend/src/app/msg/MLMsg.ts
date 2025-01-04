@@ -172,7 +172,7 @@ export enum MLMessageTypeTo {
 
 
 /**
- * Represent a generic messago to or from the mlnet core.
+ * Represent a generic message to or from the mlnet core.
  */
 export abstract class MLMsg {
     public opcode: number

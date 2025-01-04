@@ -16,6 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { MLUPdateable } from "../core/MLUpdateable"
+
 /**
  * Author:  Luca Carlon
  * Company: -
@@ -31,11 +33,16 @@ export enum MLTagType {
     T_SINT32_PAIR
 }
 
-export class MLTag {
+export class MLTag implements MLUPdateable<MLTag> {
     constructor(
         public name: string,
         public type: MLTagType
     ) {}
+
+    update(update: MLTag): void {
+        this.name = update.name
+        this.type = update.type
+    }
 }
 
 export class MLTagUint32 extends MLTag {

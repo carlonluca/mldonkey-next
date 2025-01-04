@@ -25,7 +25,7 @@ import { searchLogger } from "../core/MLLogger"
 import { MLUPdateable } from "../core/MLUpdateable"
 import { MLUtils } from "../core/MLUtils"
 import { MLMsgReader } from "../msg/MLMsgReader"
-import { MLTag } from "../msg/MLtag"
+import { MLTag } from "../msg/MLTag"
 
 export class MLResultInfo implements MLUPdateable<MLResultInfo> {
     constructor(

@@ -21,9 +21,12 @@
  * Company: -
  * Date: 2023.08.15
  */
+
 import { MLNumPair, MLNumPairList, MLStringPairList } from "../core/MLUtils"
 import { MLFileComment } from "./MLFileComment"
 import { MLSubFile } from "./MLSubFile"
+import { MLAddr, MLAddrIp, MLAddrName, MLAddrType } from "./MLAddr"
+import { MLHostConnState, MLHostState } from "./MLHostState"
 import {
     MLTag,
     MLTagIn16,
@@ -34,7 +37,7 @@ import {
     MLTagString,
     MLTagType,
     MLTagUint32
-} from "./MLtag"
+} from "./MLTag"
 
 export class MLBufferUtils {
     public static readRawData(buffer: ArrayBuffer, offset: number, length: number): [ArrayBuffer, number] {
@@ -109,6 +112,12 @@ export class MLBufferUtils {
     public static readDecimalList(buffer: ArrayBuffer, offset: number): [number[], number] {
         return this.readList(buffer, offset, (buffer: ArrayBuffer, offset: number) => {
             return this.readDecimal(buffer, offset)
+        })
+    }
+
+    public static readTagList(buffer: ArrayBuffer, offset: number): [(MLTag | undefined)[], number] {
+        return this.readList(buffer, offset, (buffer: ArrayBuffer, offset: number) => {
+            return this.readTag(buffer, offset)
         })
     }
 
@@ -207,6 +216,50 @@ export class MLBufferUtils {
         }
     }
 
+    public static readAddr(buffer: ArrayBuffer, offset: number): [MLAddr | undefined, number] {
+        let consumed = 0
+        const [addrType, consumedAddrType] = this.readInt8(buffer, offset)
+        consumed += consumedAddrType
+        const addrTypeEnum = MLAddr.addrTypeFromInt(addrType)
+        if (addrTypeEnum === MLAddrType.A_T_IP) {
+            const [addrIp, consumedAddrIp] = this.readInt32(buffer, offset + consumed)
+            consumed += consumedAddrIp
+            const [geoIp, consumedGeoIp] = this.readInt8(buffer, offset + consumed)
+            consumed += consumedGeoIp
+            const [blocked, consumedBlocked] = this.readInt8(buffer, offset + consumed)
+            consumed += consumedBlocked
+            return [new MLAddrIp(geoIp, blocked, addrIp), consumed]
+        }
+        else {
+            const [geoIp, consumedGeoIp] = this.readInt8(buffer, offset + consumed)
+            consumed += consumedGeoIp
+            const [nameAddr, consumedNameAddr] = this.readString(buffer, offset + consumed)
+            consumed += consumedNameAddr
+            const [blocked, consumedBlocked] = this.readInt8(buffer, offset + consumed)
+            consumed += consumedBlocked
+            return [new MLAddrName(geoIp, blocked, nameAddr), consumed]
+        }
+    }
+
+    public static readHostState(buffer: ArrayBuffer, offset: number): [MLHostState | undefined, number] {
+        let consumed = 0
+        const [connState, consumedConnState] = this.readInt8(buffer, offset)
+        consumed += consumedConnState
+
+        let rank = 0
+        let consumedRank = 0
+        switch (connState) {
+            case MLHostConnState.S_CONNECTED_DOWNLOADING:
+            case MLHostConnState.S_CONNECTED_AND_QUEUED:
+            case MLHostConnState.S_NOT_CONNECTED_WAS_QUEUED:
+                [rank, consumedRank] = this.readInt32(buffer, offset)
+                consumed += consumedRank
+                break
+        }
+        
+        return [new MLHostState(connState, rank), consumed]
+    }
+
     public static readSubFile(data: ArrayBuffer, offset: number): [MLSubFile, number] {
         let consumed = 0
         const [name, consumedName] = this.readString(data, offset)
@@ -287,6 +340,10 @@ export class MLMsgReader {
         return MLBufferUtils.readDecimalList(this.data, offset)
     }
 
+    readTagList(offset: number): [(MLTag | undefined)[], number] {
+        return MLBufferUtils.readTagList(this.data, offset)
+    }
+
     readString(offset: number): [string, number] {
         return MLBufferUtils.readString(this.data, offset)
     }
@@ -317,6 +374,14 @@ export class MLMsgReader {
 
     readTag(offset: number): [MLTag | undefined, number] {
         return MLBufferUtils.readTag(this.data, offset)
+    }
+
+    readAddr(offset: number): [MLAddr | undefined, number] {
+        return MLBufferUtils.readAddr(this.data, offset)
+    }
+
+    readHostState(offset: number): [MLHostState | undefined, number] {
+        return MLBufferUtils.readHostState(this.data, offset)
     }
 
     readSubFile(offset: number): [MLSubFile, number] {
@@ -381,6 +446,12 @@ export class MLMsgReader {
         return ret
     }
 
+    takeTagList(): (MLTag | undefined)[] {
+        const [ret, consumed] = this.readTagList(this.offset)
+        this.offset += consumed
+        return ret
+    }
+
     takeSubFileList(): MLSubFile[] {
         const [ret, consumed] = this.readSubFileList(this.offset)
         this.offset += consumed
@@ -437,6 +508,18 @@ export class MLMsgReader {
 
     takeTag(): MLTag | undefined {
         const [ret, consumed] = this.readTag(this.offset)
+        this.offset += consumed
+        return ret
+    }
+
+    takeAddr(): MLAddr | undefined {
+        const [ret, consumed] = this.readAddr(this.offset)
+        this.offset += consumed
+        return ret
+    }
+
+    takeHostState(): MLHostState | undefined {
+        const [ret, consumed] = this.readHostState(this.offset)
         this.offset += consumed
         return ret
     }

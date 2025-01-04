@@ -19,26 +19,25 @@
 /**
  * Author:  Luca Carlon
  * Company: -
- * Date:    2023.11.15
+ * Date:    2025.01.03
  */
 
-import { MLSearchInfo } from "../data/MLSearchInfo"
 import { MLMessageTypeFrom } from "../msg/MLMsg"
-import { MLMsgFromSearch } from "../msg/MLMsgQuery"
+import { MLMsgFromServerInfo } from "../msg/MLMsgServer"
 import { WebSocketService } from "../websocket-service.service"
 import { MLCollectionModel } from "./MLCollectionModel"
 
-export class MLSearchInfoManager extends MLCollectionModel<number, MLSearchInfo> {
+export class MLServerManager extends MLCollectionModel<number, MLMsgFromServerInfo> {
     constructor(websocketService: WebSocketService) {
         super()
         websocketService.lastMessage.observable.subscribe(msg => {
-            if (msg.type == MLMessageTypeFrom.T_SEARCH) {
-                this.handleValue((msg as MLMsgFromSearch).content)
+            if (msg.type === MLMessageTypeFrom.T_SERVER_INFO) {
+                this.handleValue((msg as MLMsgFromServerInfo))
             }
         })
     }
 
-    protected override keyFromValue(value: MLSearchInfo): number {
-        return value.id
+    protected override keyFromValue(value: MLMsgFromServerInfo): number {
+        return value.serverId
     }
 }

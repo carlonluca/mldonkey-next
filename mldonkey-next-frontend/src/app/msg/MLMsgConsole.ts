@@ -35,7 +35,6 @@ export class MLMsgFromConsole extends MLMsgFrom {
     }
 }
 
-
 export class MLMsgToConsoleCommand extends MLMsgTo {
     constructor(
         public command: string
