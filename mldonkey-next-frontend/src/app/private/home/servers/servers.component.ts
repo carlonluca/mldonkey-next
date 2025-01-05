@@ -129,9 +129,11 @@ export class ServersComponent implements OnInit, OnDestroy {
         }
     }
 
-    getHostConnStateDescription(state: MLHostConnState | undefined): string {
+    getHostConnStateDescription(state: MLHostConnState | undefined, parenthesis: boolean = false): string {
         if (!state)
-            return "-"
+            return ""
+        if (parenthesis)
+            return `(${MLHostState.getHostConnStateDescription(state)})`
         return MLHostState.getHostConnStateDescription(state)
     }
 }

@@ -97,7 +97,7 @@ export class MLHostState {
             case MLHostConnState.S_NOT_CONNECTED_WAS_QUEUED:
                 return "Disconnected (was queued)";
             case MLHostConnState.S_CONNECTED_AND_UNKNOWN:
-                return "Connected (unknown)";
+                return "Connected";
             default:
                 return "Unknown state";
         }

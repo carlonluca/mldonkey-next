@@ -141,6 +141,10 @@ export class MLBufferUtils {
         return [new DataView(buffer).getInt16(offset, true), 2]
     }
 
+    public static readUint16(buffer: ArrayBuffer, offset: number): MLNumPair {
+        return [new DataView(buffer).getUint16(offset, true), 2]
+    }
+
     public static readInt32(buffer: ArrayBuffer, offset: number): MLNumPair {
         return [new DataView(buffer).getInt32(offset, true), 4]
     }
@@ -356,6 +360,10 @@ export class MLMsgReader {
         return MLBufferUtils.readInt16(this.data, offset)
     }
 
+    readUint16(offset: number): MLNumPair {
+        return MLBufferUtils.readUint16(this.data, offset)
+    }
+
     readInt32(offset: number): [number, number] {
         return MLBufferUtils.readInt32(this.data, offset)
     }
@@ -478,6 +486,12 @@ export class MLMsgReader {
 
     takeInt16(): number {
         const [ret, consumed] = this.readInt16(this.offset)
+        this.offset += consumed
+        return ret
+    }
+
+    takeUint16(): number {
+        const [ret, consumed] = this.readUint16(this.offset)
         this.offset += consumed
         return ret
     }

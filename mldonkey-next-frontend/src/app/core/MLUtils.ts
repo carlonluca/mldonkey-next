@@ -118,6 +118,6 @@ export class MLUtils {
         const octet2 = (unsigned >>> 16) & 0xFF
         const octet3 = (unsigned >>> 8) & 0xFF
         const octet4 = unsigned & 0xFF
-        return `${octet1}.${octet2}.${octet3}.${octet4}`;
+        return `${octet4}.${octet3}.${octet2}.${octet1}`;
     }
 }

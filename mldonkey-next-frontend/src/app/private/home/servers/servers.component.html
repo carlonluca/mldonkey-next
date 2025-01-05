@@ -51,8 +51,7 @@
             [ngClass]="{'alternate-row': isEven, 'table-mobile-td': true }">
             <div class="wrap-anywhere alternate-row-content">
                 <b>{{ server.serverName }}</b><br />
-                {{ this.buildAddress(server) }}
-                <span class="no-margins"> - </span>
+                {{ this.buildAddress(server) }} {{ this.getHostConnStateDescription(server.hostState?.connState, true) }}
             </div>
         </td>
     </ng-container>

@@ -82,7 +82,7 @@ export class MLMsgFromServerInfo extends MLMsgFrom implements MLUPdateable<MLMsg
         const serverId = reader.takeInt32()
         const netId = reader.takeInt32()
         const serverAddr = reader.takeAddr()
-        const serverPort = reader.takeInt16()
+        const serverPort = reader.takeUint16()
         const serverScore = reader.takeInt32()
         const serverMetadata = reader.takeTagList()
         const userCount = reader.takeInt64()
