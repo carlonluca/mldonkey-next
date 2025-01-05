@@ -94,7 +94,7 @@ export class ServersComponent implements OnInit, OnDestroy {
         if (this.uiService.mobileLayout.value)
             return ['name']
         else
-            return ['name', 'addr', 'status']
+            return ['name', 'addr', 'status', 'countrycode']
     }
 
     refreshColumns() {

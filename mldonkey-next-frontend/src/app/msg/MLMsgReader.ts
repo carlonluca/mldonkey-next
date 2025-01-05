@@ -137,6 +137,10 @@ export class MLBufferUtils {
         return [new DataView(buffer).getInt8(offset), 1]
     }
 
+    public static readUint8(buffer: ArrayBuffer, offset: number): MLNumPair {
+        return [new DataView(buffer).getUint8(offset), 1]
+    }
+
     public static readInt16(buffer: ArrayBuffer, offset: number): MLNumPair {
         return [new DataView(buffer).getInt16(offset, true), 2]
     }
@@ -228,7 +232,7 @@ export class MLBufferUtils {
         if (addrTypeEnum === MLAddrType.A_T_IP) {
             const [addrIp, consumedAddrIp] = this.readInt32(buffer, offset + consumed)
             consumed += consumedAddrIp
-            const [geoIp, consumedGeoIp] = this.readInt8(buffer, offset + consumed)
+            const [geoIp, consumedGeoIp] = this.readUint8(buffer, offset + consumed)
             consumed += consumedGeoIp
             const [blocked, consumedBlocked] = this.readInt8(buffer, offset + consumed)
             consumed += consumedBlocked

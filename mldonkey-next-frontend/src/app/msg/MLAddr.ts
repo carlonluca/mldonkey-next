@@ -33,13 +33,13 @@ export enum MLAddrType {
 export class MLAddr implements MLUPdateable<MLAddr> {
     constructor(
         public addrType: MLAddrType,
-        public geoIp: number,
+        public countryCode: number,
         public blocked: number
     ) {}
 
     update(update: MLAddr): void {
         this.addrType = update.addrType
-        this.geoIp = update.geoIp
+        this.countryCode = update.countryCode
         this.blocked = update.blocked
     }
 
