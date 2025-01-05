@@ -29,6 +29,7 @@ import { MatTableDataSource } from '@angular/material/table'
 import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
 import { MLUtils } from 'src/app/core/MLUtils'
 import { MLAddrIp, MLAddrName, MLAddrType } from 'src/app/msg/MLAddr'
+import { MLHostConnState, MLHostState } from 'src/app/msg/MLHostState'
 import { MLMsgFromServerInfo } from 'src/app/msg/MLMsgServer'
 import { ServersService } from 'src/app/services/servers.service'
 import { UiServiceService } from 'src/app/services/ui-service.service'
@@ -93,7 +94,7 @@ export class ServersComponent implements OnInit, OnDestroy {
         if (this.uiService.mobileLayout.value)
             return ['name']
         else
-            return ['name', 'addr']
+            return ['name', 'addr', 'status']
     }
 
     refreshColumns() {
@@ -126,5 +127,11 @@ export class ServersComponent implements OnInit, OnDestroy {
             const name = inetAddr as MLAddrName
             return name.nameAddr
         }
+    }
+
+    getHostConnStateDescription(state: MLHostConnState | undefined): string {
+        if (!state)
+            return "-"
+        return MLHostState.getHostConnStateDescription(state)
     }
 }

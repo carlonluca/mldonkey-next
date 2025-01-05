@@ -42,7 +42,7 @@ export class MLHostState {
     constructor(
         public connState: MLHostConnState,
         public rank: number /* present ONLY IF Connection State = 3 or 5 or 9 */
-    ) {}
+    ) { }
 
     public static connStateFromInt(i: number): MLHostConnState {
         switch (i) {
@@ -71,6 +71,35 @@ export class MLHostState {
             default:
                 wsLogger.warn(`Unknown connection state: ${i}`)
                 return MLHostConnState.S_NOT_CONNECTED
+        }
+    }
+
+    public static getHostConnStateDescription(state: MLHostConnState): string {
+        switch (state) {
+            case MLHostConnState.S_NOT_CONNECTED:
+                return "Not connected";
+            case MLHostConnState.S_CONNECTING:
+                return "Connecting";
+            case MLHostConnState.S_CONNECTED_INITIATING:
+                return "Connected (initiating)";
+            case MLHostConnState.S_CONNECTED_DOWNLOADING:
+                return "Downloading";
+            case MLHostConnState.S_CONNECTED:
+                return "Connected";
+            case MLHostConnState.S_CONNECTED_AND_QUEUED:
+                return "Connected (queued)";
+            case MLHostConnState.S_NEW_HOST:
+                return "New host";
+            case MLHostConnState.S_REMOVED_HOST:
+                return "Removed host";
+            case MLHostConnState.S_BLACKLISTED:
+                return "Blacklisted";
+            case MLHostConnState.S_NOT_CONNECTED_WAS_QUEUED:
+                return "Disconnected (was queued)";
+            case MLHostConnState.S_CONNECTED_AND_UNKNOWN:
+                return "Connected (unknown)";
+            default:
+                return "Unknown state";
         }
     }
 }
