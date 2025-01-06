@@ -26,6 +26,7 @@ import { SelectionModel } from '@angular/cdk/collections'
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { MatSort, Sort } from '@angular/material/sort'
 import { MatTableDataSource } from '@angular/material/table'
+import { COUNTRY_FLAG_URLS, MLCountryCode } from 'src/app/core/MLCountryCode'
 import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
 import { MLUtils } from 'src/app/core/MLUtils'
 import { MLAddrIp, MLAddrName, MLAddrType } from 'src/app/msg/MLAddr'
@@ -34,6 +35,8 @@ import { MLMsgFromServerInfo } from 'src/app/msg/MLMsgServer'
 import { ServersService } from 'src/app/services/servers.service'
 import { UiServiceService } from 'src/app/services/ui-service.service'
 import { WebSocketService } from 'src/app/websocket-service.service'
+import getUnicodeFlagIcon from 'country-flag-icons/unicode'
+import { hasFlag } from 'country-flag-icons'
 
 @Component({
     selector: 'app-servers',
@@ -94,7 +97,7 @@ export class ServersComponent implements OnInit, OnDestroy {
         if (this.uiService.mobileLayout.value)
             return ['name']
         else
-            return ['name', 'addr', 'status', 'countrycode']
+            return ['countrycode', 'name', 'addr', 'status']
     }
 
     refreshColumns() {
@@ -135,5 +138,30 @@ export class ServersComponent implements OnInit, OnDestroy {
         if (parenthesis)
             return `(${MLHostState.getHostConnStateDescription(state)})`
         return MLHostState.getHostConnStateDescription(state)
+    }
+
+    getFlagSVG(server: MLMsgFromServerInfo): string {
+        if (!server || !server.inetAddr)
+            return ""
+
+        const code = MLCountryCode.countryIndexToCode(server.inetAddr.countryCode)
+        if (!code)
+            return ""
+
+        return COUNTRY_FLAG_URLS.get(code) ?? ""
+    }
+
+    getFlagUnicode(server: MLMsgFromServerInfo): string {
+        if (!server || !server.inetAddr)
+            return "🏴‍☠️"
+        
+        const code = MLCountryCode.countryIndexToCode(server.inetAddr.countryCode)
+        if (!code)
+            return "🏴‍☠️"
+
+        if (!hasFlag(code))
+            return "🏴‍☠️"
+
+        return getUnicodeFlagIcon(code) ?? "🏴‍☠️"
     }
 }
