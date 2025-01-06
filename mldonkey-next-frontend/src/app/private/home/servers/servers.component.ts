@@ -23,8 +23,8 @@
  */
 
 import { SelectionModel } from '@angular/cdk/collections'
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
-import { MatSort, Sort } from '@angular/material/sort'
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { MatSort, MatSortable, Sort } from '@angular/material/sort'
 import { MatTableDataSource } from '@angular/material/table'
 import { COUNTRY_FLAG_URLS, MLCountryCode } from 'src/app/core/MLCountryCode'
 import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
@@ -44,7 +44,7 @@ import { hasFlag } from 'country-flag-icons'
     styleUrls: ['./servers.component.scss'],
     standalone: false
 })
-export class ServersComponent implements OnInit, OnDestroy {
+export class ServersComponent implements AfterViewInit, OnInit, OnDestroy {
     private subscriptions = new MLSubscriptionSet()
 
     @ViewChild(MatSort) sort: MatSort
@@ -76,6 +76,26 @@ export class ServersComponent implements OnInit, OnDestroy {
 
         this.dataSource.data = this.serversService.serverList.value
         this.dataSource.sort = this.sort
+    }
+
+    ngAfterViewInit(): void {
+        this.dataSource.sort = this.sort
+        this.dataSource.sortingDataAccessor = (item, prop) => {
+            switch (prop) {
+                case "countrycode":
+                    return item.inetAddr?.countryCode ?? ""
+                case "name":
+                    return item.serverName
+                case "addr":
+                    return this.buildAddress(item)
+                case "status":
+                default:
+                    return this.getHostConnStateDescription(item.hostState?.connState)
+            }
+        }
+        this.dataSource.sort.active = "status"
+        this.dataSource.sort.direction = "desc"
+        this.dataSource.sort.sortChange.emit()
     }
 
     ngOnDestroy(): void {
