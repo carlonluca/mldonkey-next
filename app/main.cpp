@@ -114,17 +114,17 @@ void setup_env()
     const QByteArray appDirData = qgetenv("APPDIR");
     const QString webengineResources = lqt::path_combine({
         appDirData,
-        "/opt/qt/6.8.1/gcc_64/resources"
+        "/opt/qt/6.8.2/gcc_64/resources"
     });
     const QByteArray webengineResourcesData = webengineResources.toUtf8();
     const QString webengineProcPath = lqt::path_combine({
         appDirData,
-        "/opt/qt/6.8.1/gcc_64/libexec/QtWebEngineProcess"
+        "/opt/qt/6.8.2/gcc_64/libexec/QtWebEngineProcess"
     });
     const QByteArray webengineProcData = webengineProcPath.toUtf8();
     const QString webengineLocalesPath = lqt::path_combine({
         appDirData,
-        "/opt/qt/6.8.1/gcc_64/translations/qtwebengine_locales"
+        "/opt/qt/6.8.2/gcc_64/translations/qtwebengine_locales"
     });
     const QByteArray webengineLocalesData = webengineLocalesPath.toUtf8();
 
