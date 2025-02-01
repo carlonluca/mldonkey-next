@@ -151,6 +151,7 @@ export class SysInfoComponent implements OnInit {
             { key: "buildinfo_version_runtime_glibc", label: "glibc runtime version" },
             { key: "buildinfo_version_zlib", label: "zlib version" },
             { key: "buildinfo_version_bzip2", label: "bzip2 version" },
+            { key: "buildinfo_version_curl", label: "curl version" },
             { key: "buildinfo_threads", label: "Has pthread" },
             { key: "buildinfo_gd", label: "Has GD graphics library" },
             { key: "buildinfo_gd_jpg", label: "Has JPEG support in GD" },
