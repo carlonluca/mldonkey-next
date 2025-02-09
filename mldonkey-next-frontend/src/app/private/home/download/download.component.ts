@@ -149,6 +149,8 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     computeProgress(item: MLMsgDownloadElement): number {
+        if (item.size === BigInt(0))
+            return 100
         return Number(item.downloaded * 100n / item.size)
     }
 
