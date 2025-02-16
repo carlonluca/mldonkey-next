@@ -65,9 +65,27 @@ import { MatDividerModule } from '@angular/material/divider'
 import { TurtleIconComponent } from './components/turtle-icon/turtle-icon.component'
 import { SpeedIndicatorComponent } from './private/home/download/speed-indicator/speed-indicator.component'
 import { NgxEchartsModule } from 'ngx-echarts'
+import * as echarts from 'echarts/core'
+import { BarChart } from 'echarts/charts'
+import { CanvasRenderer } from 'echarts/renderers'
 import { RouterModule } from '@angular/router'
-import { ComponentsModule } from "./components/components.module";
+import { LegendComponent } from 'echarts/components'
+import { TooltipComponent } from 'echarts/components'
+import { GridComponent } from 'echarts/components'
+import { GraphicComponent } from 'echarts/components'
+import { LineChart } from 'echarts/charts'
+import { ComponentsModule } from "./components/components.module"
 import { FollowContentViewComponent } from './components/follow-content-view/follow-content-view.component'
+
+echarts.use([
+    BarChart,
+    CanvasRenderer,
+    LegendComponent,
+    TooltipComponent,
+    GridComponent,
+    GraphicComponent,
+    LineChart
+])
 
 @NgModule({
     declarations: [
@@ -124,7 +142,7 @@ import { FollowContentViewComponent } from './components/follow-content-view/fol
         MatDividerModule,
         PrettySecsShortPipe,
         RouterModule,
-        NgxEchartsModule.forRoot({ echarts: () => import('echarts') }),
+        NgxEchartsModule.forRoot({ echarts }),
         ComponentsModule
     ],
     exports: [

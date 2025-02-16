@@ -27,9 +27,9 @@ import { MatTableDataSource } from '@angular/material/table'
 import { faPlug, faPlugCircleXmark } from '@fortawesome/free-solid-svg-icons'
 import { MLNetworkSummaryModel, StatsService } from 'src/app/services/stats.service'
 import { WebSocketService } from 'src/app/websocket-service.service'
-import { LegendComponentOption, type EChartsOption } from 'echarts'
 import { MLUtils } from 'src/app/core/MLUtils'
 import { MLMsgFromBwUpDownBase } from 'src/app/msg/MLMsgStats'
+import { EChartsOption, LegendComponentOption } from 'echarts/types/dist/echarts'
 
 @Component({
     selector: 'app-stats',
