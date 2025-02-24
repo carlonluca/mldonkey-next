@@ -16,13 +16,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { MLUPdateable } from "../core/MLUpdateable";
-
 /**
  * Author:  Luca Carlon
  * Company: -
  * Date: 2023.11.13
  */
+
+import { MLUPdateable } from "../core/MLUpdateable"
+
 export enum MLSearchType {
     T_LOCAL,
     T_REMOTE,
