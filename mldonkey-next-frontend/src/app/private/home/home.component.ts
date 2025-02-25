@@ -36,7 +36,8 @@ import {
     faChartPie,
     faCircleInfo,
     faTerminal,
-    faQuestion
+    faQuestion,
+    faShareNodes
 } from '@fortawesome/free-solid-svg-icons'
 import { StorageService } from 'src/app/services/storage.service'
 import { MLConnectionState, WebSocketService } from 'src/app/websocket-service.service'
@@ -52,6 +53,7 @@ import { StatsService } from 'src/app/services/stats.service'
 import { MatDialog } from '@angular/material/dialog'
 import { AboutComponent } from './about/about.component'
 import { ServersService } from 'src/app/services/servers.service'
+import { SharedFilesinfoService } from 'src/app/services/sharedfilesinfo.service'
 
 @Component({
     selector: 'app-home',
@@ -78,6 +80,7 @@ export class HomeComponent {
     faQuestion = faQuestion
     faPie = faChartPie
     faCircleInfo = faCircleInfo
+    faShareNodes = faShareNodes
     version = packageJson.version
     versionAngular = VERSION
 
@@ -92,6 +95,7 @@ export class HomeComponent {
         private clientStatsService: ClientStatsService,
         private statsService: StatsService,
         private serverService: ServersService,
+        private sharedFileInfoService: SharedFilesinfoService,
         public uiService: UiServiceService,
         public dialog: MatDialog) {
         this.subscriptions.add(

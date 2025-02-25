@@ -22,12 +22,16 @@
  * Date:    2025.02.24
  */
 
-import { MLMessageTypeFrom } from "../msg/MLMsg"
-import { MLMsgFromSharedFileInfo } from "../msg/MLMsgSharedFileInfo"
-import { WebSocketService } from "../websocket-service.service"
-import { MLCollectionModel } from "./MLCollectionModel"
+import { Injectable } from '@angular/core'
+import { MLCollectionModel } from '../core/MLCollectionModel'
+import { WebSocketService } from '../websocket-service.service'
+import { MLMessageTypeFrom } from '../msg/MLMsg'
+import { MLMsgFromSharedFileInfo } from '../msg/MLMsgSharedFileInfo'
 
-export class MLSharedFileInfoManager extends MLCollectionModel<number, MLMsgFromSharedFileInfo> {
+@Injectable({
+    providedIn: 'root'
+})
+export class SharedFilesinfoService extends MLCollectionModel<number, MLMsgFromSharedFileInfo> {
     constructor(websocketService: WebSocketService) {
         super()
         websocketService.lastMessage.observable.subscribe(msg => {

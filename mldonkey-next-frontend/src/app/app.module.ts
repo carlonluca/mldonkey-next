@@ -76,6 +76,7 @@ import { GraphicComponent } from 'echarts/components'
 import { LineChart } from 'echarts/charts'
 import { ComponentsModule } from "./components/components.module"
 import { FollowContentViewComponent } from './components/follow-content-view/follow-content-view.component'
+import { SharedFilesComponent } from './private/home/sharedfiles/sharedfiles.component'
 
 echarts.use([
     BarChart,
@@ -106,7 +107,8 @@ echarts.use([
         ScrollToBottomDirective,
         TurtleIconComponent,
         SpeedIndicatorComponent,
-        FollowContentViewComponent
+        FollowContentViewComponent,
+        SharedFilesComponent
     ],
     providers: [
         provideNgxMask()

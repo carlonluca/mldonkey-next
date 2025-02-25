@@ -37,6 +37,7 @@ import { SysInfoComponent } from './private/home/sysinfo/sysinfo.component'
 import { CorelogsComponent } from './private/home/corelogs/corelogs.component'
 import { UploadComponent } from './private/home/upload/upload.component'
 import { HelpComponent } from './private/home/help/help.component'
+import { SharedFilesComponent } from './private/home/sharedfiles/sharedfiles.component'
 
 const routes: Routes = [
     {
@@ -63,6 +64,10 @@ const routes: Routes = [
             path: "upload",
             canActivate: [ AuthGuard ],
             component: UploadComponent
+        }, {
+            path: "sharedfiles",
+            canActivate: [ AuthGuard ],
+            component: SharedFilesComponent
         }, {
             path: "search",
             canActivate: [ AuthGuard ],
