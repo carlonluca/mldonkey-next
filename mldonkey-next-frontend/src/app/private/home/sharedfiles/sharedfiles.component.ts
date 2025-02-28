@@ -23,6 +23,7 @@
  */
 
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { MatMenu, MatMenuTrigger } from '@angular/material/menu'
 import { MatSort, MatSortable, Sort } from '@angular/material/sort'
 import { MatTableDataSource } from '@angular/material/table'
 import { MLSortMode } from 'src/app/core/MLSortMode'
@@ -54,11 +55,14 @@ export class SharedFilesComponent implements AfterViewInit, OnInit, OnDestroy {
         new MLSortMode("reqcount", true, "Request count ↓")
     ]
 
+    @ViewChild(MatMenuTrigger) menuTrigger: MatMenuTrigger
+    contextMenuPosition = { x: '0px', y: '0px' };
+
     @ViewChild(MatSort) sort: MatSort
 
     private subscriptions = new MLSubscriptionSet()
 
-    constructor(public sharedFilesInfo: SharedFilesinfoService, public uiSerivce: UiServiceService) {}
+    constructor(public sharedFilesInfo: SharedFilesinfoService, public uiSerivce: UiServiceService) { }
 
     ngOnInit() {
         this.subscriptions.add(
@@ -121,15 +125,38 @@ export class SharedFilesComponent implements AfterViewInit, OnInit, OnDestroy {
         })
     }
 
+    async downloadFileBlob(url: string, fileName: string) {
+        const response = await fetch(url)
+        const blob = await response.blob()
+        const blobUrl = URL.createObjectURL( blob);
+        const aElement = document.createElement('a');
+        aElement.href = blobUrl;
+        aElement.download = fileName;
+        aElement.style.display = 'none';
+        document.body.appendChild(aElement);
+        aElement.click();
+        URL.revokeObjectURL(blobUrl);
+        aElement.remove();   
+    }
+
+    onContextMenuAction(item: MLMsgFromSharedFileInfo) {
+        this.downloadFileBlob("http://gitlab.pihome.lan/opensource/mldonkey-next/-/raw/master/icon.svg", "file.svg")
+    }
+
+    onContextMenu(event: MouseEvent, item: MLMsgFromSharedFileInfo) {
+        event.preventDefault()
+        this.menuTrigger.openMenu()
+    }
+
     private refreshColumns() {
         this.displayedColumns = this.displayColumns()
     }
 
     private displayColumns(): string[] {
         if (this.uiSerivce.mobileLayout.value)
-            return ['name']
+            return ['name', "options"]
         else
-            return ['name', 'size', 'uploaded', 'reqcount']
+            return ['name', 'size', 'uploaded', 'reqcount', "options"]
     }
 
     private refreshDataSource(sharedFilesMap: Map<number, MLMsgFromSharedFileInfo>) {
