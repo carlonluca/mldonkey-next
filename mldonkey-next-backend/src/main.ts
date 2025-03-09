@@ -23,17 +23,20 @@
  */
 
 import WebSocket from 'ws'
-import express from "express"
+import express, { query } from "express"
 import cookieParser from 'cookie-parser'
 import cookie from 'cookie'
 import path from 'path'
-import http from 'http'
+import http, { request } from 'http'
 import * as fs from 'fs'
 import { logger } from './core/MLLogger'
 import { MLBridgeManager } from './core/MLBridgeManager'
 import { IncomingMessage } from 'http'
 import { Tail } from 'tail'
 import crypto from 'crypto'
+import * as MLConstants from './core/MLConstants'
+import { URL } from 'node:url'
+import { RequestOptions } from 'node:http'
 
 const wss = new WebSocket.Server({ port: 4002 });
 const wssLog = new WebSocket.Server({ port: 4003 })
@@ -112,11 +115,56 @@ fs.readFile(`/var/lib/mldonkey/downloads.ini`, {
 })
 
 const app = express()
-const port = process.env.MLDONKEY_NEXT_WEBAPP_PORT || 4081
-const webappPath = process.env.MLDONKEY_NEXT_WEBAPP_ROOT
+const port = MLConstants.MLDONKEY_NEXT_WEBAPP_PORT
+const webappPath = MLConstants.MLDONKEY_NEXT_WEBAPP_ROOT
+const httpPort = MLConstants.MLDONKEY_CORE_WEB_PORT
+const httpHost = MLConstants.MLDONKEY_CORE_HOST
 
 app.use(cookieParser())
-app.use((req, res, next) => {
+app.get('/download', (clientReq, clientRes) => {
+    const fileId = clientReq.query.id
+    if (!fileId)
+        return clientRes.status(400).send('Missing "id" parameter')
+
+    const username = clientReq.query.uname
+    if (!username)
+        return clientRes.status(400).send('Missing "username" parameter')
+
+    const passwd = clientReq.query.passwd
+    let auth = `${username}`
+    if (passwd)
+        auth += ":" + passwd
+
+    let corePort = httpPort
+    try {
+        corePort = parseInt(clientReq.query.coreport as string)
+        corePort = isNaN(corePort) ? httpPort : corePort
+    }
+    catch (_e) {
+        logger.warn("Error: " + _e)
+    }
+
+    const options: RequestOptions = {
+        hostname: httpHost,
+        port: corePort,
+        path: `/preview_download?q=${fileId}`,
+        method: 'GET',
+        headers: {
+            authorization: 'Basic ' + Buffer.from(auth).toString('base64')
+        }
+    }
+    const proxy = request(options, res => {
+        clientRes.writeHead(res.statusCode, res.headers)
+        res.pipe(clientRes, {
+          end: true
+        })
+    })
+
+    clientReq.pipe(proxy, {
+        end: true
+    })
+})
+app.use((_req, res, next) => {
     res.cookie('logtoken', logToken, { httpOnly: true })
     next()
 })

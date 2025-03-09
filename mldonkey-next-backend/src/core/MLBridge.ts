@@ -25,9 +25,10 @@
 import * as net from 'net'
 import { WebSocket } from 'ws'
 import { logger } from './MLLogger'
+import * as MLConstants from './MLConstants'
 
-const HOST = '127.0.0.1'
-const PORT = 4001
+const HOST = MLConstants.MLDONKEY_CORE_HOST
+const PORT = MLConstants.MLDONKEY_CORE_TCP_PORT
 
 /**
  * Represents a bridge between a browser app and the mlnet core.
