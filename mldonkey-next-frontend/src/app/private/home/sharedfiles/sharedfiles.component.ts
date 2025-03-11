@@ -23,7 +23,7 @@
  */
 
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
-import { MatMenu, MatMenuTrigger } from '@angular/material/menu'
+import { MatMenuTrigger } from '@angular/material/menu'
 import { MatSort, MatSortable, Sort } from '@angular/material/sort'
 import { MatTableDataSource } from '@angular/material/table'
 import { MLSortMode } from 'src/app/core/MLSortMode'
@@ -139,11 +139,11 @@ export class SharedFilesComponent implements AfterViewInit, OnInit, OnDestroy {
         aElement.remove();   
     }
 
-    onContextMenuAction(item: MLMsgFromSharedFileInfo) {
+    onContextMenuAction(_item: MLMsgFromSharedFileInfo) {
         this.downloadFileBlob("http://gitlab.pihome.lan/opensource/mldonkey-next/-/raw/master/icon.svg", "file.svg")
     }
 
-    onContextMenu(event: MouseEvent, item: MLMsgFromSharedFileInfo) {
+    onContextMenu(event: MouseEvent, _item: MLMsgFromSharedFileInfo) {
         event.preventDefault()
         this.menuTrigger.openMenu()
     }
