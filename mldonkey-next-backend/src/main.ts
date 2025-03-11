@@ -23,7 +23,7 @@
  */
 
 import WebSocket from 'ws'
-import express, { query } from "express"
+import express from "express"
 import cookieParser from 'cookie-parser'
 import cookie from 'cookie'
 import path from 'path'
@@ -35,7 +35,6 @@ import { IncomingMessage } from 'http'
 import { Tail } from 'tail'
 import crypto from 'crypto'
 import * as MLConstants from './core/MLConstants'
-import { URL } from 'node:url'
 import { RequestOptions } from 'node:http'
 
 const wss = new WebSocket.Server({ port: 4002 });
