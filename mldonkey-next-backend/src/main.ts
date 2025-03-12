@@ -130,9 +130,9 @@ app.get('/download', (clientReq, clientRes) => {
         return clientRes.status(400).send('Missing "username" parameter')
 
     const passwd = clientReq.query.passwd
-    let auth = `${username}`
+    let auth = `${username}:`
     if (passwd)
-        auth += ":" + passwd
+        auth += passwd
 
     let corePort = httpPort
     try {
@@ -157,6 +157,23 @@ app.get('/download', (clientReq, clientRes) => {
         res.pipe(clientRes, {
           end: true
         })
+    })
+
+    proxy.on("error", err => {
+        logger.warn("Proxy request error:", err)
+        if (!clientRes.headersSent)
+            clientRes.writeHead(500, { "Content-type": "text/plain" })
+        clientRes.send("Internal server error")
+    })
+
+    clientReq.on("error", err => {
+        logger.warn("Client request error:", err)
+        proxy.destroy()
+    })
+
+    clientRes.on("error", err => {
+        logger.warn("Client response error:", err)
+        proxy.destroy()
     })
 
     clientReq.pipe(proxy, {
