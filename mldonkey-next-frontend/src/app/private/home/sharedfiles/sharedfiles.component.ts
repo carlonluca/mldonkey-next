@@ -31,6 +31,7 @@ import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
 import { MLMsgFromSharedFileInfo } from 'src/app/msg/MLMsgSharedFileInfo'
 import { SharedFilesinfoService } from 'src/app/services/sharedfilesinfo.service'
 import { UiServiceService } from 'src/app/services/ui-service.service'
+import { buildUrl } from 'build-url-ts'
 
 @Component({
     selector: 'app-sharedfiles',
@@ -139,8 +140,14 @@ export class SharedFilesComponent implements AfterViewInit, OnInit, OnDestroy {
         aElement.remove();   
     }
 
-    onContextMenuAction(_item: MLMsgFromSharedFileInfo) {
-        this.downloadFileBlob("http://gitlab.pihome.lan/opensource/mldonkey-next/-/raw/master/icon.svg", "file.svg")
+    onContextMenuAction(item: MLMsgFromSharedFileInfo) {
+        this.downloadFileBlob(buildUrl(window.location.origin, {
+            path: "download",
+            queryParams: {
+                id: item.sharedFileId,
+                uname: "luca"
+            }
+        }), item.fileName)
     }
 
     onContextMenu(event: MouseEvent, _item: MLMsgFromSharedFileInfo) {
