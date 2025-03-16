@@ -72,7 +72,7 @@
     <ng-container matColumnDef="options">
         <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
         <td mat-cell *matCellDef="let info; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-            <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options">
+            <button mat-icon-button [matMenuTriggerFor]="menu" [matMenuTriggerData]="{info: info}" aria-label="Options">
                 <mat-icon>more_vert</mat-icon>
             </button>
         </td>
@@ -110,7 +110,7 @@
     <ng-container matColumnDef="options">
         <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
         <td mat-cell *matCellDef="let info; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-            <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options">
+            <button mat-icon-button [matMenuTriggerFor]="menu" [matMenuTriggerData]="{info: info}" aria-label="Options">
                 <mat-icon>more_vert</mat-icon>
             </button>
         </td>
@@ -124,7 +124,7 @@
 </table>
 
 <mat-menu #menu="matMenu" yPosition="above" xPosition="before">
-    <ng-template matMenuContent let-item="item">
-        <button mat-menu-item (click)="onContextMenuAction(item)">Download</button>
+    <ng-template matMenuContent let-info="info">
+        <button mat-menu-item (click)="onContextMenuAction(info)">Download</button>
     </ng-template>
 </mat-menu>
