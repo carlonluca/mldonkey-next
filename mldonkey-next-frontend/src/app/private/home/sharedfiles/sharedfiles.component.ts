@@ -180,7 +180,7 @@ export class SharedFilesComponent implements AfterViewInit, OnInit, OnDestroy {
 
     private displayColumns(): string[] {
         if (this.uiSerivce.mobileLayout.value)
-            return ['name', "options"]
+            return ['name']
         else
             return ['name', 'size', 'uploaded', 'reqcount', "options"]
     }
