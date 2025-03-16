@@ -74,7 +74,7 @@ export class PublicComponent implements OnInit, OnDestroy {
         const loginData = storage.getLoginData()
         if (loginData) {
             this.inputUsr = loginData.username
-            this.inputPwd = loginData.passwd
+            this.inputPwd = loginData.passwd ?? ""
         }
 
         webSocketService.connectionState.observable.subscribe(state => {
@@ -95,7 +95,7 @@ export class PublicComponent implements OnInit, OnDestroy {
                         setTimeout(() => {
                             if (data) {
                                 uiLogger.info("Credentials found in storage. Logging in automatically...")
-                                this.doLogin(data.username, data.passwd)
+                                this.doLogin(data.username, data.passwd ?? "")
                             }
                         }, 1000)
                     }
@@ -149,15 +149,8 @@ export class PublicComponent implements OnInit, OnDestroy {
     }
 
     doSetup() {
-        // Define the new parameter to add
         const newParam = { action: 'openSetup' }
-
-        // Merge with current parameters and navigate without reloading
-        this.router.navigate([], {
-            relativeTo: this.route,
-            queryParams: newParam,
-            queryParamsHandling: 'merge'
-        })
+        MLUtils.signalToNative(this.router, this.route, newParam)
     }
 
     isWebView(): boolean {

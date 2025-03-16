@@ -33,8 +33,8 @@ export class StorageService {
     getLoginData(): Credentials | null {
         const username = localStorage.getItem(StorageService.KEY_LOGIN_USER)
         const passwd = localStorage.getItem(StorageService.KEY_LOGIN_PASSWD)
-        if (username !== null && passwd !== null)
-            return new Credentials(username, passwd)
+        if (username !== null)
+            return new Credentials(username, !passwd ? null : passwd)
         return null
     }
 
@@ -51,7 +51,7 @@ export class StorageService {
         }
 
         localStorage.setItem(StorageService.KEY_LOGIN_USER, credentials.username)
-        localStorage.setItem(StorageService.KEY_LOGIN_PASSWD, credentials.passwd)
+        localStorage.setItem(StorageService.KEY_LOGIN_PASSWD, credentials.passwd ?? "")
     }
 }
 
@@ -59,5 +59,5 @@ export class StorageService {
  * Stores credentials.
  */
 export class Credentials {
-    constructor(public username: string, public passwd: string) { }
+    constructor(public username: string, public passwd: string | null) { }
 }

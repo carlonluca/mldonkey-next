@@ -21,6 +21,7 @@
  * Company: -
  * Date:    2023.08.14
  */
+import { ActivatedRoute, Router } from "@angular/router"
 import prettyBytes from "pretty-bytes"
 
 export type MLStringPair = [string, string]
@@ -119,5 +120,14 @@ export class MLUtils {
         const octet3 = (unsigned >>> 8) & 0xFF
         const octet4 = unsigned & 0xFF
         return `${octet4}.${octet3}.${octet2}.${octet1}`;
+    }
+
+    public static signalToNative(router: Router, activatedRoute: ActivatedRoute, params: any) {
+        // Merge with current parameters and navigate without reloading
+        router.navigate([], {
+            relativeTo: activatedRoute,
+            queryParams: params,
+            queryParamsHandling: 'merge'
+        })
     }
 }

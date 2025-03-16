@@ -32,6 +32,9 @@ import { MLMsgFromSharedFileInfo } from 'src/app/msg/MLMsgSharedFileInfo'
 import { SharedFilesinfoService } from 'src/app/services/sharedfilesinfo.service'
 import { UiServiceService } from 'src/app/services/ui-service.service'
 import { buildUrl } from 'build-url-ts'
+import { StorageService } from 'src/app/services/storage.service'
+import { MLUtils } from 'src/app/core/MLUtils'
+import { ActivatedRoute, Router } from '@angular/router'
 
 @Component({
     selector: 'app-sharedfiles',
@@ -63,7 +66,13 @@ export class SharedFilesComponent implements AfterViewInit, OnInit, OnDestroy {
 
     private subscriptions = new MLSubscriptionSet()
 
-    constructor(public sharedFilesInfo: SharedFilesinfoService, public uiSerivce: UiServiceService) { }
+    constructor(
+        public sharedFilesInfo: SharedFilesinfoService,
+        public uiSerivce: UiServiceService,
+        public storageService: StorageService,
+        public router: Router,
+        private route: ActivatedRoute
+    ) { }
 
     ngOnInit() {
         this.subscriptions.add(
@@ -141,13 +150,23 @@ export class SharedFilesComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     onContextMenuAction(item: MLMsgFromSharedFileInfo) {
-        this.downloadFileBlob(buildUrl(window.location.origin, {
-            path: "download",
-            queryParams: {
+        const credentials = this.storageService.getLoginData()
+        if (MLUtils.isWebView())
+            MLUtils.signalToNative(this.router, this.route, {
+                action: "download",
                 id: item.sharedFileId,
-                uname: "luca"
-            }
-        }), item.fileName)
+                uname: credentials?.username,
+                passwd: credentials?.passwd
+            })
+        else
+            this.downloadFileBlob(buildUrl(window.location.origin, {
+                path: "download",
+                queryParams: {
+                    id: item.sharedFileId,
+                    uname: credentials?.username,
+                    passwd: credentials?.passwd
+                }
+            }), item.fileName)
     }
 
     onContextMenu(event: MouseEvent, _item: MLMsgFromSharedFileInfo) {
