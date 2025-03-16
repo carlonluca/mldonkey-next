@@ -122,6 +122,7 @@ export class MLUtils {
         return `${octet4}.${octet3}.${octet2}.${octet1}`;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public static signalToNative(router: Router, activatedRoute: ActivatedRoute, params: any) {
         // Merge with current parameters and navigate without reloading
         router.navigate([], {
