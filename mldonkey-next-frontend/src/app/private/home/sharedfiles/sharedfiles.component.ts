@@ -153,14 +153,14 @@ export class SharedFilesComponent implements AfterViewInit, OnInit, OnDestroy {
         const credentials = this.storageService.getLoginData()
         if (MLUtils.isWebView())
             MLUtils.signalToNative(this.router, this.route, {
-                action: "download",
+                action: "previewUpload",
                 id: item.sharedFileId,
                 uname: credentials?.username,
                 passwd: credentials?.passwd
             })
         else
             this.downloadFileBlob(buildUrl(window.location.origin, {
-                path: "download",
+                path: "previewUpload",
                 queryParams: {
                     id: item.sharedFileId,
                     uname: credentials?.username,

@@ -120,7 +120,7 @@ const httpPort = MLConstants.MLDONKEY_CORE_WEB_PORT
 const httpHost = MLConstants.MLDONKEY_CORE_HOST
 
 app.use(cookieParser())
-app.get('/download', (clientReq, clientRes) => {
+app.get('/previewUpload', (clientReq, clientRes) => {
     const fileId = clientReq.query.id
     if (!fileId)
         return clientRes.status(400).send('Missing "id" parameter')
@@ -146,7 +146,7 @@ app.get('/download', (clientReq, clientRes) => {
     const options: RequestOptions = {
         hostname: httpHost,
         port: corePort,
-        path: `/preview_download?q=${fileId}`,
+        path: `/preview_upload?q=${fileId}`,
         method: 'GET',
         headers: {
             authorization: 'Basic ' + Buffer.from(auth).toString('base64')
