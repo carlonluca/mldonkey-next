@@ -24,7 +24,7 @@
 
 import { SelectionModel } from '@angular/cdk/collections'
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
-import { MatSort, Sort } from '@angular/material/sort'
+import { MatSort, MatSortable, Sort } from '@angular/material/sort'
 import { MatTableDataSource } from '@angular/material/table'
 import { COUNTRY_FLAG_URLS, MLCountryCode } from 'src/app/core/MLCountryCode'
 import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
@@ -73,12 +73,15 @@ export class ServersComponent implements AfterViewInit, OnInit, OnDestroy {
                 this.refreshSelection()
             })
         )
-
-        this.dataSource.data = this.serversService.serverList.value
-        this.dataSource.sort = this.sort
     }
 
     ngAfterViewInit(): void {
+        setTimeout(() => {
+            this.sort.sort({
+                id: "status",
+                start: "desc"
+            } as MatSortable)
+        }, 0)
         this.dataSource.sort = this.sort
         this.dataSource.sortingDataAccessor = (item, prop) => {
             switch (prop) {
@@ -93,9 +96,6 @@ export class ServersComponent implements AfterViewInit, OnInit, OnDestroy {
                     return this.getHostConnStateDescription(item.hostState?.connState)
             }
         }
-        this.dataSource.sort.active = "status"
-        this.dataSource.sort.direction = "desc"
-        this.dataSource.sort.sortChange.emit()
     }
 
     ngOnDestroy(): void {
