@@ -226,7 +226,7 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
         this.downTotal = tot
         this.downProgress = done
         this.downSpeedSum = speed
-        this.downPerc = this.downTotal === BigInt(0) ? 100 : Math.min(Math.max(0, Number(this.downProgress)/Number(this.downTotal)*100), 100)
+        this.downPerc = this.downTotal === BigInt(0) ? 0 : Math.min(Math.max(0, Number(this.downProgress)/Number(this.downTotal)*100), 100)
     }
 
     refreshStats(stats: MLMsgFromClientStats | null) {
