@@ -249,7 +249,7 @@ export class MLBufferUtils {
         }
     }
 
-    public static readHostState(buffer: ArrayBuffer, offset: number): [MLHostState | undefined, number] {
+    public static readHostState(buffer: ArrayBuffer, offset: number): [MLHostState, number] {
         let consumed = 0
         const [connState, consumedConnState] = this.readInt8(buffer, offset)
         consumed += consumedConnState
@@ -392,7 +392,7 @@ export class MLMsgReader {
         return MLBufferUtils.readAddr(this.data, offset)
     }
 
-    readHostState(offset: number): [MLHostState | undefined, number] {
+    readHostState(offset: number): [MLHostState, number] {
         return MLBufferUtils.readHostState(this.data, offset)
     }
 
@@ -536,7 +536,7 @@ export class MLMsgReader {
         return ret
     }
 
-    takeHostState(): MLHostState | undefined {
+    takeHostState(): MLHostState {
         const [ret, consumed] = this.readHostState(this.offset)
         this.offset += consumed
         return ret

@@ -23,7 +23,7 @@
  */
 
 import { MLMessageTypeFrom } from "../msg/MLMsg"
-import { MLMsgFromServerInfo } from "../msg/MLMsgServer"
+import { MLMsgFromServerInfo, MLMsgFromServerState } from "../msg/MLMsgServer"
 import { WebSocketService } from "../websocket-service.service"
 import { MLCollectionModel } from "./MLCollectionModel"
 
@@ -31,8 +31,13 @@ export class MLServerManager extends MLCollectionModel<number, MLMsgFromServerIn
     constructor(websocketService: WebSocketService) {
         super()
         websocketService.lastMessage.observable.subscribe(msg => {
-            if (msg.type === MLMessageTypeFrom.T_SERVER_INFO) {
+            if (msg.type === MLMessageTypeFrom.T_SERVER_INFO)
                 this.handleValue(msg as MLMsgFromServerInfo)
+            else if (msg.type === MLMessageTypeFrom.T_SERVER_STATE) {
+                const _msg = msg as MLMsgFromServerState
+                const serverInfo = this.elements.value.get(_msg.serverId)
+                if (serverInfo)
+                    serverInfo.hostState.update(_msg.hostState)
             }
         })
     }

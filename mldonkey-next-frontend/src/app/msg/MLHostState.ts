@@ -23,6 +23,7 @@
  */
 
 import { wsLogger } from "../core/MLLogger"
+import { MLUPdateable } from "../core/MLUpdateable"
 
 export enum MLHostConnState {
     S_NOT_CONNECTED,
@@ -38,11 +39,16 @@ export enum MLHostConnState {
     S_CONNECTED_AND_UNKNOWN
 }
 
-export class MLHostState {
+export class MLHostState implements MLUPdateable<MLHostState> {
     constructor(
         public connState: MLHostConnState,
         public rank: number /* present ONLY IF Connection State = 3 or 5 or 9 */
     ) { }
+
+    update(update: MLHostState): void {
+        this.connState = update.connState
+        this.rank = update.rank
+    }
 
     public static connStateFromInt(i: number): MLHostConnState {
         switch (i) {

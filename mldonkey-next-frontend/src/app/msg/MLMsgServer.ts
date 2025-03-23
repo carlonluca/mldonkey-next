@@ -29,9 +29,31 @@ import { MLMessageTypeFrom, MLMsgFrom } from "./MLMsg"
 import { MLMsgReader } from "./MLMsgReader"
 import { MLTag } from "./MLTag"
 
-export class MLMsgFromServerInfo extends MLMsgFrom implements MLUPdateable<MLMsgFromServerInfo> {
+export class MLMsgFromServerState extends MLMsgFrom implements MLUPdateable<MLMsgFromServerState> {
     constructor(
         public serverId: number,
+        public hostState: MLHostState,
+        msgType: MLMessageTypeFrom = MLMessageTypeFrom.T_SERVER_STATE
+    ) {
+        super(msgType)
+    }
+
+    update(update: MLMsgFromServerState): void {
+        this.serverId = update.serverId
+        this.hostState.update(update.hostState)
+    }
+
+    public static fromBuffer(buffer: ArrayBuffer): MLMsgFromServerState {
+        const reader = new MLMsgReader(buffer)
+        const serverId = reader.takeInt32()
+        const hostState = reader.takeHostState()
+        return new MLMsgFromServerState(serverId, hostState)
+    }
+}
+
+export class MLMsgFromServerInfo extends MLMsgFromServerState implements MLUPdateable<MLMsgFromServerInfo> {
+    constructor(
+        serverId: number,
         public netId: number,
         public inetAddr: MLAddr | undefined,
         public serverPort: number,
@@ -39,7 +61,7 @@ export class MLMsgFromServerInfo extends MLMsgFrom implements MLUPdateable<MLMsg
         public serverMetadata: (MLTag | undefined)[],
         public userCount: bigint,
         public fileCount: bigint,
-        public hostState: MLHostState | undefined,
+        hostState: MLHostState,
         public serverName: string,
         public serverDesc: string,
         public preferred: boolean,
@@ -50,11 +72,11 @@ export class MLMsgFromServerInfo extends MLMsgFrom implements MLUPdateable<MLMsg
         public hardLimit: bigint,
         public ping: number
     ) {
-        super(MLMessageTypeFrom.T_SERVER_INFO)
+        super(serverId, hostState, MLMessageTypeFrom.T_SERVER_INFO)
     }
 
-    update(update: MLMsgFromServerInfo): void {
-        this.serverId = update.serverId
+    override update(update: MLMsgFromServerInfo): void {
+        super.update(update)
         this.netId = update.netId
         if (update.inetAddr)
             this.inetAddr?.update(update.inetAddr)
@@ -65,7 +87,6 @@ export class MLMsgFromServerInfo extends MLMsgFrom implements MLUPdateable<MLMsg
         this.serverMetadata = update.serverMetadata // TODO: reimplement this
         this.userCount = update.userCount
         this.fileCount = update.fileCount
-        this.hostState = update.hostState
         this.serverName = update.serverName
         this.serverDesc = update.serverDesc
         this.preferred = update.preferred
@@ -77,7 +98,7 @@ export class MLMsgFromServerInfo extends MLMsgFrom implements MLUPdateable<MLMsg
         this.ping = update.ping
     }
 
-    public static fromBuffer(buffer: ArrayBuffer): MLMsgFromServerInfo {
+    public static override fromBuffer(buffer: ArrayBuffer): MLMsgFromServerInfo {
         const reader = new MLMsgReader(buffer)
         const serverId = reader.takeInt32()
         const netId = reader.takeInt32()
