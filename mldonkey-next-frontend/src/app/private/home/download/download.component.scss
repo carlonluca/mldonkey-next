@@ -83,6 +83,21 @@ td {
     align-items: center;
 }
 
+.file-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.file-icon {
+    font-size: 24px;
+}
+
+.file-details {
+    display: flex;
+    flex-direction: column;
+}
+
 #main-menu {
     margin-right: $defaultMargin;
 }

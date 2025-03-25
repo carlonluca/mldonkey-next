@@ -69,9 +69,14 @@
     <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
         <td mat-cell *matCellDef="let download; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-            <div class="filename-element alternate-row-content">{{ download.name }}</div>
-            <mat-progress-bar class="file-progress pos-relative" mode="determinate"
-                [value]="computeProgress(download)"></mat-progress-bar>
+            <div class="file-container">
+            <fa-icon class="file-icon" [icon]="this.iconFromFileName(download.name)"></fa-icon>
+                <div class="file-details">
+                    <div class="filename-element alternate-row-content">{{ download.name }}</div>
+                    <mat-progress-bar class="file-progress pos-relative" mode="determinate"
+                        [value]="computeProgress(download)"></mat-progress-bar>
+                </div>
+            </div>
         </td>
         <td mat-footer-cell *matFooterCellDef="let isEven = even"
             [ngClass]="{'alternate-row': this.dataSource.data.length%2 === 0 }">

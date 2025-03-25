@@ -37,7 +37,19 @@ import { UiServiceService } from 'src/app/services/ui-service.service'
 import { WebSocketService } from 'src/app/websocket-service.service'
 import { ClientStatsService } from 'src/app/services/clientstats.service'
 import { MLMsgFromClientStats } from 'src/app/msg/MLMsgClientStats'
+import mime from 'mime'
 import prettyBytes from 'pretty-bytes'
+import {
+    faCompactDisc,
+    faFile,
+    faFileArchive,
+    faFileAudio,
+    faFileImage,
+    faFilePdf,
+    faFileText,
+    faFileVideo,
+    IconDefinition
+} from '@fortawesome/free-solid-svg-icons'
 
 @Component({
     selector: 'app-download',
@@ -281,5 +293,29 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
         if (typeof(speed) === "bigint")
             return prettyBytes(Number(speed))
         return prettyBytes(speed) + "/s"
+    }
+
+    iconFromFileName(fileName: string): IconDefinition {
+        //uiLogger.info("Mime:", fileName, mime.getType(fileName))
+        const mimeType = mime.getType(fileName)
+        if (mimeType?.startsWith("audio/"))
+            return faFileAudio
+        if (mimeType?.startsWith("video/"))
+            return faFileVideo
+        if (mimeType?.startsWith("text/"))
+            return faFileText
+        if (mimeType === "application/pdf")
+            return faFilePdf
+        if (mimeType?.startsWith("image/"))
+            return faFileImage
+        switch (mimeType) {
+        case "application/zip":
+        case "application/x-7z-compressed":
+            return faFileArchive
+        case "application/vnd.efi.iso":
+            return faCompactDisc
+        default:
+            return faFile
+        }
     }
 }
