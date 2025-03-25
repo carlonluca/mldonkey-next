@@ -311,6 +311,11 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
         switch (mimeType) {
         case "application/zip":
         case "application/x-7z-compressed":
+        case "application/vnd.rar":
+        case "application/x-tar":
+        case "application/x-bzip":
+        case "application/x-bzip2":
+        case "application/gzip":
             return faFileArchive
         case "application/vnd.efi.iso":
             return faCompactDisc
