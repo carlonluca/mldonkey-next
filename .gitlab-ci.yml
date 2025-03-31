@@ -18,6 +18,7 @@ Test_webapp:
     - npm i --maxsockets 1
     - npm run build
     - npm run lint
+    - git config user.name "Luca Carlon"
     - cd ../mldonkey-next-frontend
     - npm i --maxsockets 1
     - npm run lint
