@@ -14,7 +14,7 @@
     <ng-container matColumnDef="countrycode">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Country</th>
         <td mat-cell *matCellDef="let server; let isEven = even" [ngClass]="{'alternate-row': isEven, 'flag-image': true }">
-            <img [src]="this.getFlagSVG(server)" class="flag-image">
+            <img [src]="this.getFlagSVG(server)" class="flag-image alternate-row-content">
         </td>
     </ng-container>
     <ng-container matColumnDef="name">

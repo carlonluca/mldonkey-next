@@ -50,23 +50,27 @@
     *ngIf="!this.uiService.mobileLayout.value">
     <ng-container matColumnDef="availability">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Availability</th>
-        <td mat-cell *matCellDef="let result; let isEven = even" [ngClass]="{'alternate': isEven }"> {{
-            stringifyAvailability(result) }} </td>
+        <td mat-cell *matCellDef="let result; let isEven = even" [ngClass]="{'alternate': isEven }">
+            <div class="alternate-row-content">{{ stringifyAvailability(result) }}</div>
+        </td>
     </ng-container>
     <ng-container matColumnDef="completesources">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Complete sources</th>
-        <td mat-cell *matCellDef="let result; let isEven = even" [ngClass]="{'alternate': isEven }"> {{
-            stringifyCompleteSources(result) }} </td>
+        <td mat-cell *matCellDef="let result; let isEven = even" [ngClass]="{'alternate': isEven }">
+            <div class="alternate-row-content">{{ stringifyCompleteSources(result) }}</div>
+        </td>
     </ng-container>
     <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-        <td mat-cell *matCellDef="let result; let isEven = even" [ngClass]="{'alternate': isEven }"> {{
-            result.fileNames[0] }} </td>
+        <td mat-cell *matCellDef="let result; let isEven = even" [ngClass]="{'alternate': isEven }">
+            <div class="alternate-row-content">{{ result.fileNames[0] }}</div>
+        </td>
     </ng-container>
     <ng-container matColumnDef="size">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Size</th>
-        <td mat-cell *matCellDef="let result; let isEven = even" [ngClass]="{'alternate': isEven }"> {{ result.fileSize
-            | prettyBytes }} </td>
+        <td mat-cell *matCellDef="let result; let isEven = even" [ngClass]="{'alternate': isEven }">
+            <div class="alternate-row-content">{{ result.fileSize | prettyBytes }}</div>
+        </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="rowClicked(row, $event)"></tr>
@@ -78,10 +82,12 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
         <td mat-cell *matCellDef="let result; let isEven = even"
             [ngClass]="{'alternate': isEven, 'wrap-anywhere': true, 'table-mobile-td': true}">
-            <div class=""></div><b>{{ result.fileNames[0] }}</b><br />
-            Availability: {{ stringifyAvailability(result) }}<br />
-            Complete sources: {{ stringifyCompleteSources(result) }}<br />
-            Size: {{ result.fileSize | prettyBytes }}
+            <div class="pos-relative">
+                <b>{{ result.fileNames[0] }}</b><br />
+                Availability: {{ stringifyAvailability(result) }}<br />
+                Complete sources: {{ stringifyCompleteSources(result) }}<br />
+                Size: {{ result.fileSize | prettyBytes }}
+            </div>
         </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
