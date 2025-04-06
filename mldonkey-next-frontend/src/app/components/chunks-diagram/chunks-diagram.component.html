@@ -16,13 +16,4 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 
-Download / {{ this.computeName(this.item) }}<br/>
-ID: {{ this.computeDownloadId(this.item) }}<br/>
-Network ID/name: {{ this.computeNetwork(this.item) }}<br/>
-Downloaded/size: {{ this.computeSize(this.item) }}<br/>
-Priority: {{ this.computePriority(this.item) }}<br/>
-User: {{ this.computeUser(this.item) }}<br/>
-Group: {{ this.computeGroup(this.item) }}<br/>
-Sources: {{ this.computeSources(this.item) }}<br/>
-Clients: {{ this.computeClients(this.item) }}<br/>
-Chunks: <app-chunks-diagram [chunks]="this.computeChunks(this.item)"></app-chunks-diagram>
+<canvas #myCanvas width="600" height="20"></canvas>

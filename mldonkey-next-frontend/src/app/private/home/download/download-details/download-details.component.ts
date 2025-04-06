@@ -1,3 +1,27 @@
+/*
+ * This file is part of mldonkey-next.
+ *
+ * Copyright (c) 2025 Luca Carlon
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 3.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * Author:  Luca Carlon
+ * Company: -
+ * Date:    2025.04.02
+ */
+
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { MLNetworkManager } from 'src/app/core/MLNetworkManager'
@@ -30,7 +54,6 @@ export class DownloadDetailsComponent implements OnInit, OnDestroy {
         const id = this.router.snapshot.paramMap.get("id")
         if (!id)
             return
-        console.log("ID:", id)
         
         const iid = parseInt(id)
         this.subscriptions.add(
@@ -89,6 +112,10 @@ export class DownloadDetailsComponent implements OnInit, OnDestroy {
 
     computeClients(item: MLMsgDownloadElement | null): string {
         return this.checkNull(item, item => "" + item.nclients)
+    }
+
+    computeChunks(item: MLMsgDownloadElement | null): ArrayBuffer {
+        return item?.chunks ?? new ArrayBuffer()
     }
 
     private checkNull(item: MLMsgDownloadElement | null, f: (item: MLMsgDownloadElement) => string): string {

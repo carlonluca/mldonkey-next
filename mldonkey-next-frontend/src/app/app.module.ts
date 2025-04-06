@@ -78,6 +78,7 @@ import { ComponentsModule } from "./components/components.module"
 import { FollowContentViewComponent } from './components/follow-content-view/follow-content-view.component'
 import { SharedFilesComponent } from './private/home/sharedfiles/sharedfiles.component'
 import { DownloadDetailsComponent } from './private/home/download/download-details/download-details.component'
+import { ChunksDiagramComponent } from "./components/chunks-diagram/chunks-diagram.component"
 
 echarts.use([
     BarChart,
@@ -110,7 +111,8 @@ echarts.use([
         TurtleIconComponent,
         SpeedIndicatorComponent,
         FollowContentViewComponent,
-        SharedFilesComponent
+        SharedFilesComponent,
+        ChunksDiagramComponent
     ],
     providers: [
         provideNgxMask()
