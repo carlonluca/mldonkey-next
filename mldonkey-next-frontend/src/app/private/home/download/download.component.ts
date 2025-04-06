@@ -50,6 +50,7 @@ import {
     faFileVideo,
     IconDefinition
 } from '@fortawesome/free-solid-svg-icons'
+import { Router } from '@angular/router'
 
 @Component({
     selector: 'app-download',
@@ -89,7 +90,8 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
         private websocketService: WebSocketService,
         private downloadingService: DownloadingFilesService,
         public clientStatsService: ClientStatsService,
-        public uiSerivce: UiServiceService
+        public uiSerivce: UiServiceService,
+        public router: Router
     ) { }
 
     ngOnInit() {
@@ -322,5 +324,11 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
         default:
             return faFile
         }
+    }
+
+    rowClicked(downloadElement: MLMsgDownloadElement) {
+        this.router.navigate(["/home/download-details", {
+            id: downloadElement.downloadId
+        }])
     }
 }

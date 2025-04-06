@@ -38,6 +38,7 @@ import { CorelogsComponent } from './private/home/corelogs/corelogs.component'
 import { UploadComponent } from './private/home/upload/upload.component'
 import { HelpComponent } from './private/home/help/help.component'
 import { SharedFilesComponent } from './private/home/sharedfiles/sharedfiles.component'
+import { DownloadDetailsComponent } from './private/home/download/download-details/download-details.component'
 
 const routes: Routes = [
     {
@@ -100,6 +101,10 @@ const routes: Routes = [
             path: "help",
             canActivate: [ AuthGuard ],
             component: HelpComponent
+        }, {
+            path: "download-details",
+            canActivate: [ AuthGuard ],
+            component: DownloadDetailsComponent
         }]
     }
 ]

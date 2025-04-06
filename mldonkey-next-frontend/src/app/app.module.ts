@@ -77,6 +77,7 @@ import { LineChart } from 'echarts/charts'
 import { ComponentsModule } from "./components/components.module"
 import { FollowContentViewComponent } from './components/follow-content-view/follow-content-view.component'
 import { SharedFilesComponent } from './private/home/sharedfiles/sharedfiles.component'
+import { DownloadDetailsComponent } from './private/home/download/download-details/download-details.component'
 
 echarts.use([
     BarChart,
@@ -94,6 +95,7 @@ echarts.use([
         SpinnerComponent,
         HomeComponent,
         DownloadComponent,
+        DownloadDetailsComponent,
         SearchComponent,
         ServersComponent,
         StatsComponent,
