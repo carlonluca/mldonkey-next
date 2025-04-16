@@ -21,6 +21,7 @@
  * Company: -
  * Date:    2023.11.13
  */
+
 import { MLMsgReader } from "../msg/MLMsgReader"
 import { MLUPdateable } from "../core/MLUpdateable"
 import { MLSubFile } from "../msg/MLSubFile"
@@ -35,6 +36,31 @@ export enum MLMsgFromDownloadState {
     S_NEW,
     S_ABORTED,
     S_QUEUED
+}
+
+// eslint-disable-next-line @typescript-eslint/no-namespace
+export namespace MLMsgFromDownloadState {
+    const downloadStateLabels: Record<MLMsgFromDownloadState, string> = {
+        [MLMsgFromDownloadState.S_DOWNLOADING]: "Downloading",
+        [MLMsgFromDownloadState.S_PAUSED]: "Paused",
+        [MLMsgFromDownloadState.S_COMPLETE]: "Complete",
+        [MLMsgFromDownloadState.S_SHARED]: "Shared",
+        [MLMsgFromDownloadState.S_CANCELLED]: "Cancelled",
+        [MLMsgFromDownloadState.S_NEW]: "New",
+        [MLMsgFromDownloadState.S_ABORTED]: "Aborted",
+        [MLMsgFromDownloadState.S_QUEUED]: "Queued",
+    };
+
+    export function toString(state: MLMsgFromDownloadState): string {
+        return downloadStateLabels[state]
+    }
+
+    export function parse(state: string): MLMsgFromDownloadState {
+        return Object.entries(downloadStateLabels).reduce((acc, [key, value]) => {
+            acc[value] = Number(key);
+            return acc;
+        }, {} as Record<string, MLMsgFromDownloadState>)[state]
+    }
 }
 
 export class MLMsgDownloadElement implements MLUPdateable<MLMsgDownloadElement> {

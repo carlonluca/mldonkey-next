@@ -76,8 +76,12 @@ export class ChunksDiagramComponent implements AfterViewInit, OnChanges {
         const view = new Uint8Array(this.chunks)
         for (let i = 0; i < this.chunks.byteLength; i++) {
             const chunkX = i*chunkWidth
-            console.log("color:", this.colorForChunkValue[(view.at(i) ?? 48) - 48], (view.at(i) ?? 48) - 48)
-            ctx.fillStyle = this.colorForChunkValue[(view.at(i) ?? 48) - 48]
+
+            // Apparently in some cases the ascii value is provided, in other cases the
+            // integer is provided.
+            const colorValue = view.at(i) ?? 48
+            const idx = colorValue <= 3 ? colorValue : colorValue - 48
+            ctx.fillStyle = this.colorForChunkValue[idx]
             ctx.fillRect(chunkX, 0, chunkWidth, height)
         }
     }
