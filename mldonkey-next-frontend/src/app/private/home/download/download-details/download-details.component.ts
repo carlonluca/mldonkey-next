@@ -28,7 +28,7 @@ import { ActivatedRoute } from '@angular/router'
 import { MLNetworkManager } from 'src/app/core/MLNetworkManager'
 import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
 import { MLUtils } from 'src/app/core/MLUtils'
-import { MLMsgDownloadElement, MLMsgFromDownloadState } from 'src/app/data/MLDownloadFileInfo'
+import { MLFormat, MLMsgDownloadElement, MLMsgFromDownloadState } from 'src/app/data/MLDownloadFileInfo'
 import { DownloadingFilesService } from 'src/app/services/downloading-files.service'
 import { WebSocketService } from 'src/app/websocket-service.service'
 
@@ -57,25 +57,7 @@ export class DownloadDetailsComponent implements OnInit, OnDestroy {
     networkManager: MLNetworkManager
     subscriptions = new MLSubscriptionSet()
     RowElementType = RowElementType
-    dataSource = new MatTableDataSource<RowElement>([
-        new RowElement("ID", RowElementType.E_T_STRING_LIST, item => [this.computeDownloadId(item)]),
-        new RowElement("Network ID/name", RowElementType.E_T_STRING_LIST, item => [this.computeNetwork(item)]),
-        new RowElement("Downloaded/size", RowElementType.E_T_STRING_LIST, item => [this.computeSize(item)]),
-        new RowElement("Downloaded percentage", RowElementType.E_T_STRING_LIST, item => [this.computeDownloadedPercentage(item)]),
-        new RowElement("Speed", RowElementType.E_T_STRING_LIST, item => [this.computeSpeed(item)]),
-        new RowElement("Priority", RowElementType.E_T_STRING_LIST, item => [this.computePriority(item)]),
-        new RowElement("User", RowElementType.E_T_STRING_LIST, item => [this.computeUser(item)]),
-        new RowElement("Group", RowElementType.E_T_STRING_LIST, item => [this.computeGroup(item)]),
-        new RowElement("Sources", RowElementType.E_T_STRING_LIST, item => [this.computeSources(item)]),
-        new RowElement("Clients", RowElementType.E_T_STRING_LIST, item => [this.computeClients(item)]),
-        new RowElement("Chunks", RowElementType.E_T_BUFF_LIST, item => [this.computeChunks(item)]),
-        new RowElement("Name", RowElementType.E_T_STRING_LIST, item => [this.computeName(item)]),
-        new RowElement("Suggested names", RowElementType.E_T_STRING_LIST, item => this.computeNames(item)),
-        new RowElement("md4", RowElementType.E_T_STRING_LIST, item => [this.computeMd4(item)]),
-        new RowElement("State", RowElementType.E_T_STRING_LIST, item => [this.computeState(item)]),
-        new RowElement("Availability", RowElementType.E_T_AVAIL_LIST, item => this.computeAvailability(item)),
-        new RowElement("File age", RowElementType.E_T_STRING_LIST, item => [this.computeFileAge(item)])
-    ])
+    dataSource = new MatTableDataSource<RowElement>([])
 
     constructor(
         private router: ActivatedRoute,
@@ -97,10 +79,39 @@ export class DownloadDetailsComponent implements OnInit, OnDestroy {
             })
         )
         this.item = this.downloadService.downloadingList.value.find((d) => d.downloadId === iid) ?? null
+        this.refreshModel()
     }
 
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe(null)
+    }
+
+    refreshModel() {
+        this.dataSource = new MatTableDataSource<RowElement>([
+            new RowElement("ID", RowElementType.E_T_STRING_LIST, item => [this.computeDownloadId(item)]),
+            new RowElement("Network ID/name", RowElementType.E_T_STRING_LIST, item => [this.computeNetwork(item)]),
+            new RowElement("Downloaded/size", RowElementType.E_T_STRING_LIST, item => [this.computeSize(item)]),
+            new RowElement("Downloaded percentage", RowElementType.E_T_STRING_LIST, item => [this.computeDownloadedPercentage(item)]),
+            new RowElement("Speed", RowElementType.E_T_STRING_LIST, item => [this.computeSpeed(item)]),
+            new RowElement("Priority", RowElementType.E_T_STRING_LIST, item => [this.computePriority(item)]),
+            new RowElement("User", RowElementType.E_T_STRING_LIST, item => [this.computeUser(item)]),
+            new RowElement("Group", RowElementType.E_T_STRING_LIST, item => [this.computeGroup(item)]),
+            new RowElement("Sources", RowElementType.E_T_STRING_LIST, item => [this.computeSources(item)]),
+            new RowElement("Clients", RowElementType.E_T_STRING_LIST, item => [this.computeClients(item)]),
+            new RowElement("Chunks", RowElementType.E_T_BUFF_LIST, item => [this.computeChunks(item)]),
+            new RowElement("Name", RowElementType.E_T_STRING_LIST, item => [this.computeName(item)]),
+            new RowElement("Suggested names", RowElementType.E_T_STRING_LIST, item => this.computeNames(item)),
+            new RowElement("md4", RowElementType.E_T_STRING_LIST, item => [this.computeMd4(item)]),
+            new RowElement("State", RowElementType.E_T_STRING_LIST, item => [this.computeState(item)]),
+            new RowElement("Availability", RowElementType.E_T_AVAIL_LIST, item => this.computeAvailability(item)),
+            new RowElement("File age", RowElementType.E_T_STRING_LIST, item => [this.computeFileAge(item)]),
+            new RowElement("Last seen", RowElementType.E_T_STRING_LIST, item => [this.computeLastSeen(item)]),
+            new RowElement("Format", RowElementType.E_T_STRING_LIST, item => this.computeFormatString(item)),
+            new RowElement("Comment", RowElementType.E_T_STRING_LIST, item => [this.computeComment(item)]),
+            new RowElement("Links", RowElementType.E_T_STRING_LIST, item => this.computeLinks(item)),
+            new RowElement("Subfiles", RowElementType.E_T_STRING_LIST, item => this.computeSubfiles(item)),
+            new RowElement("Comments", RowElementType.E_T_STRING_LIST, item => this.computeComments(item))
+        ])
     }
 
     computeName(item: MLMsgDownloadElement | null): string {
@@ -200,6 +211,68 @@ export class DownloadDetailsComponent implements OnInit, OnDestroy {
         return this.checkNull(item, item => {
             return MLUtils.prettyFormat(item.age)
         }, "-")
+    }
+
+    computeFormatString(item: MLMsgDownloadElement | null): string[] {
+        return this.checkNull(item, item => {
+            switch (item.format) {
+            case MLFormat.F_GENERIC:
+                return [ "Generic format: " + item.formatInfo ]
+            case MLFormat.F_AVI:
+                return [ "AVI format: " + item.formatInfo ]
+            case MLFormat.F_MP3:
+                return [ "MP3 format: " + item.formatInfo ]
+            case MLFormat.F_OGG:
+                return [ "OGG format: " + item.formatInfo ]
+            case MLFormat.F_UNKNOWN:
+            default:
+                return [ "Unknown format" ]
+            }
+        }, [ "-" ])
+    }
+
+    computeLastSeen(item: MLMsgDownloadElement | null): string {
+        return this.checkNull(item, item => {
+            return MLUtils.prettyFormat(item.lastSeen)
+        }, "-")
+    }
+
+    computeComment(item: MLMsgDownloadElement | null): string {
+        return this.checkNull(item, item => {
+            return item.comment
+        }, "-")
+    }
+
+    computeLinks(item: MLMsgDownloadElement | null): string[] {
+        return this.checkNull(item, item => {
+            return item.uids
+        }, [ "-" ])
+    }
+
+    computeSubfiles(item: MLMsgDownloadElement | null): string[] {
+        return this.checkNull(item, item => {
+            return item.subFiles.map(e => {
+                return [
+                    e.name,
+                    MLUtils.beautifySize(e.size),
+                    e.format
+                ].join(", ")
+            })
+        }, [ "-" ])
+    }
+
+    computeComments(item: MLMsgDownloadElement | null): string[] {
+        return this.checkNull(item, item => {
+            return item.fileComments.map(e => {
+                return [
+                    e.name,
+                    e.ip,
+                    e.countryCode,
+                    e.rating,
+                    e.comment
+                ].join(", ")
+            })
+        }, [ "-" ])
     }
 
     private checkNull<T>(item: MLMsgDownloadElement | null, f: (item: MLMsgDownloadElement) => T, nullValue: T): T {

@@ -27,7 +27,7 @@
   </ng-container>
   <ng-container matColumnDef="value">
     <th mat-header-cell *matHeaderCellDef>Value</th>
-    <td mat-cell *matCellDef="let row;; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+    <td mat-cell *matCellDef="let row; let isEven = even" [ngClass]="{'alternate-row': isEven }">
       <div *ngIf="row.type === RowElementType.E_T_STRING_LIST">
         <p *ngFor="let s of row.data(this.item)" class="table-cell">{{ s }}</p>
       </div>

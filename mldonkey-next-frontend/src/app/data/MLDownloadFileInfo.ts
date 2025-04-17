@@ -63,6 +63,15 @@ export namespace MLMsgFromDownloadState {
     }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-namespace
+export enum MLFormat {
+    F_UNKNOWN = 0,
+    F_GENERIC = 1,
+    F_AVI     = 2,
+    F_MP3     = 3,
+    F_OGG     = 4
+}
+
 export class MLMsgDownloadElement implements MLUPdateable<MLMsgDownloadElement> {
     constructor(
         public downloadId: number,
