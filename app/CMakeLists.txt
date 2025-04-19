@@ -71,7 +71,16 @@ qt_add_qml_module(mldonkey-next
         mlwebsocketbridge.h mlwebsocketbridge.cpp
         mlsettings.h mlsettings.cpp
         mlqmlutils.h mlqmlutils.cpp
-        RESOURCES android/AndroidManifest.xml android/build.gradle android/res/values/libs.xml android/res/xml/qtprovider_paths.xml android/gradle/wrapper/gradle-wrapper.jar android/gradle/wrapper/gradle-wrapper.properties android/gradle.properties android/gradlew android/gradlew.bat
+    RESOURCES
+        android/AndroidManifest.xml
+        android/build.gradle
+        android/res/values/libs.xml
+        android/res/xml/qtprovider_paths.xml
+        android/gradle/wrapper/gradle-wrapper.jar
+        android/gradle/wrapper/gradle-wrapper.properties
+        android/gradle.properties
+        android/gradlew
+        android/gradlew.bat
 )
 
 # Build this file using the build_angular_resources.sh script.
