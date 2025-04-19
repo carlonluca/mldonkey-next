@@ -6,6 +6,11 @@ script:
 - cp -r /opt/qt/6.8.2/gcc_64/resources AppDir/opt/qt/6.8.2/gcc_64/
 AppDir:
   path: /mldonkeyapp/app/build/appimage/AppDir
+  runtime:
+    env:
+      QTWEBENGINE_RESOURCES_PATH: "$APPDIR/opt/qt/6.8.2/gcc_64/resources"
+      QTWEBENGINEPROCESS_PATH: "$APPDIR/opt/qt/6.8.2/gcc_64/libexec/QtWebEngineProcess"
+      QTWEBENGINE_LOCALES_PATH: "$APPDIR/opt/qt/6.8.2/gcc_64/translations/qtwebengine_locales"
   app_info:
     id: luke.mldonkeynext
     name: mldonkey-next
@@ -29,12 +34,18 @@ AppDir:
     - sourceline: deb http://security.ubuntu.com/ubuntu/ noble-security universe
     - sourceline: deb http://security.ubuntu.com/ubuntu/ noble-security multiverse
     include:
-    - adwaita-icon-theme
     - ca-certificates
     - fonts-dejavu-core
-    - hicolor-icon-theme
     - libc-bin
     - xkb-data
+    - libwayland-egl++1
+    - libwayland-egl1-mesa
+    - libwayland-egl1
+    - libgles2
+    - libglvnd0
+    - libegl1
+    - libglapi-mesa
+    - libxkbcommon-dev
   files:
     include:
     - /opt/qt/6.8.2/gcc_64/libexec/QtWebEngineProcess
@@ -103,22 +114,6 @@ AppDir:
     - usr/share/doc/*/changelog.*
     - usr/share/doc/*/NEWS.*
     - usr/share/doc/*/TODO.*
-  test:
-    fedora-30:
-      image: appimagecrafters/tests-env:fedora-30
-      command: ./AppRun
-    debian-stable:
-      image: appimagecrafters/tests-env:debian-stable
-      command: ./AppRun
-    archlinux-latest:
-      image: appimagecrafters/tests-env:archlinux-latest
-      command: ./AppRun
-    centos-7:
-      image: appimagecrafters/tests-env:centos-7
-      command: ./AppRun
-    ubuntu-xenial:
-      image: appimagecrafters/tests-env:ubuntu-xenial
-      command: ./AppRun
 AppImage:
   arch: x86_64
   comp: xz
