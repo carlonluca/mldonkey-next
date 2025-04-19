@@ -209,7 +209,7 @@ export class DownloadDetailsComponent implements OnInit, OnDestroy {
 
     computeFileAge(item: MLMsgDownloadElement | null): string {
         return this.checkNull(item, item => {
-            return MLUtils.prettyFormat(item.age)
+            return MLUtils.prettyFormat(item.age*1000)
         }, "-")
     }
 

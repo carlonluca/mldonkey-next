@@ -23,18 +23,20 @@
 <table mat-table class="mat-elevation-z8" [dataSource]="this.dataSource">
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef class="table-cell">Name</th>
-    <td mat-cell *matCellDef="let row;; let isEven = even" [ngClass]="{'alternate-row': isEven }">{{ row.name }}</td>
+    <td mat-cell *matCellDef="let row;; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+      <b class="alternate-row-content">{{ row.name }}</b>
+    </td>
   </ng-container>
   <ng-container matColumnDef="value">
     <th mat-header-cell *matHeaderCellDef>Value</th>
     <td mat-cell *matCellDef="let row; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-      <div *ngIf="row.type === RowElementType.E_T_STRING_LIST">
+      <div *ngIf="row.type === RowElementType.E_T_STRING_LIST" class="alternate-row-content">
         <p *ngFor="let s of row.data(this.item)" class="table-cell">{{ s }}</p>
       </div>
-      <div *ngIf="row.type === RowElementType.E_T_BUFF_LIST">
+      <div *ngIf="row.type === RowElementType.E_T_BUFF_LIST" class="alternate-row-content">
         <app-chunks-diagram *ngFor="let buff of row.data(item)" [chunks]="buff"></app-chunks-diagram>
       </div>
-      <div *ngIf="row.type === RowElementType.E_T_AVAIL_LIST">
+      <div *ngIf="row.type === RowElementType.E_T_AVAIL_LIST" class="alternate-row-content">
         <p *ngFor="let a of row.data(this.item) | keyvalue" class="table-cell">
           {{ a.key }}: <app-chunks-diagram [chunks]="$any(a.value)"></app-chunks-diagram>
         </p>

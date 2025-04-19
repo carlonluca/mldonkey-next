@@ -154,15 +154,9 @@ export class MLMsgDownloadElement implements MLUPdateable<MLMsgDownloadElement> 
         const speed = reader.takeDecimal()
         const chunksAge: number[] = []
         const chunksCount = reader.takeInt16()
-        for (let i = 0; i < chunksCount; i++) {
-            let age = reader.takeDate()
-            if (age < 0)
-                age = 0x7fffffff + age
-            chunksAge.push(age)
-        }
-        let age = reader.takeDate()
-        if (age < 0)
-            age = 0x7fffffff + age
+        for (let i = 0; i < chunksCount; i++)
+            chunksAge.push(reader.takeInt32())
+        const age = reader.takeInt32()
         const format = reader.takeInt8()
         let formatInfo = ""
         switch (format) {
