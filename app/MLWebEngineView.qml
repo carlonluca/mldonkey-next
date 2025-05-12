@@ -58,4 +58,19 @@ WebEngineView {
                 qmlUtils.openUrl(openUrl)
         }
     }
+    Component.onCompleted: forceActiveFocus()
+    Keys.onPressed: function(event) {
+        if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape)
+            handleBackKey(event)
+    }
+
+    function handleBackKey(event) {
+        if (!canGoBack) {
+            event.accepted = false
+            return
+        }
+
+        event.accepted = true
+        goBack()
+    }
 }
