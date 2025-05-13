@@ -25,11 +25,21 @@
             <mat-icon>sort</mat-icon>
             <span>Sort</span>
         </button>
+        <mat-divider></mat-divider>
         <button mat-menu-item [disabled]="!this.selectionEnabled || this.selection.isEmpty()"
             (click)="cancelDownloads()">
             <mat-icon>stop_circle</mat-icon>
             <span>Abort</span>
         </button>
+        <button mat-menu-item [disabled]="!this.selectionEnabled || this.selection.isEmpty()" (click)="this.pauseDownloads()">
+            <mat-icon>pause_circle</mat-icon>
+            <span>Pause</span>
+        </button>
+        <button mat-menu-item [disabled]="!this.selectionEnabled || this.selection.isEmpty()" (click)="this.resumeDownloads()">
+            <mat-icon>play_circle</mat-icon>
+            <span>Resume</span>
+        </button>
+        <mat-divider></mat-divider>
         <button mat-menu-item (click)="this.toggleSelectionEnabled()">
             <mat-icon>{{ this.selectionEnabled ? "check_box" : "check_box_outline_blank" }}</mat-icon>
             <span>Selectable</span>

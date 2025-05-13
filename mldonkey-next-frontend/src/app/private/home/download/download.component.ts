@@ -51,6 +51,7 @@ import {
     IconDefinition
 } from '@fortawesome/free-solid-svg-icons'
 import { Router } from '@angular/router'
+import { MLMsgToConsoleCommand } from 'src/app/msg/MLMsgConsole'
 
 @Component({
     selector: 'app-download',
@@ -206,6 +207,42 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
         this.selection.selected.forEach((download) => {
             this.websocketService.sendMsg(new MLMsgToRemoveDownload(download.downloadId))
         })
+    }
+
+    sendCmdToDownload(cmd: string, download: MLMsgDownloadElement) {
+        this.websocketService.sendMsg(new MLMsgToConsoleCommand(cmd + " " + download.downloadId))
+    }
+
+    sendCmdToSelectedDownloads(cmd: string) {
+        this.selection.selected.forEach(download =>
+            this.sendCmdToDownload(cmd, download)
+        )
+    }
+
+    togglePauseResume() {
+        this.selection.selected.forEach(download => {
+            let command = undefined
+            switch (download.state) {
+            case MLMsgFromDownloadState.S_DOWNLOADING:
+                command = "pause"
+                break
+            case MLMsgFromDownloadState.S_PAUSED:
+                command = "resume"
+                break
+            }
+            if (!command)
+                return
+
+            this.sendCmdToDownload(command, download)
+        })
+    }
+
+    resumeDownloads() {
+        this.sendCmdToSelectedDownloads("resume")
+    }
+
+    pauseDownloads() {
+        this.sendCmdToSelectedDownloads("pause")
     }
 
     refreshColumns() {
