@@ -23,7 +23,8 @@
  */
 
 import { Component, Input } from '@angular/core';
-import { faArrowDown } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDown, faPause } from '@fortawesome/free-solid-svg-icons';
+import { MLMsgFromDownloadState } from 'src/app/data/MLDownloadFileInfo';
 
 @Component({
     selector: 'app-speed-indicator',
@@ -34,5 +35,11 @@ import { faArrowDown } from '@fortawesome/free-solid-svg-icons';
 export class SpeedIndicatorComponent {
     @Input({ required: true }) speed: number;
     @Input({ required: false }) bold: boolean;
+    @Input({ required: false }) downloadState: MLMsgFromDownloadState = MLMsgFromDownloadState.S_DOWNLOADING;
     faArrowDown = faArrowDown
+    faPause = faPause
+
+    isDownloading(): boolean {
+        return this.downloadState !== MLMsgFromDownloadState.S_PAUSED
+    }
 }

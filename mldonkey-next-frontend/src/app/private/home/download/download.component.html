@@ -106,12 +106,11 @@
     <ng-container matColumnDef="speed">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Speed</th>
         <td mat-cell *matCellDef="let download; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-            <app-speed-indicator class="alternate-row-content" [speed]="download.speed"></app-speed-indicator>
+            <app-speed-indicator class="alternate-row-content" [speed]="download.speed" [downloadState]="download.state"></app-speed-indicator>
         </td>
         <td mat-footer-cell *matFooterCellDef="let download; let isEven = even"
             [ngClass]="{'alternate-row': this.dataSource.data.length%2 === 0 }">
-            <app-speed-indicator class="alternate-row-content" [speed]="this.downSpeedSum ?? 0"
-                [bold]="true"></app-speed-indicator>
+            <app-speed-indicator class="alternate-row-content" [speed]="this.downSpeedSum ?? 0" [bold]="true"></app-speed-indicator>
         </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -140,7 +139,7 @@
                 <b>{{ download.name }}</b><br />
                 {{ download.downloaded | prettyBytes }} of {{ download.size | prettyBytes }}
                 <span class="no-margins"> - </span>
-                <app-speed-indicator [speed]="download.speed" [bold]="true"></app-speed-indicator>
+                <app-speed-indicator [speed]="download.speed" [bold]="true" [downloadState]="download.state"></app-speed-indicator>
                 <mat-progress-bar class="file-progress pos-relative" mode="determinate"
                     [value]="computeProgress(download)">
                 </mat-progress-bar>
