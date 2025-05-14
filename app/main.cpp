@@ -120,13 +120,6 @@ int main(int argc, char** argv)
     app.setApplicationName(QSL("mldonkey-next"));
     app.setApplicationVersion(PROJECT_VERSION);
 
-#ifdef Q_OS_ANDROID
-    lqt::QmlUtils qmlUtils;
-    qmlUtils.setBarColorLight(false, false);
-    qmlUtils.setNavBarColor(QColor(32, 32, 32));
-    qmlUtils.setStatusBarColor(QColor(32, 32, 32));
-#endif
-
 #ifdef ML_EXTRACT_WEBAPP
     deploy_webapp();
 #endif

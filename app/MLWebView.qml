@@ -43,16 +43,19 @@ WebView {
     }
     Component.onCompleted: forceActiveFocus()
     Keys.onPressed: function(event) {
+        console.log("BACK")
         if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape)
             handleBackKey(event)
     }
 
     function handleBackKey(event) {
         if (!canGoBack) {
+            console.log("Can't go back")
             event.accepted = false
             return
         }
 
+        console.log("Go back")
         event.accepted = true
         goBack()
     }

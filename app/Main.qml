@@ -30,6 +30,13 @@ Window {
     property bool configMode: configModeRequested || userSettings.mldonkeyHost.length <= 0
     property bool configModeRequested: false
     property int controlMargin: 10
+    readonly property rect visibleArea: {
+        Screen.orientation
+        const visibleArea_ = qmlUtils.visibleDisplayFrame()
+        if  (visibleArea_.width === 0)
+            return Qt.rect(0, 0, width, height)
+        return visibleArea_
+    }
 
     id: mainWindow
     width: 720
@@ -39,18 +46,7 @@ Window {
 
     Material.theme: Material.Dark
     Material.accent: Material.Pink
-
-    Component.onCompleted: {
-        // It seems that there still is a bug in Qt: with anything else than Fullscreen,
-        // there is a white vertical line on the right border of the screen.
-        if (qmlUtils.isMobile())
-            mainWindow.visibility = Window.FullScreen
-        else {
-            mainWindow.visibility = Window.Windowed
-            mainWindow.width = 720
-            mainWindow.height = 1280
-        }
-    }
+    color: "#1d1d1d"
 
     SystemPalette { id: myPalette; colorGroup: SystemPalette.Active }
 
@@ -58,6 +54,15 @@ Window {
         active: !configMode
         anchors.fill: parent
         source: qmlUtils.extractWebApp() ? "qrc:/qt/qml/mldonkeynext/MLWebView.qml" : "qrc:/qt/qml/mldonkeynext/MLWebEngineView.qml"
+        anchors.topMargin: {
+            Screen.orientation
+            return Math.max(qmlUtils.safeAreaTopInset(), visibleArea.y)
+        }
+        anchors.bottomMargin: {
+            Screen.orientation
+            return Math.max(qmlUtils.safeAreaBottomInset(),
+                            parent.height - visibleArea.y - visibleArea.height)
+        }
     }
 
     Loader {
