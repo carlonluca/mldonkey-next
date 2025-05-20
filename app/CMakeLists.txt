@@ -81,6 +81,8 @@ qt_add_qml_module(mldonkey-next
         android/gradle.properties
         android/gradlew
         android/gradlew.bat
+        RESOURCES android/res/values/styles.xml
+        RESOURCES android/res/values/colors.xml
 )
 
 # Build this file using the build_angular_resources.sh script.

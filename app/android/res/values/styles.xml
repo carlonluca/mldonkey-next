@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="android:Theme.Holo">
+        <item name="android:windowBackground">@color/materialBackground</item>
+        <item name="android:colorBackground">@color/materialBackground</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowSplashScreenBackground">@color/materialBackground</item>
+        <item name="android:windowSplashScreenIconBackgroundColor">@color/materialBackground</item>
+    </style>
+</resources>
