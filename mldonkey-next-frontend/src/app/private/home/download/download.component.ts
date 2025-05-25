@@ -52,7 +52,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { Router } from '@angular/router'
 import { MLMsgToConsoleCommand } from 'src/app/msg/MLMsgConsole'
-import { MLMsgToGetSearch, MLMsgToGetSearches } from 'src/app/msg/MLMsgQuery'
 
 @Component({
     selector: 'app-download',
