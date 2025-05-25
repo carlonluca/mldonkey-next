@@ -54,6 +54,7 @@ import { MatDialog } from '@angular/material/dialog'
 import { AboutComponent } from './about/about.component'
 import { ServersService } from 'src/app/services/servers.service'
 import { SharedFilesinfoService } from 'src/app/services/sharedfilesinfo.service'
+import { SearchesService } from 'src/app/services/searches.service'
 
 @Component({
     selector: 'app-home',
@@ -96,6 +97,7 @@ export class HomeComponent {
         private statsService: StatsService,
         private serverService: ServersService,
         private sharedFileInfoService: SharedFilesinfoService,
+        private searchesService: SearchesService,
         public uiService: UiServiceService,
         public dialog: MatDialog) {
         this.subscriptions.add(
