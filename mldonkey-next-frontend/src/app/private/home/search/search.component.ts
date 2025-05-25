@@ -38,14 +38,14 @@ import { SpinnerService } from 'src/app/services/spinner.service'
 import {
     MLMsgToGetSearch,
     MLMsgToGetSearches,
-    MLMsgToQuery,
-    MLQueryNode
+    MLMsgToQuery
 } from 'src/app/msg/MLMsgQuery'
 import {
     faCaretDown,
     faMagnifyingGlass
 } from '@fortawesome/free-solid-svg-icons'
 import { UiServiceService } from 'src/app/services/ui-service.service'
+import { MLQueryNode } from 'src/app/data/MLSearchQuery'
 
 @Component({
     selector: 'app-search',
