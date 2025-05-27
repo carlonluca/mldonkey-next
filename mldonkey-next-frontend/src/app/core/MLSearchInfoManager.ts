@@ -22,23 +22,60 @@
  * Date:    2023.11.15
  */
 
+import { interval, Subscription } from "rxjs"
 import { MLSearchInfo } from "../data/MLSearchInfo"
 import { MLMessageTypeFrom } from "../msg/MLMsg"
-import { MLMsgFromSearch } from "../msg/MLMsgQuery"
+import { MLMsgFromSearch, MLMsgToGetSearches } from "../msg/MLMsgQuery"
 import { WebSocketService } from "../websocket-service.service"
 import { MLCollectionModel } from "./MLCollectionModel"
 
 export class MLSearchInfoManager extends MLCollectionModel<number, MLSearchInfo> {
-    constructor(websocketService: WebSocketService) {
+    private timer: Subscription | null = null
+    private listeners: number = 0
+
+    constructor(private websocketService: WebSocketService) {
         super()
         websocketService.lastMessage.observable.subscribe(msg => {
             if (msg.type == MLMessageTypeFrom.T_SEARCH) {
                 this.handleValue((msg as MLMsgFromSearch).content)
             }
         })
+
+        // Refresh
+        websocketService.sendMsg(new MLMsgToGetSearches())
     }
 
     protected override keyFromValue(value: MLSearchInfo): number {
         return value.id
+    }
+
+    public registerListener() {
+        this.listeners++
+        if (this.listeners >= 1)
+            this.start()
+    }
+
+    public unregisterListener() {
+        this.listeners--
+        if (this.listeners <= 0)
+            this.stop()
+    }
+
+    public refresh() {
+        console.log("Get searches")
+        this.websocketService.sendMsg(new MLMsgToGetSearches())
+    }
+
+    private start() {
+        if (this.timer)
+            return
+        this.timer = interval(5000).subscribe(() => {
+            this.refresh()
+        })
+    }
+
+    private stop() {
+        this.timer?.unsubscribe()
+        this.timer = null
     }
 }

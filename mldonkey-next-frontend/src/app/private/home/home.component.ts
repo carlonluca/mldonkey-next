@@ -37,7 +37,8 @@ import {
     faCircleInfo,
     faTerminal,
     faQuestion,
-    faShareNodes
+    faShareNodes,
+    faClockRotateLeft
 } from '@fortawesome/free-solid-svg-icons'
 import { StorageService } from 'src/app/services/storage.service'
 import { MLConnectionState, WebSocketService } from 'src/app/websocket-service.service'
@@ -82,6 +83,7 @@ export class HomeComponent {
     faPie = faChartPie
     faCircleInfo = faCircleInfo
     faShareNodes = faShareNodes
+    faClockRotateLeft = faClockRotateLeft
     version = packageJson.version
     versionAngular = VERSION
 

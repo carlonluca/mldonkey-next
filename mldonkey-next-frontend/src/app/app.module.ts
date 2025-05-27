@@ -80,6 +80,7 @@ import { SharedFilesComponent } from './private/home/sharedfiles/sharedfiles.com
 import { DownloadDetailsComponent } from './private/home/download/download-details/download-details.component'
 import { ChunksDiagramComponent } from "./components/chunks-diagram/chunks-diagram.component"
 import { AboutComponent } from "./private/home/about/about.component";
+import { SearchHistoryComponent } from './private/home/search/search-history/search-history.component'
 
 echarts.use([
     BarChart,
@@ -113,46 +114,47 @@ echarts.use([
         SpeedIndicatorComponent,
         FollowContentViewComponent,
         SharedFilesComponent,
-        ChunksDiagramComponent
+        ChunksDiagramComponent,
+        SearchHistoryComponent
     ],
     providers: [
         provideNgxMask()
     ],
     bootstrap: [AppComponent],
     imports: [
-    RouterModule,
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MatToolbarModule,
-    MatTableModule,
-    MatSortModule,
-    MatSidenavModule,
-    FormsModule,
-    PrettyBytesPipe,
-    PrettyBytesSpeedPipe,
-    PrettySecsPipe,
-    FontAwesomeModule,
-    MatIconModule,
-    MatButtonModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatProgressSpinnerModule,
-    MatProgressBarModule,
-    MatCheckboxModule,
-    MatSelectModule,
-    MatMenuModule,
-    MatTabsModule,
-    NgxMaskDirective,
-    NgxMaskPipe,
-    MatChipsModule,
-    MatDividerModule,
-    PrettySecsShortPipe,
-    RouterModule,
-    NgxEchartsModule.forRoot({ echarts }),
-    ComponentsModule,
-    AboutComponent
-],
+        RouterModule,
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MatToolbarModule,
+        MatTableModule,
+        MatSortModule,
+        MatSidenavModule,
+        FormsModule,
+        PrettyBytesPipe,
+        PrettyBytesSpeedPipe,
+        PrettySecsPipe,
+        FontAwesomeModule,
+        MatIconModule,
+        MatButtonModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatProgressSpinnerModule,
+        MatProgressBarModule,
+        MatCheckboxModule,
+        MatSelectModule,
+        MatMenuModule,
+        MatTabsModule,
+        NgxMaskDirective,
+        NgxMaskPipe,
+        MatChipsModule,
+        MatDividerModule,
+        PrettySecsShortPipe,
+        RouterModule,
+        NgxEchartsModule.forRoot({ echarts }),
+        ComponentsModule,
+        AboutComponent
+    ],
     exports: [
         ScrollToBottomDirective
     ]

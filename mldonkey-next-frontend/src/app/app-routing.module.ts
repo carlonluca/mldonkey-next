@@ -39,6 +39,7 @@ import { UploadComponent } from './private/home/upload/upload.component'
 import { HelpComponent } from './private/home/help/help.component'
 import { SharedFilesComponent } from './private/home/sharedfiles/sharedfiles.component'
 import { DownloadDetailsComponent } from './private/home/download/download-details/download-details.component'
+import { SearchHistoryComponent } from './private/home/search/search-history/search-history.component'
 
 const routes: Routes = [
     {
@@ -73,6 +74,10 @@ const routes: Routes = [
             path: "search",
             canActivate: [ AuthGuard ],
             component: SearchComponent
+        }, {
+            path: "search-history",
+            canActivate: [ AuthGuard ],
+            component: SearchHistoryComponent
         }, {
             path: "servers",
             canActivate: [ AuthGuard ],
