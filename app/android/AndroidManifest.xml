@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:targetSandboxVersion="1" android:installLocation="auto" android:versionCode="001300" android:versionName="0.13.0" package="">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:targetSandboxVersion="1" android:installLocation="auto" android:versionCode="001400" android:versionName="0.14.0" package="">
     <!-- %%INSERT_PERMISSIONS -->
     <!-- %%INSERT_FEATURES -->
     <supports-screens android:anyDensity="true" android:largeScreens="true" android:normalScreens="true" android:smallScreens="true"/>
