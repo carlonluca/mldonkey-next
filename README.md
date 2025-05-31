@@ -1,11 +1,18 @@
-# Table of Contents  
-- [mldonkey-next](#mldonkey-next)
+# mldonkey-next
+
+## Table of Contents
+- [Changelog](#changelog)
+- [Introduction](#introduction)
 - [WebApp](#webapp) (web browser app without a bridge - part of a Docker)
-    - [WebApp installation](#webapp-installation)
+  - [WebApp installation](#webapp-installation)
 - [NativeApp](#nativeapp) (Qt cross-platform app with a bridge - provided here in Releases)
   - [NativeApp installation](#nativeapp-installation)
 
-# mldonkey-next
+## Changelog
+
+For the full changelog, refer to [this page](https://bugfreeblog.duckdns.org/mldonkey-next).
+
+## Introduction
 
 mldonkey-next is a modern implementation of clients for mldonkey. mldonkey-next includes a responsive webapp and a cross-platform app (tested only on Linux and Android). mldonkey-next is in development and will not include all the features of the original webapp.
 
