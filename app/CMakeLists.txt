@@ -40,7 +40,6 @@ find_package(Qt6
         Core
         Quick
         StateMachine
-        WebView
         WebSockets
 )
 if (NOT ML_EXTRACT_WEBAPP)
