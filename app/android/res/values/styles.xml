@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="AppTheme" parent="android:Theme.Holo">
+    <style name="AppTheme" parent="android:Theme.Holo.Dark">
         <item name="android:windowBackground">@color/materialBackground</item>
         <item name="android:colorBackground">@color/materialBackground</item>
         <item name="android:windowTranslucentStatus">true</item>
