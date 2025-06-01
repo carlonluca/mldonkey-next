@@ -74,7 +74,7 @@ Window {
     Component {
         id: configComponent
         Rectangle {
-            color: myPalette.window
+            color: Material.background
             anchors.fill: parent
             Column {
                 anchors.centerIn: parent
