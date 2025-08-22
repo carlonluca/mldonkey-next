@@ -12,7 +12,8 @@
     "--socket=wayland",
     "--device=dri",
     "--share=ipc",
-    "--share=network"
+    "--share=network",
+    "--filesystem=home"
   ],
   "modules": [
     {
