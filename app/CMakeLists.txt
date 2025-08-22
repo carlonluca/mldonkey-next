@@ -25,7 +25,7 @@ project(mldonkey-next-proj VERSION 0.14.4 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../deps/lqtutils ${CMAKE_CURRENT_BINARY_DIR}/lqtutils)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../deps/lqtutils ${CMAKE_CURRENT_BINARY_DIR}/lqtutils)
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin" OR ${CMAKE_SYSTEM_NAME} STREQUAL "Linux" OR WIN32)
     set(ML_EXTRACT_WEBAPP false)
