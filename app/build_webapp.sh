@@ -17,5 +17,12 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-./build_webapp.sh
-./create_qt_resource_files.sh
+rm -rf webapp
+mkdir webapp
+cd ..
+cd mldonkey-next-frontend
+npm i
+npm run build
+cd dist/mldonkey-next-frontend/browser
+cp -r * ../../../../app/webapp
+cd ../../../../app
