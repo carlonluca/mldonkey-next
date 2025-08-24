@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+    <id>org.duckdns.bugfreeblog.mldonkeynext</id>
+
+    <name>mldonkey-next</name>
+    <summary>Native GUI for the multi-network p2p filesharing application</summary>
+
+    <metadata_license>MIT</metadata_license>
+    <project_license>GPL-3.0-or-later</project_license>
+    <url type="homepage">https://bugfreeblog.duckdns.org/mldonkey-next</url>
+
+    <description>
+        <p>
+            mldonkey-next is a modern GUI for the multi-protocol p2p filesharing application mldonkey. mldonkey-next connects to mldonkey using the TCP binary interface.
+        </p>
+    </description>
+
+    <launchable type="desktop-id">org.duckdns.bugfreeblog.mldonkeynext.desktop</launchable>
+    <screenshots>
+        <screenshot type="default">
+            <image>https://raw.githubusercontent.com/carlonluca/mldonkey-next/refs/heads/master/docs/mldonkey-next_desktop_app.png</image>
+        </screenshot>
+        <screenshot>
+            <image>https://raw.githubusercontent.com/carlonluca/mldonkey-next/refs/heads/master/docs/mldonkey-next_desktop_app2.png</image>
+        </screenshot>
+        <screenshot>
+            <image>https://raw.githubusercontent.com/carlonluca/mldonkey-next/refs/heads/master/docs/mldonkey-next_desktop_app3.png</image>
+        </screenshot>
+    </screenshots>
+</component>

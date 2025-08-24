@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+
+Name=mldonkey-next
+Comment=Native GUI for the multi-network p2p filesharing application
+Categories=Network;P2P;
+
+Icon=org.duckdns.bugfreeblog.mldonkeynext
+Exec=mldonkey-next
+Terminal=false
