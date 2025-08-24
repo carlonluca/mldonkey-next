@@ -17,8 +17,12 @@
   "modules": [
     {
       "name": "mldonkey-next",
-      "buildsystem": "cmake-ninja",
+      "buildsystem": "simple",
       "build-commands": [
+        "./create_qt_resource_files.sh",
+        "cmake -DCMAKE_INSTALL_PREFIX=/app .",
+        "cmake --build .",
+        "cmake --install .",
         "install -Dm644 flatpak/org.duckdns.bugfreeblog.mldonkeynext.desktop /app/share/applications/org.duckdns.bugfreeblog.mldonkeynext.desktop",
         "install -Dm644 flatpak/org.duckdns.bugfreeblog.mldonkeynext.metainfo.xml /app/share/metainfo/org.duckdns.bugfreeblog.mldonkeynext.metainfo.xml",
         "install -Dm644 flatpak/org.duckdns.bugfreeblog.mldonkeynext.svg /app/share/icons/hicolor/scalable/apps/org.duckdns.bugfreeblog.mldonkeynext.svg",
@@ -28,8 +32,14 @@
       "subdir": "app",
       "sources": [
         {
-          "type": "dir",
-          "path": "../.."
+          "type": "git",
+          "url": "https://github.com/carlonluca/mldonkey-next.git"
+        },
+        {
+          "type": "archive",
+          "url": "https://github.com/carlonluca/mldonkey-next/releases/download/v0.14.4/webapp-v0.14.4.zip",
+          "dest": "app/webapp",
+          "sha256": "a5d65033b98bc6155bd4374148ef9e4187fa5da626c5a7fc7c7a940d19534273"
         }
       ]
     }
