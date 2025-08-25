@@ -9,6 +9,10 @@
     <project_license>GPL-3.0-or-later</project_license>
     <url type="homepage">https://bugfreeblog.duckdns.org/mldonkey-next</url>
 
+    <developer id="org.duckdns.bugfreeblog">
+        <name>Luca Carlon</name>
+    </developer>
+
     <description>
         <p>
             mldonkey-next is a modern GUI for the multi-protocol p2p filesharing application mldonkey. mldonkey-next connects to mldonkey using the TCP binary interface.
@@ -16,15 +20,31 @@
     </description>
 
     <launchable type="desktop-id">org.duckdns.bugfreeblog.mldonkeynext.desktop</launchable>
+
+    <content_rating type="oars-1.1">
+        <content_attribute id="social-chat">intense</content_attribute>
+    </content_rating>
+
     <screenshots>
         <screenshot type="default">
             <image>https://raw.githubusercontent.com/carlonluca/mldonkey-next/refs/heads/master/docs/mldonkey-next_desktop_app.png</image>
+            <caption>Detailed view of current downloads</caption>
         </screenshot>
         <screenshot>
             <image>https://raw.githubusercontent.com/carlonluca/mldonkey-next/refs/heads/master/docs/mldonkey-next_desktop_app2.png</image>
+            <caption>Stats about current session and overall lifetime of the core</caption>
         </screenshot>
         <screenshot>
             <image>https://raw.githubusercontent.com/carlonluca/mldonkey-next/refs/heads/master/docs/mldonkey-next_desktop_app3.png</image>
+            <caption>About dialog</caption>
         </screenshot>
     </screenshots>
+
+    <releases>
+        <release version="0.14.5" date="2025-08-24">
+        <description>
+            <p>First release of mldonkey-next as Flatpak.</p>
+        </description>
+        </release>
+    </releases>
 </component>
