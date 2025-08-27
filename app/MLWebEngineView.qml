@@ -58,7 +58,11 @@ WebEngineView {
                 qmlUtils.openUrl(openUrl)
         }
     }
-    Component.onCompleted: forceActiveFocus()
+    Component.onCompleted: {
+        console.info("Persistent storage path:", profile.persistentStoragePath)
+        forceActiveFocus()
+    }
+
     Keys.onPressed: function(event) {
         if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape)
             handleBackKey(event)
