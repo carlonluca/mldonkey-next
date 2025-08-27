@@ -59,6 +59,7 @@ WebEngineView {
         }
     }
     Component.onCompleted: {
+        settings.localStorageEnabled = true
         console.info("Persistent storage path:", profile.persistentStoragePath)
         forceActiveFocus()
     }

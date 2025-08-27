@@ -80,10 +80,10 @@ export class PublicComponent implements OnInit, OnDestroy {
         webSocketService.connectionState.observable.subscribe(state => {
             switch (state) {
                 case MLConnectionState.S_AUTHENTICATED:
+                    this.storage.setLoginData(new Credentials(this.inputUsr, this.inputPwd))
                     this.connected = true
                     this.spinner.hide()
                     this.router.navigateByUrl("/home")
-                    this.storage.setLoginData(new Credentials(this.inputUsr, this.inputPwd))
                     break
                 case MLConnectionState.S_CONNECTED: {
                     this.connected = true
