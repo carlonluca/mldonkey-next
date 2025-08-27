@@ -117,8 +117,13 @@ int main(int argc, char** argv)
 #endif
 
     QGuiApplication app(argc, argv);
+    app.setOrganizationName(QSL("Luca Carlon"));
+    app.setOrganizationDomain(QSL("org.duckdns.bugfreeblog"));
     app.setApplicationName(QSL("mldonkey-next"));
     app.setApplicationVersion(PROJECT_VERSION);
+
+    qInfo() << "App version:" << app.applicationVersion();
+    qInfo() << "App config:" << QSettings().fileName();
 
 #ifdef ML_EXTRACT_WEBAPP
     deploy_webapp();
