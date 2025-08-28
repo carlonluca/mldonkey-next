@@ -37,28 +37,9 @@ import crypto from 'crypto'
 import * as MLConstants from './core/MLConstants'
 import { RequestOptions } from 'node:http'
 
-const wss = new WebSocket.Server({ port: 4002 });
 const wssLog = new WebSocket.Server({ port: 4003 })
 const bridgeManager = new MLBridgeManager()
 const logToken = crypto.randomBytes(16).toString('hex')
-
-const wssOnConnection = (ws: WebSocket, req: IncomingMessage) => {
-    logger.info(`Client connected: ${req.socket.remoteAddress} ${ws}`)
-    bridgeManager.clientConnected(ws)
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    ws.on('close', (_ws: WebSocket, _req: IncomingMessage) => {
-        bridgeManager.clientDisconnected(ws)
-    })
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    ws.on("error", (_ws: WebSocket, err: Error) => {
-        logger.warn(`Client failed: ${err.message}`)
-        bridgeManager.clientDisconnected(ws)
-    })
-}
-
-wss.on('connection', wssOnConnection)
-logger.info('WebSocket server listening on port: 4002')
 
 fs.readFile(`/var/lib/mldonkey/downloads.ini`, {
     encoding : 'utf-8'
@@ -187,16 +168,38 @@ app.use((_req, res, next) => {
 })
 app.use("/", express.static(webappPath))
 app.get("/", (_req, res) => res.sendFile(path.join(webappPath, 'index.html')))
-/* eslint-disable @typescript-eslint/no-unused-vars */
-app.use((_req, res, next) => res.redirect('/'))
+app.use((req, res, next) => {
+  // Skip WebSocket upgrade requests
+  if (req.headers.upgrade && req.headers.upgrade.toLowerCase() === "websocket") {
+    return next();
+  }
+
+  // Skip /ws path entirely
+  if (req.path.startsWith("/ws")) {
+    return next();
+  }
+
+  // Otherwise redirect to SPA root
+  res.redirect("/");
+})
 
 const server = http.createServer(app)
 
-// This is an optional websocket server listening on the same port
-// of the http server. The other websocket server remains for backward
-// compatibility.
-const wss2 = new WebSocket.Server({ server, path: "/ws" })
-wss2.on('connection', wssOnConnection)
+const wss = new WebSocket.Server({ server, path: "/ws" })
+wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
+    logger.info(`Client connected: ${req.socket.remoteAddress} ${ws}`)
+    bridgeManager.clientConnected(ws)
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    ws.on('close', (_ws: WebSocket, _req: IncomingMessage) => {
+        bridgeManager.clientDisconnected(ws)
+    })
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    ws.on("error", (_ws: WebSocket, err: Error) => {
+        logger.warn(`Client failed: ${err.message}`)
+        bridgeManager.clientDisconnected(ws)
+    })
+})
 logger.info(`WebSocket server listening on port: ${port}`)
 
 server.listen(port, () =>
