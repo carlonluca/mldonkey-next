@@ -28,6 +28,7 @@ import { environment } from 'src/environments/environment'
 import { ScrollToBottomDirective } from './scroll'
 import { faArrowUp, faPersonWalkingArrowRight } from '@fortawesome/free-solid-svg-icons'
 import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
+import { MLUtils } from 'src/app/core/MLUtils'
 
 class LogLine {
     timestamp: Date
@@ -62,6 +63,13 @@ export class CorelogsComponent implements OnInit, OnDestroy {
     @ViewChild('scrollContainer') scrollContainer: ElementRef
     @ViewChild(ScrollToBottomDirective) scrollDirective: ScrollToBottomDirective
 
+    private wsAddr =   environment.mldonkeyWsAddr
+    private wsPort =   environment.mldonkeyWsPort
+    private wsPath =   "/logstream"
+    private wsScheme = window.location.protocol === 'https:' ? 'wss://' : 'ws://'
+    private wsUrl = isNaN(this.wsPort) ? `${this.wsScheme}${this.wsAddr}${this.wsPath}`
+                                       : `${this.wsScheme}${this.wsAddr}:${this.wsPort}${this.wsPath}`
+
     faPersonWalkingArrowRight = faPersonWalkingArrowRight
     faArrowUp = faArrowUp
 
@@ -79,7 +87,7 @@ export class CorelogsComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.websocket = webSocket<string>({
-            url: `ws://${environment.mldonkeyWsAddr}:${environment.logsWsPort}`,
+            url: this.wsUrl,
             deserializer: (e: MessageEvent) => e.data,
             serializer: (b: string) => b
         })

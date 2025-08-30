@@ -37,63 +37,9 @@ import crypto from 'crypto'
 import * as MLConstants from './core/MLConstants'
 import { RequestOptions } from 'node:http'
 
-const wssLog = new WebSocket.Server({ port: 4003 })
+
 const bridgeManager = new MLBridgeManager()
 const logToken = crypto.randomBytes(16).toString('hex')
-
-fs.readFile(`/var/lib/mldonkey/downloads.ini`, {
-    encoding : 'utf-8'
-}, (err: NodeJS.ErrnoException | null, data: string) => {
-    if (err) {
-        logger.warn(`Cannot read mlnet conf file: ${err.message}`)
-        return
-    }
-
-    const regex = /log_file\s*=\s*"([^"]*)"/
-    const match = data.match(regex)
-    let logFile = "mlnet.log"
-    if (match && match[1])
-        logFile = match[1]
-    
-    logFile = `/var/lib/mldonkey/${logFile}`
-    wssLog.on("connection", (ws: WebSocket, req: IncomingMessage) => {
-        const cookies = cookie.parse(req.headers.cookie || '')
-        const token = cookies.logtoken
-        if (process.env.MLDONKEY_DISABLE_LOGS_AUTH != "1" && token !== logToken) {
-            logger.warn("Client refused")
-            ws.close()
-            return
-        }
-
-        logger.info(`Client connected: ${req.socket.remoteAddress}`)
-        if (!fs.existsSync(logFile)) {
-            ws.send("")
-            ws.close()
-            return
-        }
-        const tail = new Tail(logFile, {
-            separator: /[\r]{0,1}\n/,
-            fromBeginning: process.env.MLDONKEY_LOGS_FROM_BEGINNING == "1",
-            follow: true
-        })
-        tail.on("line", (data: string) => ws.send(data + "\n"))
-        tail.on("error", (error) => {
-            logger.warn(`Error occurred following log file: ${error}`)
-            ws.close()
-        })
-        ws.on('close', () => {
-            logger.info("WebSocket closed")
-            tail.unwatch()
-        })
-        ws.on('error', (_ws: WebSocket, err: Error) => {
-            logger.warn(`WebSocket failed: ${err.message}`)
-            tail.unwatch()
-        })
-    })
-
-    logger.debug(`mldonkey setup to store logs in ${logFile}`)
-    logger.info("WebSocket server listening on port: 4003")
-})
 
 const app = express()
 const port = MLConstants.MLDONKEY_NEXT_WEBAPP_PORT
@@ -173,9 +119,70 @@ app.use((req, res, next) => res.redirect('/'))
 
 const server = http.createServer(app)
 
+const wssLog = new WebSocket.Server({ server, path: "/logstream" })
+fs.readFile(`/var/lib/mldonkey/downloads.ini`, {
+    encoding : 'utf-8'
+}, (err: NodeJS.ErrnoException | null, data: string) => {
+    if (err) {
+        logger.warn(`Cannot read mlnet conf file: ${err.message}`)
+        return
+    }
+
+    const regex = /log_file\s*=\s*"([^"]*)"/
+    const match = data.match(regex)
+    let logFile = "mlnet.log"
+    if (match && match[1])
+        logFile = match[1]
+    
+    logFile = `/var/lib/mldonkey/${logFile}`
+    wssLog.on("connection", (ws: WebSocket, req: IncomingMessage) => {
+        const cookies = cookie.parse(req.headers.cookie || '')
+        const token = cookies.logtoken
+        if (!MLConstants.MLDONKEY_NEXT_ENABLE_LOG_STREAM) {
+            logger.warn("Client refused")
+            ws.close()
+            return
+        }
+
+        if (process.env.MLDONKEY_DISABLE_LOGS_AUTH != "1" && token !== logToken) {
+            logger.warn("Client refused")
+            ws.close()
+            return
+        }
+
+        logger.info(`Client connected: ${req.socket.remoteAddress}`)
+        if (!fs.existsSync(logFile)) {
+            ws.send("")
+            ws.close()
+            return
+        }
+        const tail = new Tail(logFile, {
+            separator: /[\r]{0,1}\n/,
+            fromBeginning: process.env.MLDONKEY_LOGS_FROM_BEGINNING == "1",
+            follow: true
+        })
+        tail.on("line", (data: string) => ws.send(data + "\n"))
+        tail.on("error", (error) => {
+            logger.warn(`Error occurred following log file: ${error}`)
+            ws.close()
+        })
+        ws.on('close', () => {
+            logger.info("WebSocket closed")
+            tail.unwatch()
+        })
+        ws.on('error', (_ws: WebSocket, err: Error) => {
+            logger.warn(`WebSocket failed: ${err.message}`)
+            tail.unwatch()
+        })
+    })
+
+    logger.debug(`mldonkey setup to store logs in ${logFile}`)
+    logger.info(`WebSocket server listening on port: ${port}`)
+})
+
 const wss = new WebSocket.Server({ server, path: "/ws" })
 wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
-    logger.info(`Client connected: ${req.socket.remoteAddress} ${ws}`)
+    logger.info(`Client connected: ${req.socket.remoteAddress}`)
     bridgeManager.clientConnected(ws)
 
     ws.on('close', () => {

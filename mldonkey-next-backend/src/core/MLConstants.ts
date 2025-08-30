@@ -27,3 +27,4 @@ export const MLDONKEY_NEXT_WEBAPP_ROOT = process.env.MLDONKEY_NEXT_WEBAPP_ROOT
 export const MLDONKEY_CORE_WEB_PORT = parseInt(process.env.MLDONKEY_CORE_WEB_PORT) || 4080
 export const MLDONKEY_CORE_TCP_PORT = parseInt(process.env.MLDONKEY_CORE_TCP_PORT) || 4001
 export const MLDONKEY_CORE_HOST = process.env.MLDONKEY_CORE_HOST || "127.0.0.1"
+export const MLDONKEY_NEXT_ENABLE_LOG_STREAM = process.env.MLDONKEY_NEXT_ENABLE_LOG_STREAM === "1"
