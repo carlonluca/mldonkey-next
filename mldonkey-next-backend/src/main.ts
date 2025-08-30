@@ -65,7 +65,7 @@ fs.readFile(`/var/lib/mldonkey/downloads.ini`, {
             return
         }
 
-        logger.info(`Client connected: ${req.socket.remoteAddress} ${ws}`)
+        logger.info(`Client connected: ${req.socket.remoteAddress}`)
         if (!fs.existsSync(logFile)) {
             ws.send("")
             ws.close()
@@ -167,21 +167,9 @@ app.use((_req, res, next) => {
     next()
 })
 app.use("/", express.static(webappPath))
-app.get("/", (_req, res) => res.sendFile(path.join(webappPath, 'index.html')))
-app.use((req, res, next) => {
-  // Skip WebSocket upgrade requests
-  if (req.headers.upgrade && req.headers.upgrade.toLowerCase() === "websocket") {
-    return next();
-  }
-
-  // Skip /ws path entirely
-  if (req.path.startsWith("/ws")) {
-    return next();
-  }
-
-  // Otherwise redirect to SPA root
-  res.redirect("/");
-})
+app.get("/", (req, res) => res.sendFile(path.join(webappPath, 'index.html')))
+/* eslint-disable @typescript-eslint/no-unused-vars */
+app.use((req, res, next) => res.redirect('/'))
 
 const server = http.createServer(app)
 
@@ -190,17 +178,14 @@ wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
     logger.info(`Client connected: ${req.socket.remoteAddress} ${ws}`)
     bridgeManager.clientConnected(ws)
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    ws.on('close', (_ws: WebSocket, _req: IncomingMessage) => {
+    ws.on('close', () => {
         bridgeManager.clientDisconnected(ws)
     })
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    ws.on("error", (_ws: WebSocket, err: Error) => {
+    ws.on("error", (err: Error) => {
         logger.warn(`Client failed: ${err.message}`)
         bridgeManager.clientDisconnected(ws)
     })
 })
-logger.info(`WebSocket server listening on port: ${port}`)
 
 server.listen(port, () =>
-    logger.info(`HTTP server listening on: http://localhost:${port}`))
+    logger.info(`HTTP + WS server listening on: localhost:${port}`))
