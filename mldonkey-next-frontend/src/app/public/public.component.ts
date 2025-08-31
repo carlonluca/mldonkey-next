@@ -19,7 +19,7 @@
 /**
  * Author:  Luca Carlon
  * Company: -
- * Date: 14.08.2023
+ * Date:    2023.08.14
  */
 
 import { Component, OnDestroy, OnInit } from '@angular/core'
@@ -48,8 +48,14 @@ declare global {
 export class PublicComponent implements OnInit, OnDestroy {
     private static readonly retryInterval = 7000
     private observables = new MLSubscriptionSet()
-    private wsAddr = environment.mldonkeyWsAddr.length <= 0 ? "localhost" : environment.mldonkeyWsAddr
-    private wsUrl = `ws://${this.wsAddr}:${environment.mldonkeyWsPort}`
+    private isEmbedded = environment.mldonkeyWsAddr.length <= 0
+    private wsAddr =   this.isEmbedded ? "localhost" : environment.mldonkeyWsAddr
+    private wsPort =   this.isEmbedded ? 4002 : environment.mldonkeyWsPort
+    private wsPath =   this.isEmbedded ? "" : "/ws"
+    private wsScheme = this.isEmbedded ? "ws://"
+                                       : (window.location.protocol === 'https:' ? 'wss://' : 'ws://')
+    private wsUrl = isNaN(this.wsPort) ? `${this.wsScheme}${this.wsAddr}${this.wsPath}`
+                                       : `${this.wsScheme}${this.wsAddr}:${this.wsPort}${this.wsPath}`
 
     faUser = faUser
     faKey = faKey

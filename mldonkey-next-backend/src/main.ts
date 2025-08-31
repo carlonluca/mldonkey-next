@@ -37,81 +37,9 @@ import crypto from 'crypto'
 import * as MLConstants from './core/MLConstants'
 import { RequestOptions } from 'node:http'
 
-const wss = new WebSocket.Server({ port: 4002 });
-const wssLog = new WebSocket.Server({ port: 4003 })
+
 const bridgeManager = new MLBridgeManager()
 const logToken = crypto.randomBytes(16).toString('hex')
-
-wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
-    logger.info(`Client connected: ${req.socket.remoteAddress} ${ws}`)
-    bridgeManager.clientConnected(ws)
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    ws.on('close', (_ws: WebSocket, _req: IncomingMessage) => {
-        bridgeManager.clientDisconnected(ws)
-    })
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    ws.on("error", (_ws: WebSocket, err: Error) => {
-        logger.warn(`Client failed: ${err.message}`)
-        bridgeManager.clientDisconnected(ws)
-    })
-})
-
-logger.info('WebSocket server listening on port: 4002')
-
-fs.readFile(`/var/lib/mldonkey/downloads.ini`, {
-    encoding : 'utf-8'
-}, (err: NodeJS.ErrnoException | null, data: string) => {
-    if (err) {
-        logger.warn(`Cannot read mlnet conf file: ${err.message}`)
-        return
-    }
-
-    const regex = /log_file\s*=\s*"([^"]*)"/
-    const match = data.match(regex)
-    let logFile = "mlnet.log"
-    if (match && match[1])
-        logFile = match[1]
-    
-    logFile = `/var/lib/mldonkey/${logFile}`
-    wssLog.on("connection", (ws: WebSocket, req: IncomingMessage) => {
-        const cookies = cookie.parse(req.headers.cookie || '')
-        const token = cookies.logtoken
-        if (process.env.MLDONKEY_DISABLE_LOGS_AUTH != "1" && token !== logToken) {
-            logger.warn("Client refused")
-            ws.close()
-            return
-        }
-
-        logger.info(`Client connected: ${req.socket.remoteAddress} ${ws}`)
-        if (!fs.existsSync(logFile)) {
-            ws.send("")
-            ws.close()
-            return
-        }
-        const tail = new Tail(logFile, {
-            separator: /[\r]{0,1}\n/,
-            fromBeginning: process.env.MLDONKEY_LOGS_FROM_BEGINNING == "1",
-            follow: true
-        })
-        tail.on("line", (data: string) => ws.send(data + "\n"))
-        tail.on("error", (error) => {
-            logger.warn(`Error occurred following log file: ${error}`)
-            ws.close()
-        })
-        ws.on('close', () => {
-            logger.info("WebSocket closed")
-            tail.unwatch()
-        })
-        ws.on('error', (_ws: WebSocket, err: Error) => {
-            logger.warn(`WebSocket failed: ${err.message}`)
-            tail.unwatch()
-        })
-    })
-
-    logger.debug(`mldonkey setup to store logs in ${logFile}`)
-    logger.info("WebSocket server listening on port: 4003")
-})
 
 const app = express()
 const port = MLConstants.MLDONKEY_NEXT_WEBAPP_PORT
@@ -185,10 +113,87 @@ app.use((_req, res, next) => {
     next()
 })
 app.use("/", express.static(webappPath))
-app.get("/", (req, res) => res.sendFile(path.join(webappPath, 'index.html')))
-/* eslint-disable @typescript-eslint/no-unused-vars */
-app.use((req, res, next) => res.redirect('/'))
+app.get("/", (_req, res) => res.sendFile(path.join(webappPath, 'index.html')))
+app.use((req, res, next) => {
+  if (req.headers.upgrade && req.headers.upgrade.toLowerCase() === "websocket")
+    return next()
+  if (req.path.startsWith("/ws"))
+    return next()
+  res.redirect("/")
+})
 
 const server = http.createServer(app)
-server.listen(port, () =>
-    logger.info(`HTTP server listening on: http://localhost:${port}`))
+
+const wss = new WebSocket.Server({ noServer: true })
+wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
+    logger.info(`App WS client connected: ${req.socket.remoteAddress}`)
+    bridgeManager.clientConnected(ws)
+    ws.on('close', () => bridgeManager.clientDisconnected(ws))
+    ws.on("error", (err: Error) => {
+        logger.warn(`App WS error: ${err.message}`)
+        bridgeManager.clientDisconnected(ws)
+    })
+})
+
+let logFile = "mlnet.log"
+fs.readFile(`/var/lib/mldonkey/downloads.ini`, { encoding : 'utf-8' }, (err, data) => {
+    if (!err) {
+        const regex = /log_file\s*=\s*"([^"]*)"/
+        const match = data.match(regex)
+        if (match && match[1]) logFile = match[1]
+    }
+    logFile = `/var/lib/mldonkey/${logFile}`
+    logger.debug(`mldonkey setup to store logs in ${logFile}`)
+})
+
+const wssLog = new WebSocket.Server({ noServer: true })
+wssLog.on("connection", (ws: WebSocket, req: IncomingMessage) => {
+    const cookies = cookie.parse(req.headers.cookie || '')
+    const token = cookies.logtoken
+    if (!MLConstants.MLDONKEY_NEXT_ENABLE_LOG_STREAM) {
+        logger.warn("Log WS client refused")
+        ws.close()
+        return
+    }
+
+    if (process.env.MLDONKEY_DISABLE_LOGS_AUTH != "1" && token !== logToken) {
+        logger.warn("Log WS client refused")
+        ws.close()
+        return
+    }
+    logger.info(`Log WS client connected: ${req.socket.remoteAddress}`)
+    if (!fs.existsSync(logFile)) {
+        ws.send("")
+        ws.close()
+        return
+    }
+    const tail = new Tail(logFile, {
+        separator: /[\r]{0,1}\n/,
+        fromBeginning: process.env.MLDONKEY_LOGS_FROM_BEGINNING == "1",
+        follow: true
+    })
+    tail.on("line", (data: string) => ws.send(data + "\n"))
+    tail.on("error", (error) => {
+        logger.warn(`Error tailing log: ${error}`)
+        ws.close()
+    })
+    ws.on('close', () => tail.unwatch())
+    ws.on('error', (err: Error) => {
+        logger.warn(`Log WS error: ${err.message}`)
+        tail.unwatch()
+    })
+})
+
+server.on("upgrade", (req, socket, head) => {
+    const { url } = req
+    if (url?.startsWith("/ws"))
+        wss.handleUpgrade(req, socket, head, (ws) => wss.emit("connection", ws, req))
+    else if (url?.startsWith("/logstream"))
+        wssLog.handleUpgrade(req, socket, head, (ws) => wssLog.emit("connection", ws, req))
+    else
+        socket.destroy()
+})
+
+server.listen(port, () => {
+    logger.info(`HTTP + WS server listening on: localhost:${port}`)
+})

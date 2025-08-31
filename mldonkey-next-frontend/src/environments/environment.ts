@@ -1,5 +1,5 @@
 export const environment = {
     mldonkeyWsAddr: window.location.hostname,
-    mldonkeyWsPort: 4002,
-    logsWsPort: 4003
+    mldonkeyWsPort: parseInt(window.location.port),
+    logsWsPort: parseInt(window.location.port)
 };
