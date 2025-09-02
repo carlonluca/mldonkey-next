@@ -46,6 +46,9 @@ AppDir:
     - libegl1
     - libglapi-mesa
     - libxkbcommon-dev
+    - libxml2
+    - libicu-dev
+    - libjbig0
   files:
     include:
     - /opt/qt/6.9.2/gcc_64/libexec/QtWebEngineProcess
