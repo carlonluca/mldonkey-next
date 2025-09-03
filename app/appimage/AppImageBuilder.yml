@@ -11,6 +11,8 @@ AppDir:
       QTWEBENGINE_RESOURCES_PATH: "$APPDIR/opt/qt/6.9.2/gcc_64/resources"
       QTWEBENGINEPROCESS_PATH: "$APPDIR/opt/qt/6.9.2/gcc_64/libexec/QtWebEngineProcess"
       QTWEBENGINE_LOCALES_PATH: "$APPDIR/opt/qt/6.9.2/gcc_64/translations/qtwebengine_locales"
+      QTWEBENGINE_CHROMIUM_FLAGS: "--disable-gpu --no-sandbox"
+      QT_QUICK_BACKEND: "software"
   app_info:
     id: luke.mldonkeynext
     name: mldonkey-next
