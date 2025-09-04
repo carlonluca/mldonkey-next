@@ -43,6 +43,7 @@ AppDir:
     - libwayland-egl++1
     - libwayland-egl1-mesa
     - libwayland-egl1
+    - libwayland-client0
     - libgles2
     - libglvnd0
     - libegl1
