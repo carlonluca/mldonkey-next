@@ -20,8 +20,52 @@
 
 cmake_minimum_required(VERSION 3.16)
 
+option(MLDONKEY_FLATHUB_QUIRKS "Enable Flathub-specific quirks (DO NOT USE)" OFF)
+if(MLDONKEY_FLATHUB_QUIRKS)
+    message(STATUS "Running Flathub quirks")
+    set(CREATE_QT_RESOURCES "${CMAKE_CURRENT_LIST_DIR}/create_qt_resource_files.sh")
+    if(EXISTS "${CREATE_QT_RESOURCES}")
+        execute_process(
+            COMMAND bash "${CREATE_QT_RESOURCES}"
+            WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}"
+            RESULT_VARIABLE result
+        )
+        if(NOT result EQUAL 0)
+            message(FATAL_ERROR "create_qt_resource_files.sh failed with exit code ${result}")
+        endif()
+
+        install(FILES
+            ${CMAKE_CURRENT_LIST_DIR}/flatpak/org.duckdns.bugfreeblog.mldonkeynext.desktop
+            DESTINATION share/applications
+        )
+
+        install(FILES
+            ${CMAKE_CURRENT_LIST_DIR}/flatpak/org.duckdns.bugfreeblog.mldonkeynext.metainfo.xml
+            DESTINATION share/metainfo
+        )
+
+        install(FILES
+            ${CMAKE_CURRENT_LIST_DIR}/flatpak/org.duckdns.bugfreeblog.mldonkeynext.svg
+            DESTINATION share/icons/hicolor/scalable/apps
+        )
+
+        install(FILES
+            ${CMAKE_CURRENT_LIST_DIR}/flatpak/org.duckdns.bugfreeblog.mldonkeynext_128.png
+            DESTINATION share/icons/hicolor/128x128/apps
+        )
+
+        install(FILES
+            ${CMAKE_CURRENT_LIST_DIR}/flatpak/org.duckdns.bugfreeblog.mldonkeynext_512.png
+            DESTINATION share/icons/hicolor/512x512/apps
+        )
+    else()
+        message(FATAL_ERROR "create_qt_resource_files.sh not found: ${CREATE_QT_RESOURCES}")
+    endif()
+endif()
+
+
 set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
-project(mldonkey-next-proj VERSION 0.15.0 LANGUAGES CXX)
+project(mldonkey-next-proj VERSION 0.15.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -103,8 +147,8 @@ set_target_properties(mldonkey-next PROPERTIES
 
     QT_ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_LIST_DIR}/android"
     QT_ANDROID_PACKAGE_NAME "luke.mldonkeynext"
-    QT_ANDROID_VERSION_CODE 001500
-    QT_ANDROID_VERSION_NAME "0.15.0"
+    QT_ANDROID_VERSION_CODE 001501
+    QT_ANDROID_VERSION_NAME "0.15.1"
 )
 
 target_include_directories(mldonkey-next PRIVATE
