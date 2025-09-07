@@ -124,8 +124,7 @@ app.use((req, res, next) => {
 
 const server = http.createServer(app)
 
-const wss = new WebSocket.Server({ noServer: true })
-wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
+const wssConnectionEvent = (ws: WebSocket, req: IncomingMessage) => {
     logger.info(`App WS client connected: ${req.socket.remoteAddress}`)
     bridgeManager.clientConnected(ws)
     ws.on('close', () => bridgeManager.clientDisconnected(ws))
@@ -133,7 +132,16 @@ wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
         logger.warn(`App WS error: ${err.message}`)
         bridgeManager.clientDisconnected(ws)
     })
-})
+}
+
+const wss = new WebSocket.Server({ noServer: true })
+wss.on('connection', wssConnectionEvent)
+
+let wssStandalone = null
+if (MLConstants.MLDONKEY_NEXT_STANDALONE_WSS_PORT) {
+    wssStandalone = new WebSocket.Server({ port: MLConstants.MLDONKEY_NEXT_STANDALONE_WSS_PORT })
+    wssStandalone.on('connection', wssConnectionEvent)
+}
 
 let logFile = "mlnet.log"
 fs.readFile(`/var/lib/mldonkey/downloads.ini`, { encoding : 'utf-8' }, (err, data) => {

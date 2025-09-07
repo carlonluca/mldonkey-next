@@ -28,3 +28,4 @@ export const MLDONKEY_CORE_WEB_PORT = parseInt(process.env.MLDONKEY_CORE_WEB_POR
 export const MLDONKEY_CORE_TCP_PORT = parseInt(process.env.MLDONKEY_CORE_TCP_PORT) || 4001
 export const MLDONKEY_CORE_HOST = process.env.MLDONKEY_CORE_HOST || "127.0.0.1"
 export const MLDONKEY_NEXT_ENABLE_LOG_STREAM = process.env.MLDONKEY_NEXT_ENABLE_LOG_STREAM === "1"
+export const MLDONKEY_NEXT_STANDALONE_WSS_PORT = parseInt(process.env.MLDONKEY_NEXT_STANDALONE_WSS_PORT) || null
