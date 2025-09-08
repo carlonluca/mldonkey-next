@@ -58,7 +58,7 @@ export class PublicComponent implements OnInit, OnDestroy {
         : (window.location.protocol === 'https:' ? 'wss://' : 'ws://')
     private wsUrl = isNaN(this.wsPort) ? `${this.wsScheme}${this.wsAddr}${this.wsPath}`
         : `${this.wsScheme}${this.wsAddr}:${this.wsPort}${this.wsPath}`
-    private runningTimer: any = null
+    private runningTimer: ReturnType<typeof setTimeout> | null = null
 
     faUser = faUser
     faKey = faKey

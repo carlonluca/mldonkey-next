@@ -25,7 +25,7 @@
 import { Component } from '@angular/core'
 
 @Component({
-  selector: 'auth-failed-dialog',
+  selector: 'app-auth-failed-dialog',
   standalone: false,
   template: `
     <h1 mat-dialog-title>Authentication failed</h1>
