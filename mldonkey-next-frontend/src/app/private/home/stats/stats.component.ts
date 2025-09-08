@@ -67,7 +67,7 @@ export class StatsComponent {
             axisPointer: {
                 type: 'shadow'
             },
-            valueFormatter: value => MLUtils.beautifySize(BigInt((value as number) * 1024 * 1024))
+            valueFormatter: value => MLUtils.beautifySize(BigInt(Math.round(value as number) * 1024 * 1024))
         },
         legend: {
             textStyle: {
@@ -86,7 +86,7 @@ export class StatsComponent {
             axisLabel: {
                 show: true,
                 rotate: 45,
-                formatter: value => MLUtils.beautifySize(BigInt((value as number) * 1024 * 1024))
+                formatter: value => MLUtils.beautifySize(BigInt(Math.round(value as number) * 1024 * 1024))
             }
         },
         yAxis: {
