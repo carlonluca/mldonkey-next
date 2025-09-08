@@ -153,8 +153,8 @@ export class ServersComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     getHostConnStateDescription(state: MLHostConnState | undefined, parenthesis: boolean = false): string {
-        if (!state)
-            return ""
+        if (state === undefined)
+            return "-"
         if (parenthesis)
             return `(${MLHostState.getHostConnStateDescription(state)})`
         return MLHostState.getHostConnStateDescription(state)
