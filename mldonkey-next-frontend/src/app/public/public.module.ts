@@ -35,10 +35,19 @@ import { MatInputModule } from '@angular/material/input'
 import { MatFormFieldModule } from '@angular/material/form-field'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { ComponentsModule } from '../components/components.module'
+import { AuthFailedComponent } from './auth-failed'
+import {
+    MatDialogActions,
+    MatDialogClose,
+    MatDialogContent,
+    MatDialogModule,
+    MatDialogTitle
+} from '@angular/material/dialog'
 
 @NgModule({
     declarations: [
-        PublicComponent
+        PublicComponent,
+        AuthFailedComponent
     ],
     imports: [
         CommonModule,
@@ -50,8 +59,13 @@ import { ComponentsModule } from '../components/components.module'
         MatIconModule,
         MatInputModule,
         MatFormFieldModule,
+        MatDialogModule,
+        MatDialogActions,
+        MatDialogClose,
+        MatDialogContent,
+        MatDialogTitle,
         FontAwesomeModule,
         ComponentsModule
     ]
 })
-export class PublicModule {}
+export class PublicModule { }

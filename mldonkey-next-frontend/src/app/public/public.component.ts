@@ -22,7 +22,7 @@
  * Date:    2023.08.14
  */
 
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { MLConnectionState, WebSocketService } from '../websocket-service.service'
 import { SpinnerService } from '../services/spinner.service'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -34,6 +34,8 @@ import { faUser, faKey, faLink, faLinkSlash } from '@fortawesome/free-solid-svg-
 import { MLSubscriptionSet } from '../core/MLSubscriptionSet'
 import { interval } from 'rxjs'
 import { MLUtils } from '../core/MLUtils'
+import { MatDialog } from '@angular/material/dialog'
+import { AuthFailedComponent } from './auth-failed'
 
 declare global {
     interface Window { location: Location; }
@@ -49,13 +51,14 @@ export class PublicComponent implements OnInit, OnDestroy {
     private static readonly retryInterval = 7000
     private observables = new MLSubscriptionSet()
     private isEmbedded = environment.mldonkeyWsAddr.length <= 0
-    private wsAddr =   this.isEmbedded ? "localhost" : environment.mldonkeyWsAddr
-    private wsPort =   this.isEmbedded ? 4002 : environment.mldonkeyWsPort
-    private wsPath =   this.isEmbedded ? "" : environment.mldonkeyWsPath
+    private wsAddr = this.isEmbedded ? "localhost" : environment.mldonkeyWsAddr
+    private wsPort = this.isEmbedded ? 4002 : environment.mldonkeyWsPort
+    private wsPath = this.isEmbedded ? "" : environment.mldonkeyWsPath
     private wsScheme = this.isEmbedded ? "ws://"
-                                       : (window.location.protocol === 'https:' ? 'wss://' : 'ws://')
+        : (window.location.protocol === 'https:' ? 'wss://' : 'ws://')
     private wsUrl = isNaN(this.wsPort) ? `${this.wsScheme}${this.wsAddr}${this.wsPath}`
-                                       : `${this.wsScheme}${this.wsAddr}:${this.wsPort}${this.wsPath}`
+        : `${this.wsScheme}${this.wsAddr}:${this.wsPort}${this.wsPath}`
+    private runningTimer: any = null
 
     faUser = faUser
     faKey = faKey
@@ -75,7 +78,8 @@ export class PublicComponent implements OnInit, OnDestroy {
         private spinner: SpinnerService,
         private router: Router,
         private route: ActivatedRoute,
-        private storage: StorageService) {
+        private storage: StorageService,
+        private dialog: MatDialog) {
 
         const loginData = storage.getLoginData()
         if (loginData) {
@@ -89,6 +93,8 @@ export class PublicComponent implements OnInit, OnDestroy {
                     this.storage.setLoginData(new Credentials(this.inputUsr, this.inputPwd))
                     this.connected = true
                     this.spinner.hide()
+                    if (this.runningTimer)
+                        window.clearTimeout(this.runningTimer)
                     this.router.navigateByUrl("/home")
                     break
                 case MLConnectionState.S_CONNECTED: {
@@ -109,12 +115,13 @@ export class PublicComponent implements OnInit, OnDestroy {
                 }
                 default:
                     this.connected = false
+                    this.spinner.hide()
                     break
             }
         })
         webSocketService.lastMessage.observable.subscribe(msg => {
             if (msg.type === MLMessageTypeFrom.T_BAD_PASSWORD)
-                this.storage.setLoginData(null)
+                this.failure()
         })
 
         this.webSocketService.connect(this.wsUrl)
@@ -149,9 +156,11 @@ export class PublicComponent implements OnInit, OnDestroy {
      * @param passwd 
      */
     doLogin(username: string, passwd: string) {
-        // TODO: introduce some kind of timeout here
         this.spinner.show()
         this.webSocketService.login(username, passwd)
+        this.runningTimer = setTimeout(() => {
+            this.failure()
+        }, 5000)
     }
 
     doSetup() {
@@ -161,5 +170,23 @@ export class PublicComponent implements OnInit, OnDestroy {
 
     isWebView(): boolean {
         return MLUtils.isWebView()
+    }
+
+    closeDialog() {
+        this.dialog.closeAll()
+    }
+
+    openDialog() {
+        if (this.dialog.openDialogs.length === 0)
+            this.dialog.open(AuthFailedComponent)
+    }
+
+    failure() {
+        if (this.runningTimer)
+            window.clearTimeout(this.runningTimer)
+        this.storage.setLoginData(null)
+        this.spinner.hide()
+        this.openDialog()
+        this.webSocketService.disconnect()
     }
 }
