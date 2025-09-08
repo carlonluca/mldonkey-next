@@ -161,9 +161,9 @@ export class StatsService extends MLCollectionModel<number, MLNetworkStatModel> 
                         totalUptime === 0 ? 0 : sessionStats.uptime/totalUptime,
                         0, 0, 0, 0,
                         uploadForNet,
-                        Math.round(Number(uploadForNet)/Number(totalUploaded)*100),
+                        totalUploaded === BigInt(0) ? 0 : Math.round(Number(uploadForNet)/Number(totalUploaded)*100),
                         downloadForNet,
-                        Math.round(Number(downloadForNet)/Number(totalDownloaded)*100)
+                        totalDownloaded === BigInt(0) ? 0 : Math.round(Number(downloadForNet)/Number(totalDownloaded)*100)
                     )
                     summary.push(summaryModel)
                 }
