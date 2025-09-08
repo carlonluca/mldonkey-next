@@ -51,7 +51,7 @@ export class PublicComponent implements OnInit, OnDestroy {
     private isEmbedded = environment.mldonkeyWsAddr.length <= 0
     private wsAddr =   this.isEmbedded ? "localhost" : environment.mldonkeyWsAddr
     private wsPort =   this.isEmbedded ? 4002 : environment.mldonkeyWsPort
-    private wsPath =   this.isEmbedded ? "" : "/ws"
+    private wsPath =   this.isEmbedded ? "" : environment.mldonkeyWsPath
     private wsScheme = this.isEmbedded ? "ws://"
                                        : (window.location.protocol === 'https:' ? 'wss://' : 'ws://')
     private wsUrl = isNaN(this.wsPort) ? `${this.wsScheme}${this.wsAddr}${this.wsPath}`
