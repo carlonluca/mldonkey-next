@@ -1,5 +1,7 @@
 # mldonkey-next
 
+
+
 ## Table of Contents
 - [Changelog](#changelog)
 - [Introduction](#introduction)
@@ -53,5 +55,7 @@ For more info: https://bugfreeblog.duckdns.org/2024/11/mldonkey-native-app.html.
 ### NativeApp installation
 
 The AppImage and the Android app can be downloaded from the [GitHub releases](https://github.com/carlonluca/mldonkey-next/releases).
+
+Flatpak is available in Flathub: https://flathub.org/apps/org.duckdns.bugfreeblog.mldonkeynext.
 
 For the Android app, I suggest you use [Obtainium](https://github.com/ImranR98/Obtainium), that will also notify and update your app when a new release is uploaded.
