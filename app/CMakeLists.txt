@@ -50,12 +50,12 @@ if(MLDONKEY_FLATHUB_QUIRKS)
         )
 
         install(FILES
-            ${CMAKE_CURRENT_LIST_DIR}/flatpak/org.duckdns.bugfreeblog.mldonkeynext_128.png
+            ${CMAKE_CURRENT_LIST_DIR}/flatpak/128/org.duckdns.bugfreeblog.mldonkeynext.png
             DESTINATION share/icons/hicolor/128x128/apps
         )
 
         install(FILES
-            ${CMAKE_CURRENT_LIST_DIR}/flatpak/org.duckdns.bugfreeblog.mldonkeynext_512.png
+            ${CMAKE_CURRENT_LIST_DIR}/flatpak/512/org.duckdns.bugfreeblog.mldonkeynext.png
             DESTINATION share/icons/hicolor/512x512/apps
         )
     else()
