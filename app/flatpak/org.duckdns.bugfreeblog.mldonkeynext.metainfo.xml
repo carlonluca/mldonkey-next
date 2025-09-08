@@ -15,7 +15,8 @@
 
     <description>
         <p>
-            mldonkey-next is a modern GUI for the multi-protocol p2p filesharing application mldonkey. mldonkey-next connects to mldonkey using the TCP binary interface.
+            mldonkey-next is a modern GUI for the multi-protocol p2p filesharing application
+            mldonkey. mldonkey-next connects to mldonkey using the TCP binary interface.
         </p>
     </description>
 
@@ -27,24 +28,32 @@
 
     <screenshots>
         <screenshot type="default">
-            <image>https://raw.githubusercontent.com/carlonluca/mldonkey-next/refs/heads/master/docs/mldonkey-next_desktop_app.png</image>
+            <image>
+                https://raw.githubusercontent.com/carlonluca/mldonkey-next/refs/heads/master/docs/mldonkey-next_desktop_app.png</image>
             <caption>Detailed view of current downloads</caption>
         </screenshot>
         <screenshot>
-            <image>https://raw.githubusercontent.com/carlonluca/mldonkey-next/refs/heads/master/docs/mldonkey-next_desktop_app2.png</image>
+            <image>
+                https://raw.githubusercontent.com/carlonluca/mldonkey-next/refs/heads/master/docs/mldonkey-next_desktop_app2.png</image>
             <caption>Stats about current session and overall lifetime of the core</caption>
         </screenshot>
         <screenshot>
-            <image>https://raw.githubusercontent.com/carlonluca/mldonkey-next/refs/heads/master/docs/mldonkey-next_desktop_app3.png</image>
+            <image>
+                https://raw.githubusercontent.com/carlonluca/mldonkey-next/refs/heads/master/docs/mldonkey-next_desktop_app3.png</image>
             <caption>About dialog</caption>
         </screenshot>
     </screenshots>
 
     <releases>
+        <release version="0.16.0" date="2025-09-05">
+            <description>
+                <p>Fixes to the login view and updated icons.</p>
+            </description>
+        </release>
         <release version="0.15.1" date="2025-09-05">
-        <description>
-            <p>First release of mldonkey-next as Flatpak.</p>
-        </description>
+            <description>
+                <p>First release of mldonkey-next as Flatpak.</p>
+            </description>
         </release>
     </releases>
 </component>
