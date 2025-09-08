@@ -22,7 +22,7 @@
  * Date:    2023.08.14
  */
 
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { MLConnectionState, WebSocketService } from '../websocket-service.service'
 import { SpinnerService } from '../services/spinner.service'
 import { ActivatedRoute, Router } from '@angular/router'
