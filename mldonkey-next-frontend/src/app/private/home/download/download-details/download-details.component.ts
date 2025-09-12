@@ -182,7 +182,7 @@ export class DownloadDetailsComponent implements OnInit, OnDestroy {
 
     computeDownloadedPercentage(item: MLMsgDownloadElement | null): string {
         return this.checkNull(item, item => {
-            return (Number(10000n * item.downloaded / item.size) / 10000).toFixed(4) + "%"
+            return (Number(10000n * item.downloaded / item.size) / 100).toFixed(4) + "%"
         }, "-")
     }
 
