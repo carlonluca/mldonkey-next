@@ -45,6 +45,11 @@
     </screenshots>
 
     <releases>
+            <release version="0.16.2" date="2025-09-14">
+            <description>
+                <p>Fixes.</p>
+            </description>
+        </release>
         <release version="0.16.0" date="2025-09-05">
             <description>
                 <p>Fixes to the login view and updated icons.</p>
