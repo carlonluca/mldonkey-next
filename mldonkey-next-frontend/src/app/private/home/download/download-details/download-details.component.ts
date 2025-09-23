@@ -43,7 +43,14 @@ class RowElement {
         public name: string,
         public type: RowElementType,
         public data: (item: MLMsgDownloadElement | null) => ArrayBuffer[] | string[] | Map<string, ArrayBuffer>
-    ) { }
+    ) {}
+}
+
+class SpeedSample {
+    constructor(
+        public speed: number,
+        public timestamp: number
+    ) {}
 }
 
 @Component({
@@ -58,6 +65,7 @@ export class DownloadDetailsComponent implements OnInit, OnDestroy {
     subscriptions = new MLSubscriptionSet()
     RowElementType = RowElementType
     dataSource = new MatTableDataSource<RowElement>([])
+    speedSamples: Array<SpeedSample> = []
 
     constructor(
         private router: ActivatedRoute,
@@ -93,6 +101,7 @@ export class DownloadDetailsComponent implements OnInit, OnDestroy {
             new RowElement("Downloaded/size", RowElementType.E_T_STRING_LIST, item => [this.computeSize(item)]),
             new RowElement("Downloaded percentage", RowElementType.E_T_STRING_LIST, item => [this.computeDownloadedPercentage(item)]),
             new RowElement("Speed", RowElementType.E_T_STRING_LIST, item => [this.computeSpeed(item)]),
+            new RowElement("ETA", RowElementType.E_T_STRING_LIST, item => [this.computeEta(item)]),
             new RowElement("Priority", RowElementType.E_T_STRING_LIST, item => [this.computePriority(item)]),
             new RowElement("User", RowElementType.E_T_STRING_LIST, item => [this.computeUser(item)]),
             new RowElement("Group", RowElementType.E_T_STRING_LIST, item => [this.computeGroup(item)]),
@@ -112,6 +121,20 @@ export class DownloadDetailsComponent implements OnInit, OnDestroy {
             new RowElement("Subfiles", RowElementType.E_T_STRING_LIST, item => this.computeSubfiles(item)),
             new RowElement("Comments", RowElementType.E_T_STRING_LIST, item => this.computeComments(item))
         ])
+    }
+
+    computeEta(item: MLMsgDownloadElement | null): string {
+        return this.checkNull(item, item => {
+            this.addSample(item.speed)
+            const size = item.size
+            const avgSpeed = this.computeAvgSpeed()
+            if (avgSpeed <= 0)
+                return "∞"
+            const downloaded = item.downloaded
+            const remaining = size - downloaded
+            const t = remaining/BigInt(Math.round(avgSpeed))
+            return MLUtils.prettyFormat(t <= 0 ? 0 : Number(t)*1000)
+        }, "-")
     }
 
     computeName(item: MLMsgDownloadElement | null): string {
@@ -279,5 +302,19 @@ export class DownloadDetailsComponent implements OnInit, OnDestroy {
         if (!item)
             return nullValue
         return f(item)
+    }
+
+    private addSample(speed: number) {
+        this.speedSamples.push(new SpeedSample(speed, new Date().getTime()))
+        
+        const now = new Date().getTime()
+        const oldest = now - 10*1000
+        this.speedSamples = this.speedSamples.filter(s => s.timestamp >= oldest)
+    }
+
+    private computeAvgSpeed(): number {
+        if (this.speedSamples.length <= 0)
+            return 0
+        return this.speedSamples.reduce((a, b) => a + b.speed, 0)/this.speedSamples.length
     }
 }
