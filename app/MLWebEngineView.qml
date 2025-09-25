@@ -28,6 +28,7 @@ import QtWebEngine
 WebEngineView {
     anchors.fill: parent
     url: qmlUtils.webappUrl()
+    profile: persistentProfile
     onJavaScriptConsoleMessage: function(level, message, lineNumber, sourceId) {
         switch (level) {
         case WebEngineView.InfoMessageLevel:
@@ -59,7 +60,6 @@ WebEngineView {
         }
     }
     Component.onCompleted: {
-        settings.localStorageEnabled = true
         console.info("Persistent storage path:", profile.persistentStoragePath)
         forceActiveFocus()
     }
@@ -67,6 +67,12 @@ WebEngineView {
     Keys.onPressed: function(event) {
         if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape)
             handleBackKey(event)
+    }
+
+    WebEngineProfile {
+        id: persistentProfile
+        offTheRecord: false
+        storageName: "mldonkey"
     }
 
     function handleBackKey(event) {
