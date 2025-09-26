@@ -27,6 +27,7 @@ import QtQuick.Controls
 import QtQuick.Controls.Material
 
 Window {
+    readonly property real coveredPercentage: 0.8
     property bool configMode: configModeRequested || userSettings.mldonkeyHost.length <= 0
     property bool configModeRequested: false
     property int controlMargin: 10
@@ -39,8 +40,8 @@ Window {
     }
 
     id: mainWindow
-    width: 720
-    height: 1280
+    width: Screen.width*coveredPercentage
+    height: Screen.height*coveredPercentage
     visible: true
     title: "mldonkey-next " + Qt.application.version
 
