@@ -40,6 +40,7 @@ public:
     Q_INVOKABLE bool isSetupRequested(const QUrl& url);
     Q_INVOKABLE QString openUrlRequested(const QUrl& url);
     Q_INVOKABLE void openUrl(const QString& urlString);
+    Q_INVOKABLE void setIcon(QQuickWindow* window);
 };
 
 #endif // MLQMLUTILS_H

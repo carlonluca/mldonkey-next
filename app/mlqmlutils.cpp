@@ -25,6 +25,7 @@
 #include <QStandardPaths>
 #include <QUrlQuery>
 #include <QDesktopServices>
+#include <QQuickWindow>
 
 #include <lqtutils_qsl.h>
 #include <lqtutils_string.h>
@@ -81,4 +82,10 @@ QString MLQmlUtils::openUrlRequested(const QUrl& url)
 void MLQmlUtils::openUrl(const QString& urlString)
 {
     QDesktopServices::openUrl(urlString);
+}
+
+void MLQmlUtils::setIcon(QQuickWindow* window)
+{
+    Q_ASSERT(window);
+    window->setIcon(QIcon(":/qt/qml/mldonkeynext/resources/icon.svg"));
 }

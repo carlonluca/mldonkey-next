@@ -49,6 +49,8 @@ Window {
     Material.accent: Material.Pink
     color: "#1d1d1d"
 
+    Component.onCompleted: qmlUtils.setIcon(mainWindow)
+
     SystemPalette { id: myPalette; colorGroup: SystemPalette.Active }
 
     Loader {

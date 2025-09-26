@@ -124,6 +124,7 @@ qt_add_qml_module(mldonkey-next
         android/gradle.properties
         android/gradlew
         android/gradlew.bat
+        resources/icon.svg
         RESOURCES android/res/values/styles.xml
         RESOURCES android/res/values/colors.xml
 )
