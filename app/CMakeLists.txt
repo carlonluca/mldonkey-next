@@ -65,7 +65,7 @@ endif()
 
 
 set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
-project(mldonkey-next-proj VERSION 0.16.2 LANGUAGES CXX)
+project(mldonkey-next-proj VERSION 1.0.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -148,8 +148,8 @@ set_target_properties(mldonkey-next PROPERTIES
 
     QT_ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_LIST_DIR}/android"
     QT_ANDROID_PACKAGE_NAME "luke.mldonkeynext"
-    QT_ANDROID_VERSION_CODE 001602
-    QT_ANDROID_VERSION_NAME "0.16.2"
+    QT_ANDROID_VERSION_CODE 010000
+    QT_ANDROID_VERSION_NAME "1.0.0"
 )
 
 target_include_directories(mldonkey-next PRIVATE
