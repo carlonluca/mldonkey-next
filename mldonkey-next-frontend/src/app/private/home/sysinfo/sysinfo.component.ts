@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { MatTableDataSource } from '@angular/material/table'
 import { faDoorOpen, faHardDrive, faHelmetSafety, faPersonRunning } from '@fortawesome/free-solid-svg-icons'
 import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
@@ -65,6 +65,8 @@ class FormattableKey {
     standalone: false
 })
 export class SysInfoComponent implements OnInit {
+    sysinfoService = inject(SysinfoService)
+
     dataSourceBuildInfo = new MatTableDataSource<RowData>([])
     dataSourceRunInfo = new MatTableDataSource<RowData>([])
     dataSourcePortInfo = new MatTableDataSource<PortData>([])
@@ -75,7 +77,7 @@ export class SysInfoComponent implements OnInit {
     faDoorOpen = faDoorOpen
     faHardDrive = faHardDrive
 
-    constructor(public sysinfoService: SysinfoService) {}
+    constructor() {}
 
     ngOnInit(): void {
         this.subscriptions.add(

@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { AfterViewInit, Component, ElementRef, Renderer2 } from '@angular/core'
+import { AfterViewInit, Component, ElementRef, Renderer2, inject } from '@angular/core'
 
 @Component({
     selector: 'app-turtle-icon',
@@ -24,9 +24,12 @@ import { AfterViewInit, Component, ElementRef, Renderer2 } from '@angular/core'
     standalone: false
 })
 export class TurtleIconComponent implements AfterViewInit {
+    private elRef = inject(ElementRef)
+    private renderer = inject(Renderer2)
+
     fillColor = 'rgb(255, 255, 255)'
     
-    constructor(private elRef: ElementRef, private renderer: Renderer2) {}
+    constructor() {}
 
     ngAfterViewInit(): void {
         // Set width and height dynamically in pixels

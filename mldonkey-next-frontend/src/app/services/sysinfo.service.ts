@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 import { MLConnectionState, WebSocketService } from '../websocket-service.service';
 import { MLMsgFromSysInfo, MLMsgToGetSysInfo } from '../msg/MLMsgSysInfo';
 import { MLMessageTypeFrom } from '../msg/MLMsg';
@@ -27,10 +27,12 @@ import { MLObservableVariable } from '../core/MLObservableVariable';
     providedIn: 'root'
 })
 export class SysinfoService implements OnDestroy {
+    private websocketService = inject(WebSocketService);
+
     public sysInfo = new MLObservableVariable<MLMsgFromSysInfo | null>(null)
     private subscriptions: MLSubscriptionSet = new MLSubscriptionSet()
 
-    constructor(private websocketService: WebSocketService) {
+    constructor() {
         setInterval(() => {
             if (this.websocketService.connectionState.value === MLConnectionState.S_AUTHENTICATED) {
                 this.websocketService.sendMsg(new MLMsgToGetSysInfo())

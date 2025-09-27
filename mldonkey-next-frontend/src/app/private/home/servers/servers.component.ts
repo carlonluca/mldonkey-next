@@ -23,7 +23,7 @@
  */
 
 import { SelectionModel } from '@angular/cdk/collections'
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core'
 import { MatSort, MatSortable, Sort } from '@angular/material/sort'
 import { MatTableDataSource } from '@angular/material/table'
 import { COUNTRY_FLAG_URLS, MLCountryCode } from 'src/app/core/MLCountryCode'
@@ -45,6 +45,10 @@ import { hasFlag } from 'country-flag-icons'
     standalone: false
 })
 export class ServersComponent implements AfterViewInit, OnInit, OnDestroy {
+    websocketService = inject(WebSocketService);
+    uiService = inject(UiServiceService);
+    serversService = inject(ServersService);
+
     private subscriptions = new MLSubscriptionSet()
 
     @ViewChild(MatSort) sort: MatSort
@@ -54,11 +58,7 @@ export class ServersComponent implements AfterViewInit, OnInit, OnDestroy {
     selectionEnabled = false
     displayedColumns: string[] = this.displayColumns()
 
-    constructor(
-        public websocketService: WebSocketService,
-        public uiService: UiServiceService,
-        public serversService: ServersService
-    ) { }
+    constructor() { }
 
     ngOnInit(): void {
         this.subscriptions.add(

@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Injectable, OnDestroy } from '@angular/core'
+import { Injectable, OnDestroy, inject } from '@angular/core'
 import { MLDownloadManager } from '../core/MLDownloadManager'
 import { MLSubscriptionSet } from '../core/MLSubscriptionSet'
 import { MLObservableVariable } from '../core/MLObservableVariable'
@@ -27,13 +27,17 @@ import { MLMsgDownloadElement, MLMsgFromDownloadState } from '../data/MLDownload
     providedIn: 'root'
 })
 export class DownloadingFilesService implements OnDestroy {
+    websocketService = inject(WebSocketService)
+
     public downloadingFiles
     public downloadingList: MLObservableVariable<MLMsgDownloadElement[]> =
         new MLObservableVariable<MLMsgDownloadElement[]>([])
 
     private unsubscribe = new MLSubscriptionSet()
 
-    constructor(public websocketService: WebSocketService) {
+    constructor() {
+        const websocketService = this.websocketService;
+
         this.downloadingFiles = new MLDownloadManager(websocketService)
         this.unsubscribe.add(this.downloadingFiles.elements.observable.subscribe((downloading) => {
             this.downloadingList.value = Array.from(downloading.values()).filter((e) => {

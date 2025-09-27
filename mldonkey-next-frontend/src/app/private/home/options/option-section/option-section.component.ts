@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { EventEmitter, Component, Input, OnInit, Output, ViewChildren, QueryList } from '@angular/core'
+import { EventEmitter, Component, Input, OnInit, Output, ViewChildren, QueryList, inject } from '@angular/core'
 import { MatTableDataSource } from '@angular/material/table'
 import { MLMsgFromAddSectionOption } from 'src/app/msg/MLMsgOptions'
 import { UiServiceService } from 'src/app/services/ui-service.service'
@@ -68,14 +68,16 @@ class OptionItem extends MLMsgFromAddSectionOption {
     standalone: false
 })
 export class OptionSectionComponent implements OnInit {
+    uiService = inject(UiServiceService)
+
     @Input() options: MLMsgFromAddSectionOption[]
     @Output() confChanged = new EventEmitter<boolean>(false)
-    @ViewChildren(MatFormField) formFields: QueryList<MatFormField>;
+    @ViewChildren(MatFormField) formFields: QueryList<MatFormField>
 
     confChangedValue = false
     dataSource = new MatTableDataSource<OptionItem>([])
 
-    constructor(public uiService: UiServiceService) { }
+    constructor() { }
 
     ngOnInit(): void {
         this.dataSource = new MatTableDataSource(this.options.map(o => new OptionItem(o)))

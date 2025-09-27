@@ -22,7 +22,7 @@
  * Date:    2025.05.26
  */
 
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { MatTableDataSource } from '@angular/material/table'
 import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
 import { MLSearchInfo } from 'src/app/data/MLSearchInfo'
@@ -35,10 +35,12 @@ import { SearchesService } from 'src/app/services/searches.service'
     standalone: false
 })
 export class SearchHistoryComponent implements OnInit, OnDestroy {
+    private searchesService = inject(SearchesService)
+
     dataSource = new MatTableDataSource<MLSearchInfo>([])
     subscriptions = new MLSubscriptionSet()
 
-    constructor(private searchesService: SearchesService) { }
+    constructor() { }
 
     ngOnInit(): void {
         this.searchesService.searchManager.registerListener()

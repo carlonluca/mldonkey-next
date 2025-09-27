@@ -22,7 +22,7 @@
  * Date: 14.08.2023
  */
 
-import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Component, OnInit, OnDestroy, inject } from '@angular/core'
 import { Subscription } from 'rxjs'
 import { SpinnerService } from '../../services/spinner.service'
 
@@ -33,10 +33,12 @@ import { SpinnerService } from '../../services/spinner.service'
     standalone: false
 })
 export class SpinnerComponent implements OnInit, OnDestroy {
-    showSpinner = false;
-    private subscription!: Subscription;
+    private spinnerService = inject(SpinnerService)
 
-    constructor(private spinnerService: SpinnerService) { }
+    showSpinner = false
+    private subscription!: Subscription
+
+    constructor() { }
 
     ngOnInit() {
         this.subscription = this.spinnerService.spinnerVisible.observable.subscribe(

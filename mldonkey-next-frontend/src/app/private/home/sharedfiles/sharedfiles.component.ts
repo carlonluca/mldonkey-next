@@ -22,7 +22,7 @@
  * Date:    2025.02.25
  */
 
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core'
 import { MatMenuTrigger } from '@angular/material/menu'
 import { MatSort, MatSortable, Sort } from '@angular/material/sort'
 import { MatTableDataSource } from '@angular/material/table'
@@ -43,6 +43,12 @@ import { ActivatedRoute, Router } from '@angular/router'
     standalone: false
 })
 export class SharedFilesComponent implements AfterViewInit, OnInit, OnDestroy {
+    sharedFilesInfo = inject(SharedFilesinfoService)
+    uiSerivce = inject(UiServiceService)
+    storageService = inject(StorageService)
+    router = inject(Router)
+    private route = inject(ActivatedRoute)
+
     dataSource = new MatTableDataSource<MLMsgFromSharedFileInfo>([])
     displayedColumns: string[] = this.displayColumns()
     totalUploaded = BigInt(0)
@@ -66,13 +72,7 @@ export class SharedFilesComponent implements AfterViewInit, OnInit, OnDestroy {
 
     private subscriptions = new MLSubscriptionSet()
 
-    constructor(
-        public sharedFilesInfo: SharedFilesinfoService,
-        public uiSerivce: UiServiceService,
-        public storageService: StorageService,
-        public router: Router,
-        private route: ActivatedRoute
-    ) { }
+    constructor() { }
 
     ngOnInit() {
         this.subscriptions.add(

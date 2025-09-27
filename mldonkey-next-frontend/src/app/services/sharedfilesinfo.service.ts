@@ -22,7 +22,7 @@
  * Date:    2025.02.24
  */
 
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { MLCollectionModel } from '../core/MLCollectionModel'
 import { WebSocketService } from '../websocket-service.service'
 import { MLMessageTypeFrom } from '../msg/MLMsg'
@@ -32,7 +32,10 @@ import { MLMsgFromSharedFileInfo } from '../msg/MLMsgSharedFileInfo'
     providedIn: 'root'
 })
 export class SharedFilesinfoService extends MLCollectionModel<number, MLMsgFromSharedFileInfo> {
-    constructor(websocketService: WebSocketService) {
+
+    constructor() {
+        const websocketService = inject(WebSocketService);
+
         super()
         websocketService.lastMessage.observable.subscribe(msg => {
             if (msg.type == MLMessageTypeFrom.T_SHARED_FILE_INFO) {

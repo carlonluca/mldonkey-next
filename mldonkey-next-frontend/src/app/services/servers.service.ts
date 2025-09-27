@@ -22,7 +22,7 @@
  * Date:    2025.01.04
  */
 
-import { Injectable, OnDestroy } from '@angular/core'
+import { Injectable, OnDestroy, inject } from '@angular/core'
 import { WebSocketService } from '../websocket-service.service'
 import { MLServerManager } from '../core/MLServerManager'
 import { MLObservableVariable } from '../core/MLObservableVariable'
@@ -33,11 +33,15 @@ import { MLSubscriptionSet } from '../core/MLSubscriptionSet'
     providedIn: 'root'
 })
 export class ServersService implements OnDestroy {
+    websocketService = inject(WebSocketService)
+
     private unsubscribe = new MLSubscriptionSet()
     public serverManager: MLServerManager
     public serverList = new MLObservableVariable<MLMsgFromServerInfo[]>([])
 
-    constructor(public websocketService: WebSocketService) {
+    constructor() {
+        const websocketService = this.websocketService;
+
         this.serverManager = new MLServerManager(websocketService)
         this.unsubscribe.add(
             this.serverManager.elements.observable.subscribe((servers) => {

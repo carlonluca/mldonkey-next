@@ -21,7 +21,7 @@
  * Company: -
  * Date:    2023.11.19
  */
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core'
 import { WebSocketService } from 'src/app/websocket-service.service'
 import { SearchesService } from 'src/app/services/searches.service'
 import { uiLogger } from 'src/app/core/MLLogger'
@@ -54,6 +54,11 @@ import { MLQueryNode } from 'src/app/data/MLSearchQuery'
     standalone: false
 })
 export class SearchComponent implements AfterViewInit, OnInit, OnDestroy {
+    private websocketService = inject(WebSocketService)
+    private searchService = inject(SearchesService)
+    private spinner = inject(SpinnerService)
+    uiService = inject(UiServiceService)
+
     dataSource = new MatTableDataSource<MLResultInfo>([])
     displayedColumns: string[] = []
     searchText = ''
@@ -77,12 +82,9 @@ export class SearchComponent implements AfterViewInit, OnInit, OnDestroy {
 
     @ViewChild(MatSort) sort: MatSort
 
-    constructor(
-        private websocketService: WebSocketService,
-        private searchService: SearchesService,
-        private spinner: SpinnerService,
-        public uiService: UiServiceService
-    ) {
+    constructor() {
+        const searchService = this.searchService;
+
         this.subscriptions.add(this.uiService.mobileLayout.observable.subscribe(() => this.refreshDisplayedColumns()))
         this.refreshDisplayedColumns()
         this.currentSearchResults = new MLSearchSessionManager(

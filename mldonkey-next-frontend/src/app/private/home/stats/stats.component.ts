@@ -22,7 +22,7 @@
  * Date:    2024.11.20
  */
 
-import { Component } from '@angular/core'
+import { Component, inject } from '@angular/core'
 import { MatTableDataSource } from '@angular/material/table'
 import { faPlug, faPlugCircleXmark } from '@fortawesome/free-solid-svg-icons'
 import { MLNetworkSummaryModel, StatsService } from 'src/app/services/stats.service'
@@ -38,6 +38,9 @@ import { EChartsOption, LegendComponentOption } from 'echarts/types/dist/echarts
     standalone: false
 })
 export class StatsComponent {
+    statsService = inject(StatsService)
+    private websocketService = inject(WebSocketService)
+    
     private computedStyle = getComputedStyle(document.documentElement)
     private fontColor = this.computedStyle.getPropertyValue("--chart-font-color")
     private noDataGraphics = [
@@ -274,7 +277,7 @@ export class StatsComponent {
         graphic: this.noDataGraphics
     }
 
-    constructor(public statsService: StatsService, private websocketService: WebSocketService) {
+    constructor() {
         this.statsService.byNetworkStats.observable.subscribe((stats) => {
             this.networkSummaryDataSource.data = stats
             this.refreshByNetworkChart(stats)

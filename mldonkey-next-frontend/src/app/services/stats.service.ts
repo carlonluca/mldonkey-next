@@ -23,7 +23,7 @@
  */
 
 import { interval } from 'rxjs'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { MLSubscriptionSet } from '../core/MLSubscriptionSet'
 import { WebSocketService } from '../websocket-service.service'
 import { MLMessageTypeFrom } from '../msg/MLMsg'
@@ -74,12 +74,14 @@ export class MLNetworkSummaryModel {
     providedIn: 'root'
 })
 export class StatsService extends MLCollectionModel<number, MLNetworkStatModel> {
+    private websocketService = inject(WebSocketService);
+
     public byNetworkStats = new MLObservableVariable<MLNetworkSummaryModel[]>([])
     public bwStats = new MLObservableVariable<MLMsgFromBwUpDown | null>(null)
     public bwHStats = new MLObservableVariable<MLMsgFromBwHUpDown | null>(null)
     private subscriptions = new MLSubscriptionSet()
     
-    constructor(private websocketService: WebSocketService) {
+    constructor() {
         super()
         this.subscriptions.add(
             this.websocketService.lastMessage.observable.subscribe(m => {

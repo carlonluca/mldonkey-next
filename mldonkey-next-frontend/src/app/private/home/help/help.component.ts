@@ -22,7 +22,7 @@
  * Date:    2025.01.03
  */
 
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ConsoleService } from 'src/app/services/console.service';
 
 @Component({
@@ -32,5 +32,7 @@ import { ConsoleService } from 'src/app/services/console.service';
     styleUrl: './help.component.scss'
 })
 export class HelpComponent {
-    constructor(public consoleService: ConsoleService) {}
+    consoleService = inject(ConsoleService)
+
+    constructor() {}
 }

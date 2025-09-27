@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Injectable, OnDestroy } from '@angular/core'
+import { Injectable, OnDestroy, inject } from '@angular/core'
 import { WebSocketService } from '../websocket-service.service'
 import { MLOptionManager, MLOptionSection } from '../core/MLOptionManager'
 import { MLSubscriptionSet } from '../core/MLSubscriptionSet'
@@ -26,11 +26,15 @@ import { MLMsgFromAddSectionOption } from '../msg/MLMsgOptions'
     providedIn: 'root'
 })
 export class OptionsService implements OnDestroy {
+    websocketService = inject(WebSocketService)
+
     public optionManager
     public subscriptions = new MLSubscriptionSet()
     public sections: MLOptionSection[] = []
 
-    constructor(public websocketService: WebSocketService) {
+    constructor() {
+        const websocketService = this.websocketService;
+
         this.optionManager = new MLOptionManager(websocketService)
         this.subscriptions.add(this.optionManager.elements.observable.subscribe(options => this.refreshSections(options)))
     }

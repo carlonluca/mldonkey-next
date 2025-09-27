@@ -23,7 +23,7 @@
  */
 
 import { SelectionModel } from '@angular/cdk/collections'
-import { Component, ViewChild, AfterViewInit, OnInit, OnDestroy } from '@angular/core'
+import { Component, ViewChild, AfterViewInit, OnInit, OnDestroy, inject } from '@angular/core'
 import { MatSort, MatSortable, Sort } from '@angular/material/sort'
 import { MatTableDataSource } from '@angular/material/table'
 import { interval } from 'rxjs'
@@ -60,6 +60,12 @@ import { MLMsgToConsoleCommand } from 'src/app/msg/MLMsgConsole'
     standalone: false
 })
 export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
+    private websocketService = inject(WebSocketService)
+    private downloadingService = inject(DownloadingFilesService)
+    clientStatsService = inject(ClientStatsService)
+    uiSerivce = inject(UiServiceService)
+    router = inject(Router)
+
     dataSource = new MatTableDataSource<MLMsgDownloadElement>([])
     displayedColumns: string[] = this.displayColumns()
     selection = new SelectionModel<MLMsgDownloadElement>(true, [])
@@ -87,13 +93,7 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
 
     private subscriptions = new MLSubscriptionSet()
 
-    constructor(
-        private websocketService: WebSocketService,
-        private downloadingService: DownloadingFilesService,
-        public clientStatsService: ClientStatsService,
-        public uiSerivce: UiServiceService,
-        public router: Router
-    ) { }
+    constructor() { }
 
     ngOnInit() {
         this.subscriptions.add(this.uiSerivce.mobileLayout.observable.subscribe(() =>

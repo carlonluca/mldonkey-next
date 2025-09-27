@@ -22,7 +22,7 @@
  * Date:    2023.08.14
  */
 
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { MLConnectionState, WebSocketService } from '../websocket-service.service'
 import { SpinnerService } from '../services/spinner.service'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -48,6 +48,13 @@ declare global {
     standalone: false
 })
 export class PublicComponent implements OnInit, OnDestroy {
+    private webSocketService = inject(WebSocketService)
+    private spinner = inject(SpinnerService)
+    private router = inject(Router)
+    private route = inject(ActivatedRoute)
+    private storage = inject(StorageService)
+    private dialog = inject(MatDialog)
+
     private static readonly retryInterval = 7000
     private observables = new MLSubscriptionSet()
     private isEmbedded = environment.mldonkeyWsAddr.length <= 0
@@ -73,13 +80,10 @@ export class PublicComponent implements OnInit, OnDestroy {
      * 
      * @param webSocketService 
      */
-    constructor(
-        private webSocketService: WebSocketService,
-        private spinner: SpinnerService,
-        private router: Router,
-        private route: ActivatedRoute,
-        private storage: StorageService,
-        private dialog: MatDialog) {
+    constructor() {
+        const webSocketService = this.webSocketService;
+        const storage = this.storage;
+
 
         const loginData = storage.getLoginData()
         if (loginData) {

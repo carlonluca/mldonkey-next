@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
 import { ConsoleService } from 'src/app/services/console.service'
 import { WebSocketService } from 'src/app/websocket-service.service'
@@ -30,13 +30,16 @@ import { MLMsgToConsoleCommand } from 'src/app/msg/MLMsgConsole'
     standalone: false
 })
 export class ConsoleComponent implements OnInit, OnDestroy {
+    websocketService = inject(WebSocketService)
+    consoleService = inject(ConsoleService)
+
     subscriptions: MLSubscriptionSet = new MLSubscriptionSet()
     messages: string[] = []
     follow = true
     faTerminal = faTerminal
     commandString = ""
 
-    constructor(public websocketService: WebSocketService, public consoleService: ConsoleService) { }
+    constructor() { }
 
     ngOnInit(): void {
         this.subscriptions.add(

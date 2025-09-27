@@ -22,7 +22,7 @@
  * Date: 2024.09.01
  */
 
-import { Injectable, OnDestroy } from '@angular/core'
+import { Injectable, OnDestroy, inject } from '@angular/core'
 import { WebSocketService } from '../websocket-service.service'
 import { MLMessageTypeFrom } from '../msg/MLMsg'
 import { MLSubscriptionSet } from '../core/MLSubscriptionSet'
@@ -33,12 +33,14 @@ import { MLObservableVariable } from '../core/MLObservableVariable'
     providedIn: 'root'
 })
 export class ClientStatsService implements OnDestroy {
+    private websocketService = inject(WebSocketService)
+
     private subscriptions = new MLSubscriptionSet()
 
     public stats: MLObservableVariable<MLMsgFromClientStats | null> =
         new MLObservableVariable<MLMsgFromClientStats | null>(null)
 
-    constructor(private websocketService: WebSocketService) {
+    constructor() {
         this.subscriptions.add(
             this.websocketService.lastMessage.observable.subscribe(msg => {
                 if (msg.type === MLMessageTypeFrom.T_CLIENT_STATS) {

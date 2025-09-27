@@ -22,7 +22,7 @@
  * Date: 14.08.2023
  */
 
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { Router, UrlTree } from '@angular/router'
 import { Observable } from 'rxjs'
 import { MLConnectionState, WebSocketService } from './websocket-service.service'
@@ -31,7 +31,10 @@ import { MLConnectionState, WebSocketService } from './websocket-service.service
     providedIn: 'root'
 })
 export class AuthGuard  {
-    constructor(private websocketService: WebSocketService, private router: Router) {}
+    private websocketService = inject(WebSocketService)
+    private router = inject(Router)
+
+    constructor() {}
     canActivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
         if (this.websocketService.connectionState.value == MLConnectionState.S_AUTHENTICATED)
             return true

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, QueryList, ViewChildren } from '@angular/core'
+import { AfterViewInit, Component, QueryList, ViewChildren, inject } from '@angular/core'
 import { OptionsService } from 'src/app/services/options.service'
 import { OptionSectionComponent } from './option-section/option-section.component'
 import { MLStringPair } from 'src/app/core/MLUtils'
@@ -12,10 +12,13 @@ import { MLMsgToSaveOptions } from 'src/app/msg/MLMsgOptions'
     standalone: false
 })
 export class OptionsComponent implements AfterViewInit {
+    optionService = inject(OptionsService)
+    private websocketService = inject(WebSocketService)
+
     @ViewChildren('optionSection') optionSections: QueryList<OptionSectionComponent>
     confChanged = false
 
-    constructor(public optionService: OptionsService, private websocketService: WebSocketService) {}
+    constructor() {}
 
     ngAfterViewInit() {
         this.refreshChangedConf()

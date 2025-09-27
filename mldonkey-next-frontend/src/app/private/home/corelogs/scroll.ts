@@ -21,16 +21,18 @@
  * Company: -
  * Date: 2024.07.07
  */
-import { Directive, ElementRef, AfterContentChecked } from '@angular/core'
+import { Directive, ElementRef, AfterContentChecked, inject } from '@angular/core'
 
 @Directive({
     selector: '[appScrollToBottom]',
     standalone: false
 })
 export class ScrollToBottomDirective implements AfterContentChecked {
+    private el = inject(ElementRef)
+
     follow = true
 
-    constructor(private el: ElementRef) { }
+    constructor() { }
 
     ngAfterContentChecked() {
         if (this.follow)

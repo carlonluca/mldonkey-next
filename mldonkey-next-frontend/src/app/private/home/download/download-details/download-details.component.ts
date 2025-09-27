@@ -22,7 +22,7 @@
  * Date:    2025.04.02
  */
 
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { MatTableDataSource } from '@angular/material/table'
 import { ActivatedRoute } from '@angular/router'
 import { MLNetworkManager } from 'src/app/core/MLNetworkManager'
@@ -60,6 +60,10 @@ class SpeedSample {
     standalone: false
 })
 export class DownloadDetailsComponent implements OnInit, OnDestroy {
+    private router = inject(ActivatedRoute)
+    private downloadService = inject(DownloadingFilesService)
+    protected websocketService = inject(WebSocketService)
+
     item: MLMsgDownloadElement | null = null
     networkManager: MLNetworkManager
     subscriptions = new MLSubscriptionSet()
@@ -67,11 +71,7 @@ export class DownloadDetailsComponent implements OnInit, OnDestroy {
     dataSource = new MatTableDataSource<RowElement>([])
     speedSamples: Array<SpeedSample> = []
 
-    constructor(
-        private router: ActivatedRoute,
-        private downloadService: DownloadingFilesService,
-        protected websocketService: WebSocketService
-    ) {
+    constructor() {
         this.networkManager = this.websocketService.networkManager
     }
 

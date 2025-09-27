@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core'
+import { Component, OnDestroy, inject } from '@angular/core'
 import { interval } from 'rxjs';
 import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet';
 import { MLMessageTypeFrom } from 'src/app/msg/MLMsg';
@@ -12,9 +12,11 @@ import { WebSocketService } from 'src/app/websocket-service.service';
     styleUrl: './upload.component.scss'
 })
 export class UploadComponent implements OnDestroy {
+    private websocketService = inject(WebSocketService)
+
     private subscriptions = new MLSubscriptionSet()
 
-    constructor(private websocketService: WebSocketService) {
+    constructor() {
         this.subscriptions.add(
             this.websocketService.lastMessage.observable.subscribe(m => {
                 if (m.type !== MLMessageTypeFrom.T_UPLOAD_FILES)

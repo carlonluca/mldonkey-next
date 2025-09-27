@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { WebSocketService } from '../websocket-service.service'
 import { MLResultInfoManager } from '../core/MLResultInfoManager'
 import { MLSearchResultManager } from '../core/MLSearchResultManager'
@@ -26,11 +26,15 @@ import { MLSearchInfoManager } from '../core/MLSearchInfoManager'
     providedIn: 'root'
 })
 export class SearchesService {
+    websocketService = inject(WebSocketService)
+
     public searchManager: MLSearchInfoManager
     public resultManager: MLResultInfoManager
     public searchResultManager: MLSearchResultManager
 
-    constructor(public websocketService: WebSocketService) {
+    constructor() {
+        const websocketService = this.websocketService;
+
         this.searchManager = new MLSearchInfoManager(websocketService)
         this.resultManager = new MLResultInfoManager(websocketService)
         this.searchResultManager = new MLSearchResultManager(websocketService)

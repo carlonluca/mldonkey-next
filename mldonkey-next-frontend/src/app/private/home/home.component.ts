@@ -21,7 +21,7 @@
  * Company: -
  * Date: 14.08.2023
  */
-import { Component, VERSION, ViewChild } from '@angular/core'
+import { Component, VERSION, ViewChild, inject } from '@angular/core'
 import { Router } from '@angular/router'
 import {
     faDownload,
@@ -64,6 +64,20 @@ import { SearchesService } from 'src/app/services/searches.service'
     standalone: false
 })
 export class HomeComponent {
+    private webSocketService = inject(WebSocketService);
+    private router = inject(Router);
+    private storage = inject(StorageService);
+    private optionService = inject(OptionsService);
+    private consoleService = inject(ConsoleService);
+    private sysInfoService = inject(SysinfoService);
+    private clientStatsService = inject(ClientStatsService);
+    private statsService = inject(StatsService);
+    private serverService = inject(ServersService);
+    private sharedFileInfoService = inject(SharedFilesinfoService);
+    private searchesService = inject(SearchesService);
+    uiService = inject(UiServiceService);
+    dialog = inject(MatDialog);
+
     @ViewChild(MatSidenav) sidenav: MatSidenav;
 
     private subscriptions = new MLSubscriptionSet()
@@ -88,20 +102,7 @@ export class HomeComponent {
     versionAngular = VERSION
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    constructor(
-        private webSocketService: WebSocketService,
-        private router: Router,
-        private storage: StorageService,
-        private optionService: OptionsService,
-        private consoleService: ConsoleService,
-        private sysInfoService: SysinfoService,
-        private clientStatsService: ClientStatsService,
-        private statsService: StatsService,
-        private serverService: ServersService,
-        private sharedFileInfoService: SharedFilesinfoService,
-        private searchesService: SearchesService,
-        public uiService: UiServiceService,
-        public dialog: MatDialog) {
+    constructor() {
         this.subscriptions.add(
             this.uiService.mobileLayout.observable.subscribe(() => this.refreshOpenedState())
         )

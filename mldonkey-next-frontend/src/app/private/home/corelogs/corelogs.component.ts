@@ -21,7 +21,7 @@
  * Company: -
  * Date: 2024.07.07
  */
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild, Renderer2 } from '@angular/core'
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, Renderer2, inject } from '@angular/core'
 import { interval } from 'rxjs'
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket'
 import { environment } from 'src/environments/environment'
@@ -59,6 +59,8 @@ class LogLine {
     standalone: false
 })
 export class CorelogsComponent implements OnInit, OnDestroy {
+    private renderer = inject(Renderer2)
+
     @ViewChild('scrollContainer') scrollContainer: ElementRef
     @ViewChild(ScrollToBottomDirective) scrollDirective: ScrollToBottomDirective
 
@@ -82,7 +84,7 @@ export class CorelogsComponent implements OnInit, OnDestroy {
     showError = ""
     selectedRange = "1hour"
 
-    constructor(private renderer: Renderer2) { }
+    constructor() { }
 
     ngOnInit(): void {
         this.websocket = webSocket<string>({

@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { MLSubscriptionSet } from '../core/MLSubscriptionSet'
 import { MLConnectionState, WebSocketService } from '../websocket-service.service'
 import { MLMessageTypeFrom } from '../msg/MLMsg'
@@ -27,12 +27,14 @@ import { MLObservableVariable } from '../core/MLObservableVariable'
     providedIn: 'root'
 })
 export class ConsoleService {
+    websocketService = inject(WebSocketService)
+
     subscriptions: MLSubscriptionSet = new MLSubscriptionSet()
     messages = ""
     console = new MLObservableVariable<string[]>([])
     longhelpString: string | null = null
 
-    constructor(public websocketService: WebSocketService) {
+    constructor() {
         this.subscriptions.add(
             this.websocketService.lastMessage.observable.subscribe(m => {
                 if (m.type === MLMessageTypeFrom.T_CONSOLE) {
