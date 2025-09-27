@@ -17,6 +17,10 @@
 -->
 
 <div id="toolbar-container">
+    <div class="title" style="width: 100%;">
+        <fa-icon class="title-child" [icon]="this.faDownload"></fa-icon>
+        <h2 class="title-child">Download</h2>
+    </div>
     <button id="main-menu" mat-icon-button [matMenuTriggerFor]="mainMenu">
         <mat-icon>more_vert</mat-icon>
     </button>
@@ -31,11 +35,13 @@
             <mat-icon>stop_circle</mat-icon>
             <span>Abort</span>
         </button>
-        <button mat-menu-item [disabled]="!this.selectionEnabled || this.selection.isEmpty()" (click)="this.pauseDownloads()">
+        <button mat-menu-item [disabled]="!this.selectionEnabled || this.selection.isEmpty()"
+            (click)="this.pauseDownloads()">
             <mat-icon>pause_circle</mat-icon>
             <span>Pause</span>
         </button>
-        <button mat-menu-item [disabled]="!this.selectionEnabled || this.selection.isEmpty()" (click)="this.resumeDownloads()">
+        <button mat-menu-item [disabled]="!this.selectionEnabled || this.selection.isEmpty()"
+            (click)="this.resumeDownloads()">
             <mat-icon>play_circle</mat-icon>
             <span>Resume</span>
         </button>
@@ -58,8 +64,9 @@
 
 <!-- Filter bar -->
 <div id="filter-field-container" *ngIf="this.filterString !== null">
-    <app-input-with-icon id="filter-form" class="full-screen-row" [(userInput)]="this.filterString" label="Filter" matIcon="filter_list"
-        autocapitalize="none" tooltip="Filter text" type="text" (userInputChange)="this.refreshFilter()" />
+    <app-input-with-icon id="filter-form" class="full-screen-row" [(userInput)]="this.filterString" label="Filter"
+        matIcon="filter_list" autocapitalize="none" tooltip="Filter text" type="text"
+        (userInputChange)="this.refreshFilter()" />
 </div>
 
 <!-- Desktop table -->
@@ -91,8 +98,7 @@
         <td mat-footer-cell *matFooterCellDef="let isEven = even"
             [ngClass]="{'alternate-row': this.dataSource.data.length%2 === 0 }">
             <div class="filename-element alternate-row-content"><b>Overall</b></div>
-            <mat-progress-bar class="file-progress" mode="determinate"
-                [value]="this.downPerc"></mat-progress-bar>
+            <mat-progress-bar class="file-progress" mode="determinate" [value]="this.downPerc"></mat-progress-bar>
         </td>
     </ng-container>
     <ng-container matColumnDef="downloaded">
@@ -116,11 +122,13 @@
     <ng-container matColumnDef="speed">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Speed</th>
         <td mat-cell *matCellDef="let download; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-            <app-speed-indicator class="alternate-row-content" [speed]="download.speed" [downloadState]="download.state"></app-speed-indicator>
+            <app-speed-indicator class="alternate-row-content" [speed]="download.speed"
+                [downloadState]="download.state"></app-speed-indicator>
         </td>
         <td mat-footer-cell *matFooterCellDef="let download; let isEven = even"
             [ngClass]="{'alternate-row': this.dataSource.data.length%2 === 0 }">
-            <app-speed-indicator class="alternate-row-content" [speed]="this.downSpeedSum ?? 0" [bold]="true"></app-speed-indicator>
+            <app-speed-indicator class="alternate-row-content" [speed]="this.downSpeedSum ?? 0"
+                [bold]="true"></app-speed-indicator>
         </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -132,7 +140,8 @@
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort *ngIf="this.uiSerivce.mobileLayout.value">
     <ng-container matColumnDef="select">
         <th mat-header-cell *matHeaderCellDef mat-sort-header disabled="true">
-            <mat-checkbox class="pos-relative" (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+            <mat-checkbox class="pos-relative" (change)="$event ? masterToggle() : null"
+                [checked]="selection.hasValue() && isAllSelected()"
                 [indeterminate]="selection.hasValue() && !isAllSelected()">
             </mat-checkbox>
         </th>
@@ -144,12 +153,14 @@
     </ng-container>
     <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-        <td mat-cell *matCellDef="let download; let isEven = even" [ngClass]="{'alternate-row': isEven, 'table-mobile-td': true }">
+        <td mat-cell *matCellDef="let download; let isEven = even"
+            [ngClass]="{'alternate-row': isEven, 'table-mobile-td': true }">
             <div class="wrap-anywhere alternate-row-content">
                 <b>{{ download.name }}</b><br />
                 {{ download.downloaded | prettyBytes }} of {{ download.size | prettyBytes }}
                 <span class="no-margins"> - </span>
-                <app-speed-indicator [speed]="download.speed" [bold]="true" [downloadState]="download.state"></app-speed-indicator>
+                <app-speed-indicator [speed]="download.speed" [bold]="true"
+                    [downloadState]="download.state"></app-speed-indicator>
                 <mat-progress-bar class="file-progress pos-relative" mode="determinate"
                     [value]="computeProgress(download)">
                 </mat-progress-bar>

@@ -41,6 +41,7 @@ import mime from 'mime'
 import prettyBytes from 'pretty-bytes'
 import {
     faCompactDisc,
+    faDownload,
     faFile,
     faFileArchive,
     faFileAudio,
@@ -78,6 +79,7 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
     downSpeedSum: number | null = null
     upSpeed: number | null = null
     filterString: string | null = null
+    faDownload = faDownload
     sortModes = [
         new MLSortMode("name", true, "Name (a → z)", true),
         new MLSortMode("name", false, "Name (z → a)"),

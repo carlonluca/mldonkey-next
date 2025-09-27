@@ -1,3 +1,8 @@
+<div class="title">
+    <fa-icon class="title-child" [icon]="this.faServer"></fa-icon>
+    <h2 class="title-child">Servers</h2>
+</div>
+
 <!-- Desktop table -->
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort *ngIf="!this.uiService.mobileLayout.value"
     (matSortChange)="onSortChange($event)">
@@ -32,7 +37,7 @@
     <ng-container matColumnDef="status">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
         <td mat-cell *matCellDef="let server; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-            <div class="filename-element alternate-row-content">{{ this.getHostConnStateDescription(server.hostState?.connState) }}</div>
+            <div class="filename-element alternate-row-content" [ngClass]="{'connected': this.isConnected(server)}">{{ this.getHostConnStateDescription(server.hostState?.connState) }}</div>
         </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -55,9 +60,9 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
         <td mat-cell *matCellDef="let server; let isEven = even"
             [ngClass]="{'alternate-row': isEven, 'table-mobile-td': true }">
-            <div class="wrap-anywhere alternate-row-content">
+            <div class="wrap-anywhere alternate-row-content"  [ngClass]="{'connected': this.isConnected(server)}">
                 <b>{{ this.getFlagUnicode(server) }} {{ server.serverName }}</b><br />
-                {{ this.buildAddress(server) }} {{ this.getHostConnStateDescription(server.hostState.connState, true) }}
+                {{ this.buildAddress(server) }} {{ this.getHostConnStateDescription(server.hostState?.connState, true) }}
             </div>
         </td>
     </ng-container>

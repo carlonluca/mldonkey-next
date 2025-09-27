@@ -1,19 +1,5 @@
 @use "../../../css/shared.scss" as *;
 
-.title {
-    display: flex;
-    align-items: center;
-    gap: $defaultMargin;
-    margin: $defaultMargin;
-}
-
-.title-child {
-    height: 100%;
-    font-size: 20px;
-    margin: 0px;
-    padding: 0px;
-}
-
 th {
     font-weight: bold;
 }

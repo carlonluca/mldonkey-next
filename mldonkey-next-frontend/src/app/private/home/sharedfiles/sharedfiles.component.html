@@ -16,6 +16,11 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 
+<div class="title">
+    <fa-icon class="title-child" [icon]="this.faShared"></fa-icon>
+    <h2 class="title-child">Shared files</h2>
+</div>
+
 <!-- Desktop table -->
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort *ngIf="!this.uiSerivce.mobileLayout.value"
     (matSortChange)="onSortChange($event)">

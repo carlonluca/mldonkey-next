@@ -35,6 +35,7 @@ import { buildUrl } from 'build-url-ts'
 import { StorageService } from 'src/app/services/storage.service'
 import { MLUtils } from 'src/app/core/MLUtils'
 import { ActivatedRoute, Router } from '@angular/router'
+import { faShareNodes } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
     selector: 'app-sharedfiles',
@@ -49,6 +50,7 @@ export class SharedFilesComponent implements AfterViewInit, OnInit, OnDestroy {
     router = inject(Router)
     private route = inject(ActivatedRoute)
 
+    faShared = faShareNodes
     dataSource = new MatTableDataSource<MLMsgFromSharedFileInfo>([])
     displayedColumns: string[] = this.displayColumns()
     totalUploaded = BigInt(0)

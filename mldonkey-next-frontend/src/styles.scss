@@ -93,3 +93,16 @@ th::before {
 .mdc-text-field {
     background-color: transparent !important;
 }
+
+.title {
+    display: flex;
+    align-items: center;
+    gap: $defaultMargin;
+    margin: $defaultMargin;
+}
+
+.title-child {
+    font-size: 20px;
+    vertical-align: middle;
+    margin-bottom: 0px !important;
+}

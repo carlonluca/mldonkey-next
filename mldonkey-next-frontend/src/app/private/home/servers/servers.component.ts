@@ -37,6 +37,7 @@ import { UiServiceService } from 'src/app/services/ui-service.service'
 import { WebSocketService } from 'src/app/websocket-service.service'
 import getUnicodeFlagIcon from 'country-flag-icons/unicode'
 import { hasFlag } from 'country-flag-icons'
+import { faServer } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
     selector: 'app-servers',
@@ -45,9 +46,9 @@ import { hasFlag } from 'country-flag-icons'
     standalone: false
 })
 export class ServersComponent implements AfterViewInit, OnInit, OnDestroy {
-    websocketService = inject(WebSocketService);
-    uiService = inject(UiServiceService);
-    serversService = inject(ServersService);
+    websocketService = inject(WebSocketService)
+    uiService = inject(UiServiceService)
+    serversService = inject(ServersService)
 
     private subscriptions = new MLSubscriptionSet()
 
@@ -57,6 +58,7 @@ export class ServersComponent implements AfterViewInit, OnInit, OnDestroy {
     selection = new SelectionModel<MLMsgFromServerInfo>(true, [])
     selectionEnabled = false
     displayedColumns: string[] = this.displayColumns()
+    faServer = faServer
 
     constructor() { }
 
@@ -183,5 +185,13 @@ export class ServersComponent implements AfterViewInit, OnInit, OnDestroy {
             return "🏴‍☠️"
 
         return getUnicodeFlagIcon(code) ?? "🏴‍☠️"
+    }
+
+    isConnected(server: MLMsgFromServerInfo) {
+        return server.hostState.connState === MLHostConnState.S_CONNECTED
+            || server.hostState.connState === MLHostConnState.S_CONNECTED_AND_QUEUED
+            || server.hostState.connState === MLHostConnState.S_CONNECTED_AND_UNKNOWN
+            || server.hostState.connState === MLHostConnState.S_CONNECTED_DOWNLOADING
+            || server.hostState.connState === MLHostConnState.S_CONNECTED_INITIATING
     }
 }

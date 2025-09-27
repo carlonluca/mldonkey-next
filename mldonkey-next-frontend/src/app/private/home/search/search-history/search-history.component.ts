@@ -24,6 +24,7 @@
 
 import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { MatTableDataSource } from '@angular/material/table'
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
 import { MLSearchInfo } from 'src/app/data/MLSearchInfo'
 import { SearchesService } from 'src/app/services/searches.service'
@@ -39,6 +40,7 @@ export class SearchHistoryComponent implements OnInit, OnDestroy {
 
     dataSource = new MatTableDataSource<MLSearchInfo>([])
     subscriptions = new MLSubscriptionSet()
+    faMagnifyingGlass = faMagnifyingGlass
 
     constructor() { }
 
