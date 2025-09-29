@@ -1,6 +1,6 @@
 {
   "name": "mldonkey-next-frontend",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "ng": "ng",
     "start": "npx angular-build-info && npx ng serve",
