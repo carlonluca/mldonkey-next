@@ -40,8 +40,9 @@ Window {
     }
 
     id: mainWindow
-    width: Screen.width*coveredPercentage
-    height: Screen.height*coveredPercentage
+    width: qmlUtils.isMobile() ? width : Screen.width*coveredPercentage
+    height: qmlUtils.isMobile() ? height : Screen.height*coveredPercentage
+    visibility: qmlUtils.isMobile() ? Window.Maximized : Window.Windowed
     visible: true
     title: "mldonkey-next " + Qt.application.version
 
