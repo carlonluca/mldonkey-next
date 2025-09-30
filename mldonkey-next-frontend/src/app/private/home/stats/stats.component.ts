@@ -73,6 +73,7 @@ export class StatsComponent {
             valueFormatter: value => MLUtils.beautifySize(BigInt(Math.round(value as number) * 1024 * 1024))
         },
         legend: {
+            top: 'top',
             textStyle: {
                 color: "white"
             }
@@ -120,7 +121,7 @@ export class StatsComponent {
         type: "plain",
         data: ["Uploaded", "Downloaded"],
         orient: 'horizontal',
-        top: "auto",
+        top: "top",
         show: true,
         icon: "circle",
         textStyle: {

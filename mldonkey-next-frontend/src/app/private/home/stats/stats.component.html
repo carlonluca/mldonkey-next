@@ -53,6 +53,6 @@
         <tr mat-header-row *matHeaderRowDef="['netName', 'uptime', 'uploaded', 'downloaded']"></tr>
         <tr mat-row *matRowDef="let row; columns: ['netName', 'uptime', 'uploaded', 'downloaded'];"></tr>
     </table>
-
+    <br/>
     <div id="usage-by-network-div" class="chart-div" echarts [options]="usageByNetworkChart" [autoResize]="true" [merge]="usageByNetworkChartMergeOption"></div>
 </div>
