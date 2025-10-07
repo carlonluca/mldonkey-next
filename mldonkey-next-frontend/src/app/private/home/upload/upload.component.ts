@@ -1,9 +1,29 @@
-import { Component, OnDestroy, inject } from '@angular/core'
-import { interval } from 'rxjs';
-import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet';
-import { MLMessageTypeFrom } from 'src/app/msg/MLMsg';
-import { MLMsgFromUploaders, MLMsgToGetUploaders } from 'src/app/msg/MLMsgUploaders';
-import { WebSocketService } from 'src/app/websocket-service.service';
+/*
+ * This file is part of mldonkey-next.
+ *
+ * Copyright (c) 2025 Luca Carlon
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 3.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * Author:  Luca Carlon
+ * Company: -
+ * Date:    2025.10.07
+ */
+
+import { Component, inject } from '@angular/core'
+import { UploadsService } from 'src/app/services/uploads.service'
 
 @Component({
     selector: 'app-upload',
@@ -11,27 +31,8 @@ import { WebSocketService } from 'src/app/websocket-service.service';
     templateUrl: './upload.component.html',
     styleUrl: './upload.component.scss'
 })
-export class UploadComponent implements OnDestroy {
-    private websocketService = inject(WebSocketService)
+export class UploadComponent {
+    private uploadsService = inject(UploadsService)
 
-    private subscriptions = new MLSubscriptionSet()
-
-    constructor() {
-        this.subscriptions.add(
-            this.websocketService.lastMessage.observable.subscribe(m => {
-                if (m.type !== MLMessageTypeFrom.T_UPLOAD_FILES)
-                    return
-                console.log("uploaders:", (m as MLMsgFromUploaders).fileIds)
-            })
-        )
-        this.subscriptions.add(
-            interval(10000).subscribe(() => {
-                this.websocketService.sendMsg(new MLMsgToGetUploaders())
-            })
-        )
-    }
-
-    ngOnDestroy(): void {
-        this.subscriptions.unsubscribe(null)
-    }
+    constructor() {}
 }
