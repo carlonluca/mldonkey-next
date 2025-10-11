@@ -160,7 +160,6 @@ target_link_libraries(mldonkey-next PRIVATE
     Qt6::Core
     Qt6::Quick
     Qt6::StateMachine
-    Qt6::CorePrivate
     Qt6::WebSockets
     lqtutils
 )
