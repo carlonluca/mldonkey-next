@@ -16,14 +16,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { MLMessageTypeFrom, MLMsgFrom } from "./MLMsg"
-import { MLMsgReader } from "./MLMsgReader"
-
 /**
  * Author:  Luca Carlon
  * Company: -
- * Date: 2024.09.01
+ * Date:    2024.09.01
  */
+
+import { MLMessageTypeFrom, MLMsgFrom } from "./MLMsg"
+import { MLMsgReader } from "./MLMsgReader"
 
 export class MLMsgFromClientStats extends MLMsgFrom {
     constructor(

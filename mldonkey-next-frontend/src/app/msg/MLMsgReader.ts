@@ -38,6 +38,9 @@ import {
     MLTagType,
     MLTagUint32
 } from "./MLTag"
+import { ClientConnType, MLClientKind } from "./MLClientKind"
+import { MLIp2 } from "./MLIp2"
+import { MLHostname } from "./MLHostname"
 
 export class MLBufferUtils {
     public static readRawData(buffer: ArrayBuffer, offset: number, length: number): [ArrayBuffer, number] {
@@ -224,29 +227,65 @@ export class MLBufferUtils {
         }
     }
 
+    /**
+     * ADDR
+     * -> int8 (0 IP, 1 hostname)
+     * 
+     * ADDR IP
+     * -> IP2 [...]
+     * -> bool (blocked)
+     * 
+     * ADDR HOSTNAME
+     * -> HOSTNAME [...]
+     * -> bool (blocked)
+     * 
+     * @param buffer 
+     * @param offset 
+     * @returns 
+     */
     public static readAddr(buffer: ArrayBuffer, offset: number): [MLAddr | undefined, number] {
         let consumed = 0
         const [addrType, consumedAddrType] = this.readInt8(buffer, offset)
         consumed += consumedAddrType
         const addrTypeEnum = MLAddr.addrTypeFromInt(addrType)
         if (addrTypeEnum === MLAddrType.A_T_IP) {
-            const [addrIp, consumedAddrIp] = this.readInt32(buffer, offset + consumed)
-            consumed += consumedAddrIp
-            const [geoIp, consumedGeoIp] = this.readUint8(buffer, offset + consumed)
-            consumed += consumedGeoIp
+            const [ip2, consumedIp2] = this.readIp2(buffer, offset + consumed)
+            consumed += consumedIp2
             const [blocked, consumedBlocked] = this.readInt8(buffer, offset + consumed)
             consumed += consumedBlocked
-            return [new MLAddrIp(geoIp, blocked, addrIp), consumed]
+            return [new MLAddrIp(ip2.countryCode, blocked, ip2.ip), consumed]
         }
         else {
-            const [geoIp, consumedGeoIp] = this.readInt8(buffer, offset + consumed)
-            consumed += consumedGeoIp
-            const [nameAddr, consumedNameAddr] = this.readString(buffer, offset + consumed)
-            consumed += consumedNameAddr
+            const [hostname, consumedHostname] = this.readHostname(buffer, offset + consumed)
+            consumed += consumedHostname
             const [blocked, consumedBlocked] = this.readInt8(buffer, offset + consumed)
             consumed += consumedBlocked
-            return [new MLAddrName(geoIp, blocked, nameAddr), consumed]
+            return [new MLAddrName(hostname.countryCode, blocked, hostname.name), consumed]
         }
+    }
+
+    public static readIp2(buffer: ArrayBuffer, offset: number): [MLIp2, number] {
+        let consumed = 0
+        const [ip, consumedIp2] = this.readInt32(buffer, offset)
+        consumed += consumedIp2
+        const [cc, consumedCc] = this.readInt8(buffer, offset + consumed)
+        consumed += consumedCc
+        return [
+            new MLIp2(ip, cc),
+            consumed
+        ]
+    }
+
+    public static readHostname(buffer: ArrayBuffer, offset: number): [MLHostname, number] {
+        let consumed = 0
+        const [name, consumedName] = this.readString(buffer, offset)
+        consumed += consumedName
+        const [countrycode, consumedCc] = this.readInt8(buffer, offset + consumed)
+        consumed += consumedCc
+        return [
+            new MLHostname(name, countrycode),
+            consumed
+        ]
     }
 
     public static readHostState(buffer: ArrayBuffer, offset: number): [MLHostState, number] {
@@ -296,6 +335,68 @@ export class MLBufferUtils {
         consumed += consumedComment
         return [
             new MLFileComment(ip, countryCode, name, rating, comment),
+            consumed
+        ]
+    }
+
+    /**
+     * Structure:
+     * 
+     * KIND
+     * -> int8 (0 for known location, 1 for indirect location)
+     * 
+     * KIND (known location)
+     * -> IP2
+     * --> IP
+     * ---> int32
+     * --> int8 (country code)
+     * -> int16 (port)
+     * 
+     * KIND (indirect location)
+     * -> HOSTNAME
+     * --> string
+     * --> int8 (country code)
+     * -> MD4
+     * -> IP2 [...]
+     * -> int16 (port)
+     * 
+     * @param data 
+     * @param offset 
+     * @returns 
+     */
+    public static readClientKind(data: ArrayBuffer, offset: number): [MLClientKind, number] {
+        let consumed = 0
+        const [clientType, consumedClientType] = this.readInt8(data, offset)
+        consumed += consumedClientType
+        let clientName: MLHostname | null = null
+        let clientHash: ArrayBuffer | null = null
+        let clientIp: MLIp2 | null = null
+        if (clientType === 0) {
+            const [ip2, consumedIp2] = this.readIp2(data, offset + consumed)
+            consumed += consumedIp2
+            clientIp = ip2
+        }
+        else if (clientType === 1) {
+            const [_clientName, consumedClientName] = this.readHostname(data, offset + consumed)
+            consumed += consumedClientName
+            const [_clientHash, consumedClientHash] = this.readMd4(data, offset + consumed)
+            consumed += consumedClientHash
+            const [ip2, consumedIp2] = this.readIp2(data, offset + consumed)
+            consumed += consumedIp2
+            clientName = _clientName
+            clientHash = _clientHash
+            clientIp = ip2
+        }
+        const [port, consumedPort] = this.readInt16(data, offset + consumed)
+        consumed += consumedPort
+        return [
+            new MLClientKind(
+                clientType === 0 ? ClientConnType.C_T_DIRECT : ClientConnType.C_T_FIREWALLED,
+                clientName,
+                clientHash,
+                clientIp,
+                port
+            ),
             consumed
         ]
     }
@@ -402,6 +503,10 @@ export class MLMsgReader {
 
     readFileComment(offset: number): [MLFileComment, number] {
         return MLBufferUtils.readFileComment(this.data, offset)
+    }
+
+    readClientKind(offset: number): [MLClientKind, number] {
+        return MLBufferUtils.readClientKind(this.data, offset)
     }
 
     takeRawData(length: number): ArrayBuffer {
@@ -538,6 +643,12 @@ export class MLMsgReader {
 
     takeHostState(): MLHostState {
         const [ret, consumed] = this.readHostState(this.offset)
+        this.offset += consumed
+        return ret
+    }
+
+    takeClientKind(): MLClientKind {
+        const [ret, consumed] = this.readClientKind(this.offset)
         this.offset += consumed
         return ret
     }

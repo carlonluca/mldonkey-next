@@ -36,7 +36,7 @@ export class MLMsgToGetUploaders extends MLMsgTo {
 }
 
 export class MLMsgFromUploaders extends MLMsgFrom {
-    constructor(public fileIds: number[]) {
+    constructor(public clientNumbers: number[]) {
         super(MLMessageTypeFrom.T_UPLOAD_FILES)
     }
 

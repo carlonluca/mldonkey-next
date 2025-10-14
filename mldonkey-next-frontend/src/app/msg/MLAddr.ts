@@ -58,11 +58,11 @@ export class MLAddr implements MLUPdateable<MLAddr> {
 
 export class MLAddrIp extends MLAddr implements MLUPdateable<MLAddrIp> {
     constructor(
-        geoIp: number,
+        countryCode: number,
         blocked: number,
         public addrIp: number
     ) {
-        super(MLAddrType.A_T_IP, geoIp, blocked)
+        super(MLAddrType.A_T_IP, countryCode, blocked)
     }
 
     override update(update: MLAddr): void {
@@ -73,11 +73,11 @@ export class MLAddrIp extends MLAddr implements MLUPdateable<MLAddrIp> {
 
 export class MLAddrName extends MLAddr implements MLUPdateable<MLAddrName> {
     constructor(
-        geoIp: number,
+        countryCode: number,
         blocked: number,
         public nameAddr: string
     ) {
-        super(MLAddrType.A_T_NAME, geoIp, blocked)
+        super(MLAddrType.A_T_NAME, countryCode, blocked)
     }
 
     override update(update: MLAddrName): void {

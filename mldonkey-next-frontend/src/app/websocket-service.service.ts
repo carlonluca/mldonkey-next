@@ -42,6 +42,7 @@ import { MLMsgFromBwHUpDown, MLMsgFromBwUpDown, MLMsgFromStats } from './msg/MLM
 import { MLSubscriptionSet } from './core/MLSubscriptionSet'
 import { MLMsgFromServerInfo, MLMsgFromServerState } from './msg/MLMsgServer'
 import { MLMsgFromSharedFileInfo } from './msg/MLMsgSharedFileInfo'
+import { MLMsgFromClientInfo } from './msg/MLMsgClientInfo'
 
 export enum MLConnectionState {
     S_NOT_CONNECTED,
@@ -245,6 +246,8 @@ export class WebSocketService {
                 return [MLMsgFromSharedFileInfo.fromBuffer(data), size + SIZE_HEADER, true]
             case MLMessageTypeFrom.T_SERVER_STATE:
                 return [MLMsgFromServerState.fromBuffer(data), size + SIZE_HEADER, true]
+            case MLMessageTypeFrom.T_CLIENT_INFO:
+                return [MLMsgFromClientInfo.fromBuffer(data), size + SIZE_HEADER, true]
             default:
                 wsLogger.warn(`Unknown msg with opcode: ${MLMessageTypeFrom[opcode]} (${opcode})`)
                 return [null, size + SIZE_HEADER, true]

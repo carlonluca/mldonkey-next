@@ -23,16 +23,60 @@
  */
 
 import { Component, inject } from '@angular/core'
+import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
+import { MLMsgFromClientInfo } from 'src/app/msg/MLMsgClientInfo'
 import { UploadsService } from 'src/app/services/uploads.service'
+
+export class MLUpload {
+    constructor(
+        public clientId: number,
+        public clientInfo: MLMsgFromClientInfo
+    ) {}
+}
 
 @Component({
     selector: 'app-upload',
-    imports: [],
+    standalone: false,
     templateUrl: './upload.component.html',
     styleUrl: './upload.component.scss'
 })
 export class UploadComponent {
     private uploadsService = inject(UploadsService)
+    public uploadsModel: MLUpload[] = []
+    private subscriptions = new MLSubscriptionSet()
 
-    constructor() {}
+    constructor() {
+        this.subscriptions.add(
+            this.uploadsService.currentClientInfo.observable.subscribe(() => this.refresh())
+        )
+        this.subscriptions.add(
+            this.uploadsService.currentUploadFiles.observable.subscribe(() => this.refresh())
+        )
+
+        this.refresh()
+    }
+
+    protected refresh() {
+        if (this.uploadsService.currentUploadFiles.value === null) {
+            this.uploadsModel = []
+            return
+        }
+
+        const clientIds = this.uploadsService.currentUploadFiles.value
+        if (clientIds === null) {
+            this.uploadsModel = []
+            return
+        }
+
+        const newUploads: MLUpload[] = []
+        for (const clientId of clientIds.clientNumbers) {
+            const clientInfo = this.uploadsService.currentClientInfo.value.find(e =>
+                e.clientId === clientId)
+            if (!clientInfo)
+                continue
+            newUploads.push(new MLUpload(clientId, clientInfo as MLMsgFromClientInfo))
+        }
+
+        this.uploadsModel = newUploads
+    }
 }

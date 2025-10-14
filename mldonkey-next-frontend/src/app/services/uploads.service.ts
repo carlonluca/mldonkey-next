@@ -29,14 +29,8 @@ import { MLMessageTypeFrom } from '../msg/MLMsg'
 import { MLMsgFromUploaders, MLMsgToGetUploaders } from '../msg/MLMsgUploaders'
 import { interval } from 'rxjs'
 import { SharedFilesinfoService } from './sharedfilesinfo.service'
-import { MLMsgFromSharedFileInfo } from '../msg/MLMsgSharedFileInfo'
-
-export class MLUpload {
-    constructor(
-        public fileId: number,
-        public fileInfo: MLMsgFromSharedFileInfo
-    ) {}
-}
+import { MLMsgFromClientInfo } from '../msg/MLMsgClientInfo'
+import { MLObservableVariable } from '../core/MLObservableVariable'
 
 @Injectable({
     providedIn: 'root'
@@ -46,15 +40,22 @@ export class UploadsService implements OnDestroy {
     private websocketService = inject(WebSocketService)
     private sharedService = inject(SharedFilesinfoService)
     private subscriptions = new MLSubscriptionSet()
+    public currentUploadFiles: MLObservableVariable<MLMsgFromUploaders | null> =
+        new MLObservableVariable<MLMsgFromUploaders | null>(null)
+    public currentClientInfo: MLObservableVariable<MLMsgFromClientInfo[]> =
+        new MLObservableVariable<MLMsgFromClientInfo[]>([])
 
     constructor() {
         this.subscriptions.add(
             this.websocketService.lastMessage.observable.subscribe(m => {
-                if (m.type !== MLMessageTypeFrom.T_UPLOAD_FILES)
+                if (m.type === MLMessageTypeFrom.T_UPLOAD_FILES) {
+                    this.handleUploadFiles(m as MLMsgFromUploaders)
                     return
-                for (const fileId of (m as MLMsgFromUploaders).fileIds) {
-                    const info = this.sharedService.getWithKey(fileId)
-                    console.log("uploaders:", fileId, info?.sharedFileId, info?.fileName, this.sharedService.elements)
+                }
+
+                if (m.type === MLMessageTypeFrom.T_CLIENT_INFO) {
+                    this.handleClientInfo(m as MLMsgFromClientInfo)
+                    return
                 }
             })
         )
@@ -68,5 +69,23 @@ export class UploadsService implements OnDestroy {
 
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe(null)
+    }
+
+    protected handleUploadFiles(msg: MLMsgFromUploaders) {
+        this.currentUploadFiles.value = msg
+        this.currentClientInfo.value.filter(clientInfo => msg.clientNumbers.indexOf(clientInfo.clientId) >= 0)
+        console.log("ul:", this.currentClientInfo)
+    }
+
+    protected handleClientInfo(msg: MLMsgFromClientInfo) {
+        const index = this.currentClientInfo.value.findIndex(clientInfo => clientInfo.clientId === msg.clientId)
+        if (index !== -1) {
+            this.currentClientInfo.value[index] = msg
+            return
+        }
+
+        this.currentClientInfo.value.push(msg)
+        this.currentClientInfo.value = [...this.currentClientInfo.value]
+        console.log("ul:", this.currentUploadFiles)
     }
 }
