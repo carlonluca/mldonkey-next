@@ -74,7 +74,6 @@ export class UploadsService implements OnDestroy {
     protected handleUploadFiles(msg: MLMsgFromUploaders) {
         this.currentUploadFiles.value = msg
         this.currentClientInfo.value.filter(clientInfo => msg.clientNumbers.indexOf(clientInfo.clientId) >= 0)
-        console.log("ul:", this.currentClientInfo)
     }
 
     protected handleClientInfo(msg: MLMsgFromClientInfo) {
@@ -86,6 +85,5 @@ export class UploadsService implements OnDestroy {
 
         this.currentClientInfo.value.push(msg)
         this.currentClientInfo.value = [...this.currentClientInfo.value]
-        console.log("ul:", this.currentUploadFiles)
     }
 }

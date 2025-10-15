@@ -16,5 +16,36 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 
-Hello
-<p *ngFor="let upload of this.uploadsModel">{{ upload.clientInfo.clientName }}</p>
+<div class="title">
+    <fa-icon class="title-child" [icon]="this.faUpload"></fa-icon>
+    <h2 class="title-child">Uploads</h2>
+</div>
+
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef>Client name</th>
+    <td mat-cell *matCellDef="let upload; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+      {{ upload.clientName }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="filename">
+    <th mat-header-cell *matHeaderCellDef>File name</th>
+    <td mat-cell *matCellDef="let upload; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+      {{ upload.uploadFileName }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="uploaded">
+    <th mat-header-cell *matHeaderCellDef>Uploaded to client</th>
+    <td mat-cell *matCellDef="let upload; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+      {{ this.formatSize(upload.uploaded) }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="downloaded">
+    <th mat-header-cell *matHeaderCellDef>Downloaded from client</th>
+    <td mat-cell *matCellDef="let upload; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+      {{ this.formatSize(upload.downloaded) }}
+    </td>
+  </ng-container>  
+  <tr mat-header-row *matHeaderRowDef="['name', 'filename', 'uploaded', 'downloaded']"></tr>
+  <tr mat-row *matRowDef="let row; columns: ['name', 'filename', 'uploaded', 'downloaded']"></tr>
+</table>

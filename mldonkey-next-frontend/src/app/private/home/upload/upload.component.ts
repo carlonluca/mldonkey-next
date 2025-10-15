@@ -23,16 +23,12 @@
  */
 
 import { Component, inject } from '@angular/core'
+import { MatTableDataSource } from '@angular/material/table'
+import { faUpload } from '@fortawesome/free-solid-svg-icons'
 import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
+import { MLUtils } from 'src/app/core/MLUtils'
 import { MLMsgFromClientInfo } from 'src/app/msg/MLMsgClientInfo'
 import { UploadsService } from 'src/app/services/uploads.service'
-
-export class MLUpload {
-    constructor(
-        public clientId: number,
-        public clientInfo: MLMsgFromClientInfo
-    ) {}
-}
 
 @Component({
     selector: 'app-upload',
@@ -42,8 +38,10 @@ export class MLUpload {
 })
 export class UploadComponent {
     private uploadsService = inject(UploadsService)
-    public uploadsModel: MLUpload[] = []
     private subscriptions = new MLSubscriptionSet()
+    
+    dataSource = new MatTableDataSource<MLMsgFromClientInfo>([])
+    faUpload = faUpload
 
     constructor() {
         this.subscriptions.add(
@@ -58,25 +56,29 @@ export class UploadComponent {
 
     protected refresh() {
         if (this.uploadsService.currentUploadFiles.value === null) {
-            this.uploadsModel = []
+            this.dataSource.data = []
             return
         }
 
         const clientIds = this.uploadsService.currentUploadFiles.value
         if (clientIds === null) {
-            this.uploadsModel = []
+            this.dataSource.data = []
             return
         }
 
-        const newUploads: MLUpload[] = []
+        const newUploads: MLMsgFromClientInfo[] = []
         for (const clientId of clientIds.clientNumbers) {
             const clientInfo = this.uploadsService.currentClientInfo.value.find(e =>
                 e.clientId === clientId)
             if (!clientInfo)
                 continue
-            newUploads.push(new MLUpload(clientId, clientInfo as MLMsgFromClientInfo))
+            newUploads.push(clientInfo as MLMsgFromClientInfo)
         }
 
-        this.uploadsModel = newUploads
+        this.dataSource.data = newUploads
+    }
+
+    formatSize(size: bigint) {
+        return MLUtils.beautifySize(size)
     }
 }
