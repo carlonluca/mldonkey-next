@@ -24,7 +24,7 @@
 
 import { MLClientKind } from "./MLClientKind"
 import { MLHostState } from "./MLHostState"
-import { MLMessageTypeFrom, MLMsgFrom } from "./MLMsg"
+import { MLMessageTypeFrom, MLMessageTypeTo, MLMsgFrom, MLMsgTo } from "./MLMsg"
 import { MLMsgReader } from "./MLMsgReader"
 import { MLTag } from "./MLTag"
 
@@ -94,5 +94,17 @@ export class MLMsgFromClientInfo extends MLMsgFrom {
             clientVersion,
             suiVerified
         )
+    }
+}
+
+export class MLMsgToGetClientInfo extends MLMsgTo {
+    constructor(public clientId: number) {
+        super(MLMessageTypeTo.T_GET_CLIENT_INFO)
+    }
+
+    public override toBuffer(): ArrayBuffer {
+        let data = new ArrayBuffer()
+        data = this.appendInt32(data, this.clientId)
+        return this.createEnvelope(data)
     }
 }

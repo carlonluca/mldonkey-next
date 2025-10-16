@@ -29,7 +29,7 @@ import { MLMessageTypeFrom } from '../msg/MLMsg'
 import { MLMsgFromUploaders, MLMsgToGetUploaders } from '../msg/MLMsgUploaders'
 import { interval } from 'rxjs'
 import { SharedFilesinfoService } from './sharedfilesinfo.service'
-import { MLMsgFromClientInfo } from '../msg/MLMsgClientInfo'
+import { MLMsgFromClientInfo, MLMsgToGetClientInfo } from '../msg/MLMsgClientInfo'
 import { MLObservableVariable } from '../core/MLObservableVariable'
 
 @Injectable({
@@ -73,7 +73,11 @@ export class UploadsService implements OnDestroy {
 
     protected handleUploadFiles(msg: MLMsgFromUploaders) {
         this.currentUploadFiles.value = msg
-        this.currentClientInfo.value.filter(clientInfo => msg.clientNumbers.indexOf(clientInfo.clientId) >= 0)
+        this.currentClientInfo.value.filter(clientInfo =>
+            msg.clientNumbers.indexOf(clientInfo.clientId) >= 0)
+        for (const uploader of this.currentUploadFiles.value.clientNumbers)
+            if (!this.currentClientInfo.value.find(info => info.clientId === uploader))
+                this.websocketService.sendMsg(new MLMsgToGetClientInfo(uploader))
     }
 
     protected handleClientInfo(msg: MLMsgFromClientInfo) {
