@@ -26,7 +26,7 @@ import { inject, Injectable, OnDestroy } from '@angular/core'
 import { MLSubscriptionSet } from '../core/MLSubscriptionSet'
 import { WebSocketService } from '../websocket-service.service'
 import { MLMessageTypeFrom } from '../msg/MLMsg'
-import { MLMsgFromUploaders, MLMsgToGetUploaders } from '../msg/MLMsgUploaders'
+import { MLMsgFromPending, MLMsgFromUploaders, MLMsgToGetPending, MLMsgToGetUploaders } from '../msg/MLMsgUploaders'
 import { interval } from 'rxjs'
 import { SharedFilesinfoService } from './sharedfilesinfo.service'
 import { MLMsgFromClientInfo, MLMsgToGetClientInfo } from '../msg/MLMsgClientInfo'
@@ -42,6 +42,9 @@ export class UploadsService implements OnDestroy {
     private subscriptions = new MLSubscriptionSet()
     public currentUploadFiles: MLObservableVariable<MLMsgFromUploaders | null> =
         new MLObservableVariable<MLMsgFromUploaders | null>(null)
+    public currentPendingFiles: MLObservableVariable<MLMsgFromPending | null> =
+        new MLObservableVariable<MLMsgFromPending | null>(null)
+    // TODO: somehow clean this up
     public currentClientInfo: MLObservableVariable<MLMsgFromClientInfo[]> =
         new MLObservableVariable<MLMsgFromClientInfo[]>([])
 
@@ -57,27 +60,44 @@ export class UploadsService implements OnDestroy {
                     this.handleClientInfo(m as MLMsgFromClientInfo)
                     return
                 }
+
+                if (m.type === MLMessageTypeFrom.T_PENDING) {
+                    this.handlePendingFiles(m as MLMsgFromPending)
+                    return
+                }
             })
         )
         this.subscriptions.add(
             interval(this.REFRESH_INTERVAL).subscribe(() => {
-                this.websocketService.sendMsg(new MLMsgToGetUploaders())
+                this.requestRefresh()
             })
         )
-        this.websocketService.sendMsg(new MLMsgToGetUploaders())
+        this.requestRefresh()
     }
 
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe(null)
     }
 
+    requestRefresh() {
+        this.websocketService.sendMsg(new MLMsgToGetUploaders())
+        this.websocketService.sendMsg(new MLMsgToGetPending())
+    }
+
+    // TODO: delay the request to avoid loop
     protected handleUploadFiles(msg: MLMsgFromUploaders) {
         this.currentUploadFiles.value = msg
-        this.currentClientInfo.value.filter(clientInfo =>
-            msg.clientNumbers.indexOf(clientInfo.clientId) >= 0)
         for (const uploader of this.currentUploadFiles.value.clientNumbers)
             if (!this.currentClientInfo.value.find(info => info.clientId === uploader))
                 this.websocketService.sendMsg(new MLMsgToGetClientInfo(uploader))
+    }
+
+    // TODO: delay the request to avoid loop
+    protected handlePendingFiles(msg: MLMsgFromPending) {
+        this.currentPendingFiles.value = msg
+        for (const pending of this.currentPendingFiles.value.clientNumbers)
+            if (!this.currentClientInfo.value.find(info => info.clientId === pending))
+                this.websocketService.sendMsg(new MLMsgToGetClientInfo(pending))
     }
 
     protected handleClientInfo(msg: MLMsgFromClientInfo) {

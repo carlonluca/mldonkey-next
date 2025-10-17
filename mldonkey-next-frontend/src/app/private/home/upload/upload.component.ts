@@ -22,9 +22,10 @@
  * Date:    2025.10.07
  */
 
-import { Component, inject } from '@angular/core'
+import { Component, inject, OnDestroy } from '@angular/core'
 import { MatTableDataSource } from '@angular/material/table'
-import { faArrowDown, faArrowUp, faUpload } from '@fortawesome/free-solid-svg-icons'
+import { faArrowDown, faArrowUp, faBed, faUpload } from '@fortawesome/free-solid-svg-icons'
+import { interval } from 'rxjs'
 import { COUNTRY_FLAG_URLS, MLCountryCode } from 'src/app/core/MLCountryCode'
 import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
 import { MLUtils } from 'src/app/core/MLUtils'
@@ -38,35 +39,54 @@ import { UploadsService } from 'src/app/services/uploads.service'
     templateUrl: './upload.component.html',
     styleUrl: './upload.component.scss'
 })
-export class UploadComponent {
+export class UploadComponent implements OnDestroy {
     private uploadsService = inject(UploadsService)
     private subscriptions = new MLSubscriptionSet()
     
     dataSource = new MatTableDataSource<MLMsgFromClientInfo>([])
+    dataSourcePending = new MatTableDataSource<MLMsgFromClientInfo>([])
     faUpload = faUpload
     faUp = faArrowUp
     faDown = faArrowDown
+    faBed = faBed
     uiService = inject(UiServiceService)
 
     constructor() {
         this.subscriptions.add(
-            this.uploadsService.currentClientInfo.observable.subscribe(() => this.refresh())
+            this.uploadsService.currentClientInfo.observable.subscribe(() =>
+                this.refreshUploading()
+            )
         )
         this.subscriptions.add(
-            this.uploadsService.currentUploadFiles.observable.subscribe(() => this.refresh())
+            this.uploadsService.currentUploadFiles.observable.subscribe(() =>
+                this.refreshUploading()
+            )
+        )
+        this.subscriptions.add(
+            this.uploadsService.currentPendingFiles.observable.subscribe(() =>
+                this.refreshPending()
+            )
+        )
+        this.subscriptions.add(
+            interval(5000).subscribe(() => this.uploadsService.requestRefresh())
         )
 
-        this.refresh()
+        this.refreshUploading()
+        this.refreshPending()
     }
 
-    protected refresh() {
-        if (this.uploadsService.currentUploadFiles.value === null) {
+    ngOnDestroy(): void {
+        this.subscriptions.unsubscribe(null)
+    }
+
+    protected refreshUploading() {
+        if (!this.uploadsService.currentUploadFiles.value) {
             this.dataSource.data = []
             return
         }
 
         const clientIds = this.uploadsService.currentUploadFiles.value
-        if (clientIds === null) {
+        if (!clientIds) {
             this.dataSource.data = []
             return
         }
@@ -81,6 +101,31 @@ export class UploadComponent {
         }
 
         this.dataSource.data = newUploads
+    }
+
+    protected refreshPending() {
+        if (!this.uploadsService.currentPendingFiles.value) {
+            this.dataSourcePending.data = []
+            return
+        }
+
+        const clientIds = this.uploadsService.currentPendingFiles.value
+        if (!clientIds) {
+            this.dataSourcePending.data = []
+            return
+        }
+
+        const newPending: MLMsgFromClientInfo[] = []
+        for (const clientId of clientIds.clientNumbers) {
+            const clientInfo = this.uploadsService.currentClientInfo.value.find(e =>
+                e.clientId === clientId
+            )
+            if (!clientInfo)
+                continue
+            newPending.push(clientInfo as MLMsgFromClientInfo)
+        }
+
+        this.dataSourcePending.data = newPending
     }
 
     formatSize(size: bigint) {

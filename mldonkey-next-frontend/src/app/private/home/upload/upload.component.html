@@ -83,3 +83,71 @@
   <tr mat-header-row *matHeaderRowDef="['upload']"></tr>
   <tr mat-row *matRowDef="let row; columns: ['upload']"></tr>
 </table>
+
+<div class="title">
+    <fa-icon class="title-child" [icon]="this.faBed"></fa-icon>
+    <h2 class="title-child">Pending</h2>
+</div>
+
+<!-- Desktop -->
+<table mat-table [dataSource]="dataSourcePending" class="mat-elevation-z8" *ngIf="!this.uiService.mobileLayout.value">
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef>Client name</th>
+    <td mat-cell *matCellDef="let upload; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+      {{ upload.clientName }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="address">
+    <th mat-header-cell *matHeaderCellDef>Address</th>
+    <td mat-cell *matCellDef="let upload; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+      {{ computeAddress(upload) }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="cc">
+    <th mat-header-cell *matHeaderCellDef>Country</th>
+    <td mat-cell *matCellDef="let upload; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+      <img [src]="this.getFlagSVG(upload)" class="flag-image alternate-row-content">
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="filename">
+    <th mat-header-cell *matHeaderCellDef>File name</th>
+    <td mat-cell *matCellDef="let upload; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+      {{ upload.uploadFileName }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="uploaded">
+    <th mat-header-cell *matHeaderCellDef>Uploaded to client</th>
+    <td mat-cell *matCellDef="let upload; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+      {{ this.formatSize(upload.uploaded) }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="downloaded">
+    <th mat-header-cell *matHeaderCellDef>Downloaded from client</th>
+    <td mat-cell *matCellDef="let upload; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+      {{ this.formatSize(upload.downloaded) }}
+    </td>
+  </ng-container>  
+  <tr mat-header-row *matHeaderRowDef="['name', 'address', 'cc', 'filename', 'uploaded', 'downloaded']"></tr>
+  <tr mat-row *matRowDef="let row; columns: ['name', 'address', 'cc', 'filename', 'uploaded', 'downloaded']"></tr>
+</table>
+
+<!-- Mobile -->
+<table mat-table [dataSource]="dataSourcePending" class="mat-elevation-z8" *ngIf="this.uiService.mobileLayout.value">
+  <ng-container matColumnDef="upload">
+    <th mat-header-cell *matHeaderCellDef>Upload</th>
+    <td mat-cell *matCellDef="let upload; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+      <div class="container">
+        <img [src]="this.getFlagSVG(upload)" class="flag-image alternate-row-content">
+        <div class="text">
+          <div><b>Name: </b> {{ upload.clientName }}</div>
+          <div><b>Address: </b>{{ this.computeAddress(upload) }}</div>
+        </div>
+      </div>
+      {{ upload.uploadFileName }}<br/>
+      <fa-icon class="upload" [icon]="this.faUp"></fa-icon>{{ this.formatSize(upload.uploaded) }}
+      <fa-icon class="download" [icon]="this.faDown"></fa-icon>{{ this.formatSize(upload.downloaded) }}
+    </td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="['upload']"></tr>
+  <tr mat-row *matRowDef="let row; columns: ['upload']"></tr>
+</table>
