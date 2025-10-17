@@ -24,11 +24,12 @@
 
 import { Component, inject } from '@angular/core'
 import { MatTableDataSource } from '@angular/material/table'
-import { faUpload } from '@fortawesome/free-solid-svg-icons'
+import { faArrowDown, faArrowUp, faUpload } from '@fortawesome/free-solid-svg-icons'
 import { COUNTRY_FLAG_URLS, MLCountryCode } from 'src/app/core/MLCountryCode'
 import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
 import { MLUtils } from 'src/app/core/MLUtils'
 import { MLMsgFromClientInfo } from 'src/app/msg/MLMsgClientInfo'
+import { UiServiceService } from 'src/app/services/ui-service.service'
 import { UploadsService } from 'src/app/services/uploads.service'
 
 @Component({
@@ -43,6 +44,9 @@ export class UploadComponent {
     
     dataSource = new MatTableDataSource<MLMsgFromClientInfo>([])
     faUpload = faUpload
+    faUp = faArrowUp
+    faDown = faArrowDown
+    uiService = inject(UiServiceService)
 
     constructor() {
         this.subscriptions.add(

@@ -268,7 +268,7 @@ export class MLBufferUtils {
         let consumed = 0
         const [ip, consumedIp2] = this.readInt32(buffer, offset)
         consumed += consumedIp2
-        const [cc, consumedCc] = this.readInt8(buffer, offset + consumed)
+        const [cc, consumedCc] = this.readUint8(buffer, offset + consumed)
         consumed += consumedCc
         return [
             new MLIp2(ip, cc),
