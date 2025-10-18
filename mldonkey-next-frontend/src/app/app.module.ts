@@ -82,6 +82,7 @@ import { ChunksDiagramComponent } from "./components/chunks-diagram/chunks-diagr
 import { AboutComponent } from "./private/home/about/about.component";
 import { SearchHistoryComponent } from './private/home/search/search-history/search-history.component'
 import { UploadComponent } from './private/home/upload/upload.component'
+import { BandwidthSummaryComponent } from './components/bandwidth-summary/bandwidth-summary.component'
 
 echarts.use([
     BarChart,
@@ -117,7 +118,8 @@ echarts.use([
         SharedFilesComponent,
         ChunksDiagramComponent,
         SearchHistoryComponent,
-        UploadComponent
+        UploadComponent,
+        BandwidthSummaryComponent
     ],
     providers: [
         provideNgxMask()

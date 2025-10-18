@@ -183,8 +183,4 @@
     <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
 </table>
 
-<p id="summary" style="text-align: center;">
-    <b>Download</b>: {{ this.downSpeed | prettyBytesSpeed }} -
-    <b>Upload</b>: {{ this.upSpeed | prettyBytesSpeed }} -
-    <b>Downloading</b>: {{ this.clientStatsService.stats.value?.countDownloads ?? "?" }}
-</p>
+<app-bandwidth-summary></app-bandwidth-summary>
