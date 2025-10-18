@@ -67,11 +67,6 @@ export class UploadsService implements OnDestroy {
                 }
             })
         )
-        this.subscriptions.add(
-            interval(this.REFRESH_INTERVAL).subscribe(() => {
-                this.requestRefresh()
-            })
-        )
         this.requestRefresh()
     }
 
@@ -84,20 +79,24 @@ export class UploadsService implements OnDestroy {
         this.websocketService.sendMsg(new MLMsgToGetPending())
     }
 
-    // TODO: delay the request to avoid loop
     protected handleUploadFiles(msg: MLMsgFromUploaders) {
         this.currentUploadFiles.value = msg
         for (const uploader of this.currentUploadFiles.value.clientNumbers)
             if (!this.currentClientInfo.value.find(info => info.clientId === uploader))
-                this.websocketService.sendMsg(new MLMsgToGetClientInfo(uploader))
+                // Avoid tight loop
+                setTimeout(() => {
+                    this.websocketService.sendMsg(new MLMsgToGetClientInfo(uploader))
+                }, 1000)
     }
 
-    // TODO: delay the request to avoid loop
     protected handlePendingFiles(msg: MLMsgFromPending) {
         this.currentPendingFiles.value = msg
         for (const pending of this.currentPendingFiles.value.clientNumbers)
             if (!this.currentClientInfo.value.find(info => info.clientId === pending))
-                this.websocketService.sendMsg(new MLMsgToGetClientInfo(pending))
+                // Avoid tight loop
+                setTimeout(() => {
+                    this.websocketService.sendMsg(new MLMsgToGetClientInfo(pending))
+                }, 1000)
     }
 
     protected handleClientInfo(msg: MLMsgFromClientInfo) {
