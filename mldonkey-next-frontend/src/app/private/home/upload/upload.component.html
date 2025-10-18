@@ -48,13 +48,13 @@
     </td>
   </ng-container>
   <ng-container matColumnDef="uploaded">
-    <th mat-header-cell *matHeaderCellDef>Uploaded to client</th>
+    <th mat-header-cell *matHeaderCellDef>Uploaded</th>
     <td mat-cell *matCellDef="let upload; let isEven = even" [ngClass]="{'alternate-row': isEven }">
       {{ this.formatSize(upload.info.uploaded) }}
     </td>
   </ng-container>
   <ng-container matColumnDef="downloaded">
-    <th mat-header-cell *matHeaderCellDef>Downloaded from client</th>
+    <th mat-header-cell *matHeaderCellDef>Downloaded</th>
     <td mat-cell *matCellDef="let upload; let isEven = even" [ngClass]="{'alternate-row': isEven }">
       {{ this.formatSize(upload.info.downloaded) }}
     </td>
@@ -62,7 +62,7 @@
   <ng-container matColumnDef="speed">
     <th mat-header-cell *matHeaderCellDef>Speed</th>
     <td mat-cell *matCellDef="let upload; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-      {{ this.formatSpeed(upload.speed) }}
+      <app-speed-indicator class="alternate-row-content" [speed]="this.formatSpeed(upload.speed ?? 0)" [download]="false"></app-speed-indicator>
     </td>
   </ng-container>
   <tr mat-header-row *matHeaderRowDef="['name', 'address', 'cc', 'filename', 'uploaded', 'downloaded', 'speed']"></tr>
@@ -122,13 +122,13 @@
     </td>
   </ng-container>
   <ng-container matColumnDef="uploaded">
-    <th mat-header-cell *matHeaderCellDef>Uploaded to client</th>
+    <th mat-header-cell *matHeaderCellDef>Uploaded</th>
     <td mat-cell *matCellDef="let upload; let isEven = even" [ngClass]="{'alternate-row': isEven }">
       {{ this.formatSize(upload.info.uploaded) }}
     </td>
   </ng-container>
   <ng-container matColumnDef="downloaded">
-    <th mat-header-cell *matHeaderCellDef>Downloaded from client</th>
+    <th mat-header-cell *matHeaderCellDef>Downloaded</th>
     <td mat-cell *matCellDef="let upload; let isEven = even" [ngClass]="{'alternate-row': isEven }">
       {{ this.formatSize(upload.info.downloaded) }}
     </td>
@@ -149,7 +149,7 @@
           <div><b>Address: </b>{{ this.computeAddress(upload.info) }}</div>
         </div>
       </div>
-      {{ upload.uploadFileName }}<br/>
+      {{ upload.info.uploadFileName }}<br/>
       <fa-icon class="upload" [icon]="this.faUp"></fa-icon>{{ this.formatSize(upload.info.uploaded) }}
       <fa-icon class="download" [icon]="this.faDown"></fa-icon>{{ this.formatSize(upload.info.downloaded) }}
     </td>

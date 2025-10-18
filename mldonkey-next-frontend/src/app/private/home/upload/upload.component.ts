@@ -132,11 +132,10 @@ export class UploadComponent implements OnDestroy {
         return MLUtils.beautifySize(size)
     }
 
-    formatSpeed(speed: number | null): string {
+    formatSpeed(speed: number | null): number {
         if (speed === null)
-            return "-"
-        speed = Math.round(speed * 10**2) / 10**2
-        return MLUtils.beautifySpeed(speed)
+            return 0
+        return Math.round(speed * 10**2) / 10**2
     }
 
     computeCountryCode(upload: MLMsgFromClientInfo): number {

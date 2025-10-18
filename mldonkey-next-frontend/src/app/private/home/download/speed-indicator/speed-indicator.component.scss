@@ -23,7 +23,12 @@
 }
 
 .downloading {
-    color: $green-color;
+    color: $download-color;
+    font-weight: bold;
+}
+
+.uploading {
+    color: $upload-color;
     font-weight: bold;
 }
 

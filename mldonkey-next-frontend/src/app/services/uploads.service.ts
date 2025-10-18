@@ -91,21 +91,19 @@ export class UploadsService implements OnDestroy {
     protected handleUploadFiles(msg: MLMsgFromUploaders) {
         this.currentUploadFiles.value = msg
         for (const uploader of this.currentUploadFiles.value.clientNumbers)
-            if (!this.currentClientInfo.value.find(info => info.info.clientId === uploader))
-                // Avoid tight loop
-                setTimeout(() => {
-                    this.websocketService.sendMsg(new MLMsgToGetClientInfo(uploader))
-                }, 1000)
+            // Avoid tight loop
+            setTimeout(() => {
+                this.websocketService.sendMsg(new MLMsgToGetClientInfo(uploader))
+            }, 1000)
     }
 
     protected handlePendingFiles(msg: MLMsgFromPending) {
         this.currentPendingFiles.value = msg
         for (const pending of this.currentPendingFiles.value.clientNumbers)
-            if (!this.currentClientInfo.value.find(info => info.info.clientId === pending))
-                // Avoid tight loop
-                setTimeout(() => {
-                    this.websocketService.sendMsg(new MLMsgToGetClientInfo(pending))
-                }, 1000)
+            // Avoid tight loop
+            setTimeout(() => {
+                this.websocketService.sendMsg(new MLMsgToGetClientInfo(pending))
+            }, 1000)
     }
 
     protected handleClientInfo(msg: MLMsgFromClientInfo) {
