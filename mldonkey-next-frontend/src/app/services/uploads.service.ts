@@ -31,6 +31,14 @@ import { SharedFilesinfoService } from './sharedfilesinfo.service'
 import { MLMsgFromClientInfo, MLMsgToGetClientInfo } from '../msg/MLMsgClientInfo'
 import { MLObservableVariable } from '../core/MLObservableVariable'
 
+export class MLClientInfo {
+    constructor(
+        public info: MLMsgFromClientInfo,
+        public speed: number | null,
+        public timestamp: number
+    ) {}
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -44,8 +52,10 @@ export class UploadsService implements OnDestroy {
     public currentPendingFiles: MLObservableVariable<MLMsgFromPending | null> =
         new MLObservableVariable<MLMsgFromPending | null>(null)
     // TODO: somehow clean this up
-    public currentClientInfo: MLObservableVariable<MLMsgFromClientInfo[]> =
-        new MLObservableVariable<MLMsgFromClientInfo[]>([])
+    public currentClientInfo: MLObservableVariable<MLClientInfo[]> =
+        new MLObservableVariable<MLClientInfo[]>([])
+
+    private lastUploaded: Map<number, number> = new Map<number, number>()
 
     constructor() {
         this.subscriptions.add(
@@ -81,7 +91,7 @@ export class UploadsService implements OnDestroy {
     protected handleUploadFiles(msg: MLMsgFromUploaders) {
         this.currentUploadFiles.value = msg
         for (const uploader of this.currentUploadFiles.value.clientNumbers)
-            if (!this.currentClientInfo.value.find(info => info.clientId === uploader))
+            if (!this.currentClientInfo.value.find(info => info.info.clientId === uploader))
                 // Avoid tight loop
                 setTimeout(() => {
                     this.websocketService.sendMsg(new MLMsgToGetClientInfo(uploader))
@@ -91,7 +101,7 @@ export class UploadsService implements OnDestroy {
     protected handlePendingFiles(msg: MLMsgFromPending) {
         this.currentPendingFiles.value = msg
         for (const pending of this.currentPendingFiles.value.clientNumbers)
-            if (!this.currentClientInfo.value.find(info => info.clientId === pending))
+            if (!this.currentClientInfo.value.find(info => info.info.clientId === pending))
                 // Avoid tight loop
                 setTimeout(() => {
                     this.websocketService.sendMsg(new MLMsgToGetClientInfo(pending))
@@ -99,13 +109,26 @@ export class UploadsService implements OnDestroy {
     }
 
     protected handleClientInfo(msg: MLMsgFromClientInfo) {
-        const index = this.currentClientInfo.value.findIndex(clientInfo => clientInfo.clientId === msg.clientId)
+        const index = this.currentClientInfo.value.findIndex(clientInfo =>
+            clientInfo.info.clientId === msg.clientId
+        )
         if (index !== -1) {
-            this.currentClientInfo.value[index] = msg
+            const info = this.currentClientInfo.value[index]
+            const timestamp1 = info.timestamp
+            const timestamp2 = performance.now()
+            const uploaded1 = info.info.uploaded
+            const uploaded2 = msg.uploaded
+            const deltat = timestamp2 - timestamp1
+            this.currentClientInfo.value[index] = new MLClientInfo(
+                msg,
+                deltat > 0 ? Number(uploaded2 - uploaded1)/deltat : 0,
+                performance.now()
+            )
+            this.currentClientInfo.value = [...this.currentClientInfo.value]
             return
         }
 
-        this.currentClientInfo.value.push(msg)
+        this.currentClientInfo.value.push(new MLClientInfo(msg, null, performance.now()))
         this.currentClientInfo.value = [...this.currentClientInfo.value]
     }
 }

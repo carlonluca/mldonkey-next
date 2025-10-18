@@ -19,7 +19,7 @@
 /**
  * Author:  Luca Carlon
  * Company: -
- * Date: 2024.11.16
+ * Date:    2024.11.16
  */
 
 import { Pipe, PipeTransform } from "@angular/core"

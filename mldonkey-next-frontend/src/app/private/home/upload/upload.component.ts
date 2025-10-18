@@ -31,7 +31,7 @@ import { MLSubscriptionSet } from 'src/app/core/MLSubscriptionSet'
 import { MLUtils } from 'src/app/core/MLUtils'
 import { MLMsgFromClientInfo } from 'src/app/msg/MLMsgClientInfo'
 import { UiServiceService } from 'src/app/services/ui-service.service'
-import { UploadsService } from 'src/app/services/uploads.service'
+import { MLClientInfo, UploadsService } from 'src/app/services/uploads.service'
 
 @Component({
     selector: 'app-upload',
@@ -43,8 +43,8 @@ export class UploadComponent implements OnDestroy {
     private uploadsService = inject(UploadsService)
     private subscriptions = new MLSubscriptionSet()
     
-    dataSource = new MatTableDataSource<MLMsgFromClientInfo>([])
-    dataSourcePending = new MatTableDataSource<MLMsgFromClientInfo>([])
+    dataSource = new MatTableDataSource<MLClientInfo>([])
+    dataSourcePending = new MatTableDataSource<MLClientInfo>([])
     faUpload = faUpload
     faUp = faArrowUp
     faDown = faArrowDown
@@ -91,13 +91,13 @@ export class UploadComponent implements OnDestroy {
             return
         }
 
-        const newUploads: MLMsgFromClientInfo[] = []
+        const newUploads: MLClientInfo[] = []
         for (const clientId of clientIds.clientNumbers) {
             const clientInfo = this.uploadsService.currentClientInfo.value.find(e =>
-                e.clientId === clientId)
+                e.info.clientId === clientId)
             if (!clientInfo)
                 continue
-            newUploads.push(clientInfo as MLMsgFromClientInfo)
+            newUploads.push(clientInfo as MLClientInfo)
         }
 
         this.dataSource.data = newUploads
@@ -115,14 +115,14 @@ export class UploadComponent implements OnDestroy {
             return
         }
 
-        const newPending: MLMsgFromClientInfo[] = []
+        const newPending: MLClientInfo[] = []
         for (const clientId of clientIds.clientNumbers) {
             const clientInfo = this.uploadsService.currentClientInfo.value.find(e =>
-                e.clientId === clientId
+                e.info.clientId === clientId
             )
             if (!clientInfo)
                 continue
-            newPending.push(clientInfo as MLMsgFromClientInfo)
+            newPending.push(clientInfo as MLClientInfo)
         }
 
         this.dataSourcePending.data = newPending
@@ -130,6 +130,13 @@ export class UploadComponent implements OnDestroy {
 
     formatSize(size: bigint) {
         return MLUtils.beautifySize(size)
+    }
+
+    formatSpeed(speed: number | null): string {
+        if (speed === null)
+            return "-"
+        speed = Math.round(speed * 10**2) / 10**2
+        return MLUtils.beautifySpeed(speed)
     }
 
     computeCountryCode(upload: MLMsgFromClientInfo): number {
