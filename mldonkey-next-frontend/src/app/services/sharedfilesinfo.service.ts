@@ -32,9 +32,8 @@ import { MLMsgFromSharedFileInfo } from '../msg/MLMsgSharedFileInfo'
     providedIn: 'root'
 })
 export class SharedFilesinfoService extends MLCollectionModel<number, MLMsgFromSharedFileInfo> {
-
     constructor() {
-        const websocketService = inject(WebSocketService);
+        const websocketService = inject(WebSocketService)
 
         super()
         websocketService.lastMessage.observable.subscribe(msg => {

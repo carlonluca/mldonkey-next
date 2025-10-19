@@ -16,29 +16,16 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-$dark2: #303030;
-$sectionFontSize: 21px;
-$defaultMargin: 10px;
-$textColor: white;
-$green-color: green;
-$red-color: red;
-$primary-color: #c1175a;
-$disabled-opacity: 0.6;
-$download-color: $green-color;
-$upload-color: #5578e4;
+@use "../../css/shared.scss" as *;
 
-.wrap-anywhere {
-    word-break: break-all;
+#summary {
+    margin: $defaultMargin;
 }
 
-.table-mobile-td {
-    padding: $defaultMargin;
+.upload {
+    color: $upload-color;
 }
 
-.red-text {
-    color: $red-color;
-}
-
-.green-text {
-    color: $green-color;
+.download {
+    color: $download-color;
 }

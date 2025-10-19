@@ -1,0 +1,72 @@
+@use "../../../css/shared.scss" as *;
+
+.container {
+    display: flex;
+    margin-bottom: $defaultMargin;
+}
+
+.flag-image {
+    object-fit: cover;
+    margin-right: 10px;
+    align-items: stretch;
+    height: calc(1.2em*2);
+}
+
+.text {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    line-height: 1.2em;
+}
+
+.upload {
+    color: $upload-color;
+}
+
+.download {
+    color: $download-color;
+}
+
+.wrap {
+    display: block;
+    word-break: break-all;
+    white-space: normal;
+    width: 100%;
+    overflow-wrap: break-word;
+}
+
+.bandwidth-container {
+    display: flex;
+    align-items: flex-start;
+    gap: $defaultMargin;
+    border-radius: 8px;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.bandwidth-container-left {
+    width: 66;
+    flex: 0 0 66%;
+    background: rgba(255,255,255,0.1);
+    padding: 10px;
+    border-radius: 6px;
+    box-sizing: border-box;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.bandwidth-container-right {
+    width: 34%;
+    flex: 0 0 34;
+    background: rgba(255,255,255,0.1);
+    padding: 10px 16px;
+    border-radius: 6px;
+    box-sizing: border-box;
+    align-items: flex-end;
+}
+
+.row-footer {
+    background: rgba(255,255,255,0.1);
+    padding: 10px;
+    border-radius: 6px;
+}

@@ -35,13 +35,34 @@ export class MLMsgToGetUploaders extends MLMsgTo {
     }
 }
 
+export class MLMsgToGetPending extends MLMsgTo {
+    constructor() {
+        super(MLMessageTypeTo.T_GET_PENDING)
+    }
+
+    public override toBuffer(): ArrayBuffer {
+        return this.createEnvelope(new ArrayBuffer(0))
+    }
+}
+
 export class MLMsgFromUploaders extends MLMsgFrom {
-    constructor(public fileIds: number[]) {
+    constructor(public clientNumbers: number[]) {
         super(MLMessageTypeFrom.T_UPLOAD_FILES)
     }
 
     public static fromBuffer(buffer: ArrayBuffer): MLMsgFromUploaders {
         const reader = new MLMsgReader(buffer)
         return new MLMsgFromUploaders(reader.takeInt32List())
+    }
+}
+
+export class MLMsgFromPending extends MLMsgFrom {
+    constructor(public clientNumbers: number[]) {
+        super(MLMessageTypeFrom.T_PENDING)
+    }
+
+    public static fromBuffer(buffer: ArrayBuffer): MLMsgFromUploaders {
+        const reader = new MLMsgReader(buffer)
+        return new MLMsgFromPending(reader.takeInt32List())
     }
 }

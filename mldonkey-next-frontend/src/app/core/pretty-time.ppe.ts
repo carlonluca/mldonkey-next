@@ -16,14 +16,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Pipe, PipeTransform } from "@angular/core";
-import { MLUtils } from "./MLUtils";
-
 /**
  * Author:  Luca Carlon
  * Company: -
- * Date: 2024.11.16
+ * Date:    2024.11.16
  */
+
+import { Pipe, PipeTransform } from "@angular/core"
+import { MLUtils } from "./MLUtils"
 
 @Pipe({
     standalone: true,

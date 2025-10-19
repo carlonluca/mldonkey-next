@@ -16,9 +16,13 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<div style="display: inline;" [ngClass]="{'downloading': this.speed > 0, 'no-margins': true, 'bold-font': this.bold}">
-    <fa-icon [icon]="this.faArrowDown" *ngIf="this.speed > 0 && this.isDownloading()"></fa-icon>
-    <fa-icon [icon]="this.faPause" *ngIf="!this.isDownloading()" style="margin-left: 5px; margin-right: 5px;"></fa-icon>
-    <app-turtle-icon *ngIf="this.speed <= 0 && this.isDownloading()"></app-turtle-icon>
-    {{ this.isDownloading() ? (this.speed | prettyBytesSpeed) : "-" }}
+<div style="display: inline;"
+  [ngClass]="{'downloading': !this.isStuck() && this.download, 'uploading': !this.isStuck() && !this.download, 'no-margins': true, 'bold-font': this.bold}">
+  <fa-icon [icon]="this.faArrowDown"
+    *ngIf="!this.isStuck() && this.isDownloading() && this.download"></fa-icon>
+  <fa-icon [icon]="this.faArrowUp" *ngIf="!this.isStuck() && !this.download"></fa-icon>
+  <fa-icon [icon]="this.faPause" *ngIf="this.downloadState && !this.isDownloading()"
+    style="margin-left: 5px; margin-right: 5px;"></fa-icon>
+  <app-turtle-icon *ngIf="this.speed <= 0 && this.isDownloading()"></app-turtle-icon>
+  {{ this.isDownloading() ? (this.speed | prettyBytesSpeed) : "-" }}
 </div>

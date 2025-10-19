@@ -35,7 +35,6 @@ import { MLSortMode } from '../../../core/MLSortMode'
 import { DownloadingFilesService } from 'src/app/services/downloading-files.service'
 import { UiServiceService } from 'src/app/services/ui-service.service'
 import { WebSocketService } from 'src/app/websocket-service.service'
-import { ClientStatsService } from 'src/app/services/clientstats.service'
 import { MLMsgFromClientStats } from 'src/app/msg/MLMsgClientStats'
 import mime from 'mime'
 import prettyBytes from 'pretty-bytes'
@@ -63,10 +62,9 @@ import { MLMsgToConsoleCommand } from 'src/app/msg/MLMsgConsole'
 export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
     private websocketService = inject(WebSocketService)
     private downloadingService = inject(DownloadingFilesService)
-    clientStatsService = inject(ClientStatsService)
+    
     uiSerivce = inject(UiServiceService)
     router = inject(Router)
-
     dataSource = new MatTableDataSource<MLMsgDownloadElement>([])
     displayedColumns: string[] = this.displayColumns()
     selection = new SelectionModel<MLMsgDownloadElement>(true, [])
@@ -74,10 +72,8 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
     downTotal: bigint | null = null
     downProgress: bigint | null = null
     downPerc = 100
-    // downSpeed includes protocol overhead probably. downSpeedSum is just a sum of the downloads.
-    downSpeed: number | null = null
-    downSpeedSum: number | null = null
-    upSpeed: number | null = null
+    // downSpeed includes protocol overhead probably. downSpeedSum is just a sum of the downloads.    
+    downSpeedSum: number | null = null    
     filterString: string | null = null
     faDownload = faDownload
     sortModes = [
@@ -110,11 +106,6 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
             this.refreshSelection()
             this.refreshProgress()
         }))
-        this.subscriptions.add(
-            this.clientStatsService.stats.observable.subscribe(stats => {
-                this.refreshStats(stats)
-            })
-        )
     }
 
     ngAfterViewInit() {
@@ -280,19 +271,6 @@ export class DownloadComponent implements AfterViewInit, OnInit, OnDestroy {
         this.downProgress = done
         this.downSpeedSum = speed
         this.downPerc = this.downTotal === BigInt(0) ? 0 : Math.min(Math.max(0, Number(this.downProgress)/Number(this.downTotal)*100), 100)
-    }
-
-    refreshStats(stats: MLMsgFromClientStats | null) {
-        if (!stats) {
-            this.downSpeed = null
-            this.upSpeed = null
-        }
-        else {
-            const totDown = stats.tcpDownSpeed + stats.udpDownSpeed
-            const totUp = stats.tcpUpSpeed + stats.udpUpSpeed
-            this.downSpeed = totDown
-            this.upSpeed = totUp
-        }
     }
 
     refreshFilter() {

@@ -56,6 +56,7 @@ import { AboutComponent } from './about/about.component'
 import { ServersService } from 'src/app/services/servers.service'
 import { SharedFilesinfoService } from 'src/app/services/sharedfilesinfo.service'
 import { SearchesService } from 'src/app/services/searches.service'
+import { UploadsService } from 'src/app/services/uploads.service'
 
 @Component({
     selector: 'app-home',
@@ -64,19 +65,20 @@ import { SearchesService } from 'src/app/services/searches.service'
     standalone: false
 })
 export class HomeComponent {
-    private webSocketService = inject(WebSocketService);
-    private router = inject(Router);
-    private storage = inject(StorageService);
-    private optionService = inject(OptionsService);
-    private consoleService = inject(ConsoleService);
-    private sysInfoService = inject(SysinfoService);
-    private clientStatsService = inject(ClientStatsService);
-    private statsService = inject(StatsService);
-    private serverService = inject(ServersService);
-    private sharedFileInfoService = inject(SharedFilesinfoService);
-    private searchesService = inject(SearchesService);
-    uiService = inject(UiServiceService);
-    dialog = inject(MatDialog);
+    private webSocketService = inject(WebSocketService)
+    private router = inject(Router)
+    private storage = inject(StorageService)
+    private optionService = inject(OptionsService)
+    private consoleService = inject(ConsoleService)
+    private sysInfoService = inject(SysinfoService)
+    private clientStatsService = inject(ClientStatsService)
+    private statsService = inject(StatsService)
+    private serverService = inject(ServersService)
+    private sharedFileInfoService = inject(SharedFilesinfoService)
+    private searchesService = inject(SearchesService)
+    private uploadService = inject(UploadsService)
+    uiService = inject(UiServiceService)
+    dialog = inject(MatDialog)
 
     @ViewChild(MatSidenav) sidenav: MatSidenav;
 

@@ -37,11 +37,12 @@ import { wsLogger } from './core/MLLogger'
 import { MLMsgFromAddSectionOption, MLMsgFromOptionsInfo } from './msg/MLMsgOptions'
 import { MLMsgFromSysInfo } from './msg/MLMsgSysInfo'
 import { MLMsgFromClientStats } from './msg/MLMsgClientStats'
-import { MLMsgFromUploaders } from './msg/MLMsgUploaders'
+import { MLMsgFromPending, MLMsgFromUploaders } from './msg/MLMsgUploaders'
 import { MLMsgFromBwHUpDown, MLMsgFromBwUpDown, MLMsgFromStats } from './msg/MLMsgStats'
 import { MLSubscriptionSet } from './core/MLSubscriptionSet'
 import { MLMsgFromServerInfo, MLMsgFromServerState } from './msg/MLMsgServer'
 import { MLMsgFromSharedFileInfo } from './msg/MLMsgSharedFileInfo'
+import { MLMsgFromClientInfo } from './msg/MLMsgClientInfo'
 
 export enum MLConnectionState {
     S_NOT_CONNECTED,
@@ -245,6 +246,10 @@ export class WebSocketService {
                 return [MLMsgFromSharedFileInfo.fromBuffer(data), size + SIZE_HEADER, true]
             case MLMessageTypeFrom.T_SERVER_STATE:
                 return [MLMsgFromServerState.fromBuffer(data), size + SIZE_HEADER, true]
+            case MLMessageTypeFrom.T_CLIENT_INFO:
+                return [MLMsgFromClientInfo.fromBuffer(data), size + SIZE_HEADER, true]
+            case MLMessageTypeFrom.T_PENDING:
+                return [MLMsgFromPending.fromBuffer(data), size + SIZE_HEADER, true]
             default:
                 wsLogger.warn(`Unknown msg with opcode: ${MLMessageTypeFrom[opcode]} (${opcode})`)
                 return [null, size + SIZE_HEADER, true]

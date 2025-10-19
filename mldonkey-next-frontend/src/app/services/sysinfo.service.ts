@@ -16,12 +16,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Injectable, OnDestroy, inject } from '@angular/core';
-import { MLConnectionState, WebSocketService } from '../websocket-service.service';
-import { MLMsgFromSysInfo, MLMsgToGetSysInfo } from '../msg/MLMsgSysInfo';
-import { MLMessageTypeFrom } from '../msg/MLMsg';
-import { MLSubscriptionSet } from '../core/MLSubscriptionSet';
-import { MLObservableVariable } from '../core/MLObservableVariable';
+import { Injectable, OnDestroy, inject } from '@angular/core'
+import { MLConnectionState, WebSocketService } from '../websocket-service.service'
+import { MLMsgFromSysInfo, MLMsgToGetSysInfo } from '../msg/MLMsgSysInfo'
+import { MLMessageTypeFrom } from '../msg/MLMsg'
+import { MLSubscriptionSet } from '../core/MLSubscriptionSet'
+import { MLObservableVariable } from '../core/MLObservableVariable'
 
 @Injectable({
     providedIn: 'root'

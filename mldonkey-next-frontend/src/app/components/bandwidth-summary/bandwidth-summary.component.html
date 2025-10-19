@@ -1,0 +1,22 @@
+<!--
+  This file is part of mldonkey-next.
+
+  Copyright (c) 2025 Luca Carlon
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, version 3.
+
+  This program is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<p id="summary" style="text-align: center;">
+    <fa-icon class="download" [icon]="this.faDown"></fa-icon> {{ this.clientStatsService.stats.value?.countDownloads ?? "?" }} @ {{ this.downSpeed | prettyBytesSpeed }}
+    <fa-icon class="upload" [icon]="this.faUp"></fa-icon> {{ this.uploadsService.currentUploadFiles.value?.clientNumbers?.length ?? 0 }} @ {{ this.upSpeed | prettyBytesSpeed }}
+</p>

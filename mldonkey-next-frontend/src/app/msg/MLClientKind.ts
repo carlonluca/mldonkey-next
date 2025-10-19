@@ -1,7 +1,7 @@
 /*
  * This file is part of mldonkey-next.
  *
- * Copyright (c) 2024 Luca Carlon
+ * Copyright (c) 2025 Luca Carlon
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,29 +16,26 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-$dark2: #303030;
-$sectionFontSize: 21px;
-$defaultMargin: 10px;
-$textColor: white;
-$green-color: green;
-$red-color: red;
-$primary-color: #c1175a;
-$disabled-opacity: 0.6;
-$download-color: $green-color;
-$upload-color: #5578e4;
+/**
+ * Author:  Luca Carlon
+ * Company: -
+ * Date:    2025.10.07
+ */
 
-.wrap-anywhere {
-    word-break: break-all;
+import { MLHostname } from "./MLHostname"
+import { MLIp2 } from "./MLIp2"
+
+export enum ClientConnType {
+    C_T_DIRECT,
+    C_T_FIREWALLED
 }
 
-.table-mobile-td {
-    padding: $defaultMargin;
-}
-
-.red-text {
-    color: $red-color;
-}
-
-.green-text {
-    color: $green-color;
+export class MLClientKind {
+    constructor(
+        public clientType: ClientConnType,
+        public clientHostname: MLHostname | null,
+        public clientHash: ArrayBuffer | null,
+        public clientIp: MLIp2 | null,
+        public port: number
+    ) {}
 }
