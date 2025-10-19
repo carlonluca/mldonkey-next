@@ -119,7 +119,7 @@ export class UploadsService implements OnDestroy {
             const deltat = timestamp2 - timestamp1
             this.currentClientInfo.value[index] = new MLClientInfo(
                 msg,
-                deltat > 0 ? Number(uploaded2 - uploaded1)/deltat : 0,
+                deltat > 0 ? Math.abs(Number(uploaded2 - uploaded1)/deltat) : 0,
                 performance.now()
             )
             this.currentClientInfo.value = [...this.currentClientInfo.value]

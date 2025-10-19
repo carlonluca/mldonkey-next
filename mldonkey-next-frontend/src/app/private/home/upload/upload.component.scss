@@ -26,3 +26,44 @@
 .download {
     color: $download-color;
 }
+
+.wrap {
+    display: inline-block;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+.bandwidth-container {
+    display: flex;
+    align-items: flex-start;
+    gap: $defaultMargin;
+    border-radius: 8px;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.bandwidth-container-left {
+    flex: 2 2 auto;
+    min-width: 0;
+    background: rgba(255,255,255,0.1);
+    padding: 10px;
+    border-radius: 6px;
+    box-sizing: border-box;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.bandwidth-container-right {
+    flex: 1 1 auto;
+    background: rgba(255,255,255,0.1);
+    padding: 10px 16px;
+    border-radius: 6px;
+    box-sizing: border-box;
+    align-items: flex-end;
+}
+
+.row-footer {
+    background: rgba(255,255,255,0.1);
+    padding: 10px;
+    border-radius: 6px;
+}
