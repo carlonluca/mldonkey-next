@@ -112,3 +112,32 @@ td {
 #filter-form {
     flex-grow: 1;
 }
+
+.row-container {
+    display: flex;
+    gap: $defaultMargin;
+    border-radius: 8px;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.row-left {
+    width: 66;
+    flex: 0 0 66%;
+    background: rgba(255,255,255,0.1);
+    padding: 10px;
+    border-radius: 6px;
+    box-sizing: border-box;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.row-right {
+    width: 34%;
+    flex: 0 0 34;
+    background: rgba(255,255,255,0.1);
+    padding: 10px 16px;
+    border-radius: 6px;
+    box-sizing: border-box;
+    align-items: flex-end;
+}

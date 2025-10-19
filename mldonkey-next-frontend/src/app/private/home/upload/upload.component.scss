@@ -28,9 +28,11 @@
 }
 
 .wrap {
-    display: inline-block;
-    word-wrap: break-word;
+    display: block;
+    word-break: break-all;
     white-space: normal;
+    width: 100%;
+    overflow-wrap: break-word;
 }
 
 .bandwidth-container {
@@ -43,8 +45,8 @@
 }
 
 .bandwidth-container-left {
-    flex: 2 2 auto;
-    min-width: 0;
+    width: 66;
+    flex: 0 0 66%;
     background: rgba(255,255,255,0.1);
     padding: 10px;
     border-radius: 6px;
@@ -54,7 +56,8 @@
 }
 
 .bandwidth-container-right {
-    flex: 1 1 auto;
+    width: 34%;
+    flex: 0 0 34;
     background: rgba(255,255,255,0.1);
     padding: 10px 16px;
     border-radius: 6px;

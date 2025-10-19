@@ -157,14 +157,19 @@
             [ngClass]="{'alternate-row': isEven, 'table-mobile-td': true }">
             <div class="wrap-anywhere alternate-row-content">
                 <b>{{ download.name }}</b><br />
-                {{ download.downloaded | prettyBytes }} of {{ download.size | prettyBytes }}
-                <span class="no-margins"> - </span>
-                <app-speed-indicator [speed]="download.speed" [bold]="true"
-                    [downloadState]="download.state"></app-speed-indicator>
                 <mat-progress-bar class="file-progress pos-relative" mode="determinate"
                     [value]="computeProgress(download)">
                 </mat-progress-bar>
             </div>
+                <div class="row-container">
+                    <div class="row-left">
+                        {{ download.downloaded | prettyBytes }} of {{ download.size | prettyBytes }}
+                    </div>
+                    <div class="row-right">
+                        <app-speed-indicator style="float: right;" [speed]="download.speed" [bold]="true"
+                            [downloadState]="download.state"></app-speed-indicator>
+                    </div>
+                </div>
         </td>
         <td mat-footer-cell *matFooterCellDef="let isEven = even"
             [ngClass]="{'alternate-row': this.dataSource.data.length%2 === 0, 'table-mobile-td': true }">
