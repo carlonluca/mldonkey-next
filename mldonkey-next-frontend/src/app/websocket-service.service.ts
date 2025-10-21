@@ -77,12 +77,7 @@ export class WebSocketService {
             url: url,
             binaryType: "arraybuffer",
             deserializer: (e: MessageEvent) => e.data,
-            serializer: (b: ArrayBuffer) => b,
-            openObserver: {
-                next: _ => {
-                    this.connectionState.value = MLConnectionState.S_CONNECTED
-                }
-            }
+            serializer: (b: ArrayBuffer) => b
         })
         this.subscriptions.add(
             this.webSocket.subscribe({
@@ -131,6 +126,7 @@ export class WebSocketService {
                 const response = new ML.MLMessageGuiProtocol(protocolMsg.version)
                 this.sendMsg(response)
                 this.protocol = protocolMsg.version
+                this.connectionState.value = MLConnectionState.S_CONNECTED
             }
             else if (msg.type != ML.MLMessageTypeFrom.T_BAD_PASSWORD)
                 this.connectionState.value = MLConnectionState.S_AUTHENTICATED
