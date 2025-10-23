@@ -45,6 +45,16 @@
     </screenshots>
 
     <releases>
+        <release version="1.2.1" date="2025-10-21">
+            <description>
+                <p>Fixed race condition in the login procedure.</p>
+            </description>
+        </release>    
+        <release version="1.2.0" date="2025-10-20">
+            <description>
+                <p>Implemented the uploads section.</p>
+            </description>
+        </release>
         <release version="1.0.2" date="2025-09-30">
             <description>
                 <p>Minor UI fixe.</p>
