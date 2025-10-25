@@ -35,8 +35,6 @@ import { MLMsgFromServerInfo } from 'src/app/msg/MLMsgServer'
 import { ServersService } from 'src/app/services/servers.service'
 import { UiServiceService } from 'src/app/services/ui-service.service'
 import { WebSocketService } from 'src/app/websocket-service.service'
-import getUnicodeFlagIcon from 'country-flag-icons/unicode'
-import { hasFlag } from 'country-flag-icons'
 import { faServer } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
