@@ -22,8 +22,8 @@
     "@angular/platform-browser-dynamic": "^20.3.2",
     "@angular/router": "^20.3.2",
     "@fortawesome/angular-fontawesome": "^3.0.0",
-    "@fortawesome/fontawesome-svg-core": "^7.0.1",
-    "@fortawesome/free-solid-svg-icons": "^7.0.1",
+    "@fortawesome/fontawesome-svg-core": "^7.1.0",
+    "@fortawesome/free-solid-svg-icons": "^7.1.0",
     "blob-to-buffer": "^1.2.9",
     "buffer": "^6.0.3",
     "build-url-ts": "^6.2.0",
@@ -37,7 +37,7 @@
     "pretty-bytes": "^7.1.0",
     "rxjs": "~7.8.2",
     "tslib": "^2.7.0",
-    "zone.js": "~0.15.0"
+    "zone.js": "~0.15.1"
   },
   "devDependencies": {
     "@angular-eslint/builder": "^20.3.0",
@@ -50,7 +50,7 @@
     "@angular/compiler-cli": "^20.3.2",
     "@types/blob-to-buffer": "^1.2.2",
     "@types/country-flag-icons": "^1.2.2",
-    "@types/jasmine": "~5.1.9",
+    "@types/jasmine": "~5.1.12",
     "@types/luxon": "^3.7.1",
     "@types/node": "^24.5.2",
     "@typescript-eslint/eslint-plugin": "^8.33.1",
