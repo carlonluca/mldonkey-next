@@ -174,17 +174,15 @@ export class ServersComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     getFlagUnicode(server: MLMsgFromServerInfo): string {
-        if (!server || !server.inetAddr)
-            return "🏴‍☠️"
-        
-        const code = MLCountryCode.countryIndexToCode(server.inetAddr.countryCode)
+        const cc = server.inetAddr?.countryCode
+        if (!cc)
+            return ""
+
+        const code = MLCountryCode.countryIndexToCode(cc)
         if (!code)
-            return "🏴‍☠️"
+            return ""
 
-        if (!hasFlag(code))
-            return "🏴‍☠️"
-
-        return getUnicodeFlagIcon(code) ?? "🏴‍☠️"
+        return COUNTRY_FLAG_URLS.get(code) ?? ""
     }
 
     isConnected(server: MLMsgFromServerInfo) {

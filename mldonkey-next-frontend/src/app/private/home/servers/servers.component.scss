@@ -24,9 +24,23 @@
 
 @use "../../../css/shared.scss" as *;
 
+.container {
+    display: flex;
+    margin-bottom: $defaultMargin;
+}
+
 .flag-image {
-    height: 2em;
-    padding: 0px;
+    object-fit: cover;
+    margin-right: 10px;
+    align-items: stretch;
+    height: calc(1.2em*2);
+}
+
+.text {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    line-height: 1.2em;
 }
 
 td {
