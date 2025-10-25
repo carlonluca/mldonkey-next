@@ -100,7 +100,6 @@ export class UploadsService implements OnDestroy {
         for (const uploader of this.currentUploadFiles.value.clientNumbers)
             // Avoid tight loop
             setTimeout(() => {
-                console.log("Requesting info:", uploader)
                 this.websocketService.sendMsg(new MLMsgToGetClientInfo(uploader))
             }, 1000)
     }
@@ -110,7 +109,6 @@ export class UploadsService implements OnDestroy {
         for (const pending of this.currentPendingFiles.value.clientNumbers)
             // Avoid tight loop
             setTimeout(() => {
-                console.log("Requesting info:", pending)
                 this.websocketService.sendMsg(new MLMsgToGetClientInfo(pending))
             }, 1000)
     }
@@ -129,7 +127,6 @@ export class UploadsService implements OnDestroy {
                 const uploaded1 = info.info.uploaded
                 const uploaded2 = msg.uploaded
                 const deltat = timestamp2 - timestamp1
-                console.log("Got info:", info.info.uploadFileName, timestamp1, timestamp2, deltat, uploaded1, uploaded2, Number(uploaded2 - uploaded1)/(deltat/1000))
                 this.currentClientInfo.value[index] = new MLClientInfo(
                     msg,
                     deltat > 0 ? Math.abs(Number(uploaded2 - uploaded1)/(deltat/1000)) : info.speed,
