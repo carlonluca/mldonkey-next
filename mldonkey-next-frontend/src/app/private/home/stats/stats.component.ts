@@ -82,7 +82,7 @@ export class StatsComponent {
             left: '3%',
             right: '4%',
             bottom: '3%',
-            containLabel: true
+            outerBoundsMode: 'auto'
         },
         xAxis: {
             type: 'value',
@@ -174,7 +174,7 @@ export class StatsComponent {
             }
         },
         grid:  {
-            containLabel: true
+            outerBoundsMode: 'auto'
         },
         series: [
             {
@@ -251,7 +251,7 @@ export class StatsComponent {
             }
         },
         grid:  {
-            containLabel: true
+            outerBoundsMode: 'auto'
         },
         series: [
             {

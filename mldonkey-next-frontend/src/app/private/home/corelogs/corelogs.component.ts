@@ -35,6 +35,8 @@ class LogLine {
     text: string
 
     static parse(line: string): LogLine | null {
+        if (!line || !line.match)
+            return null
         const logPattern = /(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}:\d{2}) \[(\w+)\] (.+)/
         const match = line.match(logPattern)
         if (match) {

@@ -21,7 +21,7 @@
         <ng-content></ng-content>
     </div>
     <div id="toolbar">
-        <button mat-fab extended [disabled]="this.isAtTop()" (click)="this.scrollToTop()">
+        <button mat-fab extended [disabled]="this.isTop" (click)="this.scrollToTop()">
             <fa-icon [icon]="faArrowUp"></fa-icon>
         </button>
 

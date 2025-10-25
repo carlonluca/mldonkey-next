@@ -40,8 +40,11 @@ export class FollowContentViewComponent {
     faPersonWalkingArrowRight = faPersonWalkingArrowRight
     faArrowUp = faArrowUp
     follow = true
+    isTop = false
 
     onScroll(_event: WheelEvent) {
+        const el = this.scrollContainer.nativeElement;
+        this.isTop = el.scrollTop === 0;
         this.dontFollow()
     }
 
@@ -64,11 +67,5 @@ export class FollowContentViewComponent {
     dontFollow() {
         this.scrollDirective.follow = false
         this.follow = false
-    }
-
-    isAtTop() {
-        if (!this.scrollContainer)
-            return true
-        return this.scrollContainer.nativeElement.scrollTop === 0
     }
 }
