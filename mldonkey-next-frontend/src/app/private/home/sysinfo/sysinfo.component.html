@@ -16,117 +16,133 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<div class="title">
-    <fa-icon class="title-child" [icon]="faHelmetSafety"></fa-icon>
-    <h2 class="title-child">Build information</h2>
-</div>
+@if (this.sysInfo === null) {
+    <div id="centered-container">
+        <p id="centered-label">Data missing</p>
+    </div>
+}
+@else if (this.minProtoErr() !== null) {
+    <div id="centered-container">
+        <p id="centered-label">
+            Protocol version is {{ this.minProtoErr() }}.<br/>
+            This protocol does not support system info.
+        </p>
+    </div>
+}
+@else {
+    <div class="title">
+        <fa-icon class="title-child" [icon]="faHelmetSafety"></fa-icon>
+        <h2 class="title-child">Build information</h2>
+    </div>
 
-<table mat-table [dataSource]="dataSourceBuildInfo">
-    <ng-container matColumnDef="key">
-        <th mat-header-cell *matHeaderCellDef>Property</th>
-        <td mat-cell *matCellDef="let pair; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-            <div class="wrap-anywhere alternate-row-content"><b>{{ pair.label }}</b></div>
-        </td>
-    </ng-container>
-    <ng-container matColumnDef="value">
-        <th mat-header-cell *matHeaderCellDef>Value</th>
-        <td mat-cell *matCellDef="let pair; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-            <div class="wrap-anywhere alternate-row-content"
-                [ngClass]="{'red-text': pair.value === '✗', 'green-text': pair.value === '✓' }">{{ pair.value
-                }}</div>
-        </td>
-    </ng-container>
-    <tr mat-header-row *matHeaderRowDef="[ 'key', 'value' ]"></tr>
-    <tr mat-row *matRowDef="let row; columns: [ 'key', 'value' ];"></tr>
-</table>
+    <table mat-table [dataSource]="dataSourceBuildInfo">
+        <ng-container matColumnDef="key">
+            <th mat-header-cell *matHeaderCellDef>Property</th>
+            <td mat-cell *matCellDef="let pair; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+                <div class="wrap-anywhere alternate-row-content"><b>{{ pair.label }}</b></div>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="value">
+            <th mat-header-cell *matHeaderCellDef>Value</th>
+            <td mat-cell *matCellDef="let pair; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+                <div class="wrap-anywhere alternate-row-content"
+                    [ngClass]="{'red-text': pair.value === '✗', 'green-text': pair.value === '✓' }">{{ pair.value
+                    }}</div>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="[ 'key', 'value' ]"></tr>
+        <tr mat-row *matRowDef="let row; columns: [ 'key', 'value' ];"></tr>
+    </table>
 
-<div class="title">
-    <fa-icon class="title-child" [icon]="faPersonRunning"></fa-icon>
-    <h2 class="title-child">Runtime information</h2>
-</div>
+    <div class="title">
+        <fa-icon class="title-child" [icon]="faPersonRunning"></fa-icon>
+        <h2 class="title-child">Runtime information</h2>
+    </div>
 
-<table mat-table [dataSource]="dataSourceRunInfo">
-    <ng-container matColumnDef="key">
-        <th mat-header-cell *matHeaderCellDef>Property</th>
-        <td mat-cell *matCellDef="let pair; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-            <div class="wrap-anywhere alternate-row-content"><b>{{ pair.label }}</b></div>
-        </td>
-    </ng-container>
-    <ng-container matColumnDef="value">
-        <th mat-header-cell *matHeaderCellDef>Value</th>
-        <td mat-cell *matCellDef="let pair; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-            <div class="wrap-anywhere alternate-row-content"
-                [ngClass]="{'red-text': pair.value === '✗', 'green-text': pair.value === '✓' }">{{ pair.value }}</div>
-        </td>
-    </ng-container>
-    <tr mat-header-row *matHeaderRowDef="[ 'key', 'value' ]"></tr>
-    <tr mat-row *matRowDef="let row; columns: [ 'key', 'value' ];"></tr>
-</table>
+    <table mat-table [dataSource]="dataSourceRunInfo">
+        <ng-container matColumnDef="key">
+            <th mat-header-cell *matHeaderCellDef>Property</th>
+            <td mat-cell *matCellDef="let pair; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+                <div class="wrap-anywhere alternate-row-content"><b>{{ pair.label }}</b></div>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="value">
+            <th mat-header-cell *matHeaderCellDef>Value</th>
+            <td mat-cell *matCellDef="let pair; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+                <div class="wrap-anywhere alternate-row-content"
+                    [ngClass]="{'red-text': pair.value === '✗', 'green-text': pair.value === '✓' }">{{ pair.value }}
+                </div>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="[ 'key', 'value' ]"></tr>
+        <tr mat-row *matRowDef="let row; columns: [ 'key', 'value' ];"></tr>
+    </table>
 
-<div class="title">
-    <fa-icon class="title-child" [icon]="faDoorOpen"></fa-icon>
-    <h2 class="title-child">Port information</h2>
-</div>
+    <div class="title">
+        <fa-icon class="title-child" [icon]="faDoorOpen"></fa-icon>
+        <h2 class="title-child">Port information</h2>
+    </div>
 
-<table mat-table [dataSource]="dataSourcePortInfo">
-    <ng-container matColumnDef="network">
-        <th mat-header-cell *matHeaderCellDef>Network</th>
-        <td mat-cell *matCellDef="let portData; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-            <div class="wrap-anywhere alternate-row-content"><b>{{ portData.network }}</b></div>
-        </td>
-    </ng-container>
-    <ng-container matColumnDef="port">
-        <th mat-header-cell *matHeaderCellDef>Port</th>
-        <td mat-cell *matCellDef="let portData; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-            <div class="wrap-anywhere alternate-row-content">{{ portData.port }}</div>
-        </td>
-    </ng-container>
-    <ng-container matColumnDef="type">
-        <th mat-header-cell *matHeaderCellDef>Type</th>
-        <td mat-cell *matCellDef="let portData; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-            <div class="wrap-anywhere alternate-row-content">{{ portData.type }}</div>
-        </td>
-    </ng-container>
-    <tr mat-header-row *matHeaderRowDef="[ 'network', 'port', 'type' ]"></tr>
-    <tr mat-row *matRowDef="let row; columns: [ 'network', 'port', 'type' ];"></tr>
-</table>
+    <table mat-table [dataSource]="dataSourcePortInfo">
+        <ng-container matColumnDef="network">
+            <th mat-header-cell *matHeaderCellDef>Network</th>
+            <td mat-cell *matCellDef="let portData; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+                <div class="wrap-anywhere alternate-row-content"><b>{{ portData.network }}</b></div>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="port">
+            <th mat-header-cell *matHeaderCellDef>Port</th>
+            <td mat-cell *matCellDef="let portData; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+                <div class="wrap-anywhere alternate-row-content">{{ portData.port }}</div>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef>Type</th>
+            <td mat-cell *matCellDef="let portData; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+                <div class="wrap-anywhere alternate-row-content">{{ portData.type }}</div>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="[ 'network', 'port', 'type' ]"></tr>
+        <tr mat-row *matRowDef="let row; columns: [ 'network', 'port', 'type' ];"></tr>
+    </table>
 
-<div class="title">
-    <fa-icon class="title-child" [icon]="faHardDrive"></fa-icon>
-    <h2 class="title-child">Shares information</h2>
-</div>
+    <div class="title">
+        <fa-icon class="title-child" [icon]="faHardDrive"></fa-icon>
+        <h2 class="title-child">Shares information</h2>
+    </div>
 
-<table mat-table [dataSource]="dataSourceShareInfo">
-    <ng-container matColumnDef="dir">
-        <th mat-header-cell *matHeaderCellDef>Directory</th>
-        <td mat-cell *matCellDef="let shareData; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-            <div class="wrap-anywhere alternate-row-content"><b>{{ shareData.dir }}</b></div>
-        </td>
-    </ng-container>
-    <ng-container matColumnDef="type">
-        <th mat-header-cell *matHeaderCellDef>Type</th>
-        <td mat-cell *matCellDef="let shareData; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-            <div class="wrap-anywhere alternate-row-content">{{ shareData.strategy }}</div>
-        </td>
-    </ng-container>
-    <ng-container matColumnDef="used">
-        <th mat-header-cell *matHeaderCellDef>Used</th>
-        <td mat-cell *matCellDef="let shareData; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-            <div class="wrap-anywhere alternate-row-content">{{ shareData.used | prettyBytes }}</div>
-        </td>
-    </ng-container>
-    <ng-container matColumnDef="free">
-        <th mat-header-cell *matHeaderCellDef>Free</th>
-        <td mat-cell *matCellDef="let shareData; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-            <div class="wrap-anywhere alternate-row-content">{{ shareData.free | prettyBytes }}</div>
-        </td>
-    </ng-container>
-    <ng-container matColumnDef="percFree">
-        <th mat-header-cell *matHeaderCellDef>Percentage free</th>
-        <td mat-cell *matCellDef="let shareData; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-            <div class="wrap-anywhere alternate-row-content">{{ shareData.percFree }} %</div>
-        </td>
-    </ng-container>
-    <tr mat-header-row *matHeaderRowDef="[ 'dir', 'type', 'used', 'free', 'percFree' ]"></tr>
-    <tr mat-row *matRowDef="let row; columns: [ 'dir', 'type', 'used', 'free', 'percFree' ];"></tr>
-</table>
+    <table mat-table [dataSource]="dataSourceShareInfo">
+        <ng-container matColumnDef="dir">
+            <th mat-header-cell *matHeaderCellDef>Directory</th>
+            <td mat-cell *matCellDef="let shareData; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+                <div class="wrap-anywhere alternate-row-content"><b>{{ shareData.dir }}</b></div>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef>Type</th>
+            <td mat-cell *matCellDef="let shareData; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+                <div class="wrap-anywhere alternate-row-content">{{ shareData.strategy }}</div>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="used">
+            <th mat-header-cell *matHeaderCellDef>Used</th>
+            <td mat-cell *matCellDef="let shareData; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+                <div class="wrap-anywhere alternate-row-content">{{ shareData.used | prettyBytes }}</div>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="free">
+            <th mat-header-cell *matHeaderCellDef>Free</th>
+            <td mat-cell *matCellDef="let shareData; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+                <div class="wrap-anywhere alternate-row-content">{{ shareData.free | prettyBytes }}</div>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="percFree">
+            <th mat-header-cell *matHeaderCellDef>Percentage free</th>
+            <td mat-cell *matCellDef="let shareData; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+                <div class="wrap-anywhere alternate-row-content">{{ shareData.percFree }} %</div>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="[ 'dir', 'type', 'used', 'free', 'percFree' ]"></tr>
+        <tr mat-row *matRowDef="let row; columns: [ 'dir', 'type', 'used', 'free', 'percFree' ];"></tr>
+    </table>
+}

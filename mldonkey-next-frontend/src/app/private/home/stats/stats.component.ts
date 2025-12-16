@@ -50,7 +50,7 @@ export class StatsComponent {
             top: 'middle',
             z: 101,
             style: {
-                text: 'No data',
+                text: this.buildNoDataText(),
                 fontSize: 20,
                 fontWeight: 'bold',
                 fill: this.fontColor
@@ -386,5 +386,11 @@ export class StatsComponent {
         const hours = date.getHours().toString().padStart(2, '0')
         const minutes = date.getMinutes().toString().padStart(2, '0')
         return `${day}/${month} ${hours}:${minutes}`
+    }
+
+    private buildNoDataText(): string {
+        if (this.websocketService.protocol < 42)
+            return "Protocol does not support BW data"
+        return "No data"
     }
 }

@@ -121,8 +121,10 @@ export class StatsService extends MLCollectionModel<number, MLNetworkStatModel> 
     refresh() {
         this.websocketService.networkManager.elements.value.forEach(n => {
             this.websocketService.sendMsg(new MLMsgToGetStats(n.netNum))
-            this.websocketService.sendMsg(new MLMsgToGetBwUpDown())
-            this.websocketService.sendMsg(new MLMsgToGetBwHUpDown())
+            if (this.websocketService.protocol >= 42) {
+                this.websocketService.sendMsg(new MLMsgToGetBwUpDown())
+                this.websocketService.sendMsg(new MLMsgToGetBwHUpDown())
+            }
         })
     }
 

@@ -22,6 +22,7 @@ import { MLMsgFromSysInfo, MLMsgToGetSysInfo } from '../msg/MLMsgSysInfo'
 import { MLMessageTypeFrom } from '../msg/MLMsg'
 import { MLSubscriptionSet } from '../core/MLSubscriptionSet'
 import { MLObservableVariable } from '../core/MLObservableVariable'
+import { MLMinProtoError } from '../core/MLMinProtoErr'
 
 @Injectable({
     providedIn: 'root'
@@ -29,13 +30,16 @@ import { MLObservableVariable } from '../core/MLObservableVariable'
 export class SysinfoService implements OnDestroy {
     private websocketService = inject(WebSocketService);
 
-    public sysInfo = new MLObservableVariable<MLMsgFromSysInfo | null>(null)
+    public sysInfo = new MLObservableVariable<MLMsgFromSysInfo | null | MLMinProtoError>(null)
     private subscriptions: MLSubscriptionSet = new MLSubscriptionSet()
 
     constructor() {
         setInterval(() => {
             if (this.websocketService.connectionState.value === MLConnectionState.S_AUTHENTICATED) {
-                this.websocketService.sendMsg(new MLMsgToGetSysInfo())
+                if (this.websocketService.protocol < 42)
+                    this.sysInfo.value = new MLMinProtoError(this.websocketService.protocol)
+                else
+                    this.websocketService.sendMsg(new MLMsgToGetSysInfo())
             }
         }, 1000)
         this.subscriptions.add(
@@ -46,7 +50,7 @@ export class SysinfoService implements OnDestroy {
             })
         )
     }
-    
+
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe(null)
     }

@@ -60,9 +60,9 @@ export class WebSocketService {
     public lastMessage: MLObservableVariable<ML.MLMsgFrom> =
         new MLObservableVariable<ML.MLMsgFrom>(new ML.MLMsgFromNone())
     public networkManager: MLNetworkManager
+    public protocol = 0
 
     private buffer: ArrayBuffer = new ArrayBuffer(0)
-    private protocol = 0
     private subscriptions = new MLSubscriptionSet()
 
     constructor() {

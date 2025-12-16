@@ -25,6 +25,7 @@ import { SysinfoService } from 'src/app/services/sysinfo.service'
 import { DateTime } from 'luxon'
 import { MLUtils } from 'src/app/core/MLUtils'
 import prettyBytes from 'pretty-bytes'
+import { MLMinProtoError } from 'src/app/core/MLMinProtoErr'
 
 class RowData {
     key: string
@@ -66,6 +67,7 @@ class FormattableKey {
 })
 export class SysInfoComponent implements OnInit {
     sysinfoService = inject(SysinfoService)
+    sysInfo: MLMsgFromSysInfo | MLMinProtoError | null = null
 
     dataSourceBuildInfo = new MatTableDataSource<RowData>([])
     dataSourceRunInfo = new MatTableDataSource<RowData>([])
@@ -82,7 +84,8 @@ export class SysInfoComponent implements OnInit {
     ngOnInit(): void {
         this.subscriptions.add(
             this.sysinfoService.sysInfo.observable.subscribe(sysInfo => {
-                if (sysInfo) {
+                this.sysInfo = sysInfo
+                if (sysInfo instanceof MLMsgFromSysInfo) {
                     this.refreshBuildInfo(sysInfo)
                     this.refreshRunInfo(sysInfo)
                     this.refreshPortInfo(sysInfo)
@@ -90,6 +93,17 @@ export class SysInfoComponent implements OnInit {
                 }
             })
         )
+        this.sysInfo = this.sysinfoService.sysInfo.value
+    }
+
+    isValidSysinfo(): boolean {
+        return this.sysInfo instanceof MLMsgFromSysInfo
+    }
+
+    minProtoErr(): number | null {
+        if (this.sysInfo instanceof MLMinProtoError)
+            return (this.sysInfo as MLMinProtoError).currProto
+        return null
     }
 
     private refreshShareInfo(sysInfos: MLMsgFromSysInfo) {
