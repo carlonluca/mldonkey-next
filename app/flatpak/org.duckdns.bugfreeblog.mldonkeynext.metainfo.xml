@@ -45,6 +45,11 @@
     </screenshots>
 
     <releases>
+        <release version="1.4.0" date="2025-12-16">
+            <description>
+                <p>Added support for older mldonkey core versions.</p>
+            </description>
+        </release>
         <release version="1.3.0" date="2025-10-25">
             <description>
                 <p>Updated UI.</p>
