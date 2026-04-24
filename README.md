@@ -1,6 +1,8 @@
 # mldonkey-next
 
-
+![Docker Pulls](https://img.shields.io/docker/pulls/carlonluca/mldonkey?style=for-the-badge&logoColor=c01d5c&logo=docker&color=c01d5c)
+![Flathub Downloads](https://img.shields.io/flathub/downloads/org.duckdns.bugfreeblog.mldonkeynext?style=for-the-badge&logoColor=c01d5c&logo=flathub&color=c01d5c&label=flathub)
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/carlonluca/mldonkey-next/total?style=for-the-badge&logoColor=c01d5c&logo=github&color=c01d5c&label=github)
 
 ## Table of Contents
 - [Changelog](#changelog)
