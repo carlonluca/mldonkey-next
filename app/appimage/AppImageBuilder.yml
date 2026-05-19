@@ -44,6 +44,8 @@ AppDir:
     - libwayland-egl1-mesa
     - libwayland-egl1
     - libwayland-client0
+    - libgbm1
+    - libgl1-mesa-dri
     - libgles2
     - libglvnd0
     - libegl1
