@@ -11,6 +11,7 @@ AppDir:
       QTWEBENGINE_RESOURCES_PATH: "$APPDIR/opt/qt/6.11.0/gcc_64/resources"
       QTWEBENGINEPROCESS_PATH: "$APPDIR/opt/qt/6.11.0/gcc_64/libexec/QtWebEngineProcess"
       QTWEBENGINE_LOCALES_PATH: "$APPDIR/opt/qt/6.11.0/gcc_64/translations/qtwebengine_locales"
+      QTWEBENGINE_CHROMIUM_FLAGS: "--no-sandbox"
       GBM_BACKENDS_PATH: "$APPDIR/usr/lib/x86_64-linux-gnu/gbm"
   app_info:
     id: luke.mldonkeynext
