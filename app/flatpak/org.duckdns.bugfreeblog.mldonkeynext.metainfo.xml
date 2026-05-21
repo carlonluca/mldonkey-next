@@ -45,6 +45,11 @@
     </screenshots>
 
     <releases>
+        <release version="1.6.0" date="2026-05-21">
+            <description>
+                <p>Bugfixes.</p>
+            </description>
+        </release>
         <release version="1.5.0" date="2026-04-07">
             <description>
                 <p>Updated Qt to 6.11.0.</p>
