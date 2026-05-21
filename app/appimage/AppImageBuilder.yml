@@ -69,7 +69,8 @@ AppDir:
     - /opt/qt/6.11.0/gcc_64/lib/libQt6WebSockets.so.6
     - /opt/qt/6.11.0/gcc_64/lib/libQt6StateMachine.so.6
     - /opt/qt/6.11.0/gcc_64/lib/libQt6StateMachineQml.so.6
-    - /opt/qt/6.11.0/gcc_64/libexec/../lib/libQt6WebEngineCore.so.6
+    - /opt/qt/6.11.0/gcc_64/lib/libQt6WebEngineCore.so.6
+    - /opt/qt/6.11.0/gcc_64/lib/libQt6*.so.6
     - /opt/qt/6.11.0/gcc_64/plugins/platforminputcontexts/libcomposeplatforminputcontextplugin.so
     - /opt/qt/6.11.0/gcc_64/plugins/platforminputcontexts/libibusplatforminputcontextplugin.so
     - /opt/qt/6.11.0/gcc_64/plugins/platforminputcontexts/libqtvirtualkeyboardplugin.so
