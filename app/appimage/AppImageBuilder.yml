@@ -70,7 +70,23 @@ AppDir:
     - /opt/qt/6.11.0/gcc_64/lib/libQt6StateMachine.so.6
     - /opt/qt/6.11.0/gcc_64/lib/libQt6StateMachineQml.so.6
     - /opt/qt/6.11.0/gcc_64/lib/libQt6WebEngineCore.so.6
-    - /opt/qt/6.11.0/gcc_64/lib/libQt6*.so.6
+    - /opt/qt/6.11.0/gcc_64/lib/libQt6Core.so.6
+    - /opt/qt/6.11.0/gcc_64/lib/libQt6Gui.so.6
+    - /opt/qt/6.11.0/gcc_64/lib/libQt6DBus.so.6
+    - /opt/qt/6.11.0/gcc_64/lib/libQt6Network.so.6
+    - /opt/qt/6.11.0/gcc_64/lib/libQt6OpenGL.so.6
+    - /opt/qt/6.11.0/gcc_64/lib/libQt6Qml.so.6
+    - /opt/qt/6.11.0/gcc_64/lib/libQt6QmlMeta.so.6
+    - /opt/qt/6.11.0/gcc_64/lib/libQt6QmlModels.so.6
+    - /opt/qt/6.11.0/gcc_64/lib/libQt6QmlWorkerScript.so.6
+    - /opt/qt/6.11.0/gcc_64/lib/libQt6Quick.so.6
+    - /opt/qt/6.11.0/gcc_64/lib/libQt6WaylandClient.so.6
+    - /opt/qt/6.11.0/gcc_64/lib/libQt6WaylandCompositor.so.6
+    - /opt/qt/6.11.0/gcc_64/lib/libQt6WaylandCompositorIviapplication.so.6
+    - /opt/qt/6.11.0/gcc_64/lib/libQt6WaylandCompositorPresentationTime.so.6
+    - /opt/qt/6.11.0/gcc_64/lib/libQt6WaylandCompositorWLShell.so.6
+    - /opt/qt/6.11.0/gcc_64/lib/libQt6WaylandCompositorXdgShell.so.6
+    - /opt/qt/6.11.0/gcc_64/lib/libQt6WaylandEglCompositorHwIntegration.so.6
     - /opt/qt/6.11.0/gcc_64/plugins/platforminputcontexts/libcomposeplatforminputcontextplugin.so
     - /opt/qt/6.11.0/gcc_64/plugins/platforminputcontexts/libibusplatforminputcontextplugin.so
     - /opt/qt/6.11.0/gcc_64/plugins/platforminputcontexts/libqtvirtualkeyboardplugin.so
