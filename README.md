@@ -61,3 +61,5 @@ The AppImage and the Android app can be downloaded from the [GitHub releases](ht
 Flatpak is available in Flathub: https://flathub.org/apps/org.duckdns.bugfreeblog.mldonkeynext.
 
 For the Android app, I suggest you use [Obtainium](https://github.com/ImranR98/Obtainium), that will also notify and update your app when a new release is uploaded.
+
+For the AppImage, I suggest you use [Gear Lever](https://github.com/mijorus/gearlever), which can setup the AppImage automatically and keep it up to date automatically (use GitHub as the source).
