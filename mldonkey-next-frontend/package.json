@@ -32,12 +32,12 @@
     "loglevel": "^1.9.1",
     "luxon": "^3.7.2",
     "mime": "^4.1.0",
-    "ngx-echarts": "^20.0.2",
-    "ngx-mask": "^20.0.3",
+    "ngx-echarts": "^21.0.0",
+    "ngx-mask": "^21.0.1",
     "pretty-bytes": "^7.1.0",
     "rxjs": "~7.8.2",
     "tslib": "^2.7.0",
-    "zone.js": "~0.15.1"
+    "zone.js": "~0.16.2"
   },
   "devDependencies": {
     "@angular-eslint/builder": "^20.4.0",
@@ -64,7 +64,7 @@
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.1",
     "karma-jasmine": "~5.1.0",
-    "karma-jasmine-html-reporter": "~2.1.0",
+    "karma-jasmine-html-reporter": "~2.2.0",
     "typescript": "~5.9.3"
   }
 }
