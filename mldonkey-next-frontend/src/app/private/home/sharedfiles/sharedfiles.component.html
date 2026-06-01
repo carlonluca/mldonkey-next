@@ -1,135 +1,139 @@
 <!--
-  This file is part of mldonkey-next.
+This file is part of mldonkey-next.
 
-  Copyright (c) 2025 Luca Carlon
+Copyright (c) 2025 Luca Carlon
 
-  This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, version 3.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, version 3.
 
-  This program is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-  General Public License for more details.
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+General Public License for more details.
 
-  You should have received a copy of the GNU General Public License
-  along with this program. If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <div class="title">
-    <fa-icon class="title-child" [icon]="this.faShared"></fa-icon>
-    <h2 class="title-child">Shared files</h2>
+  <fa-icon class="title-child" [icon]="this.faShared"></fa-icon>
+  <h2 class="title-child">Shared files</h2>
 </div>
 
 <!-- Desktop table -->
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort *ngIf="!this.uiSerivce.mobileLayout.value"
+@if (!this.uiSerivce.mobileLayout.value) {
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort
     (matSortChange)="onSortChange($event)">
     <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-        <td mat-cell *matCellDef="let info; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-            <div class="filename-element alternate-row-content">{{ info.fileName }}</div>
-        </td>
-        <td mat-footer-cell *matFooterCellDef="let isEven = even"
-            [ngClass]="{'alternate-row': this.dataSource.data.length%2 === 0 }">
-            <div class="filename-element alternate-row-content"><b>Overall</b></div>
-        </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+      <td mat-cell *matCellDef="let info; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+        <div class="filename-element alternate-row-content">{{ info.fileName }}</div>
+      </td>
+      <td mat-footer-cell *matFooterCellDef="let isEven = even"
+        [ngClass]="{'alternate-row': this.dataSource.data.length%2 === 0 }">
+        <div class="filename-element alternate-row-content"><b>Overall</b></div>
+      </td>
     </ng-container>
     <ng-container matColumnDef="size">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Size</th>
-        <td mat-cell *matCellDef="let info; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-            <div class="alternate-row-content">{{ info.fileSize | prettyBytes }}</div>
-        </td>
-        <td mat-footer-cell *matFooterCellDef="let info; let isEven = even"
-            [ngClass]="{'alternate-row': this.dataSource.data.length%2 === 0 }">
-            <div class="alternate-row-content">
-                <b>{{ this.totalSize | prettyBytes }}</b>
-            </div>
-        </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Size</th>
+      <td mat-cell *matCellDef="let info; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+        <div class="alternate-row-content">{{ info.fileSize | prettyBytes }}</div>
+      </td>
+      <td mat-footer-cell *matFooterCellDef="let info; let isEven = even"
+        [ngClass]="{'alternate-row': this.dataSource.data.length%2 === 0 }">
+        <div class="alternate-row-content">
+          <b>{{ this.totalSize | prettyBytes }}</b>
+        </div>
+      </td>
     </ng-container>
     <ng-container matColumnDef="uploaded">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Uploaded</th>
-        <td mat-cell *matCellDef="let info; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-            <div class="alternate-row-content">
-                {{ info.uploadedBytes | prettyBytes }}
-            </div>
-        </td>
-        <td mat-footer-cell *matFooterCellDef="let info; let isEven = even"
-            [ngClass]="{'alternate-row': this.dataSource.data.length%2 === 0 }">
-            <div class="alternate-row-content">
-                <b>{{ this.totalUploaded | prettyBytes }}</b>
-            </div>
-        </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Uploaded</th>
+      <td mat-cell *matCellDef="let info; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+        <div class="alternate-row-content">
+          {{ info.uploadedBytes | prettyBytes }}
+        </div>
+      </td>
+      <td mat-footer-cell *matFooterCellDef="let info; let isEven = even"
+        [ngClass]="{'alternate-row': this.dataSource.data.length%2 === 0 }">
+        <div class="alternate-row-content">
+          <b>{{ this.totalUploaded | prettyBytes }}</b>
+        </div>
+      </td>
     </ng-container>
     <ng-container matColumnDef="reqcount">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Request count</th>
-        <td mat-cell *matCellDef="let info; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-            <div class="alternate-row-content">
-                {{ info.requestCount }}
-            </div>
-        </td>
-        <td mat-footer-cell *matFooterCellDef="let info; let isEven = even"
-            [ngClass]="{'alternate-row': this.dataSource.data.length%2 === 0 }">
-            <div class="alternate-row-content">
-                <b>{{ this.totalRequets }}</b>
-            </div>
-        </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Request count</th>
+      <td mat-cell *matCellDef="let info; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+        <div class="alternate-row-content">
+          {{ info.requestCount }}
+        </div>
+      </td>
+      <td mat-footer-cell *matFooterCellDef="let info; let isEven = even"
+        [ngClass]="{'alternate-row': this.dataSource.data.length%2 === 0 }">
+        <div class="alternate-row-content">
+          <b>{{ this.totalRequets }}</b>
+        </div>
+      </td>
     </ng-container>
     <ng-container matColumnDef="options">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
-        <td mat-cell *matCellDef="let info; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-            <button mat-icon-button [matMenuTriggerFor]="menu" [matMenuTriggerData]="{info: info}" aria-label="Options">
-                <mat-icon>more_vert</mat-icon>
-            </button>
-        </td>
-        <td mat-footer-cell *matFooterCellDef="let info; let isEven = even"
-            [ngClass]="{'alternate-row': this.dataSource.data.length%2 === 0 }">
-        </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+      <td mat-cell *matCellDef="let info; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+        <button mat-icon-button [matMenuTriggerFor]="menu" [matMenuTriggerData]="{info: info}" aria-label="Options">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+      </td>
+      <td mat-footer-cell *matFooterCellDef="let info; let isEven = even"
+        [ngClass]="{'alternate-row': this.dataSource.data.length%2 === 0 }">
+      </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
-</table>
+  </table>
+}
 
 <!-- Mobile table -->
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort *ngIf="this.uiSerivce.mobileLayout.value">
+@if (this.uiSerivce.mobileLayout.value) {
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
     <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-        <td mat-cell *matCellDef="let info; let isEven = even"
-            [ngClass]="{'alternate-row': isEven, 'table-mobile-td': true }">
-            <div class="wrap-anywhere alternate-row-content">
-                <b>{{ info.fileName }}</b><br />
-                <b>Uploaded</b>: {{ info.uploadedBytes | prettyBytes }}<br />
-                <b>Size</b>: {{ info.fileSize | prettyBytes }}
-            </div>
-        </td>
-        <td mat-footer-cell *matFooterCellDef="let isEven = even"
-            [ngClass]="{'alternate-row': this.dataSource.data.length%2 === 0, 'table-mobile-td': true }">
-            <div class="wrap-anywhere alternate-row-content">
-                <b>Overall</b><br />
-                <b>Uploaded</b>: {{ this.totalUploaded| prettyBytes }}<br />
-                <b>Size</b>: {{ this.totalSize| prettyBytes }}<br />
-                <b>Size</b>: {{ this.totalRequets }}
-            </div>
-        </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+      <td mat-cell *matCellDef="let info; let isEven = even"
+        [ngClass]="{'alternate-row': isEven, 'table-mobile-td': true }">
+        <div class="wrap-anywhere alternate-row-content">
+          <b>{{ info.fileName }}</b><br />
+          <b>Uploaded</b>: {{ info.uploadedBytes | prettyBytes }}<br />
+          <b>Size</b>: {{ info.fileSize | prettyBytes }}
+        </div>
+      </td>
+      <td mat-footer-cell *matFooterCellDef="let isEven = even"
+        [ngClass]="{'alternate-row': this.dataSource.data.length%2 === 0, 'table-mobile-td': true }">
+        <div class="wrap-anywhere alternate-row-content">
+          <b>Overall</b><br />
+          <b>Uploaded</b>: {{ this.totalUploaded| prettyBytes }}<br />
+          <b>Size</b>: {{ this.totalSize| prettyBytes }}<br />
+          <b>Size</b>: {{ this.totalRequets }}
+        </div>
+      </td>
     </ng-container>
     <ng-container matColumnDef="options">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
-        <td mat-cell *matCellDef="let info; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-            <button mat-icon-button [matMenuTriggerFor]="menu" [matMenuTriggerData]="{info: info}" aria-label="Options">
-                <mat-icon>more_vert</mat-icon>
-            </button>
-        </td>
-        <td mat-footer-cell *matFooterCellDef="let info; let isEven = even"
-            [ngClass]="{'alternate-row': this.dataSource.data.length%2 === 0 }">
-        </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+      <td mat-cell *matCellDef="let info; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+        <button mat-icon-button [matMenuTriggerFor]="menu" [matMenuTriggerData]="{info: info}" aria-label="Options">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+      </td>
+      <td mat-footer-cell *matFooterCellDef="let info; let isEven = even"
+        [ngClass]="{'alternate-row': this.dataSource.data.length%2 === 0 }">
+      </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
-</table>
+  </table>
+}
 
 <mat-menu #menu="matMenu" yPosition="above" xPosition="before">
-    <ng-template matMenuContent let-info="info">
-        <button mat-menu-item (click)="onContextMenuAction(info)">Download</button>
-    </ng-template>
+  <ng-template matMenuContent let-info="info">
+    <button mat-menu-item (click)="onContextMenuAction(info)">Download</button>
+  </ng-template>
 </mat-menu>

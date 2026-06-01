@@ -1,191 +1,199 @@
 <!--
-  This file is part of mldonkey-next.
+This file is part of mldonkey-next.
 
-  Copyright (c) 2024 Luca Carlon
+Copyright (c) 2024 Luca Carlon
 
-  This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, version 3.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, version 3.
 
-  This program is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-  General Public License for more details.
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+General Public License for more details.
 
-  You should have received a copy of the GNU General Public License
-  along with this program. If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <div id="toolbar-container">
-    <div class="title" style="width: 100%;">
-        <fa-icon class="title-child" [icon]="this.faDownload"></fa-icon>
-        <h2 class="title-child">Download</h2>
-    </div>
-    <button id="main-menu" mat-icon-button [matMenuTriggerFor]="mainMenu">
-        <mat-icon>more_vert</mat-icon>
+  <div class="title" style="width: 100%;">
+    <fa-icon class="title-child" [icon]="this.faDownload"></fa-icon>
+    <h2 class="title-child">Download</h2>
+  </div>
+  <button id="main-menu" mat-icon-button [matMenuTriggerFor]="mainMenu">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+  <mat-menu #mainMenu="matMenu">
+    <button mat-menu-item color="basic" [matMenuTriggerFor]="menu">
+      <mat-icon>sort</mat-icon>
+      <span>Sort</span>
     </button>
-    <mat-menu #mainMenu="matMenu">
-        <button mat-menu-item color="basic" [matMenuTriggerFor]="menu">
-            <mat-icon>sort</mat-icon>
-            <span>Sort</span>
-        </button>
-        <mat-divider></mat-divider>
-        <button mat-menu-item [disabled]="!this.selectionEnabled || this.selection.isEmpty()"
-            (click)="cancelDownloads()">
-            <mat-icon>stop_circle</mat-icon>
-            <span>Abort</span>
-        </button>
-        <button mat-menu-item [disabled]="!this.selectionEnabled || this.selection.isEmpty()"
-            (click)="this.pauseDownloads()">
-            <mat-icon>pause_circle</mat-icon>
-            <span>Pause</span>
-        </button>
-        <button mat-menu-item [disabled]="!this.selectionEnabled || this.selection.isEmpty()"
-            (click)="this.resumeDownloads()">
-            <mat-icon>play_circle</mat-icon>
-            <span>Resume</span>
-        </button>
-        <mat-divider></mat-divider>
-        <button mat-menu-item (click)="this.toggleSelectionEnabled()">
-            <mat-icon>{{ this.selectionEnabled ? "check_box" : "check_box_outline_blank" }}</mat-icon>
-            <span>Selectable</span>
-        </button>
-        <button mat-menu-item (click)="this.toggleFilter()">
-            <mat-icon>{{ this.filterString !== null ? "check_box" : "check_box_outline_blank" }}</mat-icon>
-            <span>Show filer</span>
-        </button>
-    </mat-menu>
-    <mat-menu #menu="matMenu">
-        <button mat-menu-item *ngFor="let sortMode of sortModes" (click)="this.sortModeClicked(sortMode)">
-            <span [ngStyle]="{'font-weight': sortMode.selected ? 'bold' : 'normal'}">{{ sortMode.label }}</span>
-        </button>
-    </mat-menu>
+    <mat-divider></mat-divider>
+    <button mat-menu-item [disabled]="!this.selectionEnabled || this.selection.isEmpty()"
+      (click)="cancelDownloads()">
+      <mat-icon>stop_circle</mat-icon>
+      <span>Abort</span>
+    </button>
+    <button mat-menu-item [disabled]="!this.selectionEnabled || this.selection.isEmpty()"
+      (click)="this.pauseDownloads()">
+      <mat-icon>pause_circle</mat-icon>
+      <span>Pause</span>
+    </button>
+    <button mat-menu-item [disabled]="!this.selectionEnabled || this.selection.isEmpty()"
+      (click)="this.resumeDownloads()">
+      <mat-icon>play_circle</mat-icon>
+      <span>Resume</span>
+    </button>
+    <mat-divider></mat-divider>
+    <button mat-menu-item (click)="this.toggleSelectionEnabled()">
+      <mat-icon>{{ this.selectionEnabled ? "check_box" : "check_box_outline_blank" }}</mat-icon>
+      <span>Selectable</span>
+    </button>
+    <button mat-menu-item (click)="this.toggleFilter()">
+      <mat-icon>{{ this.filterString !== null ? "check_box" : "check_box_outline_blank" }}</mat-icon>
+      <span>Show filer</span>
+    </button>
+  </mat-menu>
+  <mat-menu #menu="matMenu">
+    @for (sortMode of sortModes; track sortMode) {
+      <button mat-menu-item (click)="this.sortModeClicked(sortMode)">
+        <span [ngStyle]="{'font-weight': sortMode.selected ? 'bold' : 'normal'}">{{ sortMode.label }}</span>
+      </button>
+    }
+  </mat-menu>
 </div>
 
 <!-- Filter bar -->
-<div id="filter-field-container" *ngIf="this.filterString !== null">
+@if (this.filterString !== null) {
+  <div id="filter-field-container">
     <app-input-with-icon id="filter-form" class="full-screen-row" [(userInput)]="this.filterString" label="Filter"
-        matIcon="filter_list" autocapitalize="none" tooltip="Filter text" type="text"
-        (userInputChange)="this.refreshFilter()" />
-</div>
+      matIcon="filter_list" autocapitalize="none" tooltip="Filter text" type="text"
+      (userInputChange)="this.refreshFilter()" />
+  </div>
+}
 
 <!-- Desktop table -->
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort *ngIf="!this.uiSerivce.mobileLayout.value"
+@if (!this.uiSerivce.mobileLayout.value) {
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort
     (matSortChange)="onSortChange($event)">
     <ng-container matColumnDef="select">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header disabled="true">
-            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
-                [indeterminate]="selection.hasValue() && !isAllSelected()"></mat-checkbox>
-        </th>
-        <td mat-cell *matCellDef="let row; let download; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
-                [checked]="selection.isSelected(row)" class="pos-relative"></mat-checkbox>
-        </td>
-        <td mat-footer-cell *matFooterCellDef [ngClass]="{'alternate-row': this.dataSource.data.length%2 === 0 }"></td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header disabled="true">
+        <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+        [indeterminate]="selection.hasValue() && !isAllSelected()"></mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row; let download; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+        <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+        [checked]="selection.isSelected(row)" class="pos-relative"></mat-checkbox>
+      </td>
+      <td mat-footer-cell *matFooterCellDef [ngClass]="{'alternate-row': this.dataSource.data.length%2 === 0 }"></td>
     </ng-container>
     <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-        <td mat-cell *matCellDef="let download; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-            <div class="file-container alternate-row-content">
-                <fa-icon class="file-icon" [icon]="this.iconFromFileName(download.name)"></fa-icon>
-                <div class="file-details">
-                    <div class="filename-element">{{ download.name }}</div>
-                    <mat-progress-bar class="file-progress" mode="determinate"
-                        [value]="computeProgress(download)"></mat-progress-bar>
-                </div>
-            </div>
-        </td>
-        <td mat-footer-cell *matFooterCellDef="let isEven = even"
-            [ngClass]="{'alternate-row': this.dataSource.data.length%2 === 0 }">
-            <div class="filename-element alternate-row-content"><b>Overall</b></div>
-            <mat-progress-bar class="file-progress" mode="determinate" [value]="this.downPerc"></mat-progress-bar>
-        </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+      <td mat-cell *matCellDef="let download; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+        <div class="file-container alternate-row-content">
+          <fa-icon class="file-icon" [icon]="this.iconFromFileName(download.name)"></fa-icon>
+          <div class="file-details">
+            <div class="filename-element">{{ download.name }}</div>
+            <mat-progress-bar class="file-progress" mode="determinate"
+            [value]="computeProgress(download)"></mat-progress-bar>
+          </div>
+        </div>
+      </td>
+      <td mat-footer-cell *matFooterCellDef="let isEven = even"
+        [ngClass]="{'alternate-row': this.dataSource.data.length%2 === 0 }">
+        <div class="filename-element alternate-row-content"><b>Overall</b></div>
+        <mat-progress-bar class="file-progress" mode="determinate" [value]="this.downPerc"></mat-progress-bar>
+      </td>
     </ng-container>
     <ng-container matColumnDef="downloaded">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Downloaded</th>
-        <td mat-cell *matCellDef="let download; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-            <div class="alternate-row-content">{{ download.downloaded | prettyBytes }}</div>
-        </td>
-        <td mat-footer-cell *matFooterCellDef [ngClass]="{'alternate-row': this.dataSource.data.length%2 === 0 }"><b>{{
-                this.downProgress | prettyBytes }}</b></td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Downloaded</th>
+      <td mat-cell *matCellDef="let download; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+        <div class="alternate-row-content">{{ download.downloaded | prettyBytes }}</div>
+      </td>
+      <td mat-footer-cell *matFooterCellDef [ngClass]="{'alternate-row': this.dataSource.data.length%2 === 0 }"><b>{{
+      this.downProgress | prettyBytes }}</b></td>
     </ng-container>
     <ng-container matColumnDef="size">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Size</th>
-        <td mat-cell *matCellDef="let download; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-            <div class="alternate-row-content">
-                {{ download.size | prettyBytes }}
-            </div>
-        </td>
-        <td mat-footer-cell *matFooterCellDef [ngClass]="{'alternate-row': this.dataSource.data.length%2 === 0 }"><b>{{
-                this.downTotal | prettyBytes }}</b></td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Size</th>
+      <td mat-cell *matCellDef="let download; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+        <div class="alternate-row-content">
+          {{ download.size | prettyBytes }}
+        </div>
+      </td>
+      <td mat-footer-cell *matFooterCellDef [ngClass]="{'alternate-row': this.dataSource.data.length%2 === 0 }"><b>{{
+      this.downTotal | prettyBytes }}</b></td>
     </ng-container>
     <ng-container matColumnDef="speed">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Speed</th>
-        <td mat-cell *matCellDef="let download; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-            <app-speed-indicator class="alternate-row-content" [speed]="download.speed"
-                [downloadState]="download.state"></app-speed-indicator>
-        </td>
-        <td mat-footer-cell *matFooterCellDef="let download; let isEven = even"
-            [ngClass]="{'alternate-row': this.dataSource.data.length%2 === 0 }">
-            <app-speed-indicator class="alternate-row-content" [speed]="this.downSpeedSum ?? 0"
-                [bold]="true"></app-speed-indicator>
-        </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Speed</th>
+      <td mat-cell *matCellDef="let download; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+        <app-speed-indicator class="alternate-row-content" [speed]="download.speed"
+        [downloadState]="download.state"></app-speed-indicator>
+      </td>
+      <td mat-footer-cell *matFooterCellDef="let download; let isEven = even"
+        [ngClass]="{'alternate-row': this.dataSource.data.length%2 === 0 }">
+        <app-speed-indicator class="alternate-row-content" [speed]="this.downSpeedSum ?? 0"
+        [bold]="true"></app-speed-indicator>
+      </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row (click)="this.rowClicked(row)" *matRowDef="let row; columns: displayedColumns;"></tr>
     <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
-</table>
+  </table>
+}
 
 <!-- Mobile table -->
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort *ngIf="this.uiSerivce.mobileLayout.value">
+@if (this.uiSerivce.mobileLayout.value) {
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
     <ng-container matColumnDef="select">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header disabled="true">
-            <mat-checkbox class="pos-relative" (change)="$event ? masterToggle() : null"
-                [checked]="selection.hasValue() && isAllSelected()"
-                [indeterminate]="selection.hasValue() && !isAllSelected()">
-            </mat-checkbox>
-        </th>
-        <td mat-cell *matCellDef="let row; let download; let isEven = even" [ngClass]="{'alternate-row': isEven }">
-            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
-                [checked]="selection.isSelected(row)" class="pos-relative"></mat-checkbox>
-        </td>
-        <td mat-footer-cell *matFooterCellDef [ngClass]="{'alternate-row': this.dataSource.data.length%2 === 0 }"></td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header disabled="true">
+        <mat-checkbox class="pos-relative" (change)="$event ? masterToggle() : null"
+          [checked]="selection.hasValue() && isAllSelected()"
+          [indeterminate]="selection.hasValue() && !isAllSelected()">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row; let download; let isEven = even" [ngClass]="{'alternate-row': isEven }">
+        <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+        [checked]="selection.isSelected(row)" class="pos-relative"></mat-checkbox>
+      </td>
+      <td mat-footer-cell *matFooterCellDef [ngClass]="{'alternate-row': this.dataSource.data.length%2 === 0 }"></td>
     </ng-container>
     <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-        <td mat-cell *matCellDef="let download; let isEven = even"
-            [ngClass]="{'alternate-row': isEven, 'table-mobile-td': true }">
-            <div class="wrap-anywhere alternate-row-content">
-                <b>{{ download.name }}</b><br />
-                <mat-progress-bar class="file-progress pos-relative" mode="determinate"
-                    [value]="computeProgress(download)">
-                </mat-progress-bar>
-            </div>
-                <div class="row-container">
-                    <div class="row-left">
-                        {{ download.downloaded | prettyBytes }} of {{ download.size | prettyBytes }}
-                    </div>
-                    <div class="row-right">
-                        <app-speed-indicator style="float: right;" [speed]="download.speed" [bold]="true"
-                            [downloadState]="download.state"></app-speed-indicator>
-                    </div>
-                </div>
-        </td>
-        <td mat-footer-cell *matFooterCellDef="let isEven = even"
-            [ngClass]="{'alternate-row': this.dataSource.data.length%2 === 0, 'table-mobile-td': true }">
-            <div class="wrap-anywhere alternate-row-content">
-                <b>Overall</b><br />
-                {{ this.downProgress | prettyBytes }} of {{ this.downTotal | prettyBytes }}
-                <span class="no-margins"> - </span>
-                <app-speed-indicator [speed]="this.downSpeedSum ?? 0" [bold]="true"></app-speed-indicator>
-                <mat-progress-bar class="file-progress pos-relative" mode="determinate" [value]="this.downPerc">
-                </mat-progress-bar>
-            </div>
-        </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+      <td mat-cell *matCellDef="let download; let isEven = even"
+        [ngClass]="{'alternate-row': isEven, 'table-mobile-td': true }">
+        <div class="wrap-anywhere alternate-row-content">
+          <b>{{ download.name }}</b><br />
+          <mat-progress-bar class="file-progress pos-relative" mode="determinate"
+            [value]="computeProgress(download)">
+          </mat-progress-bar>
+        </div>
+        <div class="row-container">
+          <div class="row-left">
+            {{ download.downloaded | prettyBytes }} of {{ download.size | prettyBytes }}
+          </div>
+          <div class="row-right">
+            <app-speed-indicator style="float: right;" [speed]="download.speed" [bold]="true"
+            [downloadState]="download.state"></app-speed-indicator>
+          </div>
+        </div>
+      </td>
+      <td mat-footer-cell *matFooterCellDef="let isEven = even"
+        [ngClass]="{'alternate-row': this.dataSource.data.length%2 === 0, 'table-mobile-td': true }">
+        <div class="wrap-anywhere alternate-row-content">
+          <b>Overall</b><br />
+          {{ this.downProgress | prettyBytes }} of {{ this.downTotal | prettyBytes }}
+          <span class="no-margins"> - </span>
+          <app-speed-indicator [speed]="this.downSpeedSum ?? 0" [bold]="true"></app-speed-indicator>
+          <mat-progress-bar class="file-progress pos-relative" mode="determinate" [value]="this.downPerc">
+          </mat-progress-bar>
+        </div>
+      </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row (click)="this.rowClicked(row)" *matRowDef="let row; columns: displayedColumns;"></tr>
     <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
-</table>
+  </table>
+}
 
 <app-bandwidth-summary></app-bandwidth-summary>

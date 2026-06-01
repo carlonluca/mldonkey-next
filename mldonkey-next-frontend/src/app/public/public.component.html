@@ -1,35 +1,39 @@
 <!--
-  This file is part of mldonkey-next.
+This file is part of mldonkey-next.
 
-  Copyright (c) 2023 Luca Carlon
+Copyright (c) 2023 Luca Carlon
 
-  This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, version 3.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, version 3.
 
-  This program is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-  General Public License for more details.
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+General Public License for more details.
 
-  You should have received a copy of the GNU General Public License
-  along with this program. If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <div id="full-screen-container" class="mat-app-background">
-    <div class="login-container mat-elevation-z8">
-        <app-input-with-icon class="full-screen-row" [faIcon]="faUser" [(userInput)]="inputUsr" label="Username"
-            autocapitalize="none" tooltip="Your username" type="text" />
-        <app-input-with-icon class="full-screen-row" [faIcon]="faKey" [(userInput)]="inputPwd" label="Password"
-            autocapitalize="none" tooltip="Your password" type="password" />
-        <button class="full-screen-row" mat-raised-button (click)="login()">Login</button>
-        <mat-divider id="divider" *ngIf="this.isWebView()"></mat-divider>
-        <button class="full-screen-row" mat-raised-button (click)="doSetup()" *ngIf="this.isWebView()">Server
-            setup</button>
-        <div class="flex-container">
-            <fa-icon class="flex-child" [icon]="this.connected ? faConnected : faDisconnected"></fa-icon>
-            <p>{{ this.connected ? "Connected to the core" : "Not connected to the core" }}</p>
-        </div>
+  <div class="login-container mat-elevation-z8">
+    <app-input-with-icon class="full-screen-row" [faIcon]="faUser" [(userInput)]="inputUsr" label="Username"
+      autocapitalize="none" tooltip="Your username" type="text" />
+    <app-input-with-icon class="full-screen-row" [faIcon]="faKey" [(userInput)]="inputPwd" label="Password"
+      autocapitalize="none" tooltip="Your password" type="password" />
+    <button class="full-screen-row" mat-raised-button (click)="login()">Login</button>
+    @if (this.isWebView()) {
+      <mat-divider id="divider"></mat-divider>
+    }
+    @if (this.isWebView()) {
+      <button class="full-screen-row" mat-raised-button (click)="doSetup()">Server
+      setup</button>
+    }
+    <div class="flex-container">
+      <fa-icon class="flex-child" [icon]="this.connected ? faConnected : faDisconnected"></fa-icon>
+      <p>{{ this.connected ? "Connected to the core" : "Not connected to the core" }}</p>
     </div>
-    <p class="copyright">© 2023-2025 Luca Carlon</p>
+  </div>
+  <p class="copyright">© 2023-2025 Luca Carlon</p>
 </div>

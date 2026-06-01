@@ -1,30 +1,32 @@
 <!--
-  This file is part of mldonkey-next.
+This file is part of mldonkey-next.
 
-  Copyright (c) 2024 Luca Carlon
+Copyright (c) 2024 Luca Carlon
 
-  This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, version 3.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, version 3.
 
-  This program is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-  General Public License for more details.
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+General Public License for more details.
 
-  You should have received a copy of the GNU General Public License
-  along with this program. If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <div id="container">
-    <div id="command-bar">
-        <app-input-with-icon id="command-input" [faIcon]="faTerminal" [(userInput)]="commandString" label="Command"
-            autocapitalize="none" tooltip="Enter your command" type="text" (userInputSubmit)="this.submitCommand()" />
-        <button mat-mini-fab [disabled]="this.commandString.length <= 0" (click)="this.submitCommand()">
-            <mat-icon>keyboard_return</mat-icon>
-        </button>
-    </div>
-    <app-follow-content-view id="command-output">
-        <p *ngFor="let message of messages; index as i" [ngClass]="{'alternate': i%2 === 0 }">{{ message }}</p>
-    </app-follow-content-view>
+  <div id="command-bar">
+    <app-input-with-icon id="command-input" [faIcon]="faTerminal" [(userInput)]="commandString" label="Command"
+      autocapitalize="none" tooltip="Enter your command" type="text" (userInputSubmit)="this.submitCommand()" />
+    <button mat-mini-fab [disabled]="this.commandString.length <= 0" (click)="this.submitCommand()">
+      <mat-icon>keyboard_return</mat-icon>
+    </button>
+  </div>
+  <app-follow-content-view id="command-output">
+    @for (message of messages; track message; let i = $index) {
+      <p [ngClass]="{'alternate': i%2 === 0 }">{{ message }}</p>
+    }
+  </app-follow-content-view>
 </div>

@@ -1,105 +1,139 @@
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="!this.uiService.mobileLayout.value">
+@if (!this.uiService.mobileLayout.value) {
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
     <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef>Name</th>
-        <td mat-cell *matCellDef="let option; let isEven = even"
-            [ngClass]="{'alternate': isEven, 'highlight': option.currentValue !== option.proposedValue}">
-            <b>{{ computeDescription(option) }}</b>
-        </td>
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let option; let isEven = even"
+        [ngClass]="{'alternate': isEven, 'highlight': option.currentValue !== option.proposedValue}">
+        <b>{{ computeDescription(option) }}</b>
+      </td>
     </ng-container>
     <ng-container matColumnDef="value">
-        <th mat-header-cell *matHeaderCellDef>Value</th>
-        <td mat-cell *matCellDef="let option; let isEven = even"
-            [ngClass]="{'alternate': isEven, 'highlight': option.currentValue !== option.proposedValue}">
-            <mat-form-field
-                *ngIf="isString(option) || isInteger(option) || isIp(option) || isBool(option) || isFloat(option) || isStringList(option)"
-                subscriptSizing="dynamic">
-                <input matInput type="text" *ngIf="isString(option)" [(ngModel)]="option.proposedValue"
-                    (ngModelChange)="editEntry(option, $event)" />
-                <input matInput type="text" *ngIf="isIp(option)" mask="IP" [(ngModel)]="option.proposedValue"
-                    [dropSpecialCharacters]="false" (ngModelChange)="editEntry(option, $event)" />
-                <input matInput type="number" *ngIf="isInteger(option)" [(ngModel)]="option.proposedValue"
-                    (ngModelChange)="editEntry(option, $event)" />
-                <input matInput type="number" *ngIf="isFloat(option)" [(ngModel)]="option.proposedValue"
-                    (ngModelChange)="editEntry(option, $event)" />
-                <mat-chip-grid #chipGrid *ngIf="isStringList(option)" aria-label="Enter items">
-                    <mat-chip-row *ngFor="let v of this.computeList(option)" [editable]="true"
-                        (removed)="removeItem(v, option)" (edited)="editItem($event, v, option)"
-                        [aria-description]="'press enter to edit ' + v">
-                        {{v}}
-                        <button matChipRemove [attr.aria-label]="'remove ' + v">
-                            <mat-icon>cancel</mat-icon>
-                        </button>
-                    </mat-chip-row>
-                    <input placeholder="New item..." [matChipInputFor]="chipGrid" autocomplete="off"
-                        (matChipInputTokenEnd)="addItem($event, option)" />
-                </mat-chip-grid>
-                <mat-select *ngIf="isBool(option)" [(ngModel)]="option.proposedValue"
-                    (ngModelChange)="editEntry(option, $event)">
-                    <mat-option value="true">true</mat-option>
-                    <mat-option value="false">false</mat-option>
-                </mat-select>
-            </mat-form-field>
-            <p>{{ option.help }}</p>
-        </td>
+      <th mat-header-cell *matHeaderCellDef>Value</th>
+      <td mat-cell *matCellDef="let option; let isEven = even"
+        [ngClass]="{'alternate': isEven, 'highlight': option.currentValue !== option.proposedValue}">
+        @if (isString(option) || isInteger(option) || isIp(option) || isBool(option) || isFloat(option) || isStringList(option)) {
+          <mat-form-field
+            subscriptSizing="dynamic">
+            @if (isString(option)) {
+              <input matInput type="text" [(ngModel)]="option.proposedValue"
+                (ngModelChange)="editEntry(option, $event)" />
+            }
+            @if (isIp(option)) {
+              <input matInput type="text" mask="IP" [(ngModel)]="option.proposedValue"
+                [dropSpecialCharacters]="false" (ngModelChange)="editEntry(option, $event)" />
+            }
+            @if (isInteger(option)) {
+              <input matInput type="number" [(ngModel)]="option.proposedValue"
+                (ngModelChange)="editEntry(option, $event)" />
+            }
+            @if (isFloat(option)) {
+              <input matInput type="number" [(ngModel)]="option.proposedValue"
+                (ngModelChange)="editEntry(option, $event)" />
+            }
+            @if (isStringList(option)) {
+              <mat-chip-grid #chipGrid aria-label="Enter items">
+                @for (v of this.computeList(option); track v) {
+                  <mat-chip-row [editable]="true"
+                    (removed)="removeItem(v, option)" (edited)="editItem($event, v, option)"
+                    [aria-description]="'press enter to edit ' + v">
+                    {{v}}
+                    <button matChipRemove [attr.aria-label]="'remove ' + v">
+                      <mat-icon>cancel</mat-icon>
+                    </button>
+                  </mat-chip-row>
+                }
+                <input placeholder="New item..." [matChipInputFor]="chipGrid" autocomplete="off"
+                  (matChipInputTokenEnd)="addItem($event, option)" />
+              </mat-chip-grid>
+            }
+            @if (isBool(option)) {
+              <mat-select [(ngModel)]="option.proposedValue"
+                (ngModelChange)="editEntry(option, $event)">
+                <mat-option value="true">true</mat-option>
+                <mat-option value="false">false</mat-option>
+              </mat-select>
+            }
+          </mat-form-field>
+        }
+        <p>{{ option.help }}</p>
+      </td>
     </ng-container>
     <ng-container matColumnDef="default">
-        <th mat-header-cell *matHeaderCellDef>Default</th>
-        <td mat-cell *matCellDef="let option; let isEven = even"
-            [ngClass]="{'alternate': isEven, 'highlight': option.currentValue !== option.proposedValue}">
-            {{ option.defaultValue }}
-        </td>
+      <th mat-header-cell *matHeaderCellDef>Default</th>
+      <td mat-cell *matCellDef="let option; let isEven = even"
+        [ngClass]="{'alternate': isEven, 'highlight': option.currentValue !== option.proposedValue}">
+        {{ option.defaultValue }}
+      </td>
     </ng-container>
     <ng-container matColumnDef="type">
-        <th mat-header-cell *matHeaderCellDef>Type</th>
-        <td mat-cell *matCellDef="let option; let isEven = even"
-            [ngClass]="{'alternate': isEven, 'highlight': option.currentValue !== option.proposedValue}">
-            {{ option.type }}
-        </td>
+      <th mat-header-cell *matHeaderCellDef>Type</th>
+      <td mat-cell *matCellDef="let option; let isEven = even"
+        [ngClass]="{'alternate': isEven, 'highlight': option.currentValue !== option.proposedValue}">
+        {{ option.type }}
+      </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="['name', 'value', 'default', 'type']"></tr>
     <tr mat-row *matRowDef="let row; columns: ['name', 'value', 'default', 'type'];"></tr>
-</table>
+  </table>
+}
 
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="this.uiService.mobileLayout.value">
+@if (this.uiService.mobileLayout.value) {
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
     <ng-container matColumnDef="value">
-        <th mat-header-cell *matHeaderCellDef>Entry</th>
-        <td mat-cell *matCellDef="let option; let isEven = even"
-            [ngClass]="{'alternate': isEven, 'highlight': option.currentValue !== option.proposedValue}">
-            <p class="title"><b>{{ computeDescription(option) }}</b></p>
-            <mat-form-field
-                *ngIf="isString(option) || isInteger(option) || isIp(option) || isBool(option) || isFloat(option) || isStringList(option)"
-                subscriptSizing="dynamic">
-                <input matInput type="text" *ngIf="isString(option)" [(ngModel)]="option.proposedValue"
-                    (ngModelChange)="editEntry(option, $event)" />
-                <input matInput type="text" *ngIf="isIp(option)" mask="IP" [(ngModel)]="option.proposedValue"
-                    [dropSpecialCharacters]="false" (ngModelChange)="editEntry(option, $event)" />
-                <input matInput type="number" *ngIf="isInteger(option)" [(ngModel)]="option.proposedValue"
-                    (ngModelChange)="editEntry(option, $event)" />
-                <input matInput type="number" *ngIf="isFloat(option)" [(ngModel)]="option.proposedValue"
-                    (ngModelChange)="editEntry(option, $event)" />
-                <mat-chip-grid #chipGrid *ngIf="isStringList(option)" aria-label="Enter items">
-                    <mat-chip-row *ngFor="let v of this.computeList(option)" [editable]="true"
-                        (removed)="removeItem(v, option)" (edited)="editItem($event, v, option)"
-                        [aria-description]="'press enter to edit ' + v">
-                        {{v}}
-                        <button matChipRemove [attr.aria-label]="'remove ' + v">
-                            <mat-icon>cancel</mat-icon>
-                        </button>
-                    </mat-chip-row>
-                    <input placeholder="New item..." [matChipInputFor]="chipGrid" autocomplete="off"
-                        (matChipInputTokenEnd)="addItem($event, option)" />
-                </mat-chip-grid>
-                <mat-select *ngIf="isBool(option)" [(ngModel)]="option.proposedValue"
-                    (ngModelChange)="editEntry(option, $event)">
-                    <mat-option value="true">true</mat-option>
-                    <mat-option value="false">false</mat-option>
-                </mat-select>
-            </mat-form-field>
-            <p><b>Default</b>: {{ option.defaultValue }}</p>
-            <p><b>Type</b>: {{ option.type }}</p>
-            <p>{{ computeHelp(option) }}</p>
-        </td>
+      <th mat-header-cell *matHeaderCellDef>Entry</th>
+      <td mat-cell *matCellDef="let option; let isEven = even"
+        [ngClass]="{'alternate': isEven, 'highlight': option.currentValue !== option.proposedValue}">
+        <p class="title"><b>{{ computeDescription(option) }}</b></p>
+        @if (isString(option) || isInteger(option) || isIp(option) || isBool(option) || isFloat(option) || isStringList(option)) {
+          <mat-form-field
+            subscriptSizing="dynamic">
+            @if (isString(option)) {
+              <input matInput type="text" [(ngModel)]="option.proposedValue"
+                (ngModelChange)="editEntry(option, $event)" />
+            }
+            @if (isIp(option)) {
+              <input matInput type="text" mask="IP" [(ngModel)]="option.proposedValue"
+                [dropSpecialCharacters]="false" (ngModelChange)="editEntry(option, $event)" />
+            }
+            @if (isInteger(option)) {
+              <input matInput type="number" [(ngModel)]="option.proposedValue"
+                (ngModelChange)="editEntry(option, $event)" />
+            }
+            @if (isFloat(option)) {
+              <input matInput type="number" [(ngModel)]="option.proposedValue"
+                (ngModelChange)="editEntry(option, $event)" />
+            }
+            @if (isStringList(option)) {
+              <mat-chip-grid #chipGrid aria-label="Enter items">
+                @for (v of this.computeList(option); track v) {
+                  <mat-chip-row [editable]="true"
+                    (removed)="removeItem(v, option)" (edited)="editItem($event, v, option)"
+                    [aria-description]="'press enter to edit ' + v">
+                    {{v}}
+                    <button matChipRemove [attr.aria-label]="'remove ' + v">
+                      <mat-icon>cancel</mat-icon>
+                    </button>
+                  </mat-chip-row>
+                }
+                <input placeholder="New item..." [matChipInputFor]="chipGrid" autocomplete="off"
+                  (matChipInputTokenEnd)="addItem($event, option)" />
+              </mat-chip-grid>
+            }
+            @if (isBool(option)) {
+              <mat-select [(ngModel)]="option.proposedValue"
+                (ngModelChange)="editEntry(option, $event)">
+                <mat-option value="true">true</mat-option>
+                <mat-option value="false">false</mat-option>
+              </mat-select>
+            }
+          </mat-form-field>
+        }
+        <p><b>Default</b>: {{ option.defaultValue }}</p>
+        <p><b>Type</b>: {{ option.type }}</p>
+        <p>{{ computeHelp(option) }}</p>
+      </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="['value']"></tr>
     <tr mat-row *matRowDef="let row; columns: ['value'];"></tr>
-</table>
+  </table>
+}

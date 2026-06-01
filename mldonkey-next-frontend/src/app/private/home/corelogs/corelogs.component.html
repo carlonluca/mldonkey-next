@@ -1,55 +1,60 @@
 <!--
-  This file is part of mldonkey-next.
+This file is part of mldonkey-next.
 
-  Copyright (c) 2024 Luca Carlon
+Copyright (c) 2024 Luca Carlon
 
-  This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, version 3.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, version 3.
 
-  This program is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-  General Public License for more details.
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+General Public License for more details.
 
-  You should have received a copy of the GNU General Public License
-  along with this program. If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<div id="downloading-logs" *ngIf="showWaitingMessage && this.showError.length < 0">
+@if (showWaitingMessage && this.showError.length < 0) {
+  <div id="downloading-logs">
     <p id="downloading-logs-label">Downloading logs...</p>
-</div>
+  </div>
+}
 
-<div id="error-logs" *ngIf="this.showError.length > 0">
+@if (this.showError.length > 0) {
+  <div id="error-logs">
     <p id="error-logs-label">{{ this.showError }}</p>
-</div>
+  </div>
+}
 
-<div id="log-root-view" *ngIf="!showWaitingMessage && this.showError.length <= 0">
+@if (!showWaitingMessage && this.showError.length <= 0) {
+  <div id="log-root-view">
     <div id="log-toolbar">
-        <mat-form-field id="log-range-selector" subscriptSizing="dynamic">
-            <mat-select id="log-range-select" [(ngModel)]="selectedRange" (selectionChange)="selectedRangeChanged()">
-                <mat-option value="all">All</mat-option>
-                <mat-option value="1year">Last 365 days</mat-option>
-                <mat-option value="1month">Last 30 days</mat-option>
-                <mat-option value="1week">Last 7 days</mat-option>
-                <mat-option value="1day">Last 24 hours</mat-option>
-                <mat-option value="1hour" ngDefaultControl>Last hour</mat-option>
-            </mat-select>
-        </mat-form-field>
+      <mat-form-field id="log-range-selector" subscriptSizing="dynamic">
+        <mat-select id="log-range-select" [(ngModel)]="selectedRange" (selectionChange)="selectedRangeChanged()">
+          <mat-option value="all">All</mat-option>
+          <mat-option value="1year">Last 365 days</mat-option>
+          <mat-option value="1month">Last 30 days</mat-option>
+          <mat-option value="1week">Last 7 days</mat-option>
+          <mat-option value="1day">Last 24 hours</mat-option>
+          <mat-option value="1hour" ngDefaultControl>Last hour</mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
-
     <mat-divider id="toolbar-divider"></mat-divider>
-
     <div id="log-view" appScrollToBottom #scrollContainer (wheel)="onScroll($event)" class="scroll-container">
     </div>
-</div>
+  </div>
+}
 
-<div id="toolbar" *ngIf="!showWaitingMessage && this.showError.length <= 0">
+@if (!showWaitingMessage && this.showError.length <= 0) {
+  <div id="toolbar">
     <button mat-fab extended [disabled]="this.isAtTop()" (click)="this.scrollToTop()">
-        <fa-icon [icon]="faArrowUp"></fa-icon>
+      <fa-icon [icon]="faArrowUp"></fa-icon>
     </button>
-
     <button mat-fab extended [disabled]="this.follow" (click)="this.doFollow()">
-        <fa-icon [icon]="faPersonWalkingArrowRight"></fa-icon>
+      <fa-icon [icon]="faPersonWalkingArrowRight"></fa-icon>
     </button>
-</div>
+  </div>
+}
