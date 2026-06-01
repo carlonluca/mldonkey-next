@@ -41,7 +41,6 @@ AppDir:
     - libc-bin
     - xkb-data
     - libwayland-egl++1
-    - libwayland-egl1-mesa
     - libwayland-egl1
     - libwayland-client0
     - libgbm1
@@ -49,11 +48,20 @@ AppDir:
     - libgles2
     - libglvnd0
     - libegl1
-    - libglapi-mesa
+    - mesa-libgallium
     - libxkbcommon-dev
-    - libxml2
+    - libxml2-16
     - libicu-dev
     - libjbig0
+    - bash
+    - dash
+    - coreutils
+    - perl
+    - python3
+    - make
+    - sed
+    - grep
+    - gawk
   files:
     include:
     - /opt/qt/6.11.1/gcc_64/libexec/QtWebEngineProcess
