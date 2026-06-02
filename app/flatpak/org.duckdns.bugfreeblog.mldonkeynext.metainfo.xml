@@ -44,7 +44,17 @@
         </screenshot>
     </screenshots>
 
+    <branding>
+        <color type="primary" scheme_preference="light">#c2185b</color>
+        <color type="primary" scheme_preference="dark">#303030</color>
+    </branding>
+
     <releases>
+        <release version="1.8.0" date="2026-06-01">
+            <description>
+                <p>Updated Angular to version 21 and all the dependencies to the latest version.</p>
+            </description>
+        </release>
         <release version="1.6.0" date="2026-05-21">
             <description>
                 <p>Bugfixes.</p>
