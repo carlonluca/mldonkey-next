@@ -50,6 +50,11 @@
     </branding>
 
     <releases>
+            <release version="1.9.0" date="2026-08-22">
+            <description>
+                <p>Updated Qt.</p>
+            </description>
+        </release>
         <release version="1.8.0" date="2026-06-01">
             <description>
                 <p>Updated Angular to version 21 and all the dependencies to the latest version.</p>
