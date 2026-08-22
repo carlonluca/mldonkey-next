@@ -1,0 +1,39 @@
+name: Test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-26.04
+
+    container:
+      image: carlonluca/qt-dev:6.11.2
+      options: --entrypoint ""
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install dependencies
+        run: |
+          curl -sL https://deb.nodesource.com/setup_24.x -o nodesource_setup.sh
+          bash nodesource_setup.sh
+          apt-get update
+          apt-get install -y nodejs
+
+      - name: Build angular resources
+        working-directory: app
+        run: |
+          ./build_angular_resources.sh
+
+      - name: Build Qt app
+        working-directory: app
+        run: |
+          mkdir build
+          cd build
+          /opt/qt/6.11.2/gcc_64/bin/qt-cmake ..
+          make -j$(nproc)
