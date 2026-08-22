@@ -1,0 +1,69 @@
+name: Test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test_webapp:
+    runs-on: ubuntu-26.04
+    container:
+      image: node:22-bookworm
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Configure npm
+        run: npm config set fetch-timeout 600000
+
+      - name: Build backend
+        working-directory: mldonkey-next-backend
+        run: |
+          npm i --maxsockets 1
+          npm run build
+          npm run lint
+
+      - name: Build frontend
+        working-directory: mldonkey-next-frontend
+        run: |
+          npm i --maxsockets 1
+          npm run lint
+          npm run build
+
+      - name: Build Angular resources
+        working-directory: app
+        run: ./build_angular_resources.sh
+
+  test_app:
+    runs-on: ubuntu-26.04
+    needs: test_webapp
+
+    container:
+      image: carlonluca/qt-dev:6.11.2
+      options: --entrypoint ""
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Download webapp resources
+        uses: actions/download-artifact@v4
+        with:
+          name: webapp-resources
+          path: .
+
+      - name: Configure CMake
+        working-directory: app
+        run: |
+          mkdir -p build
+          cd build
+          cmake ..
+
+      - name: Build application
+        working-directory: app/build
+        run: cmake --build .
