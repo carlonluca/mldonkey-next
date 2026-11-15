@@ -105,6 +105,7 @@ Window {
                     id: host
                     width: parent.width
                     placeholderText: qsTr("e.g. 192.168.0.2 or mldonkey.lan")
+                    inputMethodHints: Qt.ImhNoAutoUppercase
                 }
                 Label {
                     font.bold: true
