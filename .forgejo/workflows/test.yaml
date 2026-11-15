@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-26.04
 
     container:
-      image: carlonluca/qt-dev:6.11.2
+      image: carlonluca/qt-dev:6.12.0
       options: --entrypoint ""
 
     steps:
@@ -35,5 +35,5 @@ jobs:
         run: |
           mkdir build
           cd build
-          /opt/qt/6.11.2/gcc_64/bin/qt-cmake ..
+          /opt/qt/6.12.0/gcc_64/bin/qt-cmake ..
           make -j$(nproc)
