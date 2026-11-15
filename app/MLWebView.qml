@@ -42,14 +42,4 @@ WebView {
         }
     }
     Component.onCompleted: forceActiveFocus()
-    Keys.onBackPressed: function(event) {
-        if (!canGoBack) {
-            event.accepted = false
-            Qt.quit()
-            return
-        }
-
-        event.accepted = true
-        goBack()
-    }
 }

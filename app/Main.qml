@@ -55,6 +55,7 @@ Window {
     SystemPalette { id: myPalette; colorGroup: SystemPalette.Active }
 
     Loader {
+        id: webViewLoader
         active: !configMode
         anchors.fill: parent
         source: qmlUtils.extractWebApp() ? "qrc:/qt/qml/mldonkeynext/MLWebView.qml" : "qrc:/qt/qml/mldonkeynext/MLWebEngineView.qml"
@@ -130,5 +131,23 @@ Window {
                 }
             }
         }
+    }
+
+    Keys.onBackPressed: function(event) {
+        const webView = webViewLoader.item
+        if (!webViewLoader.active || !webView) {
+            Qt.quit()
+            return
+        }
+
+
+        if (!webView.canGoBack) {
+            event.accepted = false
+            Qt.quit()
+            return
+        }
+
+        event.accepted = true
+        webView.goBack()
     }
 }
