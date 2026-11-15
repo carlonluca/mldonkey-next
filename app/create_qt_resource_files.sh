@@ -17,6 +17,8 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
+set -e
+
 BASE_DIR="webapp"
 HASH_CMD="sha256sum"
 HASH=$(find "$BASE_DIR" -type f -exec $HASH_CMD {} + | awk '{print $1}' | tr -d '\n' | $HASH_CMD | awk '{print $1}')
