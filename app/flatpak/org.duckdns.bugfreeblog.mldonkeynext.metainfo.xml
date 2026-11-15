@@ -50,7 +50,7 @@
     </branding>
 
     <releases>
-            <release version="1.9.0" date="2026-08-22">
+            <release version="1.10.0" date="2026-08-22">
             <description>
                 <p>Updated Qt.</p>
             </description>
